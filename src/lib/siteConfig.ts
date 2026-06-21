@@ -17,69 +17,147 @@ export type ServicePreviewItem = {
   description: string;
 };
 
+export type PreviewStep = {
+  title: string;
+  description: string;
+};
+
 export const siteConfig = {
   name: "West Coast KBP",
-  tagline: "California ADU & Residential Construction",
+  tagline: "California ADU & Residential Construction Platform",
   description:
-    "Clear, managed construction projects for ADUs and residential builds across the Sacramento area and Northern California.",
+    "Pre-launch platform preview for address-first ADU, garage conversion, property planning, and residential construction conversations in California.",
 
   // In-page anchors only — no external routes or backend in this shell.
   nav: [
-    { label: "Services", href: "#services" },
-    { label: "Service areas", href: "#service-areas" },
-    { label: "Feasibility review", href: "#feasibility-review" },
+    { label: "Preview", href: "#platform-preview" },
+    { label: "Trust", href: "#trust-preview" },
+    { label: "Launch status", href: "#launch-status" },
   ] satisfies NavLink[],
 
   hero: {
-    eyebrow: "California ADU & Residential Construction",
-    heading: "Clear, managed construction projects",
+    eyebrow: "Pre-launch platform preview",
+    heading: "California ADU & Residential Construction Platform",
     subheading:
-      "West Coast KBP helps property owners plan and deliver ADUs, garage conversions, and residential construction with an organized, transparent process from first review to handover.",
-    // CTA is an in-page link to the feasibility-review section. No form, no
-    // submission handling, and no data is collected in this shell.
-    ctaLabel: "Request a feasibility review",
-    ctaHref: "#feasibility-review",
+      "West Coast KBP is preparing an address-first platform preview for ADU, garage conversion, property planning, and construction execution conversations. Early feasibility language is preliminary, human-gated, and requires official jurisdiction verification and licensed professional review before any construction commitment.",
+    direction:
+      "Future reviews start with property context and project goals, but WEB-002a does not include an address field, contact form, appointment path, or live intake.",
+    primaryCtaLabel: "Explore preliminary ADU feasibility",
+    primaryCtaHref: "#preliminary-review",
+    secondaryCtaLabel: "Preview the platform flow",
+    secondaryCtaHref: "#platform-preview",
   },
 
-  services: [
+  platformPreview: [
     {
-      title: "ADU planning",
+      title: "Address-first intake concept",
       description:
-        "Early planning support for accessory dwelling units, from concept and layout to a documented path toward jurisdiction review.",
+        "The platform direction begins with property context and owner goals before discussing ADU, garage conversion, or residential construction paths. No address input is active on this page.",
     },
     {
-      title: "Garage conversions",
+      title: "Preliminary feasibility estimate",
       description:
-        "Turning existing garage space into livable square footage with a clear, managed scope of work.",
+        "Future reviews may frame early constraints and planning questions as a non-binding preliminary feasibility estimate, not a quote, contract, permit answer, code answer, final design, or construction commitment.",
     },
     {
-      title: "Residential construction",
+      title: "Candidate options",
       description:
-        "Coordinated residential construction projects delivered with structured scheduling and communication.",
+        "Candidate options are discussion paths that require official jurisdiction verification and licensed professional review before they can guide design, pricing, scheduling, or construction.",
     },
     {
-      title: "Feasibility review",
+      title: "Human review gate",
       description:
-        "A structured first look at what a project may involve before committing to design or construction.",
+        "A human review must occur before any construction commitment. Software previews, checklists, or mockups do not create authority to proceed.",
     },
   ] satisfies ServicePreviewItem[],
 
-  serviceAreas: ["Sacramento area", "Northern California"],
+  preliminaryReview: [
+    {
+      title: "Planning conversation",
+      description:
+        "A future preliminary feasibility review may discuss project goals, property context, likely constraints, and candidate options.",
+    },
+    {
+      title: "Official verification",
+      description:
+        "ADU, zoning, SB 9, SB 10, permit, and jurisdiction questions require official jurisdiction verification before they can guide decisions.",
+    },
+    {
+      title: "Licensed review",
+      description:
+        "Construction, structural, electrical, plumbing, code, and permit matters require licensed professional review before any construction commitment.",
+    },
+  ] satisfies PreviewStep[],
 
-  cta: {
-    label: "Request a feasibility review",
-    // Placeholder note shown alongside the CTA. There is no form yet, so this
-    // sets clear expectations and keeps the shell free of PII collection.
-    note: "Online requests are not available yet. This is a placeholder for an upcoming feasibility review intake — no information is collected on this site at this time.",
+  trustPreview: [
+    {
+      title: "CSLB license placeholder",
+      description:
+        "CSLB License #: [INSERT LICENSE NUMBER]. License display is pending Owner-verified CSLB language.",
+    },
+    {
+      title: "Owner-approved proof only",
+      description:
+        "Project proof will appear only after Owner verification. No project count, rating, badge, award, ranking, or client detail is published in WEB-002a.",
+    },
+    {
+      title: "Sanitized project photos placeholder",
+      description:
+        "Sanitized project photo module reserved for Owner-reviewed assets without exact addresses, identifying details, client data, or location metadata.",
+    },
+    {
+      title: "Review and testimonial placeholder",
+      description:
+        "Review and testimonial block pending Owner-reviewed sources, exact wording, permission, and publication review.",
+    },
+    {
+      title: "Process clarity",
+      description:
+        "The public structure is planning conversation, preliminary feasibility review, official verification, licensed professional review, then human review before any construction commitment.",
+    },
+    {
+      title: "Human review gate",
+      description:
+        "Human review before any construction commitment remains the core trust signal for this pre-launch page.",
+    },
+  ] satisfies PreviewStep[],
+
+  launchStatus: {
+    heading: "Contact activation coming after launch approval",
+    note: "This is a pre-launch platform preview. Call, contact, address intake, lead capture, appointment booking, and report request features are not active in WEB-002a.",
+    ctas: [
+      {
+        label: "Explore preliminary ADU feasibility",
+        href: "#preliminary-review",
+      },
+      {
+        label: "Preview the platform flow",
+        href: "#platform-preview",
+      },
+    ] satisfies NavLink[],
+    disabledLabel: "Contact activation coming after launch approval",
+    microcopy:
+      "No address, phone number, email, project data, appointment request, or file is collected here.",
   },
 
   footer: {
-    // CSLB license is a placeholder until the official number is supplied.
     cslbLicense: "CSLB License #: [INSERT LICENSE NUMBER]",
+    shortCaveat:
+      "Pre-launch platform preview only. Preliminary feasibility review and candidate options require official jurisdiction verification, licensed professional review, and human review before any construction commitment.",
+    aduDisclaimer:
+      "ADU, zoning, SB 9, and SB 10 information on this pre-launch platform preview is general planning context only. Property-specific conclusions require official jurisdiction verification and licensed professional review. Any preliminary feasibility review or preliminary feasibility estimate is non-binding and must be checked by a human before any construction commitment.",
+    permitDisclaimer:
+      "Permit paths and jurisdiction requirements vary by property, scope, and local review. This page does not make a property-specific ADU conclusion or confirm permit outcome. Any candidate options require official jurisdiction verification before they can guide design, pricing, scheduling, or construction.",
+    professionalReviewDisclaimer:
+      "License information is a placeholder until the Owner provides verified CSLB display language for publication. Construction, structural, electrical, plumbing, code, and permit matters require licensed professional review before any construction commitment.",
+    previewDisclaimer:
+      "Any visual, flow, report, checklist, or platform screen shown in WEB-002a is a pre-launch platform preview or mockup. It is not an active generated report, construction drawing, site plan, survey, design document, permit submittal, or official jurisdiction response.",
+    leadCaptureDisclaimer:
+      "This is a pre-launch platform preview. Call, contact, address intake, lead capture, appointment booking, and report request features are not active in WEB-002a. Placeholder CTAs may preview future flows, but they do not collect PII or submit information.",
     disclaimer:
-      "Information on this website is general only. ADU, SB 9, zoning, permit, structural, electrical, plumbing, and code conclusions require official jurisdiction review and licensed professional verification before construction.",
+      "No guarantee is made on pricing, timeline, permit, zoning, ADU, SB 9, SB 10, structural, electrical, plumbing, or code outcome.",
     noGuarantees:
-      "No guaranteed pricing, permits, or timelines. Project scope, cost, and schedule are confirmed only after official review.",
+      "Pricing, schedule, design, permit review, and construction path depend on property conditions, scope, official review, material availability, trade coordination, and licensed professional input.",
   },
 } as const;
 
