@@ -3,9 +3,9 @@ import { siteConfig } from "@/src/lib/siteConfig";
 /**
  * Project preview. Three placeholder cards — deliberately NO real addresses,
  * client names, costs, or project facts. Each card shows the shape of a future
- * case study (area, type, stage, and the visible proof that would back it). The
- * image area is a designed placeholder (no photo asset) and is clearly badged,
- * and a standing note makes clear that real assets require Owner selection.
+ * case study (area, type, stage, and Owner review status). The image area is a
+ * designed placeholder (no photo asset) and is clearly badged, and a standing
+ * note makes clear that real assets require Owner selection.
  */
 export default function ProjectPreview() {
   const { projects, sections } = siteConfig;
@@ -71,10 +71,10 @@ export default function ProjectPreview() {
                 <dl className="mt-4 border-t border-black/[.06] pt-3 text-sm dark:border-white/[.08]">
                   <div className="flex items-start justify-between gap-3">
                     <dt className="text-zinc-500 dark:text-zinc-400">
-                      Visible proof
+                      Owner review
                     </dt>
                     <dd className="text-right font-medium text-zinc-700 dark:text-zinc-300">
-                      {card.proof}
+                      {card.review}
                     </dd>
                   </div>
                 </dl>

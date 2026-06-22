@@ -1,10 +1,9 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
- * Service ladder. Ordered from the homeowner entry point (detached ADU) through
- * the first-class GC / subcontract channel. The final (GC) item is visually
- * differentiated to begin the homeowner / contractor split and links to the
- * dedicated GC section. Content-only; no detail pages or backend.
+ * Service ladder. Ordered to match the canonical public profile. The final
+ * GC / subcontract item is visually differentiated and links to the dedicated
+ * GC section. Content-only; no detail pages or backend.
  */
 export default function ServicePreview() {
   const { services, sections } = siteConfig;

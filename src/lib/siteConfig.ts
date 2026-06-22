@@ -39,14 +39,14 @@ export type ProjectCard = {
   area: string;
   type: string;
   stage: string;
-  proof: string;
+  review: string;
 };
 
 export const siteConfig = {
   name: "West Coast KBP",
   tagline: "Transparent ADU & Residential Construction",
   description:
-    "ADU and residential construction with visible project control — milestone-based execution for homeowners and GC partners across the Sacramento area and Northern California. Public preview.",
+    "ADU and residential construction with visible project control for direct clients and GC/subcontract partners across the Sacramento area and Northern California. Public preview.",
 
   // In-page anchors only — no external routes or backend in this preview.
   nav: [
@@ -60,7 +60,7 @@ export const siteConfig = {
     eyebrow: "Transparent ADU & Residential Construction",
     heading: "ADU and residential construction with visible project control",
     subheading:
-      "West Coast KBP helps direct clients and GC/subcontract partners move from feasibility to controlled, milestone-based execution — clear scope, visible progress, and no public promises that depend on property-specific review.",
+      "West Coast KBP supports direct clients and GC/subcontract partners with ADU, garage conversion, residential general construction, and subcontract execution paths — clear scope, visible progress, and no public promises that depend on property-specific review.",
     // CTA is an in-page link to the preview-only CTA section. There is no
     // form, no submission handling, and no data is collected in this preview.
     ctaLabel: "See the preview path — not live yet",
@@ -92,7 +92,7 @@ export const siteConfig = {
   // Trust bar — proof points shown before launch. No guarantees, no capture.
   trustBar: [
     {
-      title: "Trust proof pending",
+      title: "Trust proof pending Owner verification",
       detail:
         "License, bond, and insurance verification will be published after Owner verification and before live lead capture.",
     },
@@ -148,18 +148,24 @@ export const siteConfig = {
       },
       {
         step: "03",
+        title: "Estimate draft after review",
+        description:
+          "Estimate drafts come only after review and remain subject to Owner approval, property-specific verification, and the actual construction scope.",
+      },
+      {
+        step: "04",
         title: "Permit & admin coordination",
         description:
           "Coordinating drawings, documentation, and administrative steps. Permit decisions rest with the jurisdiction.",
       },
       {
-        step: "04",
+        step: "05",
         title: "Controlled build",
         description:
           "Construction managed against defined milestones, with progress visible throughout.",
       },
       {
-        step: "05",
+        step: "06",
         title: "Handover & closeout",
         description:
           "Final walkthrough, documentation handover, and project closeout.",
@@ -169,25 +175,25 @@ export const siteConfig = {
 
   // Project preview — placeholders only. No real addresses, clients, or facts.
   projects: {
-    note: "Placeholders only — no real addresses, clients, costs, or project facts. Real photos and case studies require Owner-selected assets and client permission before publication.",
+    note: "Placeholders only — no real addresses, clients, pricing, or project facts. Real photos and case studies require Owner-selected assets, client permission, and Owner-verified project review before publication.",
     cards: [
       {
         area: "Sacramento area — placeholder",
         type: "ADU",
         stage: "Future case study",
-        proof: "Owner-selected assets pending",
+        review: "Owner-verified project review pending",
       },
       {
         area: "Roseville / Rocklin — placeholder",
         type: "Garage Conversion",
         stage: "Future case study",
-        proof: "Owner-selected assets pending",
+        review: "Owner-verified project review pending",
       },
       {
         area: "Folsom / El Dorado Hills — placeholder",
         type: "Residential General Construction",
         stage: "Future case study",
-        proof: "Owner-selected assets pending",
+        review: "Owner-verified project review pending",
       },
     ] satisfies ProjectCard[],
   },
@@ -234,7 +240,7 @@ export const siteConfig = {
     disclaimer:
       "Information on this website is general only. ADU, SB 9, zoning, permit, structural, electrical, plumbing, and code conclusions require official jurisdiction review and licensed professional verification before construction.",
     noGuarantees:
-      "No guaranteed costs, permits, schedules, rental income, property value, or financing outcomes. Project scope, cost, and schedule are confirmed only after official review.",
+      "No public pricing commitments, permit commitments, timeline commitments, rental income, property value, or financing outcomes. Project scope and any estimate draft are handled only after review.",
     previewNotice:
       "Public preview — visual and functional review only. Not a live lead-generation site.",
   },
