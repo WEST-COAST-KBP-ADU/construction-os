@@ -3,7 +3,7 @@ import { siteConfig } from "@/src/lib/siteConfig";
 /**
  * CSLB-safe footer.
  *
- * Carries the required compliance copy: a CSLB license placeholder, the
+ * Carries the required compliance copy: pending trust-proof language, the
  * general-information disclaimer, and an explicit "no guarantees" note, plus
  * in-page navigation and the service-area list. All strings come from
  * siteConfig so legal review has a single place to look.

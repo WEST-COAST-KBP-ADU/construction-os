@@ -227,8 +227,9 @@ export const siteConfig = {
   },
 
   footer: {
-    // CSLB license is a placeholder until the official number is supplied.
-    cslbLicense: "CSLB License #: [INSERT LICENSE NUMBER]",
+    // Trust proof is pending Owner-supplied verification.
+    cslbLicense:
+      "License, bond, and insurance verification will be published after Owner verification and before live lead capture.",
     disclaimer:
       "Information on this website is general only. ADU, SB 9, zoning, permit, structural, electrical, plumbing, and code conclusions require official jurisdiction review and licensed professional verification before construction.",
     noGuarantees:
