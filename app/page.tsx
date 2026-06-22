@@ -10,7 +10,7 @@ import { siteConfig } from "@/src/lib/siteConfig";
 export default function Home() {
   return (
     <main className="flex-1">
-      {/* 1. Hero — transparent-builder headline + preview-only CTA */}
+      {/* 1. Hero — transparent-builder headline + illustrative control panel */}
       <Hero />
 
       {/* 2. Trust bar — proof before launch, milestone visibility, no capture */}
@@ -29,16 +29,19 @@ export default function Home() {
       <section
         id="service-areas"
         aria-labelledby="service-areas-heading"
-        className="w-full scroll-mt-20 border-t border-black/[.06] dark:border-white/[.08]"
+        className="w-full scroll-mt-20 border-b border-black/[.06] bg-zinc-50 dark:border-white/[.08] dark:bg-zinc-950"
       >
-        <div className="mx-auto w-full max-w-5xl px-6 py-16 sm:py-20">
+        <div className="mx-auto w-full max-w-5xl px-6 py-20 sm:py-28">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+            {siteConfig.sections.areas}
+          </p>
           <h2
             id="service-areas-heading"
-            className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl"
+            className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl"
           >
             Service areas
           </h2>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300">
+          <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300">
             We focus on projects in these areas. Coverage for a specific address
             is confirmed during review.
           </p>
@@ -46,7 +49,7 @@ export default function Home() {
             {siteConfig.serviceAreas.map((area) => (
               <li
                 key={area}
-                className="rounded-full border border-black/[.08] bg-white px-5 py-2 text-sm font-medium text-zinc-700 dark:border-white/[.12] dark:bg-zinc-950 dark:text-zinc-200"
+                className="rounded-full border border-black/[.08] bg-white px-5 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:border-accent/40 hover:text-zinc-900 dark:border-white/[.12] dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-zinc-50"
               >
                 {area}
               </li>

@@ -65,6 +65,28 @@ export const siteConfig = {
     // form, no submission handling, and no data is collected in this preview.
     ctaLabel: "See the preview path — not live yet",
     ctaHref: "#preview-cta",
+    // Secondary in-page link to the process section. Navigation only.
+    secondaryCtaLabel: "See how a project runs",
+    secondaryCtaHref: "#process",
+    // Small status pill shown above the headline.
+    badge: "Public preview · v1",
+    // Inline proof points beneath the hero CTA. No guarantees, no capture.
+    highlights: [
+      "Sacramento area & Northern California",
+      "Milestone-based visibility",
+      "Preview only — no lead capture",
+    ],
+  },
+
+  // Short uppercase kickers shown above each section heading. Labels only —
+  // no claims, prices, timelines, or guarantees.
+  sections: {
+    services: "Service ladder",
+    process: "Transparent process",
+    projects: "Illustrative preview",
+    areas: "Where we work",
+    gc: "Contractor partnerships",
+    cta: "Preview status",
   },
 
   // Trust bar — proof points shown before launch. No guarantees, no capture.
