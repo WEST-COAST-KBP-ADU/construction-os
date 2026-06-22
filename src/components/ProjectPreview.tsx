@@ -2,7 +2,7 @@ import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
  * Project preview. Three placeholder cards — deliberately NO real addresses,
- * client names, prices, or project facts. Each card shows the shape of a future
+ * client names, costs, or project facts. Each card shows the shape of a future
  * case study (area, type, stage, and the visible proof that would back it). The
  * image area is a designed placeholder (no photo asset) and is clearly badged,
  * and a standing note makes clear that real assets require Owner selection.

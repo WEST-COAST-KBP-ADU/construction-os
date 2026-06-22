@@ -5,7 +5,7 @@ import { siteConfig } from "@/src/lib/siteConfig";
  * rendered as a distinct dark "contractor lane" panel to clearly separate the
  * B2B audience from the homeowner sections above. Carries a placeholder
  * capability statement and a preview-only invite-to-bid path. No form, no
- * submission, no contact capture.
+ * submission, no lead capture.
  */
 export default function GCPartnerPath() {
   const { gcPartner, sections } = siteConfig;

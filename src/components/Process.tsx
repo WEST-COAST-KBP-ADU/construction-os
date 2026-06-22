@@ -2,9 +2,9 @@ import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
  * Process section. A typical, ordered sequence from feasibility to closeout,
- * rendered as a connected vertical timeline. Uses "typical / property-specific
+ * rendered as a connected vertical schedule. Uses "typical / property-specific
  * review required" language throughout so no step reads as a guaranteed outcome
- * (permits, cost, or timeline).
+ * (permits, cost, or schedule).
  */
 export default function Process() {
   const { process, sections } = siteConfig;

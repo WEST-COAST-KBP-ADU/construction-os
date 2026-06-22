@@ -1,7 +1,7 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
- * CSLB-safe footer.
+ * License-safe footer.
  *
  * Carries the required compliance copy: pending trust-proof language, the
  * general-information disclaimer, and an explicit "no guarantees" note, plus
@@ -23,7 +23,7 @@ export default function Footer() {
               {tagline}
             </p>
             <p className="mt-4 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              {footer.cslbLicense}
+              {footer.trustProof}
             </p>
           </div>
 
