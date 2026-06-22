@@ -23,6 +23,9 @@ export default function Footer() {
         </div>
 
         <div className="mt-6 space-y-3 text-xs leading-6 text-zinc-500 dark:text-zinc-400">
+          <p className="font-medium text-zinc-600 dark:text-zinc-300">
+            {footer.previewNotice}
+          </p>
           <p>{footer.disclaimer}</p>
           <p>{footer.noGuarantees}</p>
         </div>

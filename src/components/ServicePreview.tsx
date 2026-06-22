@@ -1,8 +1,9 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
- * Static preview of the core service areas. Content-only; no links to detail
- * pages yet in this shell.
+ * Service ladder. Ordered from the homeowner entry point (detached ADU) through
+ * the first-class GC / subcontract channel. Content-only; no detail pages or
+ * links to backend in this preview.
  */
 export default function ServicePreview() {
   return (
@@ -16,10 +17,11 @@ export default function ServicePreview() {
           id="services-heading"
           className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-3xl"
         >
-          What we work on
+          What we build
         </h2>
         <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300">
-          A managed approach across the project types we focus on.
+          A managed approach across the project types we focus on — from a
+          homeowner&rsquo;s first ADU to subcontract work for general contractors.
         </p>
 
         <ul className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">

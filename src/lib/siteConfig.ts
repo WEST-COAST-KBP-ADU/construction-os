@@ -1,10 +1,17 @@
 /**
- * Central, static configuration for the West Coast KBP public site shell.
+ * Central, static configuration for the West Coast KBP public site —
+ * Public Marketing Site v1 Preview.
  *
  * This is the single source of truth for public-facing copy. It intentionally
- * contains no backend wiring, no form endpoints, and no PII. Compliance-
- * sensitive strings (CSLB license, disclaimer) live here so they are easy to
- * review and update in one place.
+ * contains no backend wiring, no form endpoints, no analytics, and no PII.
+ * Compliance-sensitive strings (CSLB license, disclaimers, "no guarantees",
+ * preview-only notices) live here so they are easy to review and update in one
+ * place.
+ *
+ * PREVIEW SCOPE: nothing on this site collects, submits, emails, stores,
+ * tracks, or uses any information for lead generation. All CTAs are inert
+ * placeholders pending Owner approval. No project facts, client names,
+ * prices, permits, timelines, or legal/code claims are asserted here.
  */
 
 export type NavLink = {
@@ -12,65 +19,189 @@ export type NavLink = {
   href: string;
 };
 
-export type ServicePreviewItem = {
+export type ServiceItem = {
   title: string;
   description: string;
 };
 
+export type TrustItem = {
+  title: string;
+  detail: string;
+};
+
+export type ProcessStep = {
+  step: string;
+  title: string;
+  description: string;
+};
+
+export type ProjectCard = {
+  area: string;
+  type: string;
+  stage: string;
+  proof: string;
+};
+
 export const siteConfig = {
   name: "West Coast KBP",
-  tagline: "California ADU & Residential Construction",
+  tagline: "Transparent ADU & Residential Construction",
   description:
-    "Clear, managed construction projects for ADUs and residential builds across the Sacramento area and Northern California.",
+    "ADU and residential construction with visible project control — milestone-based execution for homeowners and GC partners across the Sacramento area and Northern California. Public preview.",
 
-  // In-page anchors only — no external routes or backend in this shell.
+  // In-page anchors only — no external routes or backend in this preview.
   nav: [
     { label: "Services", href: "#services" },
-    { label: "Service areas", href: "#service-areas" },
-    { label: "Feasibility review", href: "#feasibility-review" },
+    { label: "Process", href: "#process" },
+    { label: "Projects", href: "#projects" },
+    { label: "For GCs", href: "#gc-partners" },
   ] satisfies NavLink[],
 
   hero: {
-    eyebrow: "California ADU & Residential Construction",
-    heading: "Clear, managed construction projects",
+    eyebrow: "Transparent ADU & Residential Construction",
+    heading: "ADU and residential construction with visible project control",
     subheading:
-      "West Coast KBP helps property owners plan and deliver ADUs, garage conversions, and residential construction with an organized, transparent process from first review to handover.",
-    // CTA is an in-page link to the feasibility-review section. No form, no
-    // submission handling, and no data is collected in this shell.
-    ctaLabel: "Request a feasibility review",
-    ctaHref: "#feasibility-review",
+      "West Coast KBP helps homeowners and GC partners move from feasibility to controlled, milestone-based execution — clear scope, visible progress, and no public promises that depend on property-specific review.",
+    // CTA is an in-page link to the preview-only contact section. There is no
+    // form, no submission handling, and no data is collected in this preview.
+    ctaLabel: "See the preview path — not live yet",
+    ctaHref: "#preview-cta",
   },
 
+  // Trust bar — proof points shown before launch. No guarantees, no capture.
+  trustBar: [
+    {
+      title: "CSLB · bond · insurance",
+      detail: "License, bond, and insurance proof shown here before public launch.",
+    },
+    {
+      title: "Milestone-based visibility",
+      detail: "Each project is tracked against defined milestones you can see.",
+    },
+    {
+      title: "Preview only — no lead capture",
+      detail: "No forms, tracking, or data collection anywhere on this preview.",
+    },
+  ] satisfies TrustItem[],
+
+  // Service ladder — homeowner entry through the GC / subcontract channel.
   services: [
     {
-      title: "ADU planning",
+      title: "Detached ADU",
       description:
-        "Early planning support for accessory dwelling units, from concept and layout to a documented path toward jurisdiction review.",
+        "A standalone accessory dwelling unit built as a separate structure, planned and delivered with a defined scope and visible milestones.",
     },
     {
-      title: "Garage conversions",
+      title: "Garage conversion",
       description:
-        "Turning existing garage space into livable square footage with a clear, managed scope of work.",
+        "Converting existing garage space into additional living area, with scope confirmed by property-specific review.",
     },
     {
-      title: "Residential construction",
+      title: "Attached ADU / residential construction",
       description:
-        "Coordinated residential construction projects delivered with structured scheduling and communication.",
+        "Attached units and broader residential construction tied into the existing home, managed against clear milestones.",
     },
     {
-      title: "Feasibility review",
+      title: "GC / subcontract work",
       description:
-        "A structured first look at what a project may involve before committing to design or construction.",
+        "Dependable general-contract and subcontract partnership with other builders on larger projects. See the GC partner path below.",
     },
-  ] satisfies ServicePreviewItem[],
+  ] satisfies ServiceItem[],
 
-  serviceAreas: ["Sacramento area", "Northern California"],
+  // Process — typical sequence only. Outcomes are property-specific.
+  process: {
+    note: "Typical sequence shown for orientation. Every project is property-specific and confirmed during review — steps, scope, and outcomes can change.",
+    steps: [
+      {
+        step: "01",
+        title: "Feasibility review",
+        description:
+          "A structured first look at what a project may involve before committing to design or construction.",
+      },
+      {
+        step: "02",
+        title: "Scope & budget range",
+        description:
+          "A typical scope and an indicative budget range. Final scope and numbers require property-specific review.",
+      },
+      {
+        step: "03",
+        title: "Permit & admin coordination",
+        description:
+          "Coordinating drawings, documentation, and administrative steps. Permit decisions rest with the jurisdiction.",
+      },
+      {
+        step: "04",
+        title: "Controlled build",
+        description:
+          "Construction managed against defined milestones, with progress visible throughout.",
+      },
+      {
+        step: "05",
+        title: "Handover & closeout",
+        description:
+          "Final walkthrough, documentation handover, and project closeout.",
+      },
+    ] satisfies ProcessStep[],
+  },
 
+  // Project preview — placeholders only. No real addresses, clients, or facts.
+  projects: {
+    note: "Placeholders only — no real addresses, clients, prices, or project facts. Real photos and case studies require Owner-selected assets and client permission before publication.",
+    cards: [
+      {
+        area: "Sacramento area — placeholder",
+        type: "Detached ADU",
+        stage: "Concept / feasibility",
+        proof: "Site photos + milestone log",
+      },
+      {
+        area: "Roseville / Rocklin — placeholder",
+        type: "Garage conversion",
+        stage: "Planning / coordination",
+        proof: "Drawing set + progress photos",
+      },
+      {
+        area: "Folsom / El Dorado Hills — placeholder",
+        type: "Attached ADU / residential",
+        stage: "In build",
+        proof: "Milestone photos + closeout docs",
+      },
+    ] satisfies ProjectCard[],
+  },
+
+  // GC partner path — first-class subcontract / general-contract channel.
+  gcPartner: {
+    heading: "For general contractors",
+    intro:
+      "West Coast KBP works as a reliable subcontract and general-contract partner. The capability details below are placeholders pending Owner confirmation — no figures here are claims.",
+    capability: [
+      "Trade scope: [placeholder — to be confirmed by Owner]",
+      "Crew capacity: [placeholder — to be confirmed by Owner]",
+      "Coverage: Sacramento area & Northern California",
+      "License, bond & insurance: shown before public launch",
+    ],
+    inviteToBid: {
+      label: "Invite to bid — preview only",
+      note: "Bid invitations are not accepted in this preview. No form, submission, or contact is collected until Owner approval.",
+    },
+  },
+
+  serviceAreas: [
+    "Sacramento",
+    "Roseville",
+    "Rocklin",
+    "Lincoln",
+    "Folsom",
+    "Granite Bay",
+    "El Dorado Hills",
+    "Northern California",
+  ],
+
+  // Final preview-only CTA. Explicitly no data handling of any kind.
   cta: {
-    label: "Request a feasibility review",
-    // Placeholder note shown alongside the CTA. There is no form yet, so this
-    // sets clear expectations and keeps the shell free of PII collection.
-    note: "Online requests are not available yet. This is a placeholder for an upcoming feasibility review intake — no information is collected on this site at this time.",
+    label: "Preview request path — not live yet",
+    heading: "This is a preview. Nothing here is live.",
+    note: "Preview only. No information is collected, submitted, emailed, stored, tracked, or used for lead generation anywhere on this site until Owner approval.",
   },
 
   footer: {
@@ -79,7 +210,9 @@ export const siteConfig = {
     disclaimer:
       "Information on this website is general only. ADU, SB 9, zoning, permit, structural, electrical, plumbing, and code conclusions require official jurisdiction review and licensed professional verification before construction.",
     noGuarantees:
-      "No guaranteed pricing, permits, or timelines. Project scope, cost, and schedule are confirmed only after official review.",
+      "No guaranteed pricing, permits, timelines, rental income, property value, or financing outcomes. Project scope, cost, and schedule are confirmed only after official review.",
+    previewNotice:
+      "Public preview — visual and functional review only. Not a live lead-generation site.",
   },
 } as const;
 
