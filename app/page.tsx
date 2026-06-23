@@ -1,67 +1,41 @@
 import Hero from "@/src/components/Hero";
 import TrustBar from "@/src/components/TrustBar";
 import ServicePreview from "@/src/components/ServicePreview";
+import PlatformCapabilityPreview from "@/src/components/PlatformCapabilityPreview";
+import ObjectControlPreview from "@/src/components/ObjectControlPreview";
+import VoiceDirection from "@/src/components/VoiceDirection";
 import Process from "@/src/components/Process";
-import ProjectPreview from "@/src/components/ProjectPreview";
 import GCPartnerPath from "@/src/components/GCPartnerPath";
 import PreviewCTA from "@/src/components/PreviewCTA";
-import { siteConfig } from "@/src/lib/siteConfig";
 
 export default function Home() {
   return (
     <main className="flex-1">
-      {/* 1. Hero — transparent-builder headline + illustrative control panel */}
+      {/* 1. Hero — platform framing + illustrative control panel */}
       <Hero />
 
-      {/* 2. Trust bar — proof before launch, milestone visibility, no capture */}
+      {/* 2. Status bar — preview scope, platform direction, no collection */}
       <TrustBar />
 
-      {/* 3. Service ladder — detached ADU → garage → attached/residential → GC */}
+      {/* 3. Service ladder — ADU, conversion, residential, GC/subcontract */}
       <ServicePreview />
 
-      {/* 4. Process — typical sequence, property-specific review required */}
+      {/* 4. Platform capability preview — direction only, not active services */}
+      <PlatformCapabilityPreview />
+
+      {/* 5. Existing object control preview — no real object data */}
+      <ObjectControlPreview />
+
+      {/* 6. Premium voice direction — not implemented or live */}
+      <VoiceDirection />
+
+      {/* 7. Control flow — intent to future Business Hall */}
       <Process />
 
-      {/* 5. Project preview — 3 placeholder cards, no real PII or facts */}
-      <ProjectPreview />
-
-      {/* Service areas — geographic focus; coverage confirmed during review */}
-      <section
-        id="service-areas"
-        aria-labelledby="service-areas-heading"
-        className="w-full scroll-mt-20 border-b border-black/[.06] bg-zinc-50 dark:border-white/[.08] dark:bg-zinc-950"
-      >
-        <div className="mx-auto w-full max-w-5xl px-6 py-20 sm:py-28">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-            {siteConfig.sections.areas}
-          </p>
-          <h2
-            id="service-areas-heading"
-            className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl"
-          >
-            Service areas
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300">
-            We focus on projects in these areas. Coverage for a specific address
-            is confirmed during review.
-          </p>
-          <ul className="mt-8 flex flex-wrap gap-3">
-            {siteConfig.serviceAreas.map((area) => (
-              <li
-                key={area}
-                className="rounded-full border border-black/[.08] bg-white px-5 py-2 text-sm font-medium text-zinc-700 shadow-sm transition-colors hover:border-accent/40 hover:text-zinc-900 dark:border-white/[.12] dark:bg-zinc-900 dark:text-zinc-200 dark:hover:text-zinc-50"
-              >
-                {area}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* 6. GC partner path — capability placeholder + preview-only bid path */}
+      {/* 8. GC partner path — first-class lane, no submission path */}
       <GCPartnerPath />
 
-      {/* 7. Preview-only CTA — explicit: nothing collected until Owner approval */}
+      {/* 9. Preview-only CTA — explicit: nothing collected */}
       <PreviewCTA />
     </main>
   );

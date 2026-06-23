@@ -1,10 +1,8 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
- * Process section. A typical, ordered sequence from feasibility to closeout,
- * rendered as a connected vertical schedule. Uses "typical / property-specific
- * review required" language throughout so no step reads as a guaranteed outcome
- * (permits, cost, or schedule).
+ * Platform control flow. Shows how intent could become a reviewed object state
+ * in a future platform layer. It is orientation-only and has no data handling.
  */
 export default function Process() {
   const { process, sections } = siteConfig;
@@ -12,7 +10,7 @@ export default function Process() {
 
   return (
     <section
-      id="process"
+      id="control-flow"
       aria-labelledby="process-heading"
       className="w-full scroll-mt-20 border-b border-black/[.06] bg-zinc-50 dark:border-white/[.08] dark:bg-zinc-950"
     >
@@ -24,7 +22,7 @@ export default function Process() {
           id="process-heading"
           className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl"
         >
-          How a project runs
+          From intent to controlled object state
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-600 dark:text-zinc-300">
           {process.note}

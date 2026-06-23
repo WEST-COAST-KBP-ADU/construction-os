@@ -1,21 +1,17 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
- * License-safe footer.
- *
- * Carries the required compliance copy: pending trust-proof language, the
- * general-information disclaimer, and an explicit "no guarantees" note, plus
- * in-page navigation and the service-area list. All strings come from
- * siteConfig so legal review has a single place to look.
+ * Preview-safe footer. All strings come from siteConfig so review has a single
+ * place to inspect public-facing statements.
  */
 export default function Footer() {
-  const { footer, name, tagline, nav, serviceAreas } = siteConfig;
+  const { footer, name, tagline, nav } = siteConfig;
 
   return (
     <footer className="mt-auto w-full border-t border-black/[.08] bg-zinc-50 dark:border-white/[.12] dark:bg-zinc-950">
       <div className="mx-auto w-full max-w-5xl px-6 py-14">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1.5fr_0.7fr]">
+          <div>
             <p className="text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
               {name}
             </p>
@@ -27,7 +23,7 @@ export default function Footer() {
             </p>
           </div>
 
-          <div>
+          <div className="sm:justify-self-end">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
               Explore
             </p>
@@ -40,22 +36,6 @@ export default function Footer() {
                   >
                     {item.label}
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
-              Service areas
-            </p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {serviceAreas.map((area) => (
-                <li
-                  key={area}
-                  className="rounded-full border border-black/[.08] bg-white px-2.5 py-0.5 text-xs text-zinc-600 dark:border-white/[.12] dark:bg-zinc-900 dark:text-zinc-300"
-                >
-                  {area}
                 </li>
               ))}
             </ul>

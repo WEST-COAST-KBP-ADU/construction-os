@@ -1,17 +1,17 @@
 /**
  * Central, static configuration for the West Coast KBP public site —
- * Public Marketing Site v1 Preview.
+ * Public Platform Site v1 Preview.
  *
  * This is the single source of truth for public-facing copy. It intentionally
  * contains no backend wiring, no form endpoints, no analytics, and no PII.
- * Compliance-sensitive strings (license verification, disclaimers, "no guarantees",
- * preview-only notices) live here so they are easy to review and update in one
- * place.
+ * Preview-only notices live here so they are easy to review and update in one
+ * place. The public site does not publish regulated credentials, commercial
+ * terms, dated delivery statements, live project details, or contact collection.
  *
  * PREVIEW SCOPE: nothing on this site collects, submits, emails, stores,
- * tracks, or uses any information for lead generation. All CTAs are inert
- * placeholders pending Owner approval. No project facts, client names,
- * costs, permits, schedules, or legal/code claims are asserted here.
+ * tracks, or uses any information. All CTAs are inert placeholders pending
+ * Owner approval. No project facts, client names, costs, schedules, or
+ * legal/code conclusions are asserted here.
  */
 
 export type NavLink = {
@@ -35,74 +35,80 @@ export type ProcessStep = {
   description: string;
 };
 
-export type ProjectCard = {
-  area: string;
-  type: string;
-  stage: string;
-  review: string;
+export type CapabilityCard = {
+  title: string;
+  status: string;
+  description: string;
+};
+
+export type ObjectControlItem = {
+  label: string;
+  detail: string;
 };
 
 export const siteConfig = {
   name: "West Coast KBP",
   tagline: "Transparent ADU & Residential Construction",
   description:
-    "ADU and residential construction with visible project control for direct clients and GC/subcontract partners across the Sacramento area and Northern California. Public preview.",
+    "A public preview for the West Coast KBP platform direction: ADU, garage conversion, residential general construction, and GC/subcontract work organized through visible project control.",
 
   // In-page anchors only — no external routes or backend in this preview.
   nav: [
     { label: "Services", href: "#services" },
-    { label: "Process", href: "#process" },
-    { label: "Projects", href: "#projects" },
-    { label: "For GCs", href: "#gc-partners" },
+    { label: "Platform", href: "#platform-preview" },
+    { label: "Objects", href: "#object-control" },
+    { label: "GC Path", href: "#gc-partners" },
   ] satisfies NavLink[],
 
   hero: {
     eyebrow: "Transparent ADU & Residential Construction",
-    heading: "ADU and residential construction with visible project control",
+    heading: "A construction platform interface for ADU and residential work",
     subheading:
-      "West Coast KBP supports direct clients and GC/subcontract partners with ADU, garage conversion, residential general construction, and subcontract execution paths — clear scope, visible progress, and no public promises that depend on property-specific review.",
+      "West Coast KBP is framing ADU, garage conversion, residential general construction, and GC/subcontract work as controlled project objects: scope, state, approvals, evidence, and next action shown before any live data collection exists.",
     // CTA is an in-page link to the preview-only CTA section. There is no
     // form, no submission handling, and no data is collected in this preview.
-    ctaLabel: "See the preview path — not live yet",
+    ctaLabel: "View preview status",
     ctaHref: "#preview-cta",
     // Secondary in-page link to the process section. Navigation only.
-    secondaryCtaLabel: "See how a project runs",
-    secondaryCtaHref: "#process",
+    secondaryCtaLabel: "Review platform flow",
+    secondaryCtaHref: "#control-flow",
     // Small status pill shown above the headline.
     badge: "Public preview · v1",
-    // Inline proof points beneath the hero CTA. No guarantees, no capture.
+    // Inline proof points beneath the hero CTA. No promises, no collection.
     highlights: [
-      "Sacramento area & Northern California",
-      "Direct Client + GC/Subcontract execution",
-      "Preview only — no lead capture",
+      "Platform direction only",
+      "Direct Client + GC/Subcontract paths",
+      "No data collected in this preview",
     ],
   },
 
-  // Short uppercase kickers shown above each section heading. Labels only —
-  // no claims, costs, schedules, or guarantees.
+  // Short uppercase kickers shown above each section heading. Labels only.
   sections: {
     services: "Service ladder",
-    process: "Transparent process",
-    projects: "Illustrative preview",
-    areas: "Where we work",
-    gc: "Contractor partnerships",
+    platform: "Platform capability preview",
+    objects: "Existing object control preview",
+    voice: "Premium voice direction",
+    process: "Control flow",
+    gc: "GC / subcontract path",
     cta: "Preview status",
   },
 
-  // Trust bar — proof points shown before launch. No guarantees, no capture.
+  // Platform status strip. No operational claims, credentials, or capture.
   trustBar: [
     {
-      title: "Trust proof pending Owner verification",
+      title: "Public preview only",
       detail:
-        "License, bond, and insurance verification will be published after Owner verification and before live lead capture.",
+        "The interface is for visual and structural review. It does not collect, submit, email, store, or track information.",
     },
     {
-      title: "Direct Client + GC/Subcontract execution",
-      detail: "Each project is tracked against defined milestones you can see.",
+      title: "Platform-first structure",
+      detail:
+        "The homepage presents future project control concepts, not active services or operational commitments.",
     },
     {
-      title: "Preview only — no lead capture",
-      detail: "No forms, tracking, or data collection anywhere on this preview.",
+      title: "Owner approval required",
+      detail:
+        "Live workflows, real objects, project materials, and contact collection require explicit Owner approval later.",
     },
   ] satisfies TrustItem[],
 
@@ -111,138 +117,159 @@ export const siteConfig = {
     {
       title: "ADU",
       description:
-        "Accessory dwelling unit work planned around defined scope, documented milestones, and property-specific verification before any live commitment.",
+        "A primary platform lane for accessory dwelling unit work, organized around scope, state, approvals, and evidence before any live commitment.",
     },
     {
       title: "Garage Conversion",
       description:
-        "Garage conversion work framed through feasibility, scope review, and jurisdiction review before construction claims are made.",
+        "A conversion lane for structured review, scope definition, and project-state tracking without publishing property-specific claims.",
     },
     {
       title: "Residential General Construction",
       description:
-        "Residential construction scopes managed through clear documentation, milestone visibility, and Owner-confirmed project controls.",
+        "Residential construction scopes represented as controlled objects with visible milestones, documentation status, and review checkpoints.",
     },
     {
       title: "GC / Subcontract Work",
       description:
-        "Direct GC and subcontract execution path for contractor partners, with capability details pending Owner confirmation.",
+        "A first-class platform path for general contractor and subcontract coordination, separate from homeowner-facing intake.",
     },
   ] satisfies ServiceItem[],
 
-  // Process — typical sequence only. Outcomes are property-specific.
+  capabilities: {
+    note: "Platform direction / preview only. These are not active public services, and no interaction here collects information.",
+    cards: [
+      {
+        title: "Premium Voice Operator",
+        status: "Future interface",
+        description:
+          "A high-end voice layer is being considered as a controlled platform interface, gated by quality review before release.",
+      },
+      {
+        title: "Visual Project Scenario / Configurator",
+        status: "Preview concept",
+        description:
+          "A future scenario workspace could help organize options and assumptions before any owner-reviewed project path exists.",
+      },
+      {
+        title: "Object / Project Control",
+        status: "Core direction",
+        description:
+          "The platform direction centers on project objects with scope, milestones, approvals, evidence, and next action visible.",
+      },
+    ] satisfies CapabilityCard[],
+  },
+
+  objectControl: {
+    note: "Illustrative structure only. No real addresses, client names, project names, prices, documents, photos, or facts are shown.",
+    items: [
+      {
+        label: "Object registry",
+        detail: "A future index for active project objects and their current state.",
+      },
+      {
+        label: "Scope",
+        detail: "A controlled scope summary with version and review status.",
+      },
+      {
+        label: "Milestones",
+        detail: "A staged view of planned, active, paused, and complete work states.",
+      },
+      {
+        label: "Approvals",
+        detail: "Owner-reviewed checkpoints before a project object advances.",
+      },
+      {
+        label: "Photos / docs / evidence",
+        detail: "A future evidence layer for reviewed files and visual records.",
+      },
+      {
+        label: "Next action",
+        detail: "A single visible action needed to move the object forward.",
+      },
+    ] satisfies ObjectControlItem[],
+  },
+
+  voice: {
+    heading: "Premium voice is a future interface layer, not an auto-attendant",
+    note: "Voice is not live and is not implemented on this site. The direction is RU / EN / ES support with a high-end voice quality gate before any release.",
+    checkpoints: [
+      "No voice agent, recording, call flow, or connection exists in this preview.",
+      "Voice quality must meet a premium standard before public use.",
+      "RU / EN / ES direction is a product target, not an active service claim.",
+    ],
+  },
+
+  // Control flow — platform state sequence only.
   process: {
-    note: "Typical sequence shown for orientation. Every project is property-specific and confirmed during review — steps, scope, and outcomes can change.",
+    note: "Platform control flow shown for orientation only. It is not a sales funnel and does not create a project, account, or submission.",
     steps: [
       {
         step: "01",
-        title: "Feasibility review",
+        title: "User intent",
         description:
-          "A structured first look at what a project may involve before committing to design or construction.",
+          "A future user describes intent in a structured way without committing to a live workflow.",
       },
       {
         step: "02",
-        title: "Scope review",
+        title: "Structured draft",
         description:
-          "A working scope outline for review. Final scope and any commercial terms require Owner approval and property-specific verification.",
+          "The platform prepares a draft object shape: type, scope assumptions, missing context, and review needs.",
       },
       {
         step: "03",
-        title: "Estimate draft after review",
+        title: "Owner review",
         description:
-          "Estimate drafts come only after review and remain subject to Owner approval, property-specific verification, and the actual construction scope.",
+          "An owner review checkpoint controls whether the draft can become a real tracked object later.",
       },
       {
         step: "04",
-        title: "Permit & admin coordination",
+        title: "Object / project state",
         description:
-          "Coordinating drawings, documentation, and administrative steps. Permit decisions rest with the jurisdiction.",
+          "Approved objects can carry state, scope, milestones, approvals, evidence, and next action.",
       },
       {
         step: "05",
-        title: "Controlled build",
+        title: "Future Business Hall",
         description:
-          "Construction managed against defined milestones, with progress visible throughout.",
-      },
-      {
-        step: "06",
-        title: "Handover & closeout",
-        description:
-          "Final walkthrough, documentation handover, and project closeout.",
+          "A future partner workspace may organize GC/subcontract coordination. It is not active in this preview.",
       },
     ] satisfies ProcessStep[],
   },
 
-  // Project preview — placeholders only. No real addresses, clients, or facts.
-  projects: {
-    note: "Placeholders only — no real addresses, clients, pricing, or project facts. Real photos and case studies require Owner-selected assets, client permission, and Owner-verified project review before publication.",
-    cards: [
-      {
-        area: "Sacramento area — placeholder",
-        type: "ADU",
-        stage: "Future case study",
-        review: "Owner-verified project review pending",
-      },
-      {
-        area: "Roseville / Rocklin — placeholder",
-        type: "Garage Conversion",
-        stage: "Future case study",
-        review: "Owner-verified project review pending",
-      },
-      {
-        area: "Folsom / El Dorado Hills — placeholder",
-        type: "Residential General Construction",
-        stage: "Future case study",
-        review: "Owner-verified project review pending",
-      },
-    ] satisfies ProjectCard[],
-  },
-
   // GC partner path — first-class subcontract / general-contract channel.
   gcPartner: {
-    heading: "For general contractors and subcontract partners",
+    heading: "GC / subcontract work stays a first-class platform path",
     intro:
-      "West Coast KBP supports direct GC and subcontract execution. Capability details below remain pending Owner confirmation — no figures here are claims.",
+      "West Coast KBP keeps contractor coordination separate from homeowner-facing flows. This preview shows the lane structure only; there is no bid form and no data collection.",
     capability: [
       "Execution path: Direct Client + GC/Subcontract work",
       "Service focus: ADU, garage conversion, and residential general construction",
-      "Coverage: Sacramento area & Northern California",
-      "Trust proof pending Owner verification",
+      "Object state: scope, review, evidence, and next action",
+      "Partner workspace direction: future Business Hall",
     ],
     inviteToBid: {
-      label: "Invite to bid — preview only",
-      note: "Bid invitations are not accepted in this preview. No form, submission, or information is collected until Owner approval.",
+      label: "Partner path — preview only",
+      note: "Bid invitations are not accepted here. No form, submission, account, message, or information is collected until Owner approval.",
     },
   },
 
-  serviceAreas: [
-    "Sacramento",
-    "Roseville",
-    "Rocklin",
-    "Lincoln",
-    "Folsom",
-    "Granite Bay",
-    "El Dorado Hills",
-    "Northern California",
-  ],
-
   // Final preview-only CTA. Explicitly no data handling of any kind.
   cta: {
-    label: "Preview request path — not live yet",
-    heading: "This is a preview. Nothing here is live.",
-    note: "Preview only. No information is collected, submitted, emailed, stored, tracked, or used for lead generation anywhere on this site until Owner approval.",
+    label: "Preview path disabled",
+    heading: "Preview only. No data is collected.",
+    note: "Nothing here is live. No form, account, submission, email, storage, tracking, analytics, ads, API route, voice connection, or external service connection exists on this site.",
   },
 
   footer: {
-    // Trust proof is pending Owner-supplied verification.
     trustProof:
-      "License, bond, and insurance verification will be published after Owner verification and before live lead capture.",
+      "Public platform preview only. Live workflows, real project objects, and public contact collection require Owner approval.",
     disclaimer:
-      "Information on this website is general only. ADU, SB 9, zoning, permit, structural, electrical, plumbing, and code conclusions require official jurisdiction review and licensed professional verification before construction.",
+      "Information on this website is general platform framing only. ADU, zoning, structural, electrical, plumbing, and code conclusions require formal review by the proper professionals and authorities before construction.",
     noGuarantees:
-      "No public pricing commitments, permit commitments, timeline commitments, rental income, property value, or financing outcomes. Project scope and any estimate draft are handled only after review.",
+      "No public cost commitments, dated delivery commitments, rental income, property value, financing outcomes, or real project facts are asserted in this preview.",
     previewNotice:
-      "Public preview — visual and functional review only. Not a live lead-generation site.",
+      "Public preview — visual and structural review only. No data is collected.",
   },
 } as const;
 

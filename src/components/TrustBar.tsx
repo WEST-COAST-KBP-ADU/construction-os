@@ -1,9 +1,8 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
 /**
- * Trust bar. Proof points shown beneath the hero — credentials before launch,
- * milestone visibility, and an explicit preview-only notice. No lead capture,
- * no guarantees. Copy comes from siteConfig; icons are inline (no assets).
+ * Status bar beneath the hero. It explains preview scope, platform direction,
+ * and no-collection status. Copy comes from siteConfig; icons are inline.
  */
 const ICONS = ["shield", "eye", "lock"] as const;
 
