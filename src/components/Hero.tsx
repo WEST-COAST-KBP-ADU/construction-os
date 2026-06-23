@@ -1,69 +1,40 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
-/**
- * Homepage hero. Headline, supporting copy, an in-page CTA to the preview-only
- * section, a secondary in-page link to the process, and an illustrative
- * "project control" panel that conveys milestone visibility.
- *
- * The panel is decorative/illustrative ONLY: it shows generic process phases
- * with illustrative statuses and is explicitly labelled as not a live project.
- * No real data, dates, figures, addresses, or claims appear anywhere here, and
- * there is no form or submission handling.
- */
-const STATUS_TONES: Record<string, string> = {
-  done: "border-transparent bg-zinc-900 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900",
-  active: "border-accent/30 bg-accent/10 text-accent",
-  upcoming:
-    "border-black/[.08] bg-transparent text-zinc-400 dark:border-white/[.12] dark:text-zinc-500",
-};
-
-// Illustrative-only status per process step, paired with the step list below.
-const PANEL = [
-  { label: "Complete", tone: "done" },
-  { label: "Complete", tone: "done" },
-  { label: "In review", tone: "active" },
-  { label: "Upcoming", tone: "upcoming" },
-  { label: "Upcoming", tone: "upcoming" },
-];
-const FALLBACK = { label: "Upcoming", tone: "upcoming" };
-
 export default function Hero() {
-  const { hero, process } = siteConfig;
+  const { hero } = siteConfig;
 
   return (
-    <section className="relative w-full overflow-hidden border-b border-black/[.06] dark:border-white/[.08]">
-      {/* Decorative backdrop — pure CSS, no image assets. */}
+    <section className="relative w-full overflow-hidden border-b border-black/[.06] bg-[#F7F6F2] dark:border-white/[.08] dark:bg-[#1C1B19]">
       <div aria-hidden className="pointer-events-none absolute inset-0 hero-grid" />
       <div aria-hidden className="pointer-events-none absolute inset-0 hero-glow" />
 
-      <div className="relative mx-auto grid w-full max-w-5xl items-center gap-12 px-6 py-20 sm:py-28 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-        {/* Left — message */}
+      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1.04fr_0.96fr] lg:gap-16">
         <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
-            <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#C9A84C]/40 bg-[#C9A84C]/10 px-3 py-1 text-xs font-semibold text-[#1B4332] dark:text-[#F7F6F2]">
+            <span aria-hidden className="size-1.5 rounded-full bg-[#C9A84C]" />
             {hero.badge}
           </span>
 
-          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+          <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-[#7A7974] dark:text-zinc-400">
             {hero.eyebrow}
           </p>
-          <h1 className="mt-4 max-w-xl text-4xl font-semibold leading-[1.08] tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl lg:text-[3.5rem]">
+          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.06] tracking-tight text-[#1C1B19] dark:text-zinc-50 sm:text-5xl lg:text-[4rem]">
             {hero.heading}
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-600 dark:text-zinc-300">
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-700 dark:text-zinc-300">
             {hero.subheading}
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
             <a
               href={hero.ctaHref}
-              className="inline-flex h-12 items-center justify-center rounded-full bg-zinc-900 px-7 text-base font-medium text-zinc-50 shadow-sm transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-[#1B4332] px-7 text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#153527]"
             >
               {hero.ctaLabel}
             </a>
             <a
               href={hero.secondaryCtaHref}
-              className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full px-5 text-base font-medium text-zinc-700 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
+              className="inline-flex h-12 items-center justify-center gap-1.5 rounded-full border border-[#D4D1CA] bg-white/70 px-5 text-base font-semibold text-[#1C1B19] transition-colors hover:border-[#C9A84C] dark:border-white/[.14] dark:bg-white/[.04] dark:text-zinc-50"
             >
               {hero.secondaryCtaLabel}
               <span aria-hidden>&rarr;</span>
@@ -74,60 +45,55 @@ export default function Hero() {
             {hero.highlights.map((point) => (
               <li
                 key={point}
-                className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-300"
+                className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300"
               >
-                <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+                <span aria-hidden className="size-1.5 rounded-full bg-[#C9A84C]" />
                 {point}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Right — illustrative milestone panel */}
         <div className="relative">
-          <div className="rounded-3xl border border-black/[.08] bg-white/90 p-5 shadow-xl shadow-black/[.04] backdrop-blur dark:border-white/[.12] dark:bg-zinc-900/80 sm:p-6">
-            <div className="flex items-center justify-between gap-3">
+          <div className="rounded-3xl border border-[#D4D1CA] bg-white/92 p-5 shadow-xl shadow-black/[.05] backdrop-blur dark:border-white/[.12] dark:bg-zinc-900/80 sm:p-6">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                  Project control
+                <p className="text-sm font-semibold text-[#1C1B19] dark:text-zinc-50">
+                  Check My Lot intake path
                 </p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  Milestone visibility, end to end
+                <p className="mt-1 text-xs leading-5 text-zinc-500 dark:text-zinc-400">
+                  Frontend-only v0.1. Manual review before any commitment.
                 </p>
               </div>
-              <span className="rounded-full border border-black/[.08] px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-zinc-500 dark:border-white/[.12] dark:text-zinc-400">
-                Illustrative
+              <span className="rounded-full border border-[#C9A84C]/40 bg-[#C9A84C]/10 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-[#1B4332] dark:text-[#F7F6F2]">
+                v0.1
               </span>
             </div>
 
-            <ol className="mt-5 space-y-1.5">
-              {process.steps.map((step, i) => {
-                const status = PANEL[i] ?? FALLBACK;
-                const tone = STATUS_TONES[status.tone] ?? STATUS_TONES.upcoming;
-                return (
-                  <li
-                    key={step.step}
-                    className="flex items-center gap-3 rounded-xl border border-black/[.05] bg-zinc-50/80 px-3 py-2.5 dark:border-white/[.06] dark:bg-zinc-950/60"
-                  >
-                    <span className="font-mono text-xs text-zinc-400 dark:text-zinc-500">
-                      {step.step}
-                    </span>
-                    <span className="flex-1 truncate text-sm font-medium text-zinc-800 dark:text-zinc-200">
-                      {step.title}
-                    </span>
-                    <span
-                      className={`shrink-0 rounded-full border px-2.5 py-0.5 text-[0.7rem] font-medium ${tone}`}
-                    >
-                      {status.label}
-                    </span>
-                  </li>
-                );
-              })}
+            <ol className="mt-5 space-y-2">
+              {[
+                "Property address",
+                "ADU type and project goal",
+                "Budget and timing range",
+                "Owner/admin review",
+              ].map((item, i) => (
+                <li
+                  key={item}
+                  className="flex items-center gap-3 rounded-xl border border-black/[.06] bg-[#F7F6F2] px-3 py-3 dark:border-white/[.08] dark:bg-zinc-950/60"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#1B4332] font-mono text-xs font-semibold text-white">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm font-medium text-[#1C1B19] dark:text-zinc-200">
+                    {item}
+                  </span>
+                </li>
+              ))}
             </ol>
 
-            <p className="mt-4 text-[0.7rem] leading-5 text-zinc-400 dark:text-zinc-500">
-              Illustrative preview — not a live project. No real data, dates, or
-              figures are shown.
+            <p className="mt-5 rounded-2xl border border-[#D4D1CA] bg-white p-4 text-xs leading-5 text-zinc-600 dark:border-white/[.10] dark:bg-zinc-900 dark:text-zinc-400">
+              Preliminary review only. Final feasibility, pricing, timeline, and
+              permit path require site, jurisdiction, utility, and code verification.
             </p>
           </div>
         </div>
