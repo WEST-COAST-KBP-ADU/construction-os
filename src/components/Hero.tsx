@@ -1,5 +1,7 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
+const quickProjectTypes = ["Detached ADU", "Garage Conversion", "Attached ADU", "Not sure yet"];
+
 export default function Hero() {
   const { hero } = siteConfig;
 
@@ -57,7 +59,7 @@ export default function Hero() {
           <div className="rounded-[1.75rem] border border-[#E1D7C6] bg-white/82 p-4 shadow-2xl shadow-[#6B5A3D]/[.08] backdrop-blur dark:border-white/[.12] dark:bg-zinc-900/78 sm:p-5">
             <div
               aria-hidden
-              className="relative aspect-[4/3] overflow-hidden rounded-[1.35rem] bg-[#EDE4D3]"
+              className="relative aspect-[16/10] overflow-hidden rounded-[1.35rem] bg-[#EDE4D3]"
             >
               <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(250,247,240,0.9),rgba(224,211,188,0.78)_50%,rgba(41,76,58,0.18))]" />
               <div className="absolute left-[9%] top-[16%] h-[62%] w-[82%] rounded-t-[44%] bg-white/45 shadow-inner shadow-white/40" />
@@ -69,42 +71,62 @@ export default function Hero() {
 
             <div className="mt-5 flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-[#221F1B] dark:text-zinc-50">
-                  Start with your property
+                <p className="text-base font-semibold text-[#221F1B] dark:text-zinc-50">
+                  Check My Lot
                 </p>
                 <p className="mt-1 text-xs leading-5 text-[#756F64] dark:text-zinc-400">
-                  A simple first step for homeowners exploring an ADU.
+                  Start with an address. Details can come next.
                 </p>
               </div>
               <span className="rounded-full border border-[#C7A45D]/35 bg-[#C7A45D]/10 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wide text-[#294C3A] dark:text-[#F7F6F2]">
-                ADU
+                Fast check
               </span>
             </div>
 
-            <ol className="mt-5 space-y-2">
-              {[
-                "Share your address",
-                "Choose the ADU vision",
-                "Set budget and timing",
-                "Get a thoughtful next step",
-              ].map((item, i) => (
-                <li
-                  key={item}
-                  className="flex items-center gap-3 rounded-2xl border border-[#EEE4D3] bg-[#FBF8F2] px-3 py-3 dark:border-white/[.08] dark:bg-zinc-950/60"
+            <div className="mt-5">
+              <label
+                htmlFor="hero-property-address"
+                className="text-sm font-semibold text-[#221F1B] dark:text-zinc-50"
+              >
+                Property address
+              </label>
+              <div className="mt-2 flex flex-col gap-3 sm:flex-row">
+                <input
+                  id="hero-property-address"
+                  name="hero-property-address"
+                  autoComplete="street-address"
+                  className="h-12 min-w-0 flex-1 rounded-full border border-[#DED4C1] bg-[#FBF8F2] px-4 text-base text-[#221F1B] outline-none transition-colors placeholder:text-[#8A8378] focus:border-[#294C3A] dark:border-white/[.12] dark:bg-zinc-950 dark:text-zinc-50"
+                  placeholder="Street address, city"
+                />
+                <a
+                  href={hero.ctaHref}
+                  className="inline-flex h-12 shrink-0 items-center justify-center rounded-full bg-[#294C3A] px-6 text-base font-semibold text-white shadow-sm shadow-[#294C3A]/20 transition-colors hover:bg-[#203D2E]"
                 >
-                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#294C3A] font-mono text-xs font-semibold text-white">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-sm font-medium text-[#221F1B] dark:text-zinc-200">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ol>
+                  Check My Lot
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#756F64] dark:text-zinc-400">
+                Project type
+              </p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                {quickProjectTypes.map((type) => (
+                  <a
+                    href={hero.ctaHref}
+                    key={type}
+                    className="rounded-2xl border border-[#EEE4D3] bg-[#FBF8F2] px-3 py-3 text-sm font-semibold text-[#221F1B] transition-colors hover:border-[#C7A45D] hover:bg-white dark:border-white/[.08] dark:bg-zinc-950/60 dark:text-zinc-200"
+                  >
+                    {type}
+                  </a>
+                ))}
+              </div>
+            </div>
 
             <p className="mt-5 rounded-2xl border border-[#E9DDC9] bg-white/72 p-4 text-xs leading-5 text-[#6C665D] dark:border-white/[.10] dark:bg-zinc-900 dark:text-zinc-400">
-              Preliminary review only. Final feasibility, pricing, timeline, and permit path
-              depend on the site, jurisdiction, utilities, and code requirements.
+              No instant eligibility claims. A real review still depends on the site,
+              jurisdiction, utilities, and code requirements.
             </p>
           </div>
         </div>

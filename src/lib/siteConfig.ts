@@ -126,9 +126,9 @@ export const siteConfig = {
   ] satisfies OptionItem[],
 
   intake: {
-    heading: "Check My Lot",
+    heading: "Finish your Check My Lot details",
     subheading:
-      "Start with the property address. v0.1 creates a local draft in the browser only; backend persistence is not connected yet.",
+      "After the quick property check, add contact and project details so the local draft has enough context for manual review. Backend persistence is not connected yet.",
     disclaimer:
       "Preliminary review only. Final feasibility, pricing, timeline, and permit path require site, jurisdiction, utility, and code verification.",
     successHeading: "Local draft created",
