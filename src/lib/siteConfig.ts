@@ -49,11 +49,11 @@ export const siteConfig = {
     ctaHref: "#check-my-lot",
     secondaryCtaLabel: "See Our Work",
     secondaryCtaHref: "#projects",
-    badge: "Check My Lot v0.1",
+    badge: "Homeowner ADU planning",
     highlights: [
-      "Address-first preliminary review",
-      "Manual owner/admin review before commitments",
-      "No instant eligibility or final pricing claims",
+      "Start with your property address",
+      "Clear guidance before commitments",
+      "Thoughtful review for real residential projects",
     ],
   },
 
