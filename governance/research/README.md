@@ -9,4 +9,7 @@ must carry the wording: "Requires official source verification."
 
 | # | Question | Status | Feeds into |
 | :- | :------- | :----- | :--------- |
-| — | (none yet; pre-repo voice research is summarized, unadopted, in `../architecture/voice-lab.md`) | | |
+| [RP-0001](RP-0001-modern-leadgen-landscape.md) | Modern lead-gen landscape: Google + Meta, mid-2026 | synthesized | future channel/implementation DRs |
+
+Pre-repo voice research remains summarized, unadopted, in
+`../architecture/voice-lab.md`.
