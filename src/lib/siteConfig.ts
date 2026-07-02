@@ -48,6 +48,7 @@ export type ObjectControlItem = {
 
 export const siteConfig = {
   name: "West Coast KBP",
+  url: "https://westcoastkbp.com",
   tagline: "Transparent ADU & Residential Construction",
   description:
     "A public preview for the West Coast KBP platform direction: ADU, garage conversion, residential general construction, and GC/subcontract work organized through visible project control.",
