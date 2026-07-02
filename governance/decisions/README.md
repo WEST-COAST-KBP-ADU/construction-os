@@ -11,3 +11,4 @@ Numbering is sequential and permanent; superseded records stay in place.
 | [DR-0004](DR-0004-minimal-retention.md) | Minimal retention / no-PII default boundary | adopted | 2026-07-02 |
 | [DR-0005](DR-0005-research-gate.md) | Research Gate required before major decisions | adopted | 2026-07-02 |
 | [DR-0006](DR-0006-domain-operation-vocabulary.md) | Domain operation vocabulary v1 | adopted | 2026-07-02 |
+| [DR-0007](DR-0007-leadgen-channel-strategy.md) | Lead generation channels: Google-first, plus Meta Pixel | adopted | 2026-07-02 |

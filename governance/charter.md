@@ -46,6 +46,15 @@ run records.
 The key idea: convert messy real-world signals into structured, reviewable,
 owner-approved business actions.
 
+## Lead generation channels
+
+By owner decision (DR-0007), lead generation is built Google-first: Google
+Business Profile, Google's real-estate / housing-search services, Google Ads /
+Local Services Ads, Maps/geo services, and organic search — plus Meta Pixel for
+ad tracking and retargeting. Concrete integrations pass the Research Gate
+first; deploying any tracking tag on the live site additionally requires a
+privacy review task packet (CCPA/CPRA, consent/notice) before going live.
+
 ## Lead object concept
 
 A lead starts as a candidate, never as a customer record. Lead states:
