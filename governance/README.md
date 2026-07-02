@@ -14,7 +14,8 @@ and rules only — never runtime code.
 | :--- | :------- |
 | `charter.md` | Platform identity, vision, and authority model |
 | `BOUNDARIES.md` | Hard prohibitions, AI authority limits, data/retention rules |
-| `architecture/` | Component map, voice lab architecture, risk register |
+| `architecture/` | Component map, voice lab architecture, Core compatibility, risk register |
+| `context/` | External context packages — pinned projections, zero authority |
 | `decisions/` | Decision records (DR-NNNN) — owner-adopted decisions only |
 | `tasks/` | Task packets (TASK-NNNN) — bounded, owner-approved work units |
 | `research/` | Research packets (RP-NNNN) — Research Gate outputs, zero authority |
