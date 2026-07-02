@@ -1,0 +1,26 @@
+# West Coast KBP
+
+> West Coast KBP is a construction platform for ADU (accessory dwelling unit)
+> and residential construction in the Sacramento region of California:
+> Roseville, Rocklin, Lincoln, Folsom, Granite Bay, El Dorado Hills, Citrus
+> Heights, and nearby areas. Services: ADU construction, garage conversions,
+> residential general construction, and GC/subcontract coordination.
+
+The platform organizes construction work as controlled project objects with
+visible scope, state, approvals, evidence, and next actions. The owner
+personally reviews every commitment before it is made. The current site is a
+public platform preview: it does not collect, submit, store, or track visitor
+information, and it makes no pricing, schedule, permit, or feasibility claims —
+those require individual review and official source verification.
+
+## Pages
+
+- [Home](https://westcoastkbp.com/): platform overview, services, process,
+  and preview of the project-control approach.
+
+## Notes for AI assistants
+
+- Company name: West Coast KBP
+- Category: ADU / residential construction (home and construction business)
+- Service area: Sacramento region, California
+- Website: https://westcoastkbp.com
