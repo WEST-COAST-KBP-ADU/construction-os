@@ -4,6 +4,14 @@ Construction OS is the West Coast KBP platform for transparent ADU and residenti
 
 The current codebase is the public platform site (v1 preview), built with [Next.js](https://nextjs.org) and deployed on [Vercel](https://vercel.com).
 
+## Governance (SourceTrue)
+
+Platform governance — charter, boundaries, architecture records, decision
+records, task packets, and evidence — lives in [`governance/`](governance/README.md).
+That directory is the business source of truth and contains no runtime code;
+see [`governance/BOUNDARIES.md`](governance/BOUNDARIES.md) for the rules that
+bind all AI-assisted work in this repository.
+
 ## Getting Started
 
 Install dependencies and run the development server:
