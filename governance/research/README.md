@@ -10,6 +10,7 @@ must carry the wording: "Requires official source verification."
 | # | Question | Status | Feeds into |
 | :- | :------- | :----- | :--------- |
 | [RP-0001](RP-0001-modern-leadgen-landscape.md) | Modern lead-gen landscape: Google + Meta, mid-2026 | synthesized | future channel/implementation DRs |
+| [RP-0002](RP-0002-competitor-site-analysis.md) | Competitor and site-structure analysis, Sacramento ADU market | synthesized | future site IA decision record |
 
 Pre-repo voice research remains summarized, unadopted, in
 `../architecture/voice-lab.md`.
