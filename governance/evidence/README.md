@@ -9,3 +9,4 @@ transcripts, recordings, or secrets.
 | [RUN-0001](RUN-0001-create-sourcetrue.md) | TASK-0001 | accepted | 2026-07-02 |
 | [RUN-0002](RUN-0002-ingest-core-context.md) | TASK-0002 | accepted | 2026-07-02 |
 | [RUN-0003](RUN-0003-text-intake-lab.md) | TASK-0003 | accepted | 2026-07-02 |
+| [RUN-0004](RUN-0004-ai-search-foundation.md) | TASK-0004 | accepted | 2026-07-03 |
