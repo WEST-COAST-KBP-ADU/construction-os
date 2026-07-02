@@ -11,6 +11,9 @@ must carry the wording: "Requires official source verification."
 | :- | :------- | :----- | :--------- |
 | [RP-0001](RP-0001-modern-leadgen-landscape.md) | Modern lead-gen landscape: Google + Meta, mid-2026 | synthesized | future channel/implementation DRs |
 | [RP-0002](RP-0002-competitor-site-analysis.md) | Competitor and site-structure analysis, Sacramento ADU market | synthesized | future site IA decision record |
+| [RP-0003](RP-0003-technical-audit.md) | Technical competitive audit — 12 CA ADU companies (owner-provided PDF) | synthesized | portal architecture DR (pending) |
+| [RP-0004](RP-0004-portal-research.md) | ADU portal research + design blueprint (owner-provided PDF) | synthesized | portal architecture DR (pending) |
+| [RP-0005](RP-0005-voice-maturity.md) | Voice module maturity research (owner-provided) | synthesized | voice architecture DR (pending) |
 
 Pre-repo voice research remains summarized, unadopted, in
 `../architecture/voice-lab.md`.
