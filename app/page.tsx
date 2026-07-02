@@ -1,4 +1,5 @@
 import Hero from "@/src/components/Hero";
+import { buildBusinessJsonLd, serializeJsonLd } from "@/src/lib/structuredData";
 import TrustBar from "@/src/components/TrustBar";
 import ServicePreview from "@/src/components/ServicePreview";
 import PlatformCapabilityPreview from "@/src/components/PlatformCapabilityPreview";
@@ -11,6 +12,12 @@ import PreviewCTA from "@/src/components/PreviewCTA";
 export default function Home() {
   return (
     <main className="flex-1">
+      {/* Structured data for search engines and AI assistants */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildBusinessJsonLd()) }}
+      />
+
       {/* 1. Hero — platform framing + illustrative control panel */}
       <Hero />
 
