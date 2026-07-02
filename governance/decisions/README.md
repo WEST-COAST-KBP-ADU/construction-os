@@ -13,3 +13,4 @@ Numbering is sequential and permanent; superseded records stay in place.
 | [DR-0006](DR-0006-domain-operation-vocabulary.md) | Domain operation vocabulary v1 | adopted | 2026-07-02 |
 | [DR-0007](DR-0007-leadgen-channel-strategy.md) | Lead generation channels: Google-first, plus Meta Pixel | adopted | 2026-07-02 |
 | [DR-0008](DR-0008-portal-architecture.md) | Adopt Portal Blueprint v0.1 as the build plan | **proposed** | 2026-07-03 |
+| [DR-0009](DR-0009-engineering-role-split.md) | Engineering role split: builder (Codex) vs reviewer/analyst/registrar | adopted | 2026-07-04 |
