@@ -46,7 +46,7 @@ Per the context package §5, before any integration exists we may design:
 4. **Repo discipline** — bounded packets, evidence, run records, fail-closed
    gates. Reuse the pattern, not the code.
 
-## Candidate domain operation vocabulary (DRAFT — not adopted)
+## Candidate domain operation vocabulary (adopted as v1 — DR-0006)
 
 Honest effect classes; anything `external_io` / `destructive` / `financial` is
 `require_approval` by default, which matches BOUNDARIES.md exactly.
