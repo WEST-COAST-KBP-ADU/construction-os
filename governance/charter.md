@@ -83,6 +83,13 @@ control boundary, and no source-of-truth drift. Do not claim Business Flow runs
 through KBP Core (`kbp-core-engineering/kbp-core`) until that is separately
 verified and adopted through a decision record.
 
+Concrete compatibility contracts (effect classes, gate/broker model, allowed
+contracts-first design work) are recorded in
+`architecture/core-compatibility.md`, derived from the pinned context package
+in `context/`. Construction OS is a future second domain client of the kernel;
+business automation is NOT_OPENED there, and nothing flows from this repository
+back into kbp-core.
+
 ## Google Workspace
 
 Google Workspace is an operational layer, not SourceTrue. No writes to Drive,

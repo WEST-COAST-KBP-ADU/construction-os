@@ -7,3 +7,4 @@ transcripts, recordings, or secrets.
 | # | Task | Result | Timestamp |
 | :- | :--- | :----- | :-------- |
 | [RUN-0001](RUN-0001-create-sourcetrue.md) | TASK-0001 | accepted | 2026-07-02 |
+| [RUN-0002](RUN-0002-ingest-core-context.md) | TASK-0002 | accepted | 2026-07-02 |
