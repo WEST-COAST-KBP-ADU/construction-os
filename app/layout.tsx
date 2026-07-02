@@ -5,8 +5,12 @@ import Footer from "@/src/components/Footer";
 import { siteConfig } from "@/src/lib/siteConfig";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: `${siteConfig.name} — ${siteConfig.tagline}`,
   description: siteConfig.description,
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({

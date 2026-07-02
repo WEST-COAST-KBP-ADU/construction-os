@@ -13,6 +13,10 @@ Target operating area: Sacramento-region California markets — Roseville,
 Rocklin, Lincoln, Folsom, Granite Bay, El Dorado Hills, Citrus Heights, and
 nearby expansion areas.
 
+Public domain: **westcoastkbp.com** (owner-confirmed 2026-07-02). The public
+platform site serves from this domain; it is the canonical base URL for site
+metadata.
+
 The platform (**Construction OS**) is not a generic CRM. It is a controlled
 AI-assisted business operating layer for construction execution.
 
