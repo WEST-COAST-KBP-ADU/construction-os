@@ -9,7 +9,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-auto w-full border-t border-black/[.08] bg-zinc-50 dark:border-white/[.12] dark:bg-zinc-950">
-      <div className="mx-auto w-full max-w-5xl px-6 py-14">
+      <div className="portal-container py-14">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1.5fr_0.7fr]">
           <div>
             <p className="text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
@@ -32,7 +32,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
+                    className="rounded-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
                   >
                     {item.label}
                   </a>

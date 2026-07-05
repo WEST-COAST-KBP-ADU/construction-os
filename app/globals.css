@@ -3,6 +3,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --surface: #ffffff;
+  --surface-muted: #f6f5f2;
+  --surface-strong: #111111;
+  --line: rgb(23 23 23 / 0.08);
+  --line-strong: rgb(23 23 23 / 0.14);
+  --radius-card: 8px;
+  --radius-panel: 14px;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-panel: 0 18px 60px rgb(0 0 0 / 0.12);
   /* Brand accent — a warm, earthy "build" amber. Used sparingly for emphasis
      (kickers, status, rails, links) so the base stays calm and professional. */
   --accent: #b45309; /* amber-700 — legible on light surfaces */
@@ -13,6 +22,13 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --surface: #111111;
+    --surface-muted: #18181b;
+    --surface-strong: #f4f4f5;
+    --line: rgb(255 255 255 / 0.1);
+    --line-strong: rgb(255 255 255 / 0.18);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-panel: 0 22px 70px rgb(0 0 0 / 0.35);
     --accent: #fbbf24; /* amber-400 — brighter for dark surfaces */
     --accent-contrast: #1c1917;
   }
@@ -42,8 +58,56 @@ body {
   background: color-mix(in srgb, var(--accent) 22%, transparent);
 }
 
-/* Subtle layered hero backdrop — pure CSS, no image assets, no runtime cost.
-   A faint blueprint grid that fades out toward the edges. */
+:where(a, button):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.portal-container {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.portal-link-button,
+.portal-link-button-secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding-inline: 1.5rem;
+  font-weight: 600;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.portal-link-button {
+  background: var(--surface-strong);
+  color: var(--accent-contrast);
+}
+
+.portal-link-button:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--surface-strong) 88%, var(--accent));
+}
+
+.portal-link-button-secondary {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--foreground);
+}
+
+.portal-link-button-secondary:hover {
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+}
+
+/* Subtle blueprint grid that fades out toward the edges. */
 @utility hero-grid {
   background-image: linear-gradient(
       to right,
@@ -58,15 +122,6 @@ body {
   background-size: 46px 46px;
   -webkit-mask-image: radial-gradient(70% 60% at 50% 0%, #000 35%, transparent 100%);
   mask-image: radial-gradient(70% 60% at 50% 0%, #000 35%, transparent 100%);
-}
-
-/* Soft accent glow behind the hero / closing CTA. */
-@utility hero-glow {
-  background: radial-gradient(
-    55% 45% at 50% -5%,
-    color-mix(in srgb, var(--accent) 14%, transparent),
-    transparent 70%
-  );
 }
 
 @media (prefers-reduced-motion: reduce) {
