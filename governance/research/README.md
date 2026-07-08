@@ -14,6 +14,7 @@ must carry the wording: "Requires official source verification."
 | [RP-0003](RP-0003-technical-audit.md) | Technical competitive audit — 12 CA ADU companies (owner-provided PDF) | synthesized | portal architecture DR (pending) |
 | [RP-0004](RP-0004-portal-research.md) | ADU portal research + design blueprint (owner-provided PDF) | synthesized | portal architecture DR (pending) |
 | [RP-0005](RP-0005-voice-maturity.md) | Voice module maturity research (owner-provided) | synthesized | voice architecture DR (pending) |
+| [RP-0006](RP-0006-training-data-strategy.md) | AI training data as business strategy (owner-provided article + analysis) | synthesized | DR-0010 (proposed), data policy DR |
 
 Pre-repo voice research remains summarized, unadopted, in
 `../architecture/voice-lab.md`.

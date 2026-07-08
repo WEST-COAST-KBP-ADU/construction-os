@@ -14,3 +14,4 @@ Numbering is sequential and permanent; superseded records stay in place.
 | [DR-0007](DR-0007-leadgen-channel-strategy.md) | Lead generation channels: Google-first, plus Meta Pixel | adopted | 2026-07-02 |
 | [DR-0008](DR-0008-portal-architecture.md) | Adopt Portal Blueprint v0.1 as the build plan | **proposed** | 2026-07-03 |
 | [DR-0009](DR-0009-engineering-role-split.md) | Engineering role split: builder (Codex) vs reviewer/analyst/registrar | adopted | 2026-07-04 |
+| [DR-0010](DR-0010-dataset-by-design.md) | Dataset-by-design principle | **proposed** | 2026-07-04 |
