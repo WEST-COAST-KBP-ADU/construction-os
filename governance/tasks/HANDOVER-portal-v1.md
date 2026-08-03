@@ -167,23 +167,22 @@ For each task:
 
 Execute in order. Task 3 is independent and may run in parallel.
 
-### TASK-0007 — Visual identity pass v1
+### TASK-0007 — Land the portal design foundation
 Packet: `TASK-0007-visual-identity-pass.md` · Blueprint §9
 
-Give the existing preview a real visual identity: a design token layer
-(palette, type scale, spacing, radii, shadows, motion), then restyle the
-existing components on top of it. Mobile-first. No new copy, no new routes.
+**Do not build a new homepage.** The design foundation already exists, unmerged,
+on `feature/task-0006a-production-grade-portal-foundation-v0.1`: token layer in
+`app/globals.css` plus a component system. Your job is to rebase that branch onto
+`main`, audit every visitor-facing string against `BOUNDARIES.md`, strip any
+address input from `PropertyScreeningPreview` (capture is blocked), enforce that
+no component hard-codes a color/size/spacing value, self-host fonts, and land it.
 
-RP-0004 proposes deep forest green + gold with DM Sans/Inter. That is **input,
-not a decision** — apply it, show the result, and let the owner accept or
-redirect. Self-host the fonts.
+Quality bar, measured on the deployed Vercel preview, not locally: Lighthouse
+mobile Performance ≥ 90, Accessibility ≥ 95, LCP < 2.5s, CLS < 0.1. Paste the
+numbers and before/after screenshots into the PR.
 
-Quality bar, measured on the deployed preview, not locally: Lighthouse mobile
-Performance ≥ 90 and Accessibility ≥ 95, LCP < 2.5s, CLS < 0.1. Include
-before/after screenshots in the PR.
-
-Acceptance hinges on one structural check: no component contains a hard-coded
-color, font size, or spacing value. Everything resolves through tokens.
+Read the packet in full — it lists the conflict-resolution rule and the exact
+audit obligations.
 
 ### TASK-0008 — P1 content build-out
 Packet: `TASK-0008-p1-content-buildout.md` · Blueprint §§2–3, §8 (P1)
