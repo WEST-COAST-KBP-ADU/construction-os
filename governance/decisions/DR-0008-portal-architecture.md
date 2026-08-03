@@ -1,6 +1,8 @@
 # DR-0008: Adopt Portal Blueprint v0.1 as the build plan for westcoastkbp.com
 
-- **Status:** proposed — awaiting owner approval
+- **Status:** adopted — owner directive of 2026-08-03 («Приступаем к работе…
+  начать нужно с визуала и с этих гисданных и начать наполнение нашей
+  платформы»)
 - **Date:** 2026-07-03
 - **Decider:** owner
 - **Related:** `architecture/portal-blueprint-v0.1.md`, RP-0001…RP-0005,
