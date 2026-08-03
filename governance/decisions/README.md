@@ -15,3 +15,4 @@ Numbering is sequential and permanent; superseded records stay in place.
 | [DR-0008](DR-0008-portal-architecture.md) | Adopt Portal Blueprint v0.1 as the build plan | **proposed** | 2026-07-03 |
 | [DR-0009](DR-0009-engineering-role-split.md) | Engineering role split: builder (Codex) vs reviewer/analyst/registrar | adopted | 2026-07-04 |
 | [DR-0010](DR-0010-dataset-by-design.md) | Dataset-by-design principle | **proposed** | 2026-07-04 |
+| [DR-0011](DR-0011-lead-intake-data-handling.md) | Lead intake data handling — where a captured lead may live | **proposed** | 2026-08-03 |
