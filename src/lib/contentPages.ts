@@ -77,6 +77,44 @@ export type ComparePage = {
   faq: FaqItem[];
 };
 
+export type ProcessStep = IndexedContentItem & {
+  sequence: string;
+  output: string;
+};
+
+export type ProcessPage = {
+  metaTitle: string;
+  title: string;
+  eyebrow: string;
+  description: string;
+  lede: string;
+  heroSignal: string;
+  stepsHeading: string;
+  boundaryHeading: string;
+  boundaryIntro: string;
+  steps: ProcessStep[];
+  boundaries: IndexedContentItem[];
+  faq: FaqItem[];
+};
+
+export type FaqGroup = {
+  label: string;
+  heading: string;
+  description: string;
+  items: FaqItem[];
+};
+
+export type FaqPage = {
+  metaTitle: string;
+  title: string;
+  eyebrow: string;
+  description: string;
+  lede: string;
+  heroSignal: string;
+  indexHeading: string;
+  groups: FaqGroup[];
+};
+
 export const officialVerificationWarning = "Requires official source verification.";
 
 export const contentPageLabels = {
@@ -84,6 +122,8 @@ export const contentPageLabels = {
   services: "Services",
   about: "About",
   compare: "Compare",
+  process: "Process",
+  faq: "FAQ",
   reviewBoundary: "Review boundary",
   openServicePage: "Open service page",
   servicePageStatus: "Service page",
@@ -112,6 +152,16 @@ export const contentPageLabels = {
     controlledModel: "Controlled review model",
     limits: "What control does not mean",
     serviceContext: "See the model in context",
+  },
+  processTemplate: {
+    controlSequence: "Control sequence",
+    stageOutput: "Review output",
+    operatingBoundaries: "Operating boundaries",
+    relatedQuestions: "Related questions",
+  },
+  faqTemplate: {
+    answerIndex: "Answer index",
+    questions: "Questions and answers",
   },
 } as const;
 
@@ -710,3 +760,180 @@ export const comparePage = {
     },
   ],
 } as const satisfies ComparePage;
+
+export const processPage = {
+  metaTitle: "Process",
+  title: "A construction process that keeps evidence, decisions, and action connected",
+  eyebrow: "Controlled project pathway",
+  description:
+    "How West Coast KBP structures residential construction work from initial intent through evidence, OwnerReview, controlled action, and a reviewable record.",
+  lede:
+    "Construction questions rarely arrive in a clean sequence. The process creates that sequence deliberately: organize the request, expose what is unknown, prepare a bounded decision, and authorize only the next appropriate action.",
+  heroSignal:
+    "The process organizes work; it does not guarantee property eligibility, permit approval, cost, schedule, or a construction outcome.",
+  stepsHeading: "Every stage produces something the next reviewer can inspect",
+  boundaryHeading: "Control improves visibility without replacing official or professional judgment",
+  boundaryIntro:
+    "The public portal explains the operating model only. It does not collect project information or initiate a business action.",
+  steps: [
+    {
+      sequence: "01",
+      title: "Frame the request",
+      description:
+        "Separate the desired result from property assumptions, implied scope, and unanswered questions.",
+      output: "A candidate request with assumptions and exclusions labeled.",
+    },
+    {
+      sequence: "02",
+      title: "Assemble evidence",
+      description:
+        "Identify the official records, existing-condition material, and discipline inputs needed for review.",
+      output: "An evidence index with source, date, subject, and missing items visible.",
+    },
+    {
+      sequence: "03",
+      title: "Classify uncertainty",
+      description:
+        "Keep facts, owner preferences, professional questions, conflicts, and unknowns in distinct categories.",
+      output: "A review packet that does not smooth gaps into conclusions.",
+    },
+    {
+      sequence: "04",
+      title: "OwnerReview",
+      description:
+        "The owner reviews scope, dependencies, evidence, risks, and the proposed boundary of the next step.",
+      output: "An explicit accept, reject, revise, pause, or request-evidence decision.",
+    },
+    {
+      sequence: "05",
+      title: "Authorize one bounded action",
+      description:
+        "Only an approved next step may progress; wider commitments remain outside the authorization.",
+      output: "A named action, owner, prerequisites, and stop conditions.",
+    },
+    {
+      sequence: "06",
+      title: "Record the result",
+      description:
+        "Capture a sanitized account of what was accepted or rejected and what remains unresolved.",
+      output: "A reviewable record that supports the next decision without storing public-site PII.",
+    },
+  ],
+  boundaries: [
+    {
+      title: "Official decisions remain official",
+      description: `Permit, zoning, code, and property-specific questions stay with the appropriate authority. ${officialVerificationWarning}`,
+    },
+    {
+      title: "Professional questions stay assigned",
+      description:
+        "Design and construction-discipline judgments are routed to qualified review rather than inferred by the portal.",
+    },
+    {
+      title: "Owner approval remains explicit",
+      description:
+        "Software may prepare a candidate artifact, but it cannot approve work or make an external commitment.",
+    },
+    {
+      title: "Unknowns remain visible",
+      description:
+        "Missing information is a recorded state and a stop condition, not an invitation to guess.",
+    },
+  ],
+  faq: [
+    {
+      question: "Does this process guarantee a permit or construction result?",
+      answer: `No. It creates clearer review and control; it does not determine an external outcome. ${officialVerificationWarning}`,
+    },
+    {
+      question: "Can a visitor submit a project through this page?",
+      answer:
+        "No. The public portal has no form, account, upload, storage, tracking, booking, or message path.",
+    },
+    {
+      question: "Who approves the next action?",
+      answer:
+        "The owner is the final approval authority. AI and software may organize evidence and prepare a candidate review packet, but they do not approve or trigger business action.",
+    },
+  ],
+} as const satisfies ProcessPage;
+
+export const faqPage = {
+  metaTitle: "ADU FAQ",
+  title: "Clear ADU answers with the limits stated just as clearly",
+  eyebrow: "Sacramento-region ADU FAQ",
+  description:
+    "Answer-first guidance about ADU types, review boundaries, service area, pricing and schedule policy, and the West Coast KBP operating model.",
+  lede:
+    "These answers provide orientation, not a property determination. Property-specific, permit, zoning, code, and buildability questions require current official-source and appropriate professional review.",
+  heroSignal: `No answer on this page evaluates a parcel or promises an approval, price, schedule, or project outcome. ${officialVerificationWarning}`,
+  indexHeading: "Start with the question behind your next decision",
+  groups: [
+    {
+      label: "01 · ADU fundamentals",
+      heading: "Understand the terms before applying them to a property",
+      description:
+        "General orientation for common ADU and garage-conversion questions. Property application remains a separate review step.",
+      items: [
+        {
+          question: "What is an ADU (accessory dwelling unit)?",
+          answer:
+            "An ADU is generally understood as a secondary dwelling associated with a primary residential property. Common forms include detached, attached, conversion, and junior accessory dwelling units; the definition applicable to a specific property requires current official-source review.",
+        },
+        {
+          question: "What is a garage conversion, and is it different from an ADU?",
+          answer: `A garage conversion adapts existing garage space for a different use. Whether a proposed conversion is treated as an ADU, and which requirements apply, depends on current official rules and the property context. ${officialVerificationWarning}`,
+        },
+        {
+          question: "Can an ADU fit on my lot?",
+          answer: `This page cannot determine that. Property records, zoning, lot conditions, existing improvements, access, utilities, and applicable official requirements must be reviewed for the specific parcel. ${officialVerificationWarning}`,
+        },
+      ],
+    },
+    {
+      label: "02 · Planning boundaries",
+      heading: "Know which answers require an individual review",
+      description:
+        "Permit, price, and schedule questions are not converted into website promises. They stay attached to evidence and owner review.",
+      items: [
+        {
+          question: "Do I need a permit to build an ADU in the Sacramento region?",
+          answer: `ADU work commonly involves city or county review, but the process and requirements vary by jurisdiction and project. The applicable path must be confirmed with the appropriate local authority. ${officialVerificationWarning}`,
+        },
+        {
+          question: "How much does an ADU cost?",
+          answer:
+            "The website does not publish or promise prices. Site conditions, scope, selections, professional inputs, and jurisdiction-related items can materially change an estimate; any future estimate must be prepared from project evidence and approved by the owner before a commitment is made.",
+        },
+        {
+          question: "How long does an ADU project take?",
+          answer:
+            "The website does not publish or promise schedules. Design, review, procurement, site conditions, and construction scope can affect sequencing; any future project plan must be evidence-based and owner-reviewed.",
+        },
+      ],
+    },
+    {
+      label: "03 · Working model",
+      heading: "See how West Coast KBP organizes responsibility",
+      description:
+        "The differentiator is a visible control structure: candidate artifacts, evidence, OwnerReview, bounded action, and a reviewable record.",
+      items: [
+        {
+          question: "What areas does West Coast KBP serve?",
+          answer:
+            "The public service area is the Sacramento region, including Roseville, Rocklin, Lincoln, Folsom, Granite Bay, El Dorado Hills, Citrus Heights, and nearby areas.",
+        },
+        {
+          question: "How is West Coast KBP different from a typical contractor?",
+          answer:
+            "West Coast KBP is building a controlled operating model around visible scope, state, approvals, evidence, and one bounded next action. This describes the workflow design; it is not a guarantee of an external result.",
+        },
+        {
+          question: "Do you work with general contractors and subcontractors?",
+          answer:
+            "GC and subcontractor coordination is represented as a distinct operating lane, separate from homeowner-facing intake. Specific participation, scope, and commitments require owner review.",
+        },
+      ],
+    },
+  ],
+} as const satisfies FaqPage;

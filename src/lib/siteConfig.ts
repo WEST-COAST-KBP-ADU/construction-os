@@ -98,7 +98,7 @@ export const siteConfig = {
 
   nav: [
     { label: "Services", href: "/services/detached-adu" },
-    { label: "How It Works", href: "/#how-it-works" },
+    { label: "How It Works", href: "/process" },
     { label: "Project Control", href: "/#project-control" },
     { label: "Compare", href: "/compare" },
     { label: "About", href: "/about" },
