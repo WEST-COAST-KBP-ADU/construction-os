@@ -1,57 +1,40 @@
 import { siteConfig } from "@/src/lib/siteConfig";
 
-/**
- * Preview-safe footer. All strings come from siteConfig so review has a single
- * place to inspect public-facing statements.
- */
 export default function Footer() {
-  const { footer, name, tagline, nav } = siteConfig;
+  const { footer, labels, name, nav, tagline } = siteConfig;
 
   return (
-    <footer className="mt-auto w-full border-t border-black/[.08] bg-zinc-50 dark:border-white/[.12] dark:bg-zinc-950">
-      <div className="mx-auto w-full max-w-5xl px-6 py-14">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1.5fr_0.7fr]">
-          <div>
-            <p className="text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-              {name}
-            </p>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              {tagline}
-            </p>
-            <p className="mt-4 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              {footer.trustProof}
-            </p>
+    <footer className="site-footer">
+      <div className="portal-container site-footer__inner">
+        <div className="site-footer__top">
+          <div className="site-footer__brand">
+            <p className="footer__name">{name}</p>
+            <p className="footer__tagline">{tagline}</p>
+            <p className="footer__trust">{footer.trustProof}</p>
           </div>
 
-          <div className="sm:justify-self-end">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
-              Explore
-            </p>
-            <ul className="mt-4 space-y-2 text-sm">
+          <nav className="footer__navigation" aria-label={labels.explore}>
+            <p className="footer__eyebrow">{labels.explore}</p>
+            <ul className="footer__links">
               {nav.map((item) => (
                 <li key={item.href}>
-                  <a
-                    href={item.href}
-                    className="text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-50"
-                  >
+                  <a href={item.href} className="footer__link">
                     {item.label}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
 
-        <div className="mt-10 space-y-3 border-t border-black/[.06] pt-8 text-xs leading-6 text-zinc-500 dark:border-white/[.08] dark:text-zinc-400">
-          <p className="font-medium text-zinc-600 dark:text-zinc-300">
-            {footer.previewNotice}
-          </p>
-          <p>{footer.disclaimer}</p>
-          <p>{footer.noGuarantees}</p>
+        <div className="site-footer__legal">
+          <p className="footer__preview">{footer.previewNotice}</p>
+          <p className="footer__copy">{footer.disclaimer}</p>
+          <p className="footer__copy">{footer.noGuarantees}</p>
         </div>
 
-        <p className="mt-8 text-xs text-zinc-400 dark:text-zinc-500">
-          &copy; {name}. All rights reserved.
+        <p className="footer__copyright">
+          © {name}. {labels.allRightsReserved}
         </p>
       </div>
     </footer>

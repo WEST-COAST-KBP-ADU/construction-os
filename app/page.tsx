@@ -1,48 +1,30 @@
 import Hero from "@/src/components/Hero";
-import { buildBusinessJsonLd, serializeJsonLd } from "@/src/lib/structuredData";
-import TrustBar from "@/src/components/TrustBar";
 import ServicePreview from "@/src/components/ServicePreview";
-import PlatformCapabilityPreview from "@/src/components/PlatformCapabilityPreview";
-import ObjectControlPreview from "@/src/components/ObjectControlPreview";
-import VoiceDirection from "@/src/components/VoiceDirection";
 import Process from "@/src/components/Process";
+import ProjectControlPreview from "@/src/components/ProjectControlPreview";
+import ActiveProjectsPreview from "@/src/components/ActiveProjectsPreview";
+import PropertyScreeningPreview from "@/src/components/PropertyScreeningPreview";
 import GCPartnerPath from "@/src/components/GCPartnerPath";
+import VoiceDirection from "@/src/components/VoiceDirection";
 import PreviewCTA from "@/src/components/PreviewCTA";
+import { buildBusinessJsonLd, serializeJsonLd } from "@/src/lib/structuredData";
 
 export default function Home() {
   return (
-    <main className="flex-1">
-      {/* Structured data for search engines and AI assistants */}
+    <main id="main-content" className="site-main">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildBusinessJsonLd()) }}
       />
 
-      {/* 1. Hero — platform framing + illustrative control panel */}
       <Hero />
-
-      {/* 2. Status bar — preview scope, platform direction, no collection */}
-      <TrustBar />
-
-      {/* 3. Service ladder — ADU, conversion, residential, GC/subcontract */}
       <ServicePreview />
-
-      {/* 4. Platform capability preview — direction only, not active services */}
-      <PlatformCapabilityPreview />
-
-      {/* 5. Existing object control preview — no real object data */}
-      <ObjectControlPreview />
-
-      {/* 6. Premium voice direction — not implemented or live */}
-      <VoiceDirection />
-
-      {/* 7. Control flow — intent to future Business Hall */}
       <Process />
-
-      {/* 8. GC partner path — first-class lane, no submission path */}
+      <ProjectControlPreview />
+      <ActiveProjectsPreview />
+      <PropertyScreeningPreview />
       <GCPartnerPath />
-
-      {/* 9. Preview-only CTA — explicit: nothing collected */}
+      <VoiceDirection />
       <PreviewCTA />
     </main>
   );

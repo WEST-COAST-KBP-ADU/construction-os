@@ -26,7 +26,9 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Project Structure
 
 - `app/` — Next.js App Router pages and layout
-- `src/components/` — page sections (Hero, TrustBar, ServicePreview, etc.)
+- `src/components/` — public portal sections such as Hero, service lanes,
+  How It Works, project control, active projects, screening, partner path,
+  voice direction, and final CTA
 - `src/lib/siteConfig.ts` — single source of truth for all public-facing copy
 - `public/` — static assets
 
@@ -38,6 +40,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `npm run build` | Production build |
 | `npm run start` | Serve the production build |
 | `npm run lint` | Run ESLint |
+| `npm test` | Run Vitest |
 
 ## Deployment
 
