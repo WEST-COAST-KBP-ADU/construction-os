@@ -4,7 +4,7 @@ Owner of this file: Claude (registrar). ChatGPT edits only its own lane rows,
 in the same PR as the work. Merged `main` is the only truth; this board is the
 index, not the source.
 
-Updated: 2026-08-04 (post PR #29 pending merge)
+Updated: 2026-08-04b (kickoff under operating model v1; ChatGPT ack received)
 
 ## Lanes
 
@@ -12,7 +12,7 @@ Updated: 2026-08-04 (post PR #29 pending merge)
 | :--- | :-- | :--- | :--------- |
 | A build (ChatGPT) | Close out TASK-0007/0010 evidence | TASK-0012 studio spike (2D, no PII) | — |
 | B research (ChatGPT) | RP-0008 Sacramento GIS (city + county, two rows) | — | — |
-| C governance (Claude) | REVIEW of next builder PR; voice-entrance DR draft dormant | Phase-0 packet on owner "open" | Owner decisions below |
+| C governance (Claude) | Studio config schema v0.1 shipped (binding for TASK-0012) | REVIEW of next builder PR | Owner decisions below |
 | Landing pages | **parked last** (owner 2026-08-04) — TASK-0011 | after lanes A+B ship | owner order |
 
 ## Owner decision queue (blocking, in order)
