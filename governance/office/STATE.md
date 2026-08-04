@@ -36,5 +36,5 @@ Updated: 2026-08-04c — rebased onto main d02be35 (DR-0015/DR-0016 landed via P
 ## Done (chronological tail)
 
 - 2026-08-03: PR #20/#21 governance base; PR #28 DR-0013 + TASK-0011.
-- 2026-08-04: REVIEW-0001 issued; queue reordered technical-first; TASK-0012
+- 2026-08-04: REVIEW-0001 issued; queue reordered technical-first; TASK-0013
   written; PR #29 opened (DR-0014 tail + reviews + operating model).

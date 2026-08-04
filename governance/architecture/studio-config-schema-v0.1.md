@@ -1,6 +1,6 @@
-# Studio Configuration Schema v0.1 — deterministic contract for TASK-0012
+# Studio Configuration Schema v0.1 — deterministic contract for TASK-0013
 
-Status: architecture spec for the builder. Binding for TASK-0012 unless a
+Status: architecture spec for the builder. Binding for TASK-0013 unless a
 REVIEW file argues otherwise. Author: Lane C. Date: 2026-08-04.
 
 ## 1. Canonical objects
@@ -65,7 +65,7 @@ fixed by a new version.
 `config_hash = SHA-256` over the canonical form: UTF-8, keys sorted
 lexicographically at every level, no whitespace, `config_hash` field excluded.
 Same selections + same catalog version ⇒ identical hash, forever. The replay
-test in TASK-0012 asserts exactly this, including across a page reload.
+test in TASK-0013 asserts exactly this, including across a page reload.
 
 ## 2. Behavior rules
 
@@ -94,7 +94,7 @@ until the intake phase opens.
 - The deny-rule table is the same discipline as the statutory rules table in
   Property Intelligence v0.1: versioned data, owner-verifiable, no model.
 
-## 5. Builder checklist (TASK-0012 PR must show)
+## 5. Builder checklist (TASK-0013 PR must show)
 
 - [ ] Catalog release file with ≥2 archetypes, licenses filled
 - [ ] Hash canonicalization implemented exactly as §1; replay test green
