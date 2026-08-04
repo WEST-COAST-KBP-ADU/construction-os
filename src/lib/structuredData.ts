@@ -4,7 +4,13 @@
  */
 
 import { siteConfig } from "./siteConfig";
-import { servicePages, type FaqItem, type ServicePage } from "./contentPages";
+import {
+  servicePages,
+  type FaqItem,
+  type FaqPage,
+  type ProcessPage,
+  type ServicePage,
+} from "./contentPages";
 
 const SERVICE_AREA = [
   "Roseville, CA",
@@ -144,6 +150,53 @@ export function buildComparePageJsonLd({
         "@type": "FAQPage",
         "@id": `${url}#faq`,
         url: `${url}#frequently-asked-questions`,
+        mainEntity: buildFaqEntities(faq),
+      },
+    ],
+  };
+}
+
+export function buildProcessPageJsonLd(page: ProcessPage) {
+  const url = pageUrl("/process");
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: page.title,
+        description: page.description,
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        url: `${url}#frequently-asked-questions`,
+        mainEntity: buildFaqEntities(page.faq),
+      },
+    ],
+  };
+}
+
+export function buildFaqPageJsonLd(page: FaqPage) {
+  const url = pageUrl("/faq");
+  const faq = page.groups.flatMap((group) => group.items);
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: page.title,
+        description: page.description,
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        url,
         mainEntity: buildFaqEntities(faq),
       },
     ],

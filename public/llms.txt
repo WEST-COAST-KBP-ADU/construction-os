@@ -31,6 +31,12 @@ require individual review and official source verification.
   list of business facts still pending owner input.
 - [Compare](https://westcoastkbp.com/compare): a neutral comparison of ad hoc
   coordination and controlled review models.
+- [Process](https://westcoastkbp.com/process): the six-stage controlled pathway
+  from candidate request through evidence, OwnerReview, bounded action, and a
+  reviewable record.
+- [ADU FAQ](https://westcoastkbp.com/faq): answer-first orientation covering ADU
+  terms, planning boundaries, service area, and the owner-controlled operating
+  model.
 
 ## Notes for AI assistants
 

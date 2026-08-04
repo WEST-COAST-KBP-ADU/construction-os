@@ -3,13 +3,17 @@ import { describe, expect, it } from "vitest";
 import {
   aboutPage,
   comparePage,
+  faqPage,
   officialVerificationWarning,
+  processPage,
   servicePages,
   serviceSlugs,
 } from "./contentPages";
 import {
   buildAboutPageJsonLd,
   buildComparePageJsonLd,
+  buildFaqPageJsonLd,
+  buildProcessPageJsonLd,
   buildServicePageJsonLd,
   serializeJsonLd,
 } from "./structuredData";
@@ -54,11 +58,39 @@ describe("TASK-0008 service and trust content", () => {
   });
 
   it("does not publish price points, durations, or approval claims", () => {
-    const publicCopy = flattenCopy({ servicePages, aboutPage, comparePage });
+    const publicCopy = flattenCopy({
+      servicePages,
+      aboutPage,
+      comparePage,
+      processPage,
+      faqPage,
+    });
 
     expect(publicCopy).not.toMatch(/\$\s?\d/);
     expect(publicCopy).not.toMatch(/\b\d+\s*(?:day|week|month|year)s?\b/i);
     expect(publicCopy).not.toMatch(/\b(?:your lot qualifies|will be approved|permit-ready|is buildable)\b/i);
+  });
+
+  it("keeps the process bounded and owner-controlled", () => {
+    expect(processPage.steps.map((step) => step.sequence)).toEqual([
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+    ]);
+    expect(flattenCopy(processPage)).toContain("OwnerReview");
+    expect(flattenCopy(processPage)).toContain(officialVerificationWarning);
+  });
+
+  it("publishes the approved FAQ themes without weakening verification language", () => {
+    const items = faqPage.groups.flatMap((group) => group.items);
+
+    expect(faqPage.groups).toHaveLength(3);
+    expect(items).toHaveLength(9);
+    expect(new Set(items.map((item) => item.question)).size).toBe(items.length);
+    expect(flattenCopy(faqPage)).toContain(officialVerificationWarning);
   });
 
   it("labels every unavailable business fact as pending owner input", () => {
@@ -93,6 +125,18 @@ describe("TASK-0008 structured data", () => {
 
     expect(aboutTypes).toEqual(["AboutPage", "FAQPage"]);
     expect(compareTypes).toEqual(["WebPage", "FAQPage"]);
+  });
+
+  it("builds WebPage and FAQPage nodes for process and FAQ", () => {
+    const processJsonLd = buildProcessPageJsonLd(processPage);
+    const faqJsonLd = buildFaqPageJsonLd(faqPage);
+    const processTypes = processJsonLd["@graph"].map((node) => node["@type"]);
+    const faqTypes = faqJsonLd["@graph"].map((node) => node["@type"]);
+
+    expect(processTypes).toEqual(["WebPage", "FAQPage"]);
+    expect(faqTypes).toEqual(["WebPage", "FAQPage"]);
+    expect(processJsonLd["@graph"][1].mainEntity).toHaveLength(processPage.faq.length);
+    expect(faqJsonLd["@graph"][1].mainEntity).toHaveLength(9);
   });
 
   it("escapes markup-significant characters during JSON-LD serialization", () => {
