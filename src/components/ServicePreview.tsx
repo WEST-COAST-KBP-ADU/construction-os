@@ -1,9 +1,12 @@
+import Link from "next/link";
+
 import ModulePreviewCard from "@/src/components/ModulePreviewCard";
 import PortalSection from "@/src/components/PortalSection";
+import { contentPageLabels, servicePages } from "@/src/lib/contentPages";
 import { siteConfig } from "@/src/lib/siteConfig";
 
 export default function ServicePreview() {
-  const { sections, services } = siteConfig;
+  const { sections } = siteConfig;
   const copy = sections.services;
 
   return (
@@ -15,14 +18,18 @@ export default function ServicePreview() {
       tone="muted"
     >
       <ul className="service-grid">
-        {services.map((service, index) => (
-          <li key={service.title}>
+        {servicePages.map((service) => (
+          <li key={service.slug}>
             <ModulePreviewCard
-              label={String(index + 1).padStart(2, "0")}
-              title={service.title}
+              label={service.sequence}
+              title={service.shortTitle}
               description={service.description}
-              status={service.lane}
-            />
+              status={contentPageLabels.servicePageStatus}
+            >
+              <Link href={`/services/${service.slug}`} className="button button--secondary">
+                {contentPageLabels.openServicePage}
+              </Link>
+            </ModulePreviewCard>
           </li>
         ))}
       </ul>

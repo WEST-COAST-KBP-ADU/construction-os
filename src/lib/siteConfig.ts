@@ -97,11 +97,11 @@ export const siteConfig = {
   },
 
   nav: [
-    { label: "Services", href: "#services" },
-    { label: "How It Works", href: "#how-it-works" },
-    { label: "Project Control", href: "#project-control" },
-    { label: "Screening", href: "#property-screening" },
-    { label: "Partners", href: "#gc-partners" },
+    { label: "Services", href: "/services/detached-adu" },
+    { label: "How It Works", href: "/#how-it-works" },
+    { label: "Project Control", href: "/#project-control" },
+    { label: "Compare", href: "/compare" },
+    { label: "About", href: "/about" },
   ] satisfies NavLink[],
 
   hero: {

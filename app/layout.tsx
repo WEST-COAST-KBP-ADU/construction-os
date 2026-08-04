@@ -21,7 +21,10 @@ const dmSans = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: [siteConfig.name, siteConfig.tagline].join(" — "),
+  title: {
+    default: [siteConfig.name, siteConfig.tagline].join(" — "),
+    template: `%s — ${siteConfig.name}`,
+  },
   description: siteConfig.description,
   alternates: {
     canonical: "/",
