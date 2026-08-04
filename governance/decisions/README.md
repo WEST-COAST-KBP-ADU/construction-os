@@ -12,8 +12,9 @@ Numbering is sequential and permanent; superseded records stay in place.
 | [DR-0005](DR-0005-research-gate.md) | Research Gate required before major decisions | adopted | 2026-07-02 |
 | [DR-0006](DR-0006-domain-operation-vocabulary.md) | Domain operation vocabulary v1 | adopted | 2026-07-02 |
 | [DR-0007](DR-0007-leadgen-channel-strategy.md) | Lead generation channels: Google-first, plus Meta Pixel | adopted | 2026-07-02 |
-| [DR-0008](DR-0008-portal-architecture.md) | Adopt Portal Blueprint v0.1 as the build plan | **proposed** | 2026-07-03 |
+| [DR-0008](DR-0008-portal-architecture.md) | Adopt Portal Blueprint v0.1 as the build plan | adopted | 2026-08-03 |
 | [DR-0009](DR-0009-engineering-role-split.md) | Engineering role split: builder (Codex) vs reviewer/analyst/registrar | adopted | 2026-07-04 |
 | [DR-0010](DR-0010-dataset-by-design.md) | Dataset-by-design principle | **proposed** | 2026-07-04 |
 | [DR-0011](DR-0011-lead-intake-data-handling.md) | Lead intake data handling — where a captured lead may live | **proposed** | 2026-08-03 |
 | [DR-0012](DR-0012-client-facing-screening-output.md) | Client-facing screening output — amend BOUNDARIES.md to permit it | **proposed** | 2026-08-03 |
+| [DR-0013](DR-0013-homepage-supersedes-blueprint-s3.md) | Architectural homepage supersedes Blueprint §3 | adopted | 2026-08-03 |
