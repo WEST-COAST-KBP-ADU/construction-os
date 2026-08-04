@@ -1,12 +1,11 @@
 # DR-0008: Adopt Portal Blueprint v0.1 as the build plan for westcoastkbp.com
 
-- **Status:** adopted — owner directive of 2026-08-03 («Приступаем к работе…
-  начать нужно с визуала и с этих гисданных и начать наполнение нашей
-  платформы»)
+- **Status:** adopted — Blueprint §8 sequencing superseded by DR-0015; the
+  remaining architecture stays adopted subject to later superseding records
 - **Date:** 2026-07-03
 - **Decider:** owner
 - **Related:** `architecture/portal-blueprint-v0.1.md`, RP-0001…RP-0005,
-  DR-0002, DR-0004, DR-0006, DR-0007
+  DR-0002, DR-0004, DR-0006, DR-0007, DR-0015
 
 ## Context
 
@@ -16,13 +15,18 @@ market has no modern portal, no address-first intake, no client portal, and
 weak attribution. The platform's own controlled-execution model is the
 differentiator competitors lack.
 
-## Decision (proposed)
+## Decision
 
 Adopt `architecture/portal-blueprint-v0.1.md` as the canonical build plan:
 information architecture (§2–3), 3-tier lead funnel mapped to kernel
 operations (§4), candidate stack with per-vendor decision gates (§5), voice
 phasing (§6), deferred client portal (§7), build phases P0–P5 (§8), and a
 separate dedicated design phase (§9).
+
+DR-0015 supersedes only the §8 P0–P5 sequence. It opens governance Phase 0 and
+a no-contact/no-tracking Phase 1; its Phase 2–10 table is nonbinding. The
+blueprint's information architecture remains adopted where not otherwise
+superseded.
 
 ## Explicitly NOT decided by this record
 
@@ -38,7 +42,8 @@ separate dedicated design phase (§9).
 
 ## Revisit trigger
 
-Completion of P2 (intake live) — review blueprint against real lead data.
+A later owner-approved intake phase reaches production — review the blueprint
+against real lead data without relying on superseded phase numbering.
 
 ## Boundary check
 

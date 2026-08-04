@@ -69,10 +69,11 @@ owner-approved business actions.
 
 By owner decision (DR-0007), lead generation is built Google-first: Google
 Business Profile, Google's real-estate / housing-search services, Google Ads /
-Local Services Ads, Maps/geo services, and organic search — plus Meta Pixel for
-ad tracking and retargeting. Concrete integrations pass the Research Gate
-first; deploying any tracking tag on the live site additionally requires a
-privacy review task packet (CCPA/CPRA, consent/notice) before going live.
+Local Services Ads, Maps/geo services, and organic search — plus Meta as a
+future channel. Concrete integrations pass the Research Gate first. DR-0015
+keeps every tracking tag, pixel/CAPI path, campaign activation, and ad spend
+closed through Phase 1; later deployment requires its own privacy, consent, and
+implementation gates.
 
 ## Lead object concept
 
@@ -98,9 +99,11 @@ entitlement, or approval.
 ## Voice platform direction
 
 Premium controlled voice interface — calm, professional, concise, premium, not
-robotic. Public language policy: English primary, Spanish secondary, Russian
-disabled for public phone voice (see DR-0003). Architecture: hybrid-first voice
-lab (see DR-0002 and `architecture/voice-lab.md`).
+robotic. If separately authorized later, public automated voice is English-only;
+Spanish and Russian are internal/operator capabilities, not public services
+(DR-0016). Public phone remains closed under DR-0015. Architecture remains the
+hybrid-first, separate media-plane direction in DR-0002 and
+`architecture/voice-lab.md`.
 
 ## Relationship to KBP Core
 

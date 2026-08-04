@@ -2,6 +2,7 @@
 
 Status: hybrid-first direction adopted (DR-0002). No vendor selected in any
 role. All vendor names below are candidates pending Research Gate verification.
+Public phone and production traffic remain closed under DR-0015.
 
 ## Target flow
 
@@ -31,8 +32,9 @@ Phone / SIP carrier
 ## Voice brand requirements
 
 Calm, professional, concise, human-comfortable, premium; not robotic, not
-rushed, not overpromising. Public language policy: English primary, Spanish
-secondary, Russian disabled for public voice (DR-0003).
+rushed, not overpromising. If public automated voice is separately authorized,
+it is English-only. Spanish and Russian are internal/operator capabilities and
+must not be advertised or routed as public automated service (DR-0016).
 
 ## Known constraints and traps
 

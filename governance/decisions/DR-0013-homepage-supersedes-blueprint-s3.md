@@ -1,9 +1,11 @@
 # DR-0013: The architectural homepage supersedes Blueprint §3
 
-- **Status:** adopted
+- **Status:** adopted — homepage decision active; demo posture partially
+  superseded by DR-0015
 - **Date:** 2026-08-03
 - **Decider:** owner (concept 01 selected 2026-08-03; TASK-0010)
-- **Related:** DR-0008, `architecture/portal-blueprint-v0.1.md` §3/§3a, TASK-0010
+- **Related:** DR-0008, DR-0015, `architecture/portal-blueprint-v0.1.md`
+  §3/§3a, TASK-0010
 
 ## Context
 
@@ -32,28 +34,30 @@ the route map, city pages, and resources sections remain the build target.
 
 | Dropped from §3 | Consequence to accept |
 | :-------------- | :-------------------- |
-| Address-first hero CTA | The site's single largest differentiator is not on the homepage. Restore when DR-0011/DR-0012 clear. |
+| Address-first hero CTA | The site's single largest differentiator is not on the homepage. It remains closed until DR-0012 and a separate Phase 2+ owner gate clear; DR-0011 alone is insufficient. |
 | Social-proof bar, testimonials, credentials | No trust signal above the fold. Blocked on the owner's business-facts package, not on design. |
-| Sticky nav with license + phone | No contact path exists on the site. **Deliberate** — owner ruling 2026-08-03: this is a demo, no contact surface until the owner opens one. Not a defect; do not "fix" it. |
+| Sticky nav with license + phone | No contact path exists in Phase 1. **Deliberate** — DR-0015 opens acquisition content but keeps contact and public phone closed. Not a defect; do not "fix" it. |
 | Cost transparency, ROI calculator | Policy-gated; unchanged. |
 | Gallery / portfolio | Blocked on real project photography. |
 
-## Demo posture (owner ruling, 2026-08-03)
+## Demo posture — partially superseded by DR-0015
 
-The site is a **demo**. It carries no contact path, no capture, and no
-commercial surface by intent, not by omission. Lead generation is a later
-phase. Consequently DR-0011 and DR-0012 are **not blocking anything today** —
-they are prerequisites for a phase the owner has not opened.
+DR-0015 opens governance Phase 0 and a bounded no-contact/no-tracking Phase 1.
+That supersedes only the statement that lead generation is wholly unopened.
+The homepage decision above remains adopted.
 
-No task packet may add a phone number, email address, contact form, booking
-link, or any other contact surface until the owner opens that phase in a
-superseding record. A builder finding the site "missing contact information"
-is observing an intended property.
+The public site still carries no phone number, email address, form, booking
+link, intake, tracking, or other contact surface. DR-0011 now selects only a
+future pilot destination; it does not authorize implementation. DR-0012 and
+its Research Gate remain open for any visitor-facing GIS output.
+
+A builder finding the site "missing contact information" during Phase 1 is
+still observing an intended property.
 
 ## Revisit trigger
 
-Owner opens the lead-generation phase. At that point DR-0011 and DR-0012 move
-from dormant to blocking, and the dropped rows above reopen in order.
+Owner separately opens a contact, intake, tracking, public-phone, or Phase 2+
+capability through an adopted record and bounded task packet.
 
 ## Boundary check
 

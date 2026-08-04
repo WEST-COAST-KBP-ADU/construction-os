@@ -1,9 +1,15 @@
 # DR-0003: Public voice language policy — EN primary, ES secondary, RU disabled
 
-- **Status:** adopted
+- **Status:** superseded by DR-0016
 - **Date:** 2026-07-02
 - **Decider:** owner
-- **Related:** `architecture/voice-lab.md`, R-11 in the risk register
+- **Related:** DR-0016, `architecture/voice-lab.md`, R-11 in the risk register
+
+## Supersession
+
+DR-0016 replaced this policy on 2026-08-04. Public automated voice is now
+English-only; Spanish and Russian are internal/operator capabilities only.
+The historical decision below is retained for provenance and is not binding.
 
 ## Context
 
