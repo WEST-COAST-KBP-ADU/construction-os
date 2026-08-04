@@ -19,7 +19,7 @@ Lifecycle: `draft → owner_review → approved → in_progress → done` (or
 | [TASK-0009](TASK-0009-gis-source-research.md) | GIS source research — first jurisdiction (RP-0007) | in_progress | 2026-08-03 |
 | [TASK-0010](TASK-0010-premium-architectural-homepage.md) | Premium architectural homepage and global shell | in_progress | 2026-08-03 |
 | [TASK-0011](TASK-0011-city-and-resource-pages.md) | City pages and resources — **deprioritized to last** (owner, 2026-08-04) | approved | 2026-08-03 |
-| [TASK-0012](TASK-0012-phase-0-governance-disposition.md) | Record the bounded Phase 0 lead-generation disposition | in_progress | 2026-08-04 |
+| [TASK-0012](TASK-0012-phase-0-governance-disposition.md) | Record the bounded Phase 0 lead-generation disposition | done | 2026-08-04 |
 | [TASK-0013](TASK-0013-studio-spike-no-pii.md) | Concept studio spike — no PII, no capture, 2D-first | approved | 2026-08-04 |
 
 Builder entry point: [HANDOVER-portal-v1.md](HANDOVER-portal-v1.md)
