@@ -5,6 +5,12 @@
 **Issued:** 2026-08-03 · Owner directive: start with visual identity, GIS
 groundwork, and platform content.
 
+> **Supersession notice (2026-08-04):** This handover predates DR-0014,
+> DR-0015, and DR-0016. Those records and the current task packet control any
+> conflict. Phase 1 is no-contact/no-tracking; DR-0011 selects only a future
+> pilot destination; public automated voice is English-only and public phone
+> remains closed. The older queue and phase labels below are provenance.
+
 This document is self-contained enough to start from. It is not a substitute
 for the governance records it cites — read those before writing code.
 
@@ -12,12 +18,10 @@ for the governance records it cites — read those before writing code.
 
 ## 0. Precondition
 
-The governance records referenced here (DR-0008 adoption, TASK-0007/0008/0009)
-currently live on branch `claude/new-session-97mlmb`. That branch contains
-**governance records only — no runtime code**. It must be merged to `main`
-before you begin. Branch from `main` after the merge.
-
-If it is not yet merged, stop and tell the owner. Do not cherry-pick.
+This precondition is historical. The referenced governance records were merged.
+For new work, verify the current committed `main`, read the active task packet,
+and branch only from its pinned or owner-approved base. Do not reuse the stale
+historical branch named in earlier versions of this handover.
 
 ---
 
@@ -40,8 +44,8 @@ zero collection, submission, storage, or tracking of any kind. Every CTA is an
 inert placeholder.
 
 Your job in this handover is to make it look like a real product and read like
-a real product, **without changing that last fact**. Lead capture is blocked on
-owner decisions that are not yet made (§7).
+a real product, **without changing that last fact**. DR-0015 opens acquisition
+content only; production capture remains closed behind later gates (§7).
 
 ---
 
@@ -78,8 +82,9 @@ first commit.
 - publish a credential (CSLB number, insurance, warranty terms) until the
   owner supplies the business facts package;
 - present stock or placeholder imagery as a real completed project;
-- use non-English copy on public pages (DR-0003: English primary, Spanish
-  secondary and not yet in scope, Russian disabled for public surfaces).
+- use non-English copy on public pages under this handover; no localization
+  packet exists. Separately, DR-0016 limits any future public automated voice
+  to English and keeps Spanish/Russian as internal/operator capabilities.
 
 Any statement that is uncertain and screening-flavored carries the exact
 required wording:
@@ -214,8 +219,9 @@ Packet: `TASK-0009-gis-source-research.md` · Design:
 single research packet `governance/research/RP-0007-gis-sources-<jurisdiction>.md`
 following `governance/templates/research-packet.md`.
 
-Default jurisdiction: Roseville (first in the charter's market list) — confirm
-with the owner before starting.
+DR-0014 supersedes the old Roseville default. Sacramento County
+(unincorporated) and City of Sacramento are the first build-order authorities;
+RP-0007 Roseville remains the sourcing-method template.
 
 Answer, with citations: which public endpoints expose parcel geometry, lot
 area, zoning district, and overlay layers; what each source's terms of use say
@@ -239,12 +245,12 @@ statute, and you never state a floor as fact.
 
 | Blocked | Blocking gate |
 | :------ | :------------ |
-| Any lead capture, intake form, or email field | DR-0011 (proposed) — no destination for a lead payload has been chosen, and a captured lead is production PII under DR-0004 |
+| Any lead capture, intake form, or email field | DR-0015 keeps production intake closed; DR-0011 selects only a future pilot destination and does not authorize implementation |
 | Address-first screening tool, any parcel lookup in the app | DR-0012 (proposed) + open Research Gate; TASK-0009 is what closes it |
 | Cost, pricing, ROI, timeline content | Cost & timeline display policy (blueprint §10) — no decision record exists |
 | Credentials, real portfolio, team facts | Owner business-facts package not supplied |
-| Analytics, pixels, CRM, consent banner | Blueprint P3; DR-0007 governs channels, nothing is authorized yet |
-| Voice, phone routing, provider config | Blueprint P4; DR-0002 |
+| Analytics, pixels, CRM, consent banner | DR-0015 keeps these closed; later privacy, consent, measurement, and implementation gates are required |
+| Voice, phone routing, provider config | DR-0015 keeps public phone closed; Phase 5+ is nonbinding; DR-0002 and DR-0016 apply |
 
 If a task appears to require something in this table, it is scoped wrong.
 Surface it; do not route around it.
@@ -260,7 +266,7 @@ plausible-looking fake.
 - Business facts package: CSLB license number, insurance and warranty terms,
   real project photography, team bios.
 - Confirmation of the first jurisdiction for TASK-0009.
-- DR-0011 destination choice; DR-0012 adoption.
+- Future pilot bounds, consent/privacy controls, and DR-0012 disposition.
 
 ---
 

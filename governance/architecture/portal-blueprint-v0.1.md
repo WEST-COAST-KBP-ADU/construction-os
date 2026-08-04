@@ -1,6 +1,7 @@
 # Portal Blueprint v0.1 — westcoastkbp.com
 
-Status: ADOPTED (DR-0008), **partially superseded — see §3a**.
+Status: ADOPTED (DR-0008), **partially superseded — see §3a and §8**.
+DR-0015 supersedes phase sequencing and keeps Phase 1 no-contact/no-tracking.
 Synthesis of RP-0001…RP-0005 under the platform charter and BOUNDARIES.md.
 Design (visual identity, typography, motion) is an explicitly SEPARATE phase —
 see §9.
@@ -37,10 +38,11 @@ PRICING         /pricing/cost-guide [gated by cost policy →DR] · /financing
 WHY US          /about (team, story) · /credentials (CSLB, insurance, warranty)
                 /reviews · /compare (vs generic contractor / prefab)
 RESOURCES       /blog · /adu-laws-2026 · /grants · /faq
-CITIES          /adu-builder/[city] — Roseville, Rocklin, Lincoln, Folsom,
-                Granite Bay, El Dorado Hills, Citrus Heights (+ Elk Grove,
-                Sacramento, Rancho Cordova per RP-0003/0004)
-CONTACT         /contact — property assessment form · calendar booking
+CITIES          /adu-builder/[city] — Sacramento City, Sacramento County
+                (unincorporated), Elk Grove, Citrus Heights, Folsom, Rancho
+                Cordova, Galt, Isleton, Roseville, Rocklin, Lincoln,
+                Granite Bay, El Dorado Hills (DR-0014; sourcing-gated)
+CONTACT         /contact — target only; closed through Phase 1 (DR-0015)
 CLIENT PORTAL   /portal — authenticated (later phase, own DRs)
 Technical       /llms.txt · /sitemap.xml · /robots.txt · JSON-LD everywhere
 ```
@@ -66,7 +68,11 @@ Boundary overlay: every feasibility/cost/timeline output carries screening-only
 language ("Requires official source verification"; owner reviews every
 commitment). The tool sells *control and honesty*, not promises.
 
-## 4. Lead funnel (3-tier, mapped to our kernel)
+## 4. Lead funnel (historical target; not implementation authority)
+
+DR-0015 keeps intake, contact, and tracking closed through Phase 1. The table
+below is retained as design provenance and cannot open a route or external
+effect without later owner gates.
 
 | Tier | Visitor experience | Kernel mapping (DR-0006) |
 | :--- | :----------------- | :----------------------- |
@@ -94,9 +100,10 @@ Automation (CRM sequences) only ever runs on owner-approved leads.
 - **Lab:** OpenAI Realtime SIP + carrier trunk; validate accept/reject gate,
   safe intake, OwnerReview packet from a real call. Transcripts are NOT
   durably stored (DR-0004) — lab evidence stays within the whitelist.
-- **Production candidates:** Telnyx full-stack vs ElevenLabs + carrier —
-  decision after official verification (pricing, retention/DPA, Spanish
-  quality per DR-0003).
+- **Production candidates:** no vendor selected. Any later evaluation requires
+  official pricing, retention, privacy, latency, and safety verification.
+  Public automated voice is English-only under DR-0016; Spanish and Russian are
+  internal/operator capabilities. Public phone remains closed under DR-0015.
 
 ## 7. Client portal (later phase)
 
@@ -105,7 +112,11 @@ updates, document vault, payments, change orders, messaging, inspections,
 selections, rental tracker. Involves production PII, payments, and auth —
 requires its own decision records. Not in v0.1 build scope.
 
-## 8. Build phases (each phase = task packets with evidence)
+## 8. Build phases — SUPERSEDED by DR-0015
+
+The P0-P5 sequence below is retained for provenance only. DR-0015 opens only
+its governance Phase 0 and bounded no-contact/no-tracking Phase 1; its Phase
+2-10 table is nonbinding and authorizes no implementation.
 
 - **P0 — policy gates (owner decisions):** production data policy; cost &
   timeline display policy; then vendor DRs as verified.

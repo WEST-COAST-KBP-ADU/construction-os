@@ -3,7 +3,8 @@
 - **Status:** approved
 - **Date approved:** 2026-08-03
 - **Approved by:** owner
-- **Related:** DR-0008, DR-0013, blueprint §2, RP-0001, RP-0007
+- **Related:** DR-0008, DR-0013, DR-0014, DR-0015, blueprint §2, RP-0001,
+  RP-0007
 
 ## Objective
 
@@ -18,21 +19,23 @@ retrievable local content.
 
 Market order is set by **DR-0014**, not by the old charter list.
 
-All jurisdictions below are **core market**. The split is build order, not
-priority of the market itself — every one of these gets a page.
+All jurisdictions below are **core market sourcing scope**. The split is build
+order, not market priority. A page ships only when it meets the official-source
+standard below; insufficiently sourced pages remain explicitly omitted.
 
-**Build first (Sacramento ring):** City of Sacramento, Sacramento County
-(unincorporated), Elk Grove, Citrus Heights, Folsom, Rancho Cordova.
+**Source first (Sacramento ring):** City of Sacramento, Sacramento County
+(unincorporated), Elk Grove, Citrus Heights, Folsom, Rancho Cordova, Galt,
+Isleton.
 
-**Build next (Placer / El Dorado ring):** Roseville, Rocklin, Lincoln, Granite
+**Source next (Placer / El Dorado ring):** Roseville, Rocklin, Lincoln, Granite
 Bay, El Dorado Hills.
 
 Sacramento and unincorporated Sacramento County are **separate jurisdictions**
 with separate permit paths and separate published layers. They get separate
 pages; do not merge them into one "Sacramento" page.
 
-Each page must carry substantively different material. Seven find-replace
-clones with a swapped city name are worse than one page — thin duplicated
+Each page must carry substantively different material. Find-replace clones
+with a swapped city name are worse than one page — thin duplicated
 content is penalized in exactly the retrieval channel these pages exist to
 win. Per city, source and write:
 
@@ -71,7 +74,9 @@ verification."
 
 ## Out of scope / prohibited
 
-- Any form, capture, contact field, or booking (DR-0011 unadopted).
+- Any form, capture, contact field, booking, analytics, pixel, or tracking.
+  DR-0011 selects only a future pilot destination; DR-0015 keeps Phase 1
+  no-contact/no-tracking and does not authorize implementation.
 - Cost, pricing, ROI, or timeline content (no policy decision exists).
 - Credentials, portfolio, testimonials, team facts (owner inputs missing).
 - Any statement that a specific property or project is approvable or
@@ -96,6 +101,6 @@ non-PII summary.
 ## Boundary check
 
 - [ ] Work stays inside BOUNDARIES.md
-- [ ] No capture, no vendor, no external action
+- [ ] No capture, tracking, vendor, or external action
 - [ ] No invented fact ships
 - [ ] Evidence plan uses only whitelisted lab-safe fields

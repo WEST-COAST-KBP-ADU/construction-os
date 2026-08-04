@@ -42,10 +42,10 @@ the work starts there. That is a sequencing statement, not a market boundary:
 the Placer and El Dorado ring is core market and is sold to, not deferred to a
 later phase.
 
-Note that Folsom and Citrus Heights sit in Sacramento County and were already
-on the old list; they move up rather than in. Roseville, Rocklin, Lincoln, and
-Granite Bay are Placer County and move to tier 2. Granite Bay is unincorporated
-Placer, so it is county jurisdiction, not city.
+Folsom and Citrus Heights sit in Sacramento County and were already on the old
+list. Roseville, Rocklin, Lincoln, and Granite Bay remain in the second build
+ring while staying core market. Granite Bay is unincorporated Placer, so it is
+county jurisdiction, not city.
 
 ## Consequences
 
@@ -57,7 +57,7 @@ Placer, so it is county jurisdiction, not city.
   authority for unincorporated areas) and the **City of Sacramento**. These are
   two distinct jurisdictions with separate layers; treat them as two rows in the
   coverage matrix, not one.
-- City-page priority reorders to the tier-1 list.
+- City-page build order starts with the Sacramento ring.
 - Any later record citing the old market order is corrected by this one.
 
 ## What this record does NOT decide
@@ -70,7 +70,7 @@ Placer, so it is county jurisdiction, not city.
 
 ## Revisit trigger
 
-Owner opens a market outside the three tiers above.
+Owner opens a market outside the two adopted levels above.
 
 ## Boundary check
 
