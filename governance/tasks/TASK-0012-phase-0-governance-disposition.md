@@ -1,6 +1,6 @@
 # TASK-0012: Record the bounded Phase 0 lead-generation disposition
 
-- **Status:** in_progress
+- **Status:** done
 - **Date approved:** 2026-08-04
 - **Approved by:** owner
 - **Base:** `main@9876243492e1df747a8b2f618bc0008d12286c81`
