@@ -16,8 +16,17 @@ retrievable local content.
 
 **City pages — `/adu-builder/[city]`**
 
-Seven charter markets: Roseville, Rocklin, Lincoln, Folsom, Granite Bay,
-El Dorado Hills, Citrus Heights.
+Market order is set by **DR-0014**, not by the old charter list.
+
+**Tier 1 — build these first (core market):** City of Sacramento, Sacramento
+County (unincorporated), Elk Grove, Citrus Heights, Folsom, Rancho Cordova.
+
+**Tier 2 — only after tier 1 ships:** Roseville, Rocklin, Lincoln, Granite Bay,
+El Dorado Hills.
+
+Sacramento and unincorporated Sacramento County are **separate jurisdictions**
+with separate permit paths and separate published layers. They get separate
+pages; do not merge them into one "Sacramento" page.
 
 Each page must carry substantively different material. Seven find-replace
 clones with a swapped city name are worse than one page — thin duplicated
@@ -33,9 +42,10 @@ win. Per city, source and write:
   constraints;
 - links to the jurisdiction's own official pages.
 
-RP-0007 (Roseville GIS research, already merged) is the model for sourcing
-depth. If a city cannot be sourced to that standard, **ship fewer pages and
-say which and why** — do not pad.
+RP-0007 (Roseville) is the model for **sourcing depth**, not for market
+priority — Roseville itself is tier 2 under DR-0014. If a jurisdiction cannot
+be sourced to that standard, **ship fewer pages and say which and why** — do
+not pad.
 
 Every regulatory-flavored statement carries: "Requires official source
 verification."

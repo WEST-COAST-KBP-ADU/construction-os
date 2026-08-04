@@ -18,3 +18,4 @@ Numbering is sequential and permanent; superseded records stay in place.
 | [DR-0011](DR-0011-lead-intake-data-handling.md) | Lead intake data handling — where a captured lead may live | **proposed** | 2026-08-03 |
 | [DR-0012](DR-0012-client-facing-screening-output.md) | Client-facing screening output — amend BOUNDARIES.md to permit it | **proposed** | 2026-08-03 |
 | [DR-0013](DR-0013-homepage-supersedes-blueprint-s3.md) | Architectural homepage supersedes Blueprint §3 | adopted | 2026-08-03 |
+| [DR-0014](DR-0014-market-area-correction.md) | Market area correction — Sacramento first, not Roseville | adopted | 2026-08-03 |

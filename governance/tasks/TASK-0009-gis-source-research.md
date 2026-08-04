@@ -9,7 +9,10 @@
 ## Objective
 
 Close Research Gate items 1, 3, 4, 5 of `property-intelligence-v0.1.md` §8 for
-ONE jurisdiction (default: Roseville — owner may swap), producing RP-0007. No
+ONE jurisdiction, producing RP-0007. **Superseded target (DR-0014):** the first
+jurisdiction is Sacramento County (unincorporated) and the City of Sacramento,
+not Roseville. RP-0007 (Roseville, done) stands as the method template and is
+now tier 2; the same work must be repeated for the core market as RP-0008. No
 code, no scraping at volume, no vendor signup.
 
 ## In scope — questions RP-0007 must answer with citations
