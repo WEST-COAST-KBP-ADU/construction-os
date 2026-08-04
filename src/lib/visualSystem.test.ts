@@ -62,4 +62,11 @@ describe("portal visual-system regressions", () => {
     expect(stylesheet).toContain("content: attr(data-label)");
     expect(stylesheet).toContain(".comparison-table-wrap {\n    overflow: visible;");
   });
+
+  it("keeps the hero cockpit compact and the four service lanes balanced", () => {
+    expect(stylesheet).toContain(".hero .control-panel {\n  height: auto;");
+    expect(stylesheet).toMatch(
+      /@media \(min-width: 70rem\)[\s\S]*?\.service-grid \{\s*grid-template-columns: repeat\(4,/,
+    );
+  });
 });
