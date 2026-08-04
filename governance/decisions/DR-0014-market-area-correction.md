@@ -24,14 +24,23 @@ addressable market and would not sell.
 
 ## Decision
 
-Market priority, in order:
+Two levels, not three. **Core** contains both rings below; neither is an
+"expansion market."
 
-1. **Core — City of Sacramento and Sacramento County.** Includes the
-   unincorporated county and the incorporated cities within it: Elk Grove,
-   Citrus Heights, Folsom, Rancho Cordova, Galt, Isleton.
-2. **Adjacent expansion — Placer and El Dorado counties.** Roseville, Rocklin,
-   Lincoln, Granite Bay, El Dorado Hills.
-3. **Horizon — Northern California.**
+**Core market:**
+
+- **Sacramento ring** — City of Sacramento and Sacramento County, including the
+  unincorporated county and the incorporated cities within it: Elk Grove,
+  Citrus Heights, Folsom, Rancho Cordova, Galt, Isleton.
+- **Placer / El Dorado ring** — Roseville, Rocklin, Lincoln, Granite Bay,
+  El Dorado Hills.
+
+**Horizon:** Northern California.
+
+Sacramento leads in **build order** — it is the largest share of the core and
+the work starts there. That is a sequencing statement, not a market boundary:
+the Placer and El Dorado ring is core market and is sold to, not deferred to a
+later phase.
 
 Note that Folsom and Citrus Heights sit in Sacramento County and were already
 on the old list; they move up rather than in. Roseville, Rocklin, Lincoln, and

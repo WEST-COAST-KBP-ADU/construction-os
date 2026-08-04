@@ -11,12 +11,18 @@ client-facing documentation, internal SOPs, and controlled business execution.
 
 Target operating area (corrected by DR-0014, 2026-08-03):
 
-1. **Core market — City of Sacramento and Sacramento County**, including the
-   unincorporated county and the incorporated cities within it (Elk Grove,
-   Citrus Heights, Folsom, Rancho Cordova, Galt, Isleton).
-2. **Adjacent expansion** — Placer and El Dorado county markets: Roseville,
-   Rocklin, Lincoln, Granite Bay, El Dorado Hills.
-3. **Long-term horizon** — Northern California.
+**Core market** — both of the following are core, not core plus expansion:
+
+- City of Sacramento and Sacramento County, including the unincorporated county
+  and the incorporated cities within it (Elk Grove, Citrus Heights, Folsom,
+  Rancho Cordova, Galt, Isleton);
+- Placer and El Dorado county markets: Roseville, Rocklin, Lincoln, Granite
+  Bay, El Dorado Hills.
+
+**Horizon** — Northern California.
+
+Sacramento leads in *build order* because it is the largest share of the core,
+not because the rest of the core is a later market.
 
 The pre-DR-0014 text listed Placer-county towns first and omitted Sacramento
 entirely. That ordering was inherited by the blueprint, the research packets,

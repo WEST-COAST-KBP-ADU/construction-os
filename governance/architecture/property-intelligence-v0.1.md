@@ -142,8 +142,8 @@ adapter is per-jurisdiction with an explicit coverage matrix:
 | Roseville | City `Parcel Polygon` MapServer/1: geometry, `APN`, `ACRES`; queryable | City `Zoning` MapServer/30: codes and ordinance field; queryable | Floodplain, Specific Plan, and Open Space candidates verified; FHSZ/historic coverage incomplete | partial — RP-0007; terms, cadence, FHSZ/historic, and ambiguity policy open |
 | **Sacramento County (unincorporated)** | ? | ? | ? | **next — core market, DR-0014** |
 | **City of Sacramento** | ? | ? | ? | **next — core market, DR-0014** |
-| Elk Grove, Citrus Heights, Folsom, Rancho Cordova | ? | ? | ? | tier 1, not started |
-| Rocklin, Lincoln, Granite Bay, El Dorado Hills | ? | ? | ? | tier 2, not started |
+| Elk Grove, Citrus Heights, Folsom, Rancho Cordova | ? | ? | ? | core, Sacramento ring, not started |
+| Rocklin, Lincoln, Granite Bay, El Dorado Hills | ? | ? | ? | core, Placer/El Dorado ring, not started |
 
 An address in an uncovered jurisdiction gets an honest answer — "we do not have
 verified public data for this jurisdiction yet; a human will review your

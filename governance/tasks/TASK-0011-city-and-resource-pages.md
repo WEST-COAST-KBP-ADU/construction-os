@@ -18,11 +18,14 @@ retrievable local content.
 
 Market order is set by **DR-0014**, not by the old charter list.
 
-**Tier 1 — build these first (core market):** City of Sacramento, Sacramento
-County (unincorporated), Elk Grove, Citrus Heights, Folsom, Rancho Cordova.
+All jurisdictions below are **core market**. The split is build order, not
+priority of the market itself — every one of these gets a page.
 
-**Tier 2 — only after tier 1 ships:** Roseville, Rocklin, Lincoln, Granite Bay,
-El Dorado Hills.
+**Build first (Sacramento ring):** City of Sacramento, Sacramento County
+(unincorporated), Elk Grove, Citrus Heights, Folsom, Rancho Cordova.
+
+**Build next (Placer / El Dorado ring):** Roseville, Rocklin, Lincoln, Granite
+Bay, El Dorado Hills.
 
 Sacramento and unincorporated Sacramento County are **separate jurisdictions**
 with separate permit paths and separate published layers. They get separate
@@ -42,8 +45,8 @@ win. Per city, source and write:
   constraints;
 - links to the jurisdiction's own official pages.
 
-RP-0007 (Roseville) is the model for **sourcing depth**, not for market
-priority — Roseville itself is tier 2 under DR-0014. If a jurisdiction cannot
+RP-0007 (Roseville) is the model for **sourcing depth**; Roseville is core
+market under DR-0014, built in the second ring. If a jurisdiction cannot
 be sourced to that standard, **ship fewer pages and say which and why** — do
 not pad.
 
