@@ -4,6 +4,7 @@
  */
 
 import { siteConfig } from "./siteConfig";
+import { servicePages, type FaqItem, type ServicePage } from "./contentPages";
 
 const SERVICE_AREA = [
   "Roseville, CA",
@@ -25,7 +26,127 @@ export function buildBusinessJsonLd() {
     slogan: siteConfig.tagline,
     description: siteConfig.description,
     areaServed: SERVICE_AREA.map((name) => ({ "@type": "City", name })),
-    knowsAbout: siteConfig.services.map((service) => service.title),
+    knowsAbout: servicePages.map((service) => service.shortTitle),
+  };
+}
+
+function buildFaqEntities(faq: readonly FaqItem[]) {
+  return faq.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  }));
+}
+
+function pageUrl(pathname: string): string {
+  return new URL(pathname, siteConfig.url).toString();
+}
+
+export function buildServicePageJsonLd(page: ServicePage) {
+  const url = pageUrl(`/services/${page.slug}`);
+  const serviceId = `${url}#service`;
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": serviceId,
+        name: page.shortTitle,
+        description: page.description,
+        url,
+        provider: {
+          "@type": "HomeAndConstructionBusiness",
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
+        areaServed: SERVICE_AREA.map((name) => ({ "@type": "City", name })),
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: page.title,
+        description: page.description,
+        about: { "@id": serviceId },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        url: `${url}#frequently-asked-questions`,
+        mainEntity: buildFaqEntities(page.faq),
+      },
+    ],
+  };
+}
+
+export function buildAboutPageJsonLd({
+  title,
+  description,
+  faq,
+}: {
+  title: string;
+  description: string;
+  faq: readonly FaqItem[];
+}) {
+  const url = pageUrl("/about");
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: title,
+        description,
+        about: {
+          "@type": "HomeAndConstructionBusiness",
+          name: siteConfig.name,
+          url: siteConfig.url,
+        },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        url: `${url}#frequently-asked-questions`,
+        mainEntity: buildFaqEntities(faq),
+      },
+    ],
+  };
+}
+
+export function buildComparePageJsonLd({
+  title,
+  description,
+  faq,
+}: {
+  title: string;
+  description: string;
+  faq: readonly FaqItem[];
+}) {
+  const url = pageUrl("/compare");
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: title,
+        description,
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        url: `${url}#frequently-asked-questions`,
+        mainEntity: buildFaqEntities(faq),
+      },
+    ],
   };
 }
 
