@@ -22,7 +22,7 @@ describe("TASK-0010 residential homepage", () => {
       expect(statSync(absolutePath).size).toBeLessThan(400_000);
     }
 
-    expect(page.match(/Conceptual/g)).toHaveLength(4);
+    expect(page.match(/Conceptual imagery/g)).toHaveLength(4);
     expect(page).toContain("next/image");
   });
 
