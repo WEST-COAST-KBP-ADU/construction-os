@@ -9,7 +9,8 @@
 
 Prepared the owner-approved Phase 0/1 authority boundary, English-only public
 voice successor, pilot-only DR-0011 disposition, direct governance
-reconciliation, and TASK-0011 sourcing correction from the pinned base.
+reconciliation, and TASK-0011 sourcing correction from
+`main@9876243492e1df747a8b2f618bc0008d12286c81`.
 
 ## Evidence (whitelisted fields only)
 
@@ -21,7 +22,7 @@ reconciliation, and TASK-0011 sourcing correction from the pinned base.
 | accept/reject result | partial — publication pending owner merge |
 | latency marker | not applicable |
 | error class | `local_checkout_not_git`; connector-backed SourceTrue path used |
-| sanitized summary | Governance-only scope, record-status, link, language-policy, forbidden-surface, and PII/secret probes passed. Lint, 56 tests, and build passed on the available runtime export; exact branch CI remains pending. |
+| sanitized summary | Governance-only candidate is based on main@9876243492e1df747a8b2f618bc0008d12286c81. Scope, record-status, link, language-policy, forbidden-surface, and PII/secret probes passed. Lint, 56 tests, and build passed on the available runtime export; exact branch CI remains pending. |
 
 ## Deviations from the task packet
 

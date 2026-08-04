@@ -3,6 +3,8 @@
 - **Status:** approved
 - **Date approved:** 2026-08-03
 - **Approved by:** owner
+- **Scope amendment:** 2026-08-04 — owner added Galt and Isleton to the
+  official-source sourcing scope (DR-0015)
 - **Related:** DR-0008, DR-0013, DR-0014, DR-0015, blueprint §2, RP-0001,
   RP-0007
 

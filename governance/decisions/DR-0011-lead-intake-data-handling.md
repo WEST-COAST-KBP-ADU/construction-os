@@ -29,9 +29,10 @@ policy is adopted.
 
 ## Decision
 
-1. **This repository never persists a lead payload.** No database, no JSON on
-   disk, no commit, no log line containing address, email, phone, or name. The
-   repo may record only the whitelisted evidence fields from BOUNDARIES.md
+1. **The application runtime never persists a lead payload.** No database, no
+   JSON on disk, no commit, no application log line containing address, email,
+   phone, or name. The repository may record only the whitelisted evidence
+   fields from BOUNDARIES.md
    (timestamp, event type, accept/reject result, latency marker, error class,
    sanitized non-PII summary).
 2. **A lead payload leaves the request in one hop, to exactly one
@@ -40,7 +41,8 @@ policy is adopted.
 3. **Sanitization is structural.** The evidence event is built from a separate
    whitelist type, never by stripping fields off the payload object.
 4. **For a future bounded pilot, the sole destination is Option A: an
-   owner-controlled business mailbox.** The platform keeps no lead payload.
+   owner-controlled business mailbox.** The application runtime keeps no lead
+   payload; mailbox, transport, and provider retention remain separate gates.
 
 ### Adopted pilot limits
 
@@ -58,7 +60,7 @@ decision. DR-0012 remains independently blocking for visitor-facing GIS.
 
 | Option | What it is | PII surface | Cost of reversal |
 | :----- | :--------- | :---------- | :--------------- |
-| **A — owner mailbox (selected for pilot)** | Intake formats a plain notification to the owner's own business mailbox; nothing is stored by the platform at all | One: the mailbox the owner already reads | Near zero — no schema, no migration |
+| **A — owner mailbox (selected for pilot)** | If separately authorized, intake forwards one notification and the application runtime retains no payload | Mailbox plus transport/provider surfaces; retention and deletion remain unresolved pilot gates | Low application-schema reversal cost; provider/privacy duties still require review |
 | B — managed CRM | Payload written straight into a hosted CRM record | CRM vendor becomes a processor; needs vendor retention/training review per DR-0004 | Vendor lock, export required |
 | C — self-hosted store | Platform-owned encrypted store behind the owner's control | Largest — the platform becomes the custodian | Highest; adds backup, access, and breach duties |
 
@@ -82,8 +84,9 @@ is reviewed again.
 
 - If separately authorized, the pilot intake route is a thin, testable
   boundary: validate → evidence → forward.
-- Retention questions stay answerable with one sentence to a client: the
-  platform stores nothing.
+- Application-runtime persistence stays narrowly answerable; mailbox,
+  transport, and provider retention/deletion must be documented and tested by
+  the later pilot packet.
 - If the owner picks B or C later, this record is superseded, not amended.
 
 ## Revisit trigger
