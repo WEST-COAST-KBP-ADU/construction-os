@@ -79,3 +79,14 @@ optimized conceptual images. Opened Draft PR #26 from the pinned `main` base.
   deployment, desktop screenshot, or mobile screenshot result is asserted by
   this note.
 
+## Close-out recheck — 2026-08-04T19:10:18Z
+
+| Field | Value |
+| :---- | :---- |
+| timestamp | 2026-08-04T19:10:18Z |
+| test variant ID | TASK-0010 close-out recheck |
+| event type | canonical-site visual evidence recheck |
+| accept/reject result | partial — mobile visual and native menu evidence remain unavailable |
+| latency marker | navigation did not reach DOM before timeout |
+| error class | cloud_browser_navigation_timeout |
+| sanitized summary | Cloud browser connected, but navigation to the canonical public domain timed out before URL, title, viewport, DOM, native mobile-menu interaction, or screenshot evidence could be recorded. No completion claim is made. |
