@@ -14,3 +14,4 @@ transcripts, recordings, or secrets.
 | [RUN-0007](RUN-0007-portal-visual-identity-pass-v1.md) | TASK-0007 | partial | 2026-08-04 |
 | [RUN-0010](RUN-0010-homepage.md) | TASK-0010 | partial | 2026-08-04 |
 | [RUN-0012](RUN-0012-phase-0-governance-disposition.md) | TASK-0012 | accepted | 2026-08-04 |
+| [RUN-0013](RUN-0013-studio-spike-no-pii.md) | TASK-0013 | partial | 2026-08-04 |

@@ -1,0 +1,72 @@
+{
+  "version": "2026.08.0",
+  "effective_from": "2026-08-04",
+  "archetypes": [
+    {
+      "id": "studio-450",
+      "label": "Studio ADU",
+      "size_band": { "min_sqft": 400, "max_sqft": 500 },
+      "layouts": ["open", "alcove"],
+      "geometry_ref": "assets/images/adu-courtyard@1"
+    },
+    {
+      "id": "one-bed-600",
+      "label": "One-bedroom ADU",
+      "size_band": { "min_sqft": 550, "max_sqft": 650 },
+      "layouts": ["open", "separated"],
+      "geometry_ref": "assets/images/attainable-adu@1"
+    },
+    {
+      "id": "two-bed-800",
+      "label": "Two-bedroom ADU",
+      "size_band": { "min_sqft": 750, "max_sqft": 850 },
+      "layouts": ["split-bedroom"],
+      "geometry_ref": "assets/images/residential-addition@1"
+    }
+  ],
+  "options": {
+    "exterior": ["stucco-smooth", "lap-siding", "dark-siding"],
+    "palette": ["warm-white", "sand-dune", "soft-clay", "sage", "charcoal"],
+    "roof": ["gable", "shed"],
+    "windows": ["standard", "tall"],
+    "interior": ["essential", "comfort"]
+  },
+  "compatibility": [
+    {
+      "if": { "archetype": "studio-450", "roof": "shed" },
+      "deny": { "windows": ["tall"] },
+      "reason_code": "roof_window_clearance"
+    },
+    {
+      "if": { "archetype": "studio-450" },
+      "deny": { "interior": ["comfort"] },
+      "reason_code": "compact_interior_clearance"
+    }
+  ],
+  "assets": [
+    {
+      "ref": "assets/images/attainable-adu@1",
+      "license": {
+        "kind": "owned",
+        "source": "Repository-controlled OpenAI-generated conceptual asset",
+        "verified_on": "2026-08-04"
+      }
+    },
+    {
+      "ref": "assets/images/adu-courtyard@1",
+      "license": {
+        "kind": "owned",
+        "source": "Repository-controlled OpenAI-generated conceptual asset",
+        "verified_on": "2026-08-04"
+      }
+    },
+    {
+      "ref": "assets/images/residential-addition@1",
+      "license": {
+        "kind": "owned",
+        "source": "Repository-controlled OpenAI-generated conceptual asset",
+        "verified_on": "2026-08-04"
+      }
+    }
+  ]
+}

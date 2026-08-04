@@ -1,6 +1,6 @@
 # TASK-0013: Concept studio spike — no PII, no capture, 2D-first
 
-- **Status:** approved
+- **Status:** in_progress
 - **Date approved:** 2026-08-04
 - **Approved by:** owner (directive: technical part and visual first, landing
   pages last)
