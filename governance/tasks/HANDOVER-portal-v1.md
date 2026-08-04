@@ -168,9 +168,20 @@ For each task:
 
 ---
 
-## 6. The queue
+## 6. The queue — REORDERED by owner directive 2026-08-04
 
-Execute in order. Task 3 is independent and may run in parallel.
+Technical and visual work first; landing/content pages LAST.
+
+1. **Close out visual work** — TASK-0007/TASK-0010: register the missing
+   mobile/desktop evidence, finish registry rows, get them to done.
+2. **TASK-0013 — concept studio spike** (`TASK-0013-studio-spike-no-pii.md`):
+   /studio, synthetic property, curated catalog, deterministic config,
+   2D-first. No PII, no capture, no 3D.
+3. **RP-0008 — Sacramento GIS research** (city + unincorporated county, two
+   jurisdictions, RP-0007 as the method template). Research only, parallel-safe.
+4. **TASK-0011 — city/resource pages: LAST.** Do not start before 1-3 ship.
+
+Original task descriptions below remain valid where not contradicted.
 
 ### TASK-0007 — Land the portal design foundation
 Packet: `TASK-0007-visual-identity-pass.md` · Blueprint §9
