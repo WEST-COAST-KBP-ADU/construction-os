@@ -9,9 +9,24 @@ construction, general construction operations, client intake, lead generation,
 estimating, material takeoff, permit/admin workflow, inspection tracking,
 client-facing documentation, internal SOPs, and controlled business execution.
 
-Target operating area: Sacramento-region California markets — Roseville,
-Rocklin, Lincoln, Folsom, Granite Bay, El Dorado Hills, Citrus Heights, and
-nearby expansion areas.
+Target operating area (corrected by DR-0014, 2026-08-03):
+
+**Core market** — both of the following are core, not core plus expansion:
+
+- City of Sacramento and Sacramento County, including the unincorporated county
+  and the incorporated cities within it (Elk Grove, Citrus Heights, Folsom,
+  Rancho Cordova, Galt, Isleton);
+- Placer and El Dorado county markets: Roseville, Rocklin, Lincoln, Granite
+  Bay, El Dorado Hills.
+
+**Horizon** — Northern California.
+
+Sacramento leads in *build order* because it is the largest share of the core,
+not because the rest of the core is a later market.
+
+The pre-DR-0014 text listed Placer-county towns first and omitted Sacramento
+entirely. That ordering was inherited by the blueprint, the research packets,
+and every task packet built on them; all are corrected to this list.
 
 Public domain: **westcoastkbp.com** (owner-confirmed 2026-07-02). The public
 platform site serves from this domain; it is the canonical base URL for site
