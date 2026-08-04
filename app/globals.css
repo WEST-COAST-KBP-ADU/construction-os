@@ -489,6 +489,10 @@ a {
   height: 100%;
 }
 
+.hero .control-panel {
+  height: auto;
+}
+
 .control-panel__header,
 .module-card__header,
 .project-card__header,
@@ -1496,6 +1500,10 @@ a {
 }
 
 @media (min-width: 70rem) {
+  .service-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .indexed-grid:has(.indexed-grid__item:nth-child(4)) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
