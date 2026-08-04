@@ -16,7 +16,8 @@ Lifecycle: `draft → owner_review → approved → in_progress → done` (or
 | [TASK-0006](TASK-0006-address-first-intake.md) | Address-first intake surface (funnel Tier 1) | draft | — |
 | [TASK-0007](TASK-0007-visual-identity-pass.md) | Visual identity pass v1 | owner_review | 2026-08-03 |
 | [TASK-0008](TASK-0008-p1-content-buildout.md) | P1 content build-out — structure & trust pages | in_progress | 2026-08-03 |
-| [TASK-0009](TASK-0009-gis-source-research.md) | GIS source research — first jurisdiction (RP-0007) | approved | 2026-08-03 |
+| [TASK-0009](TASK-0009-gis-source-research.md) | GIS source research — first jurisdiction (RP-0007) | in_progress | 2026-08-03 |
 | [TASK-0010](TASK-0010-premium-architectural-homepage.md) | Premium architectural homepage and global shell | in_progress | 2026-08-03 |
 
 Builder entry point: [HANDOVER-portal-v1.md](HANDOVER-portal-v1.md)
+

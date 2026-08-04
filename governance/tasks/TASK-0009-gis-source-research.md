@@ -1,6 +1,6 @@
 # TASK-0009: GIS source research — first jurisdiction (research only, no code)
 
-- **Status:** approved
+- **Status:** in_progress
 - **Date approved:** 2026-08-03
 - **Approved by:** owner (directive: «с этих гисданных»)
 - **Related:** `architecture/property-intelligence-v0.1.md` §§5, 8; DR-0005,

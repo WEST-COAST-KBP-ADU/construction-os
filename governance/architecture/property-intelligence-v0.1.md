@@ -139,7 +139,7 @@ adapter is per-jurisdiction with an explicit coverage matrix:
 
 | Jurisdiction | Parcel layer | Zoning layer | Overlays | Status |
 | :----------- | :----------- | :----------- | :------- | :----- |
-| (charter's first market) | ? | ? | ? | to verify |
+| Roseville | City `Parcel Polygon` MapServer/1: geometry, `APN`, `ACRES`; queryable | City `Zoning` MapServer/30: codes and ordinance field; queryable | Floodplain, Specific Plan, and Open Space candidates verified; FHSZ/historic coverage incomplete | partial — RP-0007; terms, cadence, FHSZ/historic, and ambiguity policy open |
 | remaining charter markets | ? | ? | ? | not started |
 
 An address in an uncovered jurisdiction gets an honest answer — "we do not have
