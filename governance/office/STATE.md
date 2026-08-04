@@ -12,7 +12,7 @@ Updated: 2026-08-04d — PR #31 merged (d89dbb5): operating model, STATE, REVIEW
 | :--- | :-- | :--- | :--------- |
 | A build (ChatGPT) | Close out TASK-0007/0010 evidence | TASK-0013 studio spike (2D, no PII) | — |
 | B research (ChatGPT) | RP-0008 Sacramento GIS (city + county, two rows) | — | — |
-| C governance (Claude) | Idle — awaiting builder PR to review | REVIEW of next builder PR | Owner decisions below |
+| C governance (Claude) | REVIEW-0002 issued: PR #30 audit = PASS | REVIEW of next builder PR | — |
 | Landing pages | **parked last** (owner 2026-08-04) — TASK-0011 | after lanes A+B ship | owner order |
 
 ## Owner decision queue (blocking, in order)
