@@ -58,8 +58,12 @@ export default function CompareRoute() {
                 {comparePage.rows.map((row) => (
                   <tr key={row.dimension}>
                     <th scope="row">{row.dimension}</th>
-                    <td>{row.adHoc}</td>
-                    <td>{row.controlled}</td>
+                    <td data-label={contentPageLabels.compareTemplate.adHocModel}>
+                      {row.adHoc}
+                    </td>
+                    <td data-label={contentPageLabels.compareTemplate.controlledModel}>
+                      {row.controlled}
+                    </td>
                   </tr>
                 ))}
               </tbody>
