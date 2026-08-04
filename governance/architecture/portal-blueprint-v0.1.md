@@ -1,6 +1,6 @@
 # Portal Blueprint v0.1 — westcoastkbp.com
 
-Status: PROPOSED (adopted only when DR-0008 is marked adopted).
+Status: ADOPTED (DR-0008), **partially superseded — see §3a**.
 Synthesis of RP-0001…RP-0005 under the platform charter and BOUNDARIES.md.
 Design (visual identity, typography, motion) is an explicitly SEPARATE phase —
 see §9.
@@ -45,7 +45,16 @@ CLIENT PORTAL   /portal — authenticated (later phase, own DRs)
 Technical       /llms.txt · /sitemap.xml · /robots.txt · JSON-LD everywhere
 ```
 
-## 3. Homepage section order (15 sections, adapted from RP-0004)
+## 3a. SUPERSEDED — §3 no longer describes the homepage (DR-0013)
+
+The 15-section homepage below was replaced by the architectural editorial
+homepage the owner selected on 2026-08-03 (concept 01, TASK-0010): four
+sections — hero, solutions, process, quality. §3 is retained for provenance
+only; it is **not** the build target. See DR-0013 for what carried over and
+what was dropped. The information architecture in §2 is unaffected and remains
+in force.
+
+## 3. Homepage section order (15 sections, adapted from RP-0004) — SUPERSEDED
 
 Sticky nav (license + phone + CTA) → Hero (real Sacramento ADU, address-first
 CTA) → Property tool → Social-proof bar → ADU type selector → Numbered process
