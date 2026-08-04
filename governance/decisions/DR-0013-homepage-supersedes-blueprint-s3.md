@@ -34,18 +34,26 @@ the route map, city pages, and resources sections remain the build target.
 | :-------------- | :-------------------- |
 | Address-first hero CTA | The site's single largest differentiator is not on the homepage. Restore when DR-0011/DR-0012 clear. |
 | Social-proof bar, testimonials, credentials | No trust signal above the fold. Blocked on the owner's business-facts package, not on design. |
-| Sticky nav with license + phone | **No contact path exists on the site at all.** A visitor who wants to talk cannot. |
+| Sticky nav with license + phone | No contact path exists on the site. **Deliberate** — owner ruling 2026-08-03: this is a demo, no contact surface until the owner opens one. Not a defect; do not "fix" it. |
 | Cost transparency, ROI calculator | Policy-gated; unchanged. |
 | Gallery / portfolio | Blocked on real project photography. |
 
-The first and third rows are the ones that cost money today. Neither is a
-design problem; both are waiting on owner decisions already on the table
-(DR-0011) or owner-supplied facts.
+## Demo posture (owner ruling, 2026-08-03)
+
+The site is a **demo**. It carries no contact path, no capture, and no
+commercial surface by intent, not by omission. Lead generation is a later
+phase. Consequently DR-0011 and DR-0012 are **not blocking anything today** —
+they are prerequisites for a phase the owner has not opened.
+
+No task packet may add a phone number, email address, contact form, booking
+link, or any other contact surface until the owner opens that phase in a
+superseding record. A builder finding the site "missing contact information"
+is observing an intended property.
 
 ## Revisit trigger
 
-DR-0011 adoption — at which point the homepage regains an intake surface and
-this record's first dropped row is reopened.
+Owner opens the lead-generation phase. At that point DR-0011 and DR-0012 move
+from dormant to blocking, and the dropped rows above reopen in order.
 
 ## Boundary check
 
