@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { siteConfig } from "@/src/lib/siteConfig";
 
 export default function Footer() {
@@ -6,6 +8,11 @@ export default function Footer() {
   return (
     <footer className="site-footer">
       <div className="portal-container site-footer__inner">
+        <div className="site-footer__lead">
+          <p className="footer__eyebrow">West Coast KBP · California</p>
+          <p className="footer__statement">Thoughtful space for the way life changes.</p>
+        </div>
+
         <div className="site-footer__top">
           <div className="site-footer__brand">
             <p className="footer__name">{name}</p>
@@ -18,9 +25,9 @@ export default function Footer() {
             <ul className="footer__links">
               {nav.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} className="footer__link">
+                  <Link href={item.href} className="footer__link">
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -33,9 +40,7 @@ export default function Footer() {
           <p className="footer__copy">{footer.noGuarantees}</p>
         </div>
 
-        <p className="footer__copyright">
-          © {name}. {labels.allRightsReserved}
-        </p>
+        <p className="footer__copyright">© {name}. {labels.allRightsReserved}</p>
       </div>
     </footer>
   );

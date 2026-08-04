@@ -73,9 +73,9 @@ const officialVerificationWarning = "Requires official source verification.";
 export const siteConfig = {
   name: "West Coast KBP",
   url: "https://westcoastkbp.com",
-  tagline: "Construction Operations Portal",
+  tagline: "ADU & Residential Construction",
   description:
-    "A public preview of the West Coast KBP construction operations portal for ADU, garage conversion, residential general construction, and GC-partner coordination.",
+    "A public preview of West Coast KBP services for ADUs, garage conversions, attached residential space, and substantial residential construction in California.",
 
   accessibility: {
     brandHomeLabel: "West Coast KBP home",
@@ -97,9 +97,8 @@ export const siteConfig = {
   },
 
   nav: [
-    { label: "Services", href: "/services/detached-adu" },
-    { label: "How It Works", href: "/process" },
-    { label: "Project Control", href: "/#project-control" },
+    { label: "ADU Services", href: "/services/detached-adu" },
+    { label: "Our Process", href: "/process" },
     { label: "Compare", href: "/compare" },
     { label: "About", href: "/about" },
   ] satisfies NavLink[],
@@ -404,13 +403,12 @@ export const siteConfig = {
 
   footer: {
     trustProof:
-      "Public portal preview only. Live workflows, real project objects, and contact collection require Owner approval.",
+      "Serving the Sacramento-region market direction. Business credentials and project facts remain pending owner input.",
     disclaimer:
       "Information on this website is general platform framing only. This preview is not a determination about ADU, zoning, structural, electrical, plumbing, or code matters. Requires official source verification.",
     noGuarantees:
       "No public cost commitments, dated delivery commitments, rental income, property value, financing outcomes, permit outcomes, or real project facts are asserted in this preview.",
-    previewNotice:
-      "Public preview - visual and structural review only. No data is collected.",
+    previewNotice: "Public preview · visual and structural review only · no data is collected.",
   },
 } as const;
 
