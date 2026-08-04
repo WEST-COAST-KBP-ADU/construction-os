@@ -8,19 +8,21 @@ const header = readFileSync(resolve(process.cwd(), "src/components/Header.tsx"),
 const stylesheet = readFileSync(resolve(process.cwd(), "app/globals.css"), "utf8");
 
 const imagePaths = [
-  "public/images/attainable-adu-hero-concept-v1.webp",
-  "public/images/attainable-residential-addition-concept-v1.webp",
+  "public/images/balanced-adu-hero-concept-v2.webp",
+  "public/images/balanced-residential-addition-concept-v2.webp",
+  "public/images/balanced-process-materials-concept-v2.webp",
+  "public/images/balanced-interior-concept-v2.webp",
 ];
 
 describe("TASK-0010 residential homepage", () => {
-  it("uses optimized local images and labels both as conceptual", () => {
+  it("uses optimized local images and labels all four as conceptual", () => {
     for (const imagePath of imagePaths) {
       const absolutePath = resolve(process.cwd(), imagePath);
       expect(existsSync(absolutePath)).toBe(true);
       expect(statSync(absolutePath).size).toBeLessThan(400_000);
     }
 
-    expect(page.match(/Conceptual imagery/g)).toHaveLength(2);
+    expect(page.match(/Conceptual/g)).toHaveLength(4);
     expect(page).toContain("next/image");
   });
 

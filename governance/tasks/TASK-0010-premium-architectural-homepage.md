@@ -17,6 +17,9 @@ preserving the existing controlled, non-capturing public-surface boundaries.
   technical drawing lines, axes, and motion remain a restrained supporting layer.
 - The market image is attainable middle / upper-middle residential work, not
   mansion, resort, or speculative luxury.
+- Owner selected concept 01 on 2026-08-03: a balanced editorial design-build
+  direction with serif display typography, five residential paths, a restrained
+  process band, and material/interior evidence.
 - Show ordinary California lots, practical footprints, believable materials,
   and lived-in residential scale.
 - Generated imagery is conceptual and must never be represented as completed
@@ -57,14 +60,16 @@ preserving the existing controlled, non-capturing public-surface boundaries.
 
 ## Image provenance
 
-Both assets were generated with the built-in OpenAI image generation tool on
-2026-08-03 for this task. They depict fictional concepts and contain no client,
-parcel, project, or production facts.
+The four v2 assets were generated with the built-in OpenAI image generation
+tool on 2026-08-03 for the owner-selected balanced direction. They depict
+fictional concepts and contain no client, parcel, project, or production facts.
 
 | Asset | Source SHA-256 | Published SHA-256 | Intended use |
 | :---- | :------------- | :---------------- | :----------- |
-| `attainable-adu-hero-concept-v1.webp` | `e2356a8c65dd7398da6a7c4e01978082da8af811088a926d7ca1b7ff9127846c` | `90226ec38c12f9187d4d9a2a3d03e4113ae10aeaabee98a5b5bed1b9e5773093` | Full-screen hero |
-| `attainable-residential-addition-concept-v1.webp` | `8184301c9f6708406249e6e0c171b37f450179fde7ed995501e31701ac502f1f` | `edc3f8b2155f6faf3ea8f8ecb6915b7f5e91889bc083546ef5a68e95bd3ced1b` | Editorial residential story |
+| `balanced-adu-hero-concept-v2.webp` | `cfec0edb5f0de439ea0da641144f49ef98afa4d4c028cbf49d3c00d6b25a510d` | `ba9ae05b88f05fe287bc358e534c8eadf0128698a366e8e1abc9263523787b80` | Full-screen hero |
+| `balanced-residential-addition-concept-v2.webp` | `8be834257efc84e3b181b9d433b37f2775349481fea21f93b724b16bb5a45793` | `b4a19d4a251d983005df4f565bf708845989dbd47d675f7e84f83086bbee21a0` | Solutions editorial image |
+| `balanced-process-materials-concept-v2.webp` | `24cff628c55fb0f9108d4b80b9e03a5b9a3c539295e56f5860adec98659fb1f0` | `d49460d7ab2b632f92e0d0f588e1c8d4b4ceaa009d56d4a8e7ccf2eb0812eefe` | Process/material review image |
+| `balanced-interior-concept-v2.webp` | `3572de42ae8057f4f7724e1e281f2c68f89eb8dde3af0f8b43ac59de6df037c0` | `312184c2614296bd25dcde6487637ee0b12e3fc4b69274084452fa13303f360c` | Quality/interior image |
 
 ## Evidence plan
 

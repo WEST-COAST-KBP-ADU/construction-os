@@ -5,216 +5,174 @@ import { buildBusinessJsonLd, serializeJsonLd } from "@/src/lib/structuredData";
 
 const servicePaths = [
   {
-    index: "01",
-    title: "Detached ADUs",
-    description:
-      "A purpose-built home in the yard, organized around the existing property and the people who will use it.",
+    title: "Detached ADU",
+    description: "Private, independent living space for family, guests, or multi-generational use.",
     href: "/services/detached-adu",
+    icon: "detached",
   },
   {
-    index: "02",
-    title: "Conversions & attached space",
-    description:
-      "Garage conversions, attached ADUs, and JADUs considered as practical ways to use the footprint you already have.",
+    title: "Garage Conversion",
+    description: "Transform underused space into comfortable, code-conscious living space.",
     href: "/services/garage-conversion",
+    icon: "garage",
   },
   {
-    index: "03",
-    title: "Substantial residential work",
-    description:
-      "Additions and coordinated residential scopes approached with the same emphasis on clarity, review, and buildable detail.",
+    title: "Attached ADU",
+    description: "Connected space planned to work with the home's architecture and everyday flow.",
+    href: "/compare",
+    icon: "attached",
+  },
+  {
+    title: "JADU",
+    description: "A compact way to make more useful space within the home you already have.",
+    href: "/faq",
+    icon: "jadu",
+  },
+  {
+    title: "Residential Addition",
+    description: "More room, light, and function through an addition that belongs with the home.",
     href: "/process",
+    icon: "addition",
   },
 ] as const;
 
-const processSteps = [
-  {
-    index: "01",
-    title: "Understand the property",
-    description:
-      "Start with the home, the site, and the household goal. Unknown property or jurisdiction facts stay explicitly unresolved.",
-  },
-  {
-    index: "02",
-    title: "Shape a reviewable direction",
-    description:
-      "Organize the candidate scope, missing information, and decisions before treating an idea like a commitment.",
-  },
-  {
-    index: "03",
-    title: "Move only after review",
-    description:
-      "OwnerReview remains the control point before any future external action, price, schedule, or project commitment.",
-  },
-] as const;
+function ServiceIcon({ variant }: { variant: (typeof servicePaths)[number]["icon"] }) {
+  return (
+    <svg className="balanced-service__icon" viewBox="0 0 64 52" aria-hidden="true">
+      <path d="M5 48V18L32 5l27 13v30M5 48h54" />
+      {variant === "detached" && <path d="M22 48V31h20v17M26 19h12" />}
+      {variant === "garage" && <path d="M15 48V27h34v21M19 33h26M19 39h26" />}
+      {variant === "attached" && <path d="M12 48V24h22v24M34 48V14h18v34M19 31h8M40 23h6" />}
+      {variant === "jadu" && <path d="M18 48V24l14-11 14 11v24M27 48V34h10v14" />}
+      {variant === "addition" && <path d="M8 48V24h24v24M32 48V31h24v17M39 31l8-9 9 9" />}
+    </svg>
+  );
+}
 
 export default function Home() {
   return (
-    <main id="main-content" className="site-main editorial-home">
+    <main id="main-content" className="site-main balanced-home">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildBusinessJsonLd()) }}
       />
 
-      <section className="residential-hero" aria-labelledby="home-hero-title">
+      <section className="balanced-hero" aria-labelledby="home-hero-title">
         <Image
-          src="/images/attainable-adu-hero-concept-v1.webp"
-          alt="Conceptual image of a modest detached ADU in a typical California backyard"
+          src="/images/balanced-adu-hero-concept-v2.webp"
+          alt="Conceptual image of a thoughtfully designed detached ADU on an established California lot"
           fill
           priority
           sizes="100vw"
-          className="residential-hero__image"
+          className="balanced-hero__image"
         />
-        <div className="residential-hero__shade" aria-hidden="true" />
-        <div className="residential-hero__drawing" aria-hidden="true">
-          <span className="residential-hero__axis" />
-          <span className="residential-hero__measure">concept / 01</span>
-        </div>
-
-        <div className="portal-container residential-hero__inner">
-          <div className="residential-hero__copy">
-            <p className="residential-hero__eyebrow">ADU & residential construction · California</p>
-            <h1 id="home-hero-title" className="residential-hero__title">
-              More room for the life you already have.
-            </h1>
-            <p className="residential-hero__lede">
-              Thoughtful ADUs, conversions, and substantial residential work—shaped around real homes,
-              real lots, and decisions that deserve careful review.
+        <div className="balanced-hero__shade" aria-hidden="true" />
+        <div className="portal-container balanced-hero__inner">
+          <div className="balanced-hero__copy">
+            <p className="balanced-kicker balanced-kicker--light">
+              ADU &amp; residential construction · California
             </p>
-            <div className="residential-hero__actions">
-              <Link href="/services/detached-adu" className="button button--light">
+            <h1 id="home-hero-title">Room to live better.</h1>
+            <p className="balanced-hero__lede">
+              Thoughtful ADUs, conversions, and residential additions—shaped around real California
+              homes, real lots, and decisions that deserve careful review.
+            </p>
+            <div className="balanced-actions">
+              <Link href="/services/detached-adu" className="button balanced-button--light">
                 Explore ADU options
               </Link>
-              <Link href="/process" className="text-link text-link--inverse">
+              <Link href="/process" className="balanced-link balanced-link--light">
                 See how the process works <span aria-hidden="true">↗</span>
               </Link>
             </div>
           </div>
-
-          <p className="residential-hero__caption">
-            Conceptual imagery—not a completed West Coast KBP project.
-          </p>
+          <p className="balanced-caption">Conceptual imagery—not a completed West Coast KBP project.</p>
         </div>
       </section>
 
-      <section className="editorial-section editorial-section--intro" aria-labelledby="intro-title">
-        <div className="portal-container editorial-intro">
-          <p className="editorial-kicker">Built around the home you already have</p>
-          <div className="editorial-intro__copy">
-            <h2 id="intro-title">Good residential work should feel considered, not out of reach.</h2>
+      <section className="balanced-solutions" aria-labelledby="solutions-title">
+        <div className="portal-container balanced-solutions__intro">
+          <div className="balanced-solutions__copy">
+            <p className="balanced-kicker">Built for real California homes</p>
+            <h2 id="solutions-title">Solutions that fit your home and how you live.</h2>
             <p>
-              The design language is architectural, but the work stays grounded: ordinary California
-              neighborhoods, practical footprints, durable materials, and a clear path from early intent
-              to reviewed scope.
+              From independent backyard homes to smart conversions and seamless additions, each path
+              starts with the household need and the realities of the existing property.
             </p>
           </div>
+          <figure className="balanced-media balanced-media--addition">
+            <Image
+              src="/images/balanced-residential-addition-concept-v2.webp"
+              alt="Conceptual image of a carefully integrated addition to an established California home"
+              fill
+              sizes="(max-width: 760px) 100vw, 58vw"
+            />
+            <figcaption>Conceptual imagery—not a completed West Coast KBP project.</figcaption>
+          </figure>
         </div>
-      </section>
 
-      <section className="editorial-section" aria-labelledby="services-title">
         <div className="portal-container">
-          <div className="editorial-heading">
-            <p className="editorial-kicker">Ways to create space</p>
-            <h2 id="services-title">Start with the change your household needs.</h2>
-          </div>
-
-          <ol className="residential-services">
+          <ul className="balanced-services">
             {servicePaths.map((service) => (
-              <li key={service.index} className="residential-service">
-                <span className="residential-service__index">{service.index}</span>
-                <div>
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
-                </div>
-                <Link href={service.href} className="residential-service__link" aria-label={`Learn about ${service.title}`}>
-                  <span aria-hidden="true">↗</span>
+              <li key={service.title} className="balanced-service">
+                <ServiceIcon variant={service.icon} />
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <Link href={service.href} className="balanced-link">
+                  Learn more <span aria-hidden="true">↗</span>
                 </Link>
               </li>
             ))}
-          </ol>
+          </ul>
         </div>
       </section>
 
-      <section className="editorial-story" aria-labelledby="story-title">
-        <div className="editorial-story__image-wrap">
-          <Image
-            src="/images/attainable-residential-addition-concept-v1.webp"
-            alt="Conceptual image of a practical addition to an existing California home"
-            fill
-            sizes="(max-width: 760px) 100vw, 58vw"
-            className="editorial-story__image"
-          />
-          <p className="editorial-story__caption">Conceptual imagery · attainable residential scale</p>
-        </div>
-        <div className="editorial-story__copy">
-          <p className="editorial-kicker">A quieter kind of premium</p>
-          <h2 id="story-title">Quality lives in the decisions, not in spectacle.</h2>
-          <p>
-            A useful floor plan. Light where it matters. Materials that suit the home. Details that can be
-            explained and reviewed. The goal is not to make every project look expensive—it is to make the
-            experience feel deliberate.
-          </p>
-          <Link href="/about" className="text-link">
-            About West Coast KBP <span aria-hidden="true">↗</span>
-          </Link>
-        </div>
-      </section>
-
-      <section className="editorial-section editorial-section--process" aria-labelledby="process-title">
-        <div className="portal-container process-editorial">
-          <div className="editorial-heading editorial-heading--light">
-            <p className="editorial-kicker">From idea to reviewed direction</p>
+      <section className="balanced-process" aria-labelledby="process-title">
+        <div className="portal-container balanced-process__grid">
+          <div className="balanced-process__copy">
+            <p className="balanced-kicker balanced-kicker--light">Our process</p>
             <h2 id="process-title">Clarity before commitment.</h2>
-          </div>
-          <ol className="process-editorial__steps">
-            {processSteps.map((step) => (
-              <li key={step.index}>
-                <span>{step.index}</span>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
-              </li>
-            ))}
-          </ol>
-          <Link href="/process" className="button button--outline-light">
-            Review the full process
-          </Link>
-        </div>
-      </section>
-
-      <section className="editorial-section editorial-section--verification" aria-labelledby="verification-title">
-        <div className="portal-container verification-grid">
-          <div>
-            <p className="editorial-kicker">Property questions need official answers</p>
-            <h2 id="verification-title">Useful guidance without false certainty.</h2>
-          </div>
-          <div>
             <p>
-              Early screening can organize what to check, what is missing, and which official source may
-              matter. It is never presented as a permit, zoning, engineering, legal, or buildability
-              conclusion.
+              A straightforward, collaborative path helps organize the goal, the trade-offs, the
+              unresolved facts, and the decisions ahead before an idea is treated as a commitment.
             </p>
-            <p className="verification-note">Requires official source verification.</p>
-            <Link href="/faq" className="text-link">
-              Read common questions <span aria-hidden="true">↗</span>
+            <p className="balanced-process__note">Property-specific conclusions require official source verification.</p>
+            <Link href="/process" className="balanced-link balanced-link--light">
+              See how the process works <span aria-hidden="true">↗</span>
             </Link>
           </div>
+          <figure className="balanced-media balanced-media--process">
+            <Image
+              src="/images/balanced-process-materials-concept-v2.webp"
+              alt="Conceptual architectural plan and durable residential material samples under review"
+              fill
+              sizes="(max-width: 760px) 100vw, 58vw"
+            />
+            <figcaption>Conceptual imagery—not a real parcel, permit, or approved plan.</figcaption>
+          </figure>
         </div>
       </section>
 
-      <section className="home-cta" aria-labelledby="home-cta-title">
-        <div className="portal-container home-cta__inner">
-          <p className="editorial-kicker">A practical place to begin</p>
-          <h2 id="home-cta-title">Explore the right kind of space for your property.</h2>
-          <p>
-            Review the available residential paths and the questions that should be resolved before a
-            project moves forward. No form, quote, or live intake is connected to this preview.
-          </p>
-          <div className="home-cta__actions">
-            <Link href="/services/detached-adu" className="button button--primary">
-              Explore services
-            </Link>
-            <Link href="/compare" className="text-link">
-              Compare ADU paths <span aria-hidden="true">↗</span>
+      <section className="balanced-quality" aria-labelledby="quality-title">
+        <div className="portal-container balanced-quality__grid">
+          <figure className="balanced-media balanced-media--interior">
+            <Image
+              src="/images/balanced-interior-concept-v2.webp"
+              alt="Conceptual family room with durable materials and a comfortable connection to a California garden"
+              fill
+              sizes="(max-width: 760px) 100vw, 55vw"
+            />
+            <figcaption>Conceptual imagery—not a completed West Coast KBP project.</figcaption>
+          </figure>
+          <div className="balanced-quality__copy">
+            <p className="balanced-kicker">Quality that lasts</p>
+            <h2 id="quality-title">Thoughtful design. Durable execution.</h2>
+            <p>
+              The focus is on useful layouts, natural light, durable materials, and details that can
+              be explained and reviewed—not display for its own sake.
+            </p>
+            <Link href="/about" className="balanced-link">
+              About West Coast KBP <span aria-hidden="true">↗</span>
             </Link>
           </div>
         </div>

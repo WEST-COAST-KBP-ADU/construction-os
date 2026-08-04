@@ -67,3 +67,15 @@ optimized conceptual images. Opened Draft PR #26 from the pinned `main` base.
   `details` mobile menu before marking TASK-0010 done.
 - Do not merge, approve, or change production from this run.
 
+## Owner-selected balanced revision
+
+- **Timestamp:** 2026-08-04T04:44Z
+- **Selected concept:** concept 01, balanced middle / upper-middle editorial
+  design-build direction.
+- **Pinned parent:** `0b305cd397b8128b1cfb1aca213892db84c9c2cb`.
+- **Scope:** homepage composition, four new conceptual assets, focused
+  regression expectations, and SourceTrue provenance only.
+- **Status before remote verification:** pending. No lint, test, build, CI,
+  deployment, desktop screenshot, or mobile screenshot result is asserted by
+  this note.
+
