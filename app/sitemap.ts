@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { servicePages } from "@/src/lib/contentPages";
+import { jurisdictionPages } from "@/src/lib/jurisdictionPages";
 import { siteConfig } from "@/src/lib/siteConfig";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -44,5 +45,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...serviceRoutes];
+  const jurisdictionRoutes: MetadataRoute.Sitemap = jurisdictionPages.map((page) => ({
+    url: new URL(`/adu-builder/${page.slug}`, siteConfig.url).toString(),
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...jurisdictionRoutes];
 }
