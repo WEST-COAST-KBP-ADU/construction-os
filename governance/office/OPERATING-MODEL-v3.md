@@ -1,7 +1,8 @@
 # Operating Model v3 — owner-directed dual-lane control
 
-Status: proposed by owner directive, 2026-08-05. On owner merge, supersedes
-OPERATING-MODEL-v2.
+Status: operative since the Owner merged PR #40 on 2026-08-05.
+Supersedes OPERATING-MODEL-v2.
+Adoption anchor: `main@35c22898b8b7259f511f2dbde178bb62c175140e`.
 Base: `main@9f7c06d409ba1ba2eb7f82a2e306ad7f55cdb64e`.
 
 ## 1. Decision
