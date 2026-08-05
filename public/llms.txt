@@ -27,6 +27,10 @@ require individual review and official source verification.
   current official definitions left to source verification.
 - [ADU Legalization](https://westcoastkbp.com/services/adu-legalization):
   evidence and mismatch review for an existing unit.
+- [City of Sacramento ADU guide](https://westcoastkbp.com/adu-builder/sacramento):
+  City authority, permit routing, official GIS records, and verification limits.
+- [Unincorporated Sacramento County ADU guide](https://westcoastkbp.com/adu-builder/sacramento-county):
+  County authority, permit routing, official GIS records, and verification limits.
 - [About](https://westcoastkbp.com/about): operating principles and an explicit
   list of business facts still pending owner input.
 - [Compare](https://westcoastkbp.com/compare): a neutral comparison of ad hoc

@@ -98,6 +98,7 @@ export const siteConfig = {
 
   nav: [
     { label: "ADU Services", href: "/services/detached-adu" },
+    { label: "Sacramento ADU", href: "/adu-builder/sacramento" },
     { label: "Our Process", href: "/process" },
     { label: "Compare", href: "/compare" },
     { label: "About", href: "/about" },

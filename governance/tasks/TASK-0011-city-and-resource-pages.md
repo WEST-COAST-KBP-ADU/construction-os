@@ -1,6 +1,6 @@
 # TASK-0011: City pages and resources — close the Blueprint §2 gap
 
-- **Status:** approved
+- **Status:** in_progress — WORK-ORDER-002 implementation submitted for review
 - **Date approved:** 2026-08-03
 - **Approved by:** owner
 - **Scope amendment:** 2026-08-04 — owner added Galt and Isleton to the

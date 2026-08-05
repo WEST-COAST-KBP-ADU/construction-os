@@ -12,7 +12,7 @@ Updated: 2026-08-04f — operational control taken; base `main@c3271f3`
 | :- | :--- | :------- | :---- |
 | 1 | **WORK-ORDER-001** — execute RP-0008 Sacramento GIS, two jurisdictions | ChatGPT | blocked — partial packet in Draft PR; parameterized geocoder URLs rejected by environment safety layer |
 | 2 | Close TASK-0013 registry with deployed p75 CWV + screenshot evidence | ChatGPT | queued — see blockers |
-| 3 | TASK-0011 city + resource pages, Sacramento ring first | ChatGPT | queued — depends on #1 for regulatory content |
+| 3 | TASK-0011 city + resource pages, Sacramento ring first | ChatGPT | in_progress — WORK-ORDER-002 implementation on `agent/work-order-002-sacramento-pages` |
 | 4 | Review every worker PR at exact head SHA | Claude | continuous |
 
 Nothing starts out of order. The worker takes #1 and stops at its PR.
