@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 
 import catalogData from "@/src/data/studio/catalog/releases/2026.08.0.json";
+import { resolveStudioAsset } from "@/src/lib/studio/assetManifest";
 import {
   assertValidCandidate,
   buildConfigurationCandidate,
@@ -60,12 +61,6 @@ const rowLabels: Record<StudioOptionKey, string> = {
 const reasonLabels: Record<string, string> = {
   roof_window_clearance: "Tall windows are unavailable with the compact shed roof.",
   compact_interior_clearance: "The comfort interior is unavailable in the compact studio.",
-};
-
-const imageByRef: Record<string, string> = {
-  "assets/images/attainable-adu@1": "/images/attainable-adu-hero-concept-v1.webp",
-  "assets/images/adu-courtyard@1": "/images/adu-courtyard-concept-v1.webp",
-  "assets/images/residential-addition@1": "/images/attainable-residential-addition-concept-v1.webp",
 };
 
 const optionKeys = Object.keys(rowLabels) as StudioOptionKey[];
@@ -191,7 +186,7 @@ export default function StudioWorkbench() {
     }
   }
 
-  const mainImage = imageByRef[activeArchetype.geometry_ref];
+  const mainImage = resolveStudioAsset(activeArchetype.geometry_ref);
   const hashLabel = candidate ? candidate.config_hash.slice(0, 12).toUpperCase() : "PENDING";
 
   return (
@@ -294,7 +289,7 @@ export default function StudioWorkbench() {
         <div className={styles.conceptList}>
           {comparisonInputs.map((item, index) => {
             const itemArchetype = catalog.archetypes.find((entry) => entry.id === item.archetype);
-            const image = itemArchetype ? imageByRef[itemArchetype.geometry_ref] : mainImage;
+            const image = resolveStudioAsset(itemArchetype?.geometry_ref);
             return (
               <button
                 key={`${item.archetype}-${index}`}
