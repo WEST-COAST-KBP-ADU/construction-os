@@ -1,218 +1,226 @@
 # RP-0008: Sacramento GIS sources — City and unincorporated County
 
-- **Status:** BLOCKED — protocol and candidate register only; **no primary
-  source was fetched**. Not comparable to RP-0007 depth. Requires re-execution
-  by an engineer with live network access.
+- **Status:** PARTIAL — official layer metadata opened; parameterized fixture queries blocked by the execution environment
 - **Date:** 2026-08-04
-- **Researcher:** Lane C (reviewer/architect, acting on owner assignment) —
-  zero authority
-- **Requested by:** owner directive 2026-08-04; DR-0014 (Sacramento leads)
+- **Researcher:** ChatGPT, bounded worker under WORK-ORDER-001 — zero authority
 - **Feeds into:** DR-0012 (proposed), `architecture/property-intelligence-v0.1.md` §5
-- **Pinned repository base:** `main@cf20207f3fefa7e2fbe5efda67dffe7abb22d64d`
-- **Checked:** 2026-08-04
+- **Pinned base:** `main@c3271f3`; execution branch created from `main@69bcaf43d0f848f7de27c4937616badd391b4dd7`
+- **Access window:** 2026-08-05T01:06:00Z–2026-08-05T01:21:29Z
 
-## 0. Blocker — read first
+This packet records source observations only. It makes no parcel-specific zoning,
+permit, feasibility, or buildability conclusion. Research has zero authority.
 
-The execution environment's network policy denies outbound HTTPS to every
-official source required by this packet. Verified failure, not assumption —
-the proxy rejected `CONNECT` with 403 for all of:
+## 1. Executive result
 
-```
-data.cityofsacramento.org              403
-data.saccounty.gov                     403
-data-sacramentocounty.opendata.arcgis.com  403
-gis.saccounty.gov                      403
-mapservices.gis.saccounty.gov          403
-mapservices.gis.saccounty.net          403
-services.arcgis.com                    403
-hub.arcgis.com                         403
-```
+The County ArcGIS Server exposes separate queryable feature layers for the
+countywide parcel base, County zoning, City zoning, and jurisdiction polygons.
+The City zoning layer is named as City data but is physically hosted at
+`mapservices.gis.saccounty.gov`. The service and layer metadata leave
+`Copyright Text`, author, and description blank, so the accountable publisher
+of that particular layer was **not established**. Hosting agency and accountable
+agency must remain separate provenance fields.
 
-Search-engine access works; page retrieval does not. Consequently **nothing in
-§2 was opened, queried, or read.** Field lists, terms of use, rate limits, and
-update cadence cannot be established from search result summaries, and this
-packet does not pretend otherwise.
+The official County geocoder exposes `JURISDICTION`, and the County parcel
+layer exposes `JURISDICTION`, `TRA_JURISDICTION`, and
+`GIS_JURISDICTION`. However, the environment rejected every parameterized
+`findAddressCandidates` URL before the server response was retrieved.
+Therefore no fixture reached parcel or zoning join. Both jurisdictions remain
+`partial`.
 
-RP-0007 set the standard: it recorded specific layer IDs, field names, and
-per-source terms because its researcher could open the endpoints. This packet
-cannot match that from here.
+Requires official source verification.
 
-**Disposition — owner's choice:**
+## 2. Shared parcel source
 
-- **(a) Reassign execution** to the engineer with live web access (Lane B per
-  OPERATING-MODEL role 10), who runs §3 and §4 verbatim. Recommended — the
-  protocol below makes that a mechanical pass.
-- **(b) Unblock this environment** for the eight hosts above, then this packet
-  is re-executed here.
+- URL: https://mapservices.gis.saccounty.gov/arcgis/rest/services/PARCELS/MapServer/8
+- Accessed: 2026-08-05T01:13:00Z
+- Layer: `Active GIS Parcel Base` (MapServer layer 8), polygon Feature Layer.
+- Coverage metadata extent: WKID 2226; X 6602455.675135225–6842162.521507964,
+  Y 1769452.7875283062–2030220.3568713963. This is countywide, not a
+  City-only parcel source.
+- Relevant verbatim fields: `PARCEL_NUMBER`, `APN_DASH`, `APN10`,
+  `LOTSIZE`, `STREET_NBR`, `STREET_NAME`, `SITUS_ADD1`,
+  `SITUS_ADD2`, `INSERT_DATE`, `CREATED_DATE`, `EVENT_DATE`,
+  `JURISDICTION`, `TRA_JURISDICTION`, `GIS_JURISDICTION`,
+  `PARCEL_STATUS`.
+- Mechanics published in metadata: JSON/geoJSON/PBF; `Query`; standardized
+  queries; pagination, distance queries, statistics, distinct, order-by;
+  max record count 2,000.
+- `returnGeometry` and `outSR` behavior was not executed because the
+  parameterized query path was blocked.
+- Update cadence: not published. Dates in records are not a published cadence.
+- Failure/privacy note: the layer also publishes owner and mailing fields.
+  Those fields are outside this work order and must not be retrieved or stored.
 
-Either way, §3–§6 stand as the specification for the work.
+## 3. City of Sacramento — protocol items 1–10
 
-## 1. Two jurisdictions, never merged
+1. **Agency / owner.** City policy says City departments control City data and
+   the City IT department administers the City portal. The actual zoning layer
+   is hosted by Sacramento County; its metadata does not identify author,
+   copyright holder, or accountable publisher. Accountable agency for this
+   layer: unresolved. Requires official source verification.
+   URLs: https://www.cityofsacramento.gov/information-technology/gis/data and
+   https://mapservices.gis.saccounty.gov/arcgis/rest/services/CITY_of_SACRAMENTO/MapServer/3
+   (accessed 2026-08-05T01:08:00Z).
+2. **Endpoint.** `CITY_of_SACRAMENTO/MapServer/3`, `City of Sacramento
+   Zoning`, polygon Feature Layer; JSON/geoJSON/PBF; MapServer max 2,000.
+   General Plan is layer 4; PUD and SPD are layers 2 and 1.
+3. **Coverage.** Published extent WKID 2226; X
+   6687183.479104504–6743983.942931175, Y
+   1921798.0605930835–2011766.2359713316. Metadata does not state that the
+   polygons stop exactly at current incorporated limits. Requires official
+   source verification.
+4. **Fields.** Zoning: `ZONE`, `BASE_ZONE`, `OVERLAY`, `PUDNAME`,
+   `SPDNAME`, `PROJ_NUMB`, `ORDINANCE`, `ORD_DATE`, `CHANG_DATE`,
+   `URL`, `DESCRIPTIO`. Parcel/address/area fields come from shared parcel
+   layer §2; the City zoning layer has no APN, address, or lot-area field.
+5. **Query mechanics.** Queryable; standardized queries; pagination, distance,
+   statistics, distinct and order-by published; JSON/geoJSON/PBF; max 2,000.
+   Actual spatial query, `returnGeometry`, and `outSR` behavior unresolved
+   due environment rejection.
+6. **Update cadence.** Not published in layer/service metadata.
+7. **Terms.** Official City Open Data Terms, verbatim excerpt:
+   “The User accepts and agrees to the Terms by machine-consuming, or
+   downloading and using the Data”. Source:
+   https://www.cityofsacramento.gov/content/dam/portal/it/gis/open-data/OpenDataPolicy.pdf
+   (p. 12, accessed 2026-08-05T01:09:00Z). The document also says additional
+   dataset/page terms are incorporated; none were present in the opened layer
+   metadata. Whether City terms govern a City-named layer on County
+   infrastructure is unresolved and requires owner/counsel verification.
+8. **Documented limits.** No rate or throttle limit was published in opened
+   service metadata. Absence is not permission. City terms are binding on
+   machine consumption; legal effect and product use require owner/counsel
+   verification.
+9. **Overlays.** Present in City service: SPD (1), PUD (2), General Plan (4);
+   `OVERLAY`, `PUDNAME`, `SPDNAME` fields on zoning. Fire, flood, historic,
+   and specific-plan completeness were not established.
+10. **Observed failures.** Blank author/copyright/description; County hosting
+    versus unresolved City accountability; no published cadence; parameterized
+    geocoder/query URLs rejected by the environment before a source response.
 
-City of Sacramento and unincorporated Sacramento County are separate land-use
-authorities with separate ordinances, separate permit paths, and — critically
-for us — separately published layers. A parcel inside city limits is governed
-by the City; a parcel in the unincorporated county is governed by the County.
-Conflating them would produce authoritative-looking output attributed to the
-wrong agency, which is the most damaging failure mode this product has.
+## 4. Sacramento County (unincorporated) — protocol items 1–10
 
-They therefore occupy **two rows** in the coverage matrix, are researched
-separately below, and may never share a cached observation.
+1. **Agency / owner.** Sacramento County GIS is the official host and portal
+   publisher for the opened parcel and planning services. The individual
+   service metadata leaves author/copyright blank; department-level
+   accountability beyond County GIS was not established.
+   URLs: https://data.saccounty.gov/ and
+   https://mapservices.gis.saccounty.gov/arcgis/rest/services/PLANNING/MapServer/16
+   (accessed 2026-08-05T01:07:00Z–01:14:00Z).
+2. **Endpoint.** Parcel: `PARCELS/MapServer/8`, `Active GIS Parcel Base`.
+   Zoning: `PLANNING/MapServer/16`, `County Zoning`. Both polygon Feature
+   Layers; JSON/geoJSON/PBF; max 2,000.
+3. **Coverage.** Parcel extent is countywide. County zoning extent WKID 2226;
+   X 6601072.500080049–6840875.550328642, Y
+   1768500.7500623167–2030220.3568713963. Metadata does not say layer 16 is
+   clipped to unincorporated territory, despite the `JURISDICTION` field.
+   Requires official source verification.
+4. **Fields.** Parcel fields are in §2. Zoning fields:
+   `B_ZONE`, `ZONE_ALL`, `DESCRIPTION`, `JURISDICTION`,
+   `OVERLAY_1`, `OVERLAY_2`, `OVERLAY_3`, `ZONE_DESC`. No ordinance
+   reference or last-update field is published on layer 16.
+5. **Query mechanics.** Queryable; standardized queries; pagination, distance,
+   statistics, distinct and order-by published; JSON/geoJSON/PBF; max 2,000.
+   Actual spatial query, `returnGeometry`, and `outSR` behavior unresolved
+   due environment rejection.
+6. **Update cadence.** Not published in opened layer/service metadata.
+7. **Terms.** County portal disclaimer, verbatim excerpt: “Sacramento County
+   makes no representations about the suitability of this data for any
+   purpose. All data is provided "as is" without warranty”. Source:
+   https://data.saccounty.gov/ (accessed 2026-08-05T01:07:00Z). No separate
+   license or attribution text appeared in opened layer metadata. Full legal
+   effect requires owner/counsel verification.
+8. **Documented limits.** No rate or throttle limit published in opened service
+   metadata. Absence is not permission.
+9. **Overlays.** PLANNING service publishes SPA (6), erosion (46), NPA (7),
+   Parkway Corridor (8), Surface Mining (9), Mobile Home Park (10), flood (14),
+   CalFire local/state response FHSZ (79/80), specific-plan land use (69), and
+   other planning layers. Historic coverage was not found. Overlay completeness
+   for the two jurisdictions remains unresolved.
+10. **Observed failures.** Blank author/copyright; no cadence; parcel layer
+    includes multiple jurisdiction fields whose conflict behavior is
+    undocumented; parameterized query URLs rejected before a source response.
 
-A third question falls out of this and must be answered before either row is
-usable: **jurisdiction determination.** Given a point, which authority governs
-it? An incorporated-limits or jurisdiction boundary layer is required, and if
-the point falls ambiguously (boundary tolerance, annexation lag between
-sources), the correct output is a refusal, not a coin flip.
+## 5. Jurisdiction determination (item 11)
 
-## 2. Candidate source register — UNVERIFIED
+Primary candidate gate:
+https://mapservices.gis.saccounty.gov/arcgis/rest/services/POLITICAL/MapServer/3
+(accessed 2026-08-05T01:15:00Z).
 
-Search-derived candidates only. Every row is a lead to check, not a finding.
-None was opened. Do not cite these in any visitor-facing context.
+`City Boundaries with Unincorporated` is a queryable polygon Feature Layer
+with fields `DISTRICT`, `CITY_NAME`, `ID`, and `DISCREPANCY_AG`.
+The County geocoder also advertises `JURISDICTION`; the parcel layer advertises
+three jurisdiction fields. Given a point, the intended deterministic gate is a
+spatial query against layer 3, followed by agreement checks against geocoder and
+parcel jurisdiction fields. Any zero hit, multiple hit, boundary-touching result,
+`DISCREPANCY_AG` value, or disagreement must refuse.
 
-| # | Candidate | Jurisdiction | What it may provide | Status |
-| :- | :-------- | :----------- | :------------------ | :----- |
-| 1 | `data.cityofsacramento.org` — City open data portal | City | zoning, parcels, addresses | unverified |
-| 2 | `mapservices.gis.saccounty.gov/arcgis/rest/services/CITY_of_SACRAMENTO/MapServer` — search results indicate a City zoning layer at index 3 and a General Plan layer at index 4 | City | zoning polygons, general plan | unverified; note the City service appears hosted on County infrastructure — confirm which agency is the authoritative publisher |
-| 3 | `data.saccounty.gov` / `data-sacramentocounty.opendata.arcgis.com` — County GIS open data | County | parcels, address-parcel, filed parcel maps, permits | unverified |
-| 4 | County Assessor parcel viewer | County | APN, assessor attributes | unverified |
-| 5 | `data.sacog.org` — regional (SACOG) portal | regional | regional layers; **secondary aggregator** | unverified; prefer the originating agency over an aggregator for provenance |
-| 6 | CAL FIRE FHSZ (state) | both | fire hazard severity zone | unverified |
-| 7 | FEMA NFHL (federal) | both | flood zone | unverified |
-| 8 | U.S. Census geocoder | both | address → coordinate | RP-0007 found it matched 5/5 addresses but parcel joins succeeded only 2/5 — re-test here |
+Edge inclusion rules, geometry tolerance, refresh cadence, and behavior for
+recent annexations were not published and could not be probed. A point on or
+near an edge must therefore be `ambiguous`, not assigned. Requires official
+source verification.
 
-**Row 2 carries the single most important open question in this packet:** if
-the City's zoning service is published on County infrastructure, the terms of
-use, update cadence, and support commitment may belong to a different agency
-than the data authority. Resolve before either is treated as canonical.
+## 6. Fixture corpus and blocked traces
 
-## 3. Execution protocol — run per jurisdiction, twice
+All fixtures are public non-residential facilities. Addresses were taken from
+official City or Sacramento Public Library pages. None is a customer inquiry
+and no fixture was persisted outside this packet.
 
-For **City of Sacramento**, then independently for **unincorporated Sacramento
-County**, record with a direct URL and an access timestamp:
+| Jurisdiction | Public fixture | Boundary purpose | Trace result |
+| :----------- | :------------- | :--------------- | :----------- |
+| City | Central Library — 828 I St, Sacramento, CA 95814 | ordinary | geocode blocked; no parcel/zoning observation |
+| City | Pannell Community Center — 2450 Meadowview Rd, Sacramento, CA 95832 | ordinary | geocode blocked; no parcel/zoning observation |
+| City | South Natomas Community Center — 2921 Truxel Rd, Sacramento, CA 95833 | ordinary | geocode blocked; no parcel/zoning observation |
+| City | North Natomas Community Center — 2601 New Market Dr, Sacramento, CA 95835 | near-boundary candidate | proximity and trace unresolved |
+| City | Hagginwood Community Center — 3271 Marysville Blvd, Sacramento, CA 95815 | ordinary | geocode blocked; no parcel/zoning observation |
+| County | Arcade Library — 2443 Marconi Ave, Sacramento, CA 95821 | near-boundary candidate | proximity and trace unresolved |
+| County | Carmichael Library — 5605 Marconi Ave, Carmichael, CA 95608 | ordinary | geocode blocked; no parcel/zoning observation |
+| County | North Highlands-Antelope Library — 4235 Antelope Rd, Antelope, CA 95843 | ordinary | geocode blocked; no parcel/zoning observation |
+| County | Rio Linda Library — 6724 6th St, Rio Linda, CA 95673 | ordinary | geocode blocked; no parcel/zoning observation |
+| County | Orangevale Library — 8820 Greenback Ln, Orangevale, CA 95662 | ordinary | geocode blocked; no parcel/zoning observation |
 
-1. **Authoritative agency and dataset owner** — the agency that publishes and
-   is accountable for the layer, distinguished from whoever hosts it.
-2. **Endpoint** — exact service URL, layer index, service type
-   (FeatureServer/MapServer), supported formats.
-3. **Coverage** — geographic extent; explicitly whether it stops at
-   incorporated limits.
-4. **Fields** — verbatim field names for: parcel identifier/APN, lot area,
-   zoning code, ordinance/plan reference, address, last-update stamp. Copy the
-   names exactly; do not normalize them in this document.
-5. **Query mechanics** — whether attribute and spatial queries are supported,
-   pagination, max record count, whether `returnGeometry` and
-   `outSR` behave as expected.
-6. **Update cadence** — only if officially published. If the publisher does not
-   state it, record "not published" — never infer from a timestamp.
-7. **Terms of use, license, attribution, restrictions** — quote verbatim. This
-   is the row most likely to kill or reshape the product; paraphrase is not
-   acceptable evidence.
-8. **Documented limits** — rate limits, throttling, prohibited automated
-   access. Absence of a stated limit is not permission.
-9. **Overlays** — fire hazard, flood, historic, specific plan; note which are
-   absent rather than leaving the cell empty.
-10. **Failure modes observed** — outage, schema drift, contradictory values
-    between the two jurisdictions' layers.
+Official address sources:
+https://www.cityofsacramento.gov/content/dam/portal/ypce/Community-Centers/FACITLITY%20RENTAL%20GUIDE%20Packet_Final%20July%202024.pdf,
+https://www.saclibrary.org/visit-us,
+https://www.saclibrary.org/visit-us/arcade,
+https://www.saclibrary.org/visit-us/carmichael,
+https://www.saclibrary.org/visit-us/north-highlands-antelope,
+https://www.saclibrary.org/visit-us/rio-linda, and
+https://www.saclibrary.org/visit-us/orangevale
+(accessed 2026-08-05T01:17:00Z–01:19:00Z).
 
-Then, spanning both:
+### Exact blocker
 
-11. **Jurisdiction determination** — the boundary layer used, and its behavior
-    at edges and recent annexations.
+Attempted endpoint:
+`https://mapservices.gis.saccounty.gov/arcgis/rest/services/PointAddress/GeocodeServer/findAddressCandidates`
 
-## 4. Fixture corpus — five public addresses per jurisdiction
+Parameters for each fixture: `SingleLine=<fixture>`,
+`outFields=Match_addr,Addr_type,JURISDICTION,Ref_ID`,
+`maxLocations=3`, `outSR=4326`, `f=pjson`.
 
-Public, non-residential buildings only (city hall, library, fire station,
-community center) — never a real inquiry, never a residential address.
-Hand-trace each end to end: address → geocode → parcel candidate → zoning
-observation, recording every mismatch, multi-parcel hit, and boundary
-ambiguity.
+All ten attempts returned the environment response:
+`URL ... is not safe to open (non-retryable error)`.
+This was not an HTTP response from Sacramento County. No retry, alternate
+aggregator, bulk endpoint, parcel query, or zoning query was attempted after the
+blocker. Consequently: geocode 0/10 evidenced; clean parcel joins 0/10
+evidenced; zoning observations 0/10 evidenced; mismatches/multi-parcel/boundary
+ambiguities cannot be measured.
 
-Deliberately include at least one address near the city/county boundary. That
-case, not the easy ones, determines whether jurisdiction determination works.
-
-RP-0007's result is the benchmark to beat: 5/5 geocoded, 2/5 clean parcel
-joins, 2 ambiguous. If Sacramento performs no better, that is a product
-finding, not a research failure — it means the deterministic path needs a
-stronger refusal surface, and the owner should know before any integration.
-
-## 5. Coverage matrix rows — to be filled by the executing engineer
-
-Replace the placeholder rows in
-`architecture/property-intelligence-v0.1.md` §5 with these two, completed:
+## 7. Coverage conclusion
 
 | Jurisdiction | Parcel layer | Zoning layer | Overlays | Status |
 | :----------- | :----------- | :----------- | :------- | :----- |
-| City of Sacramento | *(endpoint + layer + key fields)* | *(endpoint + layer + key fields)* | *(present / absent, named)* | *(verified / partial + what is open)* |
-| Sacramento County (unincorporated) | *(same)* | *(same)* | *(same)* | *(same)* |
+| City of Sacramento | County `PARCELS/MapServer/8`: `APN_DASH`, `LOTSIZE`, `SITUS_ADD1`, `GIS_JURISDICTION` | County-hosted `CITY_of_SACRAMENTO/MapServer/3`: `ZONE`, `ORDINANCE`, `CHANG_DATE` | SPD/PUD/General Plan present; fire/flood/historic/specific-plan completeness open | partial — accountable publisher, terms applicability, cadence, boundary behavior, and fixtures open |
+| Sacramento County (unincorporated) | County `PARCELS/MapServer/8`: `APN_DASH`, `LOTSIZE`, `SITUS_ADD1`, `GIS_JURISDICTION` | County `PLANNING/MapServer/16`: `B_ZONE`, `ZONE_ALL`, `JURISDICTION`, `OVERLAY_1..3` | SPA, flood, FHSZ, specific-plan candidates present; historic completeness open | partial — unincorporated clipping, terms/license, cadence, boundary behavior, and fixtures open |
 
-A row may only read "verified" when items 1–10 of §3 are answered from primary
-sources for that jurisdiction. Partial is an honest and acceptable outcome;
-overstating is not.
+Neither row is verified. Requires official source verification.
 
-## 6. Provenance contract — required regardless of source
+## 8. Boundary check
 
-Whatever the sources turn out to be, every observation the platform later holds
-must carry these fields, or it cannot be replayed or defended:
-
-```
-SourceObservation {
-  agency            // accountable publisher, not the host
-  jurisdiction      // "city-of-sacramento" | "sacramento-county-unincorporated"
-  endpoint          // exact service URL
-  layer             // index/name as published
-  field_name        // verbatim, as published
-  raw_value         // unnormalized
-  retrieved_at      // UTC
-  source_version    // publisher's version/stamp if any, else null
-  schema_fingerprint// hash of the field list at retrieval time
-  freshness_status  // "published-cadence" | "unknown" | "stale"
-}
-```
-
-Two rules follow and are not negotiable later:
-
-- `raw_value` is stored unnormalized. Normalization is a projection, applied at
-  read time, never at write time — otherwise a publisher's schema change
-  silently rewrites history.
-- `schema_fingerprint` is what detects that change. A fingerprint mismatch is a
-  refusal condition, not a warning to log.
-
-## 7. Minimum deterministic integration path — recommendation
-
-Assuming §3 comes back workable, the smallest defensible first integration is
-**not** a live adapter:
-
-1. **Pinned snapshot, not live queries.** Take a dated extract, record its
-   fingerprint, serve from it. A live dependency on eight external hosts turns
-   every visitor request into an availability and rate-limit risk before a
-   single lead exists.
-2. **One jurisdiction end to end first** — whichever of the two returns
-   cleaner terms and fields, not whichever is larger.
-3. **Refusal before coverage.** Ship the five result states
-   (`matched | ambiguous | insufficient | unsupported | source_unavailable`)
-   before broadening coverage. A narrow tool that refuses honestly is sellable;
-   a broad one that guesses is a liability.
-4. **Jurisdiction determination is a gate, not a field.** If the governing
-   authority is uncertain, no observation is emitted at all.
-
-## 8. Evidence — what was actually done here
-
-| Action | Result |
-| :----- | :----- |
-| Fetch `main`, confirm base | `cf20207f3fefa7e2fbe5efda67dffe7abb22d64d` |
-| Reachability probe, 8 official hosts | all 403 at proxy CONNECT |
-| WebFetch probe, County open data | 403 |
-| Search passes for candidate sources | 3 queries; results recorded in §2 as unverified |
-| Primary sources opened | **none** |
-| Fixture traces run | **none** |
-
-## 9. Boundary check
-
+- [x] Two jurisdictions kept separate
 - [x] No parcel-specific zoning, permit, feasibility, or buildability conclusion
-- [x] No PII; no real inquiry address; no fixture data collected at all
-- [x] No scraping, no bulk retrieval, no vendor signup, no integration activated
-- [x] Unverified material labeled unverified in every instance
-- [ ] Primary-source verification — **not performed; blocked**
-
-Requires official source verification.
+- [x] Public non-residential fixtures only; no inquiry address or production PII
+- [x] No bulk retrieval, polling, signup, key, vendor, adapter, or integration
+- [x] Uncertainty carries the required wording
+- [ ] Fixture traces complete — blocked at parameterized geocoder request
+- [ ] Accountable publisher for County-hosted City zoning resolved
+- [ ] Terms and automated/derived-use posture cleared by owner/counsel
