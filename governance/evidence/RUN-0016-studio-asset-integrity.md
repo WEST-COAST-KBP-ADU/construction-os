@@ -1,8 +1,10 @@
 # RUN-0016 — Studio asset integrity
 
-Status: implementation complete; browser acceptance pending independent access
+Status: implementation and local browser acceptance complete; deployed browser access pending
 
 Recorded: 2026-08-05T14:45:57Z
+
+Local browser verified: 2026-08-05T14:59:34Z
 
 ## Source anchor and scope
 
@@ -55,16 +57,34 @@ Runtime notes: Node `v24.14.0`, npm `11.9.0`, locally resolved Vitest `4.1.10`. 
 - Branch: `agent/work-order-003-studio-asset-integrity`
 - State: `READY`
 - Vercel build compiled successfully, completed TypeScript, and generated the expected routes including `/studio`.
+- The first evidence head `85006a93794f2492484717b410beecb75da82098` also deployed `READY` as `dpl_ANWs9YXFvRFZE7Duep6DfqP89DVV`; the canonical `west-coast-kbp-platform-preview` check succeeded.
 
 ## Browser acceptance
 
-Pending, not claimed as PASS.
+Local exact-source browser acceptance: PASS.
 
-- The exact preview is behind Vercel deployment protection and redirects the cloud browser to Vercel login.
-- The cloud browser cannot reach the local development server (`ERR_BLOCKED_BY_CLIENT`).
-- The available cloud browser reports a 1363×936 viewport and exposes no viewport-resize operation, so the required 1487×1058 and 390×844 captures were not fabricated.
-- No temporary share URL, protection bypass, production change, or unapproved browser fallback was created.
-- Therefore `naturalWidth`/`naturalHeight`, overlay/console/network, horizontal overflow, and desktop/mobile screenshots remain pending.
+| Probe | Desktop 1487×1058 | Mobile 390×844 |
+|---|---:|---:|
+| `/studio` response | 200 | 200 |
+| Studio 450 main image | 1026×684 natural | 390×260 natural |
+| `Concept B` thumbnail | 160×106 natural | 160×106 natural |
+| Horizontal overflow | none | none |
+| Next error overlay | absent | absent |
+| Application console errors | 0 | 0 |
+| Page errors | 0 | 0 |
+| Failed requests | 0 | 0 |
+| Failed first-party images | 0 | 0 |
+
+- Deterministic configuration sequence: `B62013C355B0` (600) → `66FA6518F3D6` (450) → `130FDBBD7AE4` (800).
+- `Studio + Comfort` remained disabled with the exact compact-interior refusal reason.
+- `Studio + Shed + Tall` remained disabled with the exact roof/window-clearance refusal reason.
+- The comparison panel opened and retained its no-lead language.
+- Desktop screenshot: `wo003-studio-450-desktop-1487x1058.png`, SHA-256 `b4c15edb3ea62ef1b4a873d2db04a5e28f4a5aeb4baa4a543eaba204d475eefc`.
+- Mobile screenshot: `wo003-studio-450-mobile-390x844.png`, SHA-256 `917c3b8103b983e50d894666be63df9d4f49be13e0b89b0b4a0904055ab03b33`.
+- Machine-readable result: `wo003-browser-results.json`, SHA-256 `749debb0fcbb6372c280b0eeb9a58afd7e1b8f078f167a5bc81af25629b9c4bf`.
+- QA used temporary Playwright `1.62.1` with Chromium `149.0.7827.0`; neither package was added to the repository or product dependencies.
+
+Deployed browser acceptance remains unavailable: the exact preview redirects the cloud browser to Vercel login. No temporary share URL, protection bypass, production change, or Vercel setting change was created.
 
 ## Handoff
 
