@@ -1,80 +1,63 @@
 # STATE — single shared board
 
-Owner of this file: Claude, operational lead (OPERATING-MODEL-v2). The worker
-edits only its own lane row, in the same PR as the work. Merged `main` is the
-only truth; this board is the index, not the source.
+Owner of this file: operational lead / registrar under OPERATING-MODEL-v3 once
+that proposal is merged. Merged `main` is the only truth; this board is the
+index, not the source.
 
-Updated: 2026-08-04f — operational control taken; base `main@c3271f3`
+Updated: 2026-08-05 — owner-directed lead handoff proposed at
+`main@9f7c06d409ba1ba2eb7f82a2e306ad7f55cdb64e`.
 
-## Queue — set by the operational lead, executed in this order
+## Queue — executed in this order
 
-| # | Work | Executor | State |
-| :- | :--- | :------- | :---- |
-| 1 | **WORK-ORDER-001** — execute RP-0008 Sacramento GIS, two jurisdictions | ChatGPT | blocked — partial packet in Draft PR; parameterized geocoder URLs rejected by environment safety layer |
-| 2 | Close TASK-0013 registry with deployed p75 CWV + screenshot evidence | ChatGPT | queued — see blockers |
-| 3 | TASK-0011 city + resource pages, Sacramento ring first | ChatGPT | in_progress — WORK-ORDER-002 implementation on `agent/work-order-002-sacramento-pages` |
-| 4 | Review every worker PR at exact head SHA | Claude | continuous |
-
-Nothing starts out of order. The worker takes #1 and stops at its PR.
+| # | Work | Builder | Reviewer | State |
+| :- | :--- | :------ | :------- | :---- |
+| 1 | **WORK-ORDER-003** — restore Studio 450 asset and enforce asset integrity | ChatGPT | Claude | issued; starts only after this governance PR is merged |
+| 2 | Close TASK-0013 remaining deployed evidence without weakening p75 wording | assigned by next order | non-author lane | queued after WORK-ORDER-003 |
+| 3 | Intake → Property Case → Candidate Artifact → OwnerReview vertical slice | assigned by future order | non-author lane | next architectural milestone; task packet required |
+| 4 | Remaining Sacramento-ring jurisdiction pages | assigned after official-source research | non-author lane | research-gated |
 
 ## Shipped
 
 - `/studio` deterministic editorial workbench — merged (PR #35, `c3271f3`).
-  Catalog release `2026.08.0`: 3 archetypes, 2 compatibility rules, 3 assets
-  with license rows filled. Tests present: `studio.test.ts`, `zeroEgress.test.ts`.
-  Local visual/interaction QA passed. Registry cell reads `in_progress` pending
-  deployed p75 evidence — closes under queue item 2.
-- Public site: home, services ×5, process, faq, about, compare. JSON-LD,
-  sitemap, llms.txt. No capture anywhere.
+  Catalog release `2026.08.0`; no PII, capture, external effect, pricing, GIS, AI,
+  or persistence. TASK-0013 remains `in_progress` because deployed p75 evidence
+  and final independent disposition are absent.
+- City of Sacramento and unincorporated Sacramento County pages — merged in
+  PR #39, `main@9f7c06d409ba1ba2eb7f82a2e306ad7f55cdb64e`.
+- Public site routes and deterministic Studio shell described by their committed
+  tasks and evidence records.
 
-## Owner decision queue — only these reach the owner
+## Active defect
 
-1. Open the lead-generation phase? Not before the technical and visual track is
-   done — owner order, 2026-08-04.
-2. First ICP — one sentence.
-3. Business facts package (CSLB, insurance, photo rights, team). Blocks trust
-   content only; nothing else waits on it.
+Production `/studio` references
+`/images/adu-courtyard-concept-v1.webp`, which returns 404 for the Studio 450
+main image and comparison thumbnail. WORK-ORDER-003 owns only restoration and
+asset-integrity enforcement. It does not close TASK-0013's deployed-performance
+gate.
 
-DR-0011 is adopted (Option A, pilot destination only) and no longer a pending
-decision. Everything else is the operational lead's call.
+## Owner decision queue
 
-## Known blockers
+1. Merge or reject this proposed Operating Model v3 / WORK-ORDER-003 handoff.
+2. Lead-generation phase remains closed until the technical and visual track is
+   complete.
+3. First ICP and business facts package remain future owner decisions; they do
+   not block WORK-ORDER-003.
 
-- **Deployed visual evidence** — the worker's cloud browser timed out against
-  the canonical domain (`cloud_browser_navigation_timeout`, 2026-08-04), so
-  TASK-0007/0010/0013 still lack deployed p75 LCP/INP/CLS and the full
-  screenshot set. Recorded as `partial` in RUN-0007 and RUN-0010, never waived.
-  If it fails again: report the exact failure and stop. Local screenshots are
-  not a substitute for deployed evidence.
-- **GIS hosts unreachable from the reviewer environment** — eight official hosts
-  return 403 at proxy CONNECT. This is why WORK-ORDER-001 routes to the worker.
+## Known blockers and infrastructure notes
 
-## Infrastructure notes
+- Deployed p75 LCP/INP/CLS for TASK-0013 remains unavailable; local or lab
+  measurements are not substitutes for p75 field evidence.
+- Canonical Vercel project remains `west-coast-kbp-platform-preview`. No Vercel
+  or domain change is authorized by this proposal.
+- Merge to `main` auto-deploys production. Owner merge is production-release
+  authorization.
 
-- Canonical Vercel project: `west-coast-kbp-platform-preview` (team KBP CORE,
-  Pro) — green. A stray `nextjs-boilerplate` project on a separate Vercel team
-  (`kbp-sistem`, Hobby, unreachable from the owner's login) posts a permanent
-  red status. **Cosmetic — it never blocked a merge and never reflected the
-  site.** Do not remove the Vercel GitHub App installation to silence it: one
-  installation serves both projects, so removing it would kill the live deploy.
-- `main` is protected: PR required, force-push blocked, deletion restricted.
-  Required approvals stay at 0 — all PRs are authored by the owner's account and
-  GitHub forbids self-approval, so requiring one would deadlock every merge.
-  Required status checks stay off while the stray red check exists.
-- Merge to `main` auto-deploys production. Owner merge is therefore also a
-  production-release authorization.
+## Standing constraints
 
-## Standing constraints — do not re-litigate
+- Demo posture: no contact surface, PII, or external effect.
+- Sacramento leads build order; other jurisdiction pages require official-source
+  research.
+- No AI in the visitor-facing decision path.
+- Studio stays 2D-first.
+- One order = one branch = one Draft PR. Owner merges.
 
-- Demo posture: no contact surface of any kind (DR-0013, DR-0015).
-- Market: both rings core; Sacramento leads build order (DR-0014).
-- No AI in the visitor-facing decision path; deterministic only.
-- Public copy English. RU/ES are internal operator capability, unadvertised
-  (DR-0016).
-- Studio is 2D-first; 3D only on evidence (REVIEW-0001 §3.3).
-- One order = one branch = one draft PR. Owner merges.
-
-## Stale branches — owner cleanup, low priority
-
-Fourteen `agent/*`, `claude/*`, `feature/*`, `platform/*` branches are merged or
-abandoned. Delete from the branches page when convenient; harmless.
