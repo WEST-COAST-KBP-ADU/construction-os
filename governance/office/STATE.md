@@ -10,7 +10,7 @@ Updated: 2026-08-04e — PR #31 merged (d89dbb5): operating model, STATE, REVIEW
 
 | Lane | Now | Next | Blocked by |
 | :--- | :-- | :--- | :--------- |
-| A build (ChatGPT) | Close out TASK-0007/0010 evidence; TASK-0012 registry closure in PR | TASK-0013 studio spike (2D, no PII) | mobile/desktop browser evidence unavailable (navigation timeout 2026-08-04) |
+| A build (ChatGPT) | TASK-0013 local browser visual/interaction QA passed | Exact-head deployed p75 CWV, then SHA-pinned peer review | deployed p75 LCP/INP/CLS evidence pending |
 | B research | RP-0008 **blocked**: Lane C environment has no outbound access to official GIS hosts (403 at proxy). Protocol + unverified candidate register shipped | Re-execute §3–§4 from an environment with web access | owner: reassign or unblock hosts |
 | C governance (Claude) | REVIEW-0002 issued: PR #30 audit = PASS | REVIEW of next builder PR | — |
 | Landing pages | **parked last** (owner 2026-08-04) — TASK-0011 | after lanes A+B ship | owner order |
