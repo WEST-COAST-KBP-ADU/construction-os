@@ -15,11 +15,12 @@ operative only if the Owner merges its reviewed Draft PR.
 | Priority | Work | Builder / executor | Independent reviewer | State |
 | :-- | :--- | :--- | :--- | :--- |
 | P0 | Recover domain-account custody and establish authoritative deployed evidence | Owner executes account steps; ChatGPT prepares one step at a time | Claude verifies DNS and HTTP externally | active external dependency; deployed state: **NOT VERIFIED** |
-| P2 | Complete the ten missing empirical fixture traces for RP-0008 / WORK-ORDER-001 | ChatGPT research lane under a separate bounded packet | Claude | partial; POST-based probe path preferred; no jurisdiction conclusion from incomplete traces |
-| P3 | Close TASK-0013 and prior deployed-evidence gaps without weakening p75 wording | assigned by next order | non-author lane | blocked on P0; local, preview, or Vercel READY evidence is not canonical-domain evidence |
-| P4 | Remaining Sacramento-ring jurisdiction pages | assigned only after official-source research | non-author lane | research-gated; no page before its packet |
+| P1 | Restore registry truth after WORK-ORDER-003 | ChatGPT registrar | Claude | branch-relative: pending while this Draft PR is open; complete only in the Owner-merged state at the exact reviewed head; no product change |
+| P2 | Commit and review the ten empirical fixture traces for RP-0008 / WORK-ORDER-001 | ChatGPT research-evidence lane under a separate bounded packet | Claude | path **(a)** selected; read-only POST probes observed 10/10 geocoder and 30/30 join responses, but source evidence is not yet committed and RP-0008 remains partial |
+| P3 | Close deployed evidence for TASK-0007, TASK-0010, TASK-0013, and the City/County jurisdiction pages | assigned by next order | non-author lane | after P0: record real-domain p75 CWV and desktop/mobile screenshots; local, preview, or Vercel READY evidence is not canonical-domain evidence |
+| P4 | Build Elk Grove, Citrus Heights, Folsom, and Rancho Cordova jurisdiction pages | assigned only after official-source research | non-author lane | research-gated; research at most two jurisdictions at a time and do not write a page before its packet |
 | P5 | TASK-0011 resources: `/adu-laws-2026`, `/grants`, and blog shell | assigned by future order | non-author lane | queued; legal/statutory claims require owner or counsel verification |
-| P6 | Open the lead-generation phase | Owner decision | independent control review required | closed until P0 and P3 are evidenced and the consent/retention/deletion packet is adopted |
+| P6 | Open the lead-generation phase | Owner decision | independent control review required | closed until P0 and P3 are evidenced, consent/retention/deletion text is adopted, and the Owner supplies a one-sentence ICP plus the business-facts package |
 
 The OpenAI reasoning-plane proposal remains outside this revenue-critical
 P0-P6 queue. A read-only data-boundary architecture challenge may proceed in
