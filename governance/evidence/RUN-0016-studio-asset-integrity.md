@@ -1,10 +1,12 @@
 # RUN-0016 — Studio asset integrity
 
-Status: implementation and local browser acceptance complete; deployed browser access pending
+Status: merged; independent post-merge PASS reported; deployed browser state **NOT VERIFIED**
 
 Recorded: 2026-08-05T14:45:57Z
 
 Local browser verified: 2026-08-05T14:59:34Z
+
+Post-merge status synchronized: 2026-08-05
 
 ## Source anchor and scope
 
@@ -14,6 +16,9 @@ Local browser verified: 2026-08-05T14:59:34Z
 - Current target branch at execution start: `main@35c22898b8b7259f511f2dbde178bb62c175140e`
 - Builder branch: `agent/work-order-003-studio-asset-integrity`
 - Code head before this evidence record: `9319c488cf2f63432a8241bccbafad40a985b860`
+- Final product head: `0e0f7ba952a979c93bd18570b870214c161d6e34`
+- Owner merge: PR #41, `main@cdee1503ba5fab5481a0ad07393f1ca36191b909`; GitHub `merged_at` 2026-08-05T15:56:43Z
+- Independent review provenance: Fable reported `REVIEW-WO003-POSTMERGE: PASS` for the exact final product head. No committed REVIEW artifact exists at the synchronization base; this registrar update records the reported disposition but does not self-verify it.
 - The base-to-target delta was the governance-only merge that issued this order. Product bytes were unchanged.
 - No catalog, layout, copy, compatibility, route, dependency, infrastructure, credential, analytics, AI, or external-action behavior was changed.
 
@@ -84,11 +89,12 @@ Local exact-source browser acceptance: PASS.
 - Machine-readable result: `wo003-browser-results.json`, SHA-256 `749debb0fcbb6372c280b0eeb9a58afd7e1b8f078f167a5bc81af25629b9c4bf`.
 - QA used temporary Playwright `1.62.1` with Chromium `149.0.7827.0`; neither package was added to the repository or product dependencies.
 
-Deployed browser acceptance remains unavailable: the exact preview redirects the cloud browser to Vercel login. No temporary share URL, protection bypass, production change, or Vercel setting change was created.
+Deployed browser acceptance: **NOT VERIFIED**. The exact preview redirected the cloud browser to Vercel login, and end-to-end custody of the canonical domain is not yet evidenced. No temporary share URL, protection bypass, domain change, or Vercel setting change was created by the builder. Vercel READY is retained only as build evidence.
 
-## Handoff
+## Post-merge disposition
 
-- Draft PR only; builder must not mark Ready, approve, merge, or provide an independent verdict.
-- Independent reviewer: Claude, per Operating Model v3.
-- Owner remains the sole merger.
-- `TASK-0013` remains open until deployed browser evidence is completed.
+- The Owner merged PR #41 at the exact product head identified above.
+- Fable reported an independent post-merge PASS for that exact head; a committed REVIEW artifact is still absent and remains a provenance gap.
+- Repository governance states that merge to `main` may auto-deploy. This record does not claim production was untouched and does not infer which bytes the canonical domain serves.
+- Canonical deployed behavior and p75 field evidence remain **NOT VERIFIED**.
+- `TASK-0013` remains open until deployed browser and field evidence are completed.
