@@ -17,7 +17,7 @@ Post-merge status synchronized: 2026-08-05
 - Builder branch: `agent/work-order-003-studio-asset-integrity`
 - Code head before this evidence record: `9319c488cf2f63432a8241bccbafad40a985b860`
 - Final product head: `0e0f7ba952a979c93bd18570b870214c161d6e34`
-- Owner merge: PR #41, `main@cdee1503ba5fab5481a0ad07393f1ca36191b909`, 2026-08-05T15:56:42Z
+- Owner merge: PR #41, `main@cdee1503ba5fab5481a0ad07393f1ca36191b909`; GitHub `merged_at` 2026-08-05T15:56:43Z
 - Independent review provenance: Fable reported `REVIEW-WO003-POSTMERGE: PASS` for the exact final product head. No committed REVIEW artifact exists at the synchronization base; this registrar update records the reported disposition but does not self-verify it.
 - The base-to-target delta was the governance-only merge that issued this order. Product bytes were unchanged.
 - No catalog, layout, copy, compatibility, route, dependency, infrastructure, credential, analytics, AI, or external-action behavior was changed.
