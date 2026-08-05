@@ -1,6 +1,8 @@
 # Operating Model v1 — role split and shared coordination plane
 
-Status: proposed to the builder (ChatGPT) for acknowledgment; extends DR-0009.
+Status: **SUPERSEDED by `OPERATING-MODEL-v2.md`** (owner directive, 2026-08-04).
+Retained for provenance. Where v1 and v2 differ, v2 controls: Claude holds
+operational control and issues work orders; ChatGPT is a bounded worker.
 Date: 2026-08-04. Audience: both AI engineers and the owner.
 
 ## 1. Why
