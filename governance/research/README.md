@@ -16,7 +16,7 @@ must carry the wording: "Requires official source verification."
 | [RP-0005](RP-0005-voice-maturity.md) | Voice module maturity research (owner-provided) | synthesized | voice architecture DR (pending) |
 | [RP-0006](RP-0006-training-data-strategy.md) | AI training data as business strategy (owner-provided article + analysis) | synthesized | DR-0010 (proposed), data policy DR |
 | [RP-0007](RP-0007-gis-sources-roseville.md) | Roseville GIS sources, geocoder suitability, terms, freshness, and five-address probe | open | DR-0012 (proposed) |
-| [RP-0008](RP-0008-gis-sources-sacramento.md) | Sacramento GIS sources — City and unincorporated County (protocol + unverified candidates) | **blocked — network** | DR-0012 (proposed) |
+| [RP-0008](RP-0008-gis-sources-sacramento.md) | Sacramento GIS sources — City and unincorporated County (partial execution; official layers opened, fixture traces blocked) | **partial — query blocker** | DR-0012 (proposed) |
 
 Pre-repo voice research remains summarized, unadopted, in
 `../architecture/voice-lab.md`.

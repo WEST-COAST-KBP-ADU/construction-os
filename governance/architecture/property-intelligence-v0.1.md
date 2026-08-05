@@ -140,8 +140,8 @@ adapter is per-jurisdiction with an explicit coverage matrix:
 | Jurisdiction | Parcel layer | Zoning layer | Overlays | Status |
 | :----------- | :----------- | :----------- | :------- | :----- |
 | Roseville | City `Parcel Polygon` MapServer/1: geometry, `APN`, `ACRES`; queryable | City `Zoning` MapServer/30: codes and ordinance field; queryable | Floodplain, Specific Plan, and Open Space candidates verified; FHSZ/historic coverage incomplete | partial — RP-0007; terms, cadence, FHSZ/historic, and ambiguity policy open |
-| **Sacramento County (unincorporated)** | ? | ? | ? | **next — core market, DR-0014** |
-| **City of Sacramento** | ? | ? | ? | **next — core market, DR-0014** |
+| **Sacramento County (unincorporated)** | County `PARCELS/MapServer/8`: `APN_DASH`, `LOTSIZE`, `SITUS_ADD1`, `GIS_JURISDICTION` | County `PLANNING/MapServer/16`: `B_ZONE`, `ZONE_ALL`, `JURISDICTION`, `OVERLAY_1..3` | SPA, flood, FHSZ, specific-plan candidates present; historic completeness open | **partial — RP-0008; fixtures, clipping, cadence, terms/license, and boundary behavior open** |
+| **City of Sacramento** | County `PARCELS/MapServer/8`: `APN_DASH`, `LOTSIZE`, `SITUS_ADD1`, `GIS_JURISDICTION` | County-hosted `CITY_of_SACRAMENTO/MapServer/3`: `ZONE`, `ORDINANCE`, `CHANG_DATE` | SPD/PUD/General Plan present; fire/flood/historic/specific-plan completeness open | **partial — RP-0008; accountable publisher, terms applicability, cadence, boundary behavior, and fixtures open** |
 | Elk Grove, Citrus Heights, Folsom, Rancho Cordova | ? | ? | ? | core, Sacramento ring, not started |
 | Rocklin, Lincoln, Granite Bay, El Dorado Hills | ? | ? | ? | core, Placer/El Dorado ring, not started |
 
