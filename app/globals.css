@@ -2860,3 +2860,38 @@ a {
 .site-footer__inner {
   padding-block: var(--space-20) var(--space-10);
 }
+
+/* WORK-ORDER-005: development-preview release notice. Token-only styling;
+ * subordinate to the primary navigation and never styled as an alert. */
+.development-notice {
+  border-bottom: var(--line-width) solid var(--color-line);
+  background: var(--color-surface-muted);
+  color: var(--color-ink-muted);
+}
+
+.development-notice__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  padding-block: var(--space-2);
+}
+
+.development-notice__label {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-forest);
+  white-space: nowrap;
+}
+
+.development-notice__message {
+  margin: 0;
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+}
+
+.development-notice__supporting {
+  color: var(--color-ink-subtle);
+}

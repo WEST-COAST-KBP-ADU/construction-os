@@ -80,6 +80,17 @@ export const siteConfig = {
   accessibility: {
     brandHomeLabel: "West Coast KBP home",
     primaryNavigationLabel: "Primary",
+    developmentNoticeLabel: "Release status",
+  },
+
+  // WORK-ORDER-005: site-wide development-preview release notice. Rendered
+  // once in the root layout; route components never duplicate this copy.
+  developmentNotice: {
+    label: "Development preview",
+    message:
+      "This platform is under active development and is provided for testing and review only.",
+    supporting:
+      "Live intake, submissions, customer accounts, and external actions are not enabled.",
   },
 
   labels: {
