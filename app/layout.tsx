@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import DevelopmentNotice from "@/src/components/DevelopmentNotice";
 import Footer from "@/src/components/Footer";
 import Header from "@/src/components/Header";
 import { siteConfig } from "@/src/lib/siteConfig";
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="site-shell">
+        <DevelopmentNotice />
         <Header />
         {children}
         <Footer />
