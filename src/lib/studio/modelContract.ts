@@ -149,12 +149,80 @@ function assertExactKeys(
 }
 
 const RELEASE_VERSION_PATTERN = /^\d{4}\.\d{2}\.\d+$/;
-const CALENDAR_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+const CALENDAR_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+/**
+ * Strict proleptic Gregorian validation.
+ *
+ * A regex alone is not sufficient and neither is `Date.parse`: ECMAScript
+ * NORMALISES impossible days rather than rejecting them, so `2026-02-29`
+ * silently becomes `2026-03-01` and `2026-04-31` becomes `2026-05-01`. The
+ * only safe test is to rebuild the instant in UTC and require every component
+ * to survive the round trip unchanged. Leap years fall out of this for free:
+ * `2024-02-29` round-trips, `2026-02-29` does not.
+ */
+function isStrictUtcInstant(
+  year: number,
+  month: number,
+  day: number,
+  hour = 0,
+  minute = 0,
+  second = 0,
+): boolean {
+  const timestamp = Date.UTC(year, month - 1, day, hour, minute, second);
+
+  if (Number.isNaN(timestamp)) {
+    return false;
+  }
+
+  const rebuilt = new Date(timestamp);
+
+  return (
+    rebuilt.getUTCFullYear() === year &&
+    rebuilt.getUTCMonth() === month - 1 &&
+    rebuilt.getUTCDate() === day &&
+    rebuilt.getUTCHours() === hour &&
+    rebuilt.getUTCMinutes() === minute &&
+    rebuilt.getUTCSeconds() === second
+  );
+}
+
+/** `YYYY-MM-DD` that names a real day on the Gregorian calendar. */
+export function isCalendarDate(value: unknown): boolean {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  const match = CALENDAR_DATE_PATTERN.exec(value);
+
+  return match !== null && isStrictUtcInstant(Number(match[1]), Number(match[2]), Number(match[3]));
+}
+
+/** `YYYY-MM-DDTHH:MM:SSZ` that names a real instant. */
+export function isUtcTimestamp(value: unknown): boolean {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  const match = UTC_TIMESTAMP_PATTERN.exec(value);
+
+  return (
+    match !== null &&
+    isStrictUtcInstant(
+      Number(match[1]),
+      Number(match[2]),
+      Number(match[3]),
+      Number(match[4]),
+      Number(match[5]),
+      Number(match[6]),
+    )
+  );
+}
 
 const MODEL_ID_PATTERN = /^adu-[a-z]-\d{3}$/;
 const SEMVER_PATTERN = /^\d+\.\d+\.\d+$/;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/;
-const UTC_TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+const UTC_TIMESTAMP_PATTERN = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/;
 
 function fail(code: string): never {
   throw new Error(code);
@@ -513,7 +581,7 @@ export function assertValidModelStructure(model: AduModel): void {
     fail("maturity_promotion_requires_separate_evidence");
   }
 
-  if (!UTC_TIMESTAMP_PATTERN.test(model.released_at)) {
+  if (!isUtcTimestamp(model.released_at)) {
     fail("invalid_released_at");
   }
 
@@ -789,11 +857,7 @@ export async function assertValidRelease(
     fail("invalid_release_version");
   }
 
-  if (!CALENDAR_DATE_PATTERN.test(release.effective_from)) {
-    fail("invalid_effective_from");
-  }
-
-  if (Number.isNaN(Date.parse(`${release.effective_from}T00:00:00Z`))) {
+  if (!isCalendarDate(release.effective_from)) {
     fail("invalid_effective_from");
   }
 

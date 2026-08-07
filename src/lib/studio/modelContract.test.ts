@@ -13,6 +13,8 @@ import {
   assertValidRelease,
   canonicalDigestInput,
   computeDigest,
+  isCalendarDate,
+  isUtcTimestamp,
   defaultConfiguration,
   findConstraintViolation,
   findModel,
@@ -842,36 +844,139 @@ describe("F-2 — canonical reference configuration and geometry cross-binding",
   });
 });
 
-describe("release version and effective date validation", () => {
+/**
+ * Re-seals a release while overriding release-level scalars. Changing
+ * `effective_from` changes the release digest, so every date test below is
+ * sealed with a *correct* digest first. A rejection therefore proves the
+ * calendar rule fired, never a digest mismatch.
+ */
+async function sealedWithReleaseOverride(
+  overrides: Partial<Pick<AduModelRelease, "release_version" | "effective_from">>,
+): Promise<[AduModelRelease, Record<string, AduGeometrySource>]> {
+  const models = freshModels();
+  const sources = freshSources();
+
+  for (const model of models) {
+    for (const artifact of model.derived_artifacts) {
+      artifact.digest = await computeDigest(artifact, ["digest"]);
+    }
+
+    const source = sources[model.geometry.source_ref];
+    if (source) {
+      model.geometry.digest = await computeDigest(source);
+    }
+  }
+
+  const core = {
+    schema: release.schema,
+    release_version: overrides.release_version ?? release.release_version,
+    effective_from: overrides.effective_from ?? release.effective_from,
+    models,
+  };
+
+  return [{ ...core, release_digest: await computeDigest(core) } as AduModelRelease, sources];
+}
+
+describe("F-3 — strict Gregorian calendar validation", () => {
+  it("rejects a February 29 in a non-leap year, with the release digest valid", async () => {
+    const [tampered, sources] = await sealedWithReleaseOverride({
+      effective_from: "2026-02-29",
+    });
+
+    // Prove the digest is correct, so only the calendar rule can reject this.
+    await expect(computeDigest(tampered, ["release_digest"])).resolves.toBe(
+      tampered.release_digest,
+    );
+    // Date.parse would have normalised this to 2026-03-01 and accepted it.
+    expect(Number.isNaN(Date.parse("2026-02-29T00:00:00Z"))).toBe(false);
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("invalid_effective_from");
+  });
+
+  it("rejects every impossible day that ECMAScript would silently normalise", async () => {
+    for (const impossible of [
+      "2026-02-30",
+      "2026-02-31",
+      "2026-04-31",
+      "2026-06-31",
+      "2026-09-31",
+      "2026-11-31",
+      "2025-02-29",
+      "2100-02-29",
+    ]) {
+      // Each of these parses cleanly under Date.parse — that is the trap.
+      expect(Number.isNaN(Date.parse(`${impossible}T00:00:00Z`))).toBe(false);
+
+      const [tampered, sources] = await sealedWithReleaseOverride({
+        effective_from: impossible,
+      });
+
+      await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+        "invalid_effective_from",
+      );
+    }
+  });
+
+  it("still rejects a malformed or out-of-range date", async () => {
+    for (const malformed of ["September 2026", "2026-13-45", "2026-13-01", "2026-00-10", "2026-1-1", ""]) {
+      const [tampered, sources] = await sealedWithReleaseOverride({
+        effective_from: malformed,
+      });
+
+      await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+        "invalid_effective_from",
+      );
+    }
+  });
+
+  it("accepts real dates including a genuine leap day", async () => {
+    for (const valid of ["2026-09-01", "2024-02-29", "2026-02-28", "2000-02-29", "2026-12-31"]) {
+      const [resealed, sources] = await sealedWithReleaseOverride({ effective_from: valid });
+
+      await expect(assertValidRelease(resealed, sources)).resolves.toBeUndefined();
+    }
+  });
+
+  it("applies the same strictness to released_at", async () => {
+    for (const impossible of [
+      "2026-02-29T00:00:00Z",
+      "2026-04-31T00:00:00Z",
+      "2026-08-07T24:00:00Z",
+      "2026-08-07T00:60:00Z",
+      "2026-08-07T00:00:60Z",
+    ]) {
+      const models = freshModels();
+      const sources = freshSources();
+      models[0].released_at = impossible;
+
+      await expect(assertValidRelease(await seal(models, sources), sources)).rejects.toThrow(
+        "invalid_released_at",
+      );
+    }
+  });
+
+  it("exposes the predicates directly for reuse", () => {
+    expect(isCalendarDate("2024-02-29")).toBe(true);
+    expect(isCalendarDate("2026-02-29")).toBe(false);
+    expect(isCalendarDate("2026-04-31")).toBe(false);
+    expect(isCalendarDate(20260901)).toBe(false);
+
+    expect(isUtcTimestamp("2026-08-07T00:00:00Z")).toBe(true);
+    expect(isUtcTimestamp("2026-02-31T00:00:00Z")).toBe(false);
+    expect(isUtcTimestamp("2026-08-07")).toBe(false);
+  });
+});
+
+describe("release version validation", () => {
   it("rejects a malformed release version", async () => {
-    const models = freshModels();
-    const sources = freshSources();
-    const sealed = await seal(models, sources);
-    sealed.release_version = "v2";
+    const [tampered, sources] = await sealedWithReleaseOverride({ release_version: "v2" });
 
-    await expect(assertValidRelease(sealed, sources)).rejects.toThrow("invalid_release_version");
-  });
-
-  it("rejects a malformed effective date", async () => {
-    const models = freshModels();
-    const sources = freshSources();
-    const sealed = await seal(models, sources);
-    sealed.effective_from = "September 2026";
-
-    await expect(assertValidRelease(sealed, sources)).rejects.toThrow("invalid_effective_from");
-  });
-
-  it("rejects an impossible calendar date", async () => {
-    const models = freshModels();
-    const sources = freshSources();
-    const sealed = await seal(models, sources);
-    sealed.effective_from = "2026-13-45";
-
-    await expect(assertValidRelease(sealed, sources)).rejects.toThrow("invalid_effective_from");
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("invalid_release_version");
   });
 
   it("accepts the committed release version and effective date", () => {
     expect(release.release_version).toBe("2026.09.0");
     expect(release.effective_from).toBe("2026-09-01");
+    expect(isCalendarDate(release.effective_from)).toBe(true);
   });
 });
