@@ -34,7 +34,8 @@
   --color-danger-soft: #f9e7e5;
   --color-focus: #805619;
 
-  --font-sans: "Avenir Next", Avenir, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-source-serif), serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --font-size-label: 0.75rem;
   --font-size-body-sm: 0.875rem;
@@ -630,7 +631,7 @@
 
 .balanced-home h1,
 .balanced-home h2 {
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-weight: 400;
 }
 
@@ -1348,6 +1349,11 @@ body {
   line-height: var(--line-height-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2 {
+  font-family: var(--font-serif);
 }
 
 a {
