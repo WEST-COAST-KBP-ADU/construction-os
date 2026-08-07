@@ -109,9 +109,11 @@ export const siteConfig = {
 
   nav: [
     { label: "ADU Services", href: "/services/detached-adu" },
+    { label: "Concept Studio", href: "/studio" },
     { label: "Sacramento ADU", href: "/adu-builder/sacramento" },
     { label: "Our Process", href: "/process" },
     { label: "Compare", href: "/compare" },
+    { label: "FAQ", href: "/faq" },
     { label: "About", href: "/about" },
   ] satisfies NavLink[],
 
@@ -414,6 +416,14 @@ export const siteConfig = {
   },
 
   footer: {
+    coverageLabel: "Coverage",
+    coverage: [
+      { label: "City of Sacramento", href: "/adu-builder/sacramento" },
+      {
+        label: "Unincorporated Sacramento County",
+        href: "/adu-builder/sacramento-county",
+      },
+    ] satisfies NavLink[],
     trustProof:
       "Serving the Sacramento-region market direction. Business credentials and project facts remain pending owner input.",
     disclaimer:
