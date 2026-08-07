@@ -73,7 +73,10 @@ Two first-class paths are adopted:
   packet.
 
 Both paths produce the same bounded lead candidate and human-review semantics.
-A caller does not bypass consent, qualification, or commitment controls.
+A phone-first caller without a property uses an explicit absent-property marker
+and is routed to manual review; absence is never silently normalized into a
+property fact. A caller does not bypass consent, qualification, or commitment
+controls.
 
 ## Data separation
 
@@ -109,7 +112,9 @@ The first useful release is manual-first:
 7. a sanitized human-review summary;
 8. delivery to one owner-approved operational destination;
 9. manual follow-up, qualification, and proposal;
-10. stage counts sufficient to measure conversion.
+10. submit-onward stage counts derived from delivered candidate records;
+    pre-submission counts begin only with the separately gated
+    `FUNNEL-MEASUREMENT-001` slice.
 
 A CRM, automated voice agent, ad platform, marketing automation suite, customer
 account, and real-time pricing engine are not dependencies for this v0.
