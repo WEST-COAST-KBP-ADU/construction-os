@@ -33,7 +33,9 @@ architecture:
 
 ## Verification
 
-- Scope is documentation-only and exactly the four files authorized by #70.
+- Author scope is documentation-only and exactly four files. A fifth authorized
+  file, `FABLE-ANALYSIS.md`, is reserved exclusively for the independent Fable
+  review at the exact author result SHA.
 - The accepted Owner direction appears in `DECISION.md`.
 - Address-first and phone-first paths are explicit.
 - `FUNNEL-CONTRACT.md` defines four separate records, twelve funnel stages,
@@ -78,10 +80,12 @@ semantics.
 
 ## Remaining gates
 
-1. Independent Fable 5 review pinned to the exact result SHA.
-2. Tony's merge decision.
-3. Claude Code implementation of LEAD-CONTRACT-001 from the merged decision.
-4. Independent review and Tony merge of each runtime slice.
+1. Fable 5 writes `FABLE-ANALYSIS.md` on this branch, pinned to the exact author
+   result SHA, with exactly one terminal recommendation.
+2. ChatGPT reconciles the analysis against repository evidence.
+3. Tony's merge decision.
+4. Claude Code implementation of LEAD-CONTRACT-001 from the merged decision.
+5. Independent review and Tony merge of each runtime slice.
 
 This outcome records commercial architecture. It does not certify feasibility
 for any parcel or authorize production lead collection.
