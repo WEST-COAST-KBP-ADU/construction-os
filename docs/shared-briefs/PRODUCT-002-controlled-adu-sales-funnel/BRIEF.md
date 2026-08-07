@@ -62,7 +62,8 @@ non-promissory, and separate from personal and commercial data?
 
 1. `DECISION.md` — accepted commercial purpose and product boundaries.
 2. `FUNNEL-CONTRACT.md` — stages, records, gates, CTA mapping, and metrics.
-3. `OUTCOME.md` — what is frozen and the next bounded implementation slices.
+3. `FABLE-ANALYSIS.md` — independent adversarial product/architecture review authored by Fable 5 at the exact author result SHA.
+4. `OUTCOME.md` — what is frozen and the next bounded implementation slices.
 
 ## Acceptance
 
@@ -77,7 +78,9 @@ non-promissory, and separate from personal and commercial data?
 - technical status cannot imply price, schedule, permit, code, eligibility, or
   buildability;
 - the first runtime implementation packet can be cut without reopening product
-  intent.
+  intent;
+- Fable 5 returns exactly one terminal recommendation: `NO BLOCKING FINDING` or
+  `BLOCKED FOR REVISION` with exact findings.
 
 ## Non-goals
 
