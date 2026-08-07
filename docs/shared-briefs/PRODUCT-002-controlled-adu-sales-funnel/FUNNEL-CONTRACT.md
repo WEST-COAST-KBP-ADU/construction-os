@@ -39,7 +39,9 @@ Required fields:
 - `source_channel` and `entry_path`;
 - `service_area_candidate`;
 - `project_intent`;
-- `property_input` — address text supplied by the person, isolated here;
+- `property_input` — either address text supplied by the person, isolated here,
+  or an explicit `{ absent: true, reason }` marker for a phone-first caller who
+  does not yet control or identify a property;
 - `contact_name`;
 - at least one of `phone` or `email`;
 - `preferred_contact_method`;
@@ -93,13 +95,13 @@ anonymous_visit
 → property_intent
 → screening_candidate
 → lead_candidate
-→ qualified_candidate
+→ qualified_candidate | owner_review_required
 → owner_review_required
 → approved_for_contact | rejected | archived
-→ contacted
-→ consultation
-→ proposal
-→ won | lost | archived
+→ contacted | lost
+→ consultation | lost
+→ proposal | lost
+→ won | lost
 ```
 
 ### Transition rules
@@ -110,12 +112,18 @@ anonymous_visit
 | `property_intent` | `screening_candidate` | normalized property input and limitation notice | deterministic UI/service |
 | `screening_candidate` | `lead_candidate` | valid contact method and affirmative consent | visitor + validator |
 | `lead_candidate` | `qualified_candidate` | bounded fit rules satisfied; reasons recorded | deterministic classifier |
+| `lead_candidate` | `owner_review_required` | bounded fit rules not satisfied or property absent; manual-review reasons and complete sanitized handoff recorded | deterministic preparation |
 | `qualified_candidate` | `owner_review_required` | complete sanitized handoff packet | deterministic preparation |
 | `owner_review_required` | `approved_for_contact` / `rejected` / `archived` | explicit human decision | authorized human |
-| `approved_for_contact` | `contacted` | human contact outcome | authorized human |
-| `contacted` | `consultation` | confirmed human appointment/outcome | authorized human |
-| `consultation` | `proposal` | reviewed scope and offer authority | authorized human |
-| `proposal` | `won` / `lost` | signed agreement or recorded loss | authorized human |
+| `approved_for_contact` | `contacted` / `lost` | human contact outcome or bounded loss reason | authorized human |
+| `contacted` | `consultation` / `lost` | confirmed human appointment/outcome or bounded loss reason | authorized human |
+| `consultation` | `proposal` / `lost` | reviewed scope and offer authority or bounded loss reason | authorized human |
+| `proposal` | `won` / `lost` | signed agreement or bounded loss reason | authorized human |
+
+`rejected`, `lost`, and `won` are terminal. `archived` is terminal for its
+record; renewed intent creates a new `lead-candidate/1` and never resurrects or
+mutates the archived record. Only an authorized human may choose `rejected`,
+`archived`, or any transition to `lost`, and each requires a bounded reason.
 
 A technical `reference_consistent` result cannot skip any stage and cannot
 directly create `qualified_candidate`, `approved_for_contact`, `proposal`,
@@ -127,7 +135,8 @@ A candidate is eligible for human review only when:
 
 - ADU or related residential construction intent is explicit;
 - the property is supplied and appears within the declared core service region,
-  or is deliberately marked for manual geographic review;
+  is deliberately marked for manual geographic review, or is explicitly absent
+  on a phone-first path and therefore requires manual review;
 - a valid phone or email is supplied;
 - the person affirmatively consents to contact;
 - no prohibited content or malformed field is present;
@@ -186,7 +195,8 @@ be emitted into analytics events.
 
 Core measures:
 
-- start-to-submit conversion;
+- start-to-submit conversion after `FUNNEL-MEASUREMENT-001`; before that slice,
+  v0 measurement begins at delivered submissions;
 - submit-to-qualified conversion;
 - qualified-to-contact conversion;
 - contact-to-consultation conversion;
@@ -225,6 +235,8 @@ Before production collection is enabled, a separate packet must fix:
 - abuse/rate-limit controls;
 - incident and failed-delivery behavior;
 - request export/deletion handling;
+- retention/deletion treatment for inquiry-originated site snapshots after the
+  commercial record is deleted;
 - production environment and secret management.
 
 Until those items are adopted and verified, lead intake may be implemented and
