@@ -1,0 +1,8 @@
+{
+  "schema": "jurisdiction-profile-release/1",
+  "release_version": "2026.09.0",
+  "effective_from": "2026-09-01",
+  "adopted_profiles": [],
+  "adoption_notice": "No jurisdiction profile is adopted in this release. This layer is reference-only, evaluates nothing on its own, and makes no statement about any real authority. Requires official source verification.",
+  "release_digest": "sha256:f1f503c53a3d09a4e5524b08cc84be4c8619cf1ee0201bb749eeebf60e17ed1d"
+}
