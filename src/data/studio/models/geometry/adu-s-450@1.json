@@ -1,0 +1,101 @@
+{
+  "schema": "adu-geometry-source/1",
+  "geometry_id": "adu-s-450@1",
+  "model_id": "adu-s-450",
+  "origin": "west_coast_kbp_original",
+  "units": {
+    "length": "ft",
+    "area": "sqft",
+    "angle": "deg"
+  },
+  "coordinate_system": {
+    "origin": "front_left_exterior_wall_corner",
+    "x_axis": "width_to_right",
+    "y_axis": "depth_to_rear",
+    "z_axis": "height_up",
+    "handedness": "right"
+  },
+  "footprint": {
+    "shape": "rectangle",
+    "derivation": "axis_aligned_rectangle(width=footprint_width_ft, depth=footprint_depth_ft) at z=0"
+  },
+  "massing": {
+    "stories": 1,
+    "wall_plate_height_ft": 9,
+    "roof_pitch_rise_per_12": {
+      "gable": 4,
+      "shed": 2,
+      "hip": 4
+    },
+    "max_overall_height_ft": 16
+  },
+  "structural_grid": {
+    "bay_spacing_ft": 4,
+    "exterior_wall_framing": "nominal_2x6",
+    "slab_edge_offset_ft": 0
+  },
+  "spaces": [
+    {
+      "space_id": "living_sleeping",
+      "role": "living_sleeping",
+      "area_fraction": 0.6
+    },
+    {
+      "space_id": "kitchen",
+      "role": "kitchen",
+      "area_fraction": 0.14
+    },
+    {
+      "space_id": "bath_1",
+      "role": "bathroom",
+      "area_fraction": 0.1
+    },
+    {
+      "space_id": "entry_circulation",
+      "role": "circulation",
+      "area_fraction": 0.1
+    },
+    {
+      "space_id": "storage_mech",
+      "role": "storage_mechanical",
+      "area_fraction": 0.06
+    }
+  ],
+  "openings": {
+    "entry_door": {
+      "width_ft": 3,
+      "height_ft": 6.8,
+      "placed_on": "entry_side"
+    },
+    "window_packages": {
+      "standard": {
+        "head_height_ft": 6.8,
+        "sill_height_ft": 3,
+        "count_per_facade": 2
+      },
+      "tall": {
+        "head_height_ft": 8,
+        "sill_height_ft": 1.5,
+        "count_per_facade": 2
+      },
+      "clerestory": {
+        "head_height_ft": 8.5,
+        "sill_height_ft": 6.5,
+        "count_per_facade": 3
+      }
+    }
+  },
+  "reference_configuration": {
+    "footprint_width_ft": 18,
+    "footprint_depth_ft": 25,
+    "layout_variant": "open",
+    "entry_side": "front",
+    "orientation_deg": 0,
+    "roof_form": "gable",
+    "window_package": "standard",
+    "exterior_finish": "stucco-smooth",
+    "exterior_palette": "warm-white",
+    "interior_tier": "essential"
+  },
+  "notes": "Deterministic parametric definition. Not a construction document, not a permit set, and not derived from any municipal or third-party drawing."
+}

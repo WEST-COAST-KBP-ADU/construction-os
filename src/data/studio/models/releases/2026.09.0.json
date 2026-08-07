@@ -1,0 +1,1171 @@
+{
+  "schema": "adu-model-release/1",
+  "release_version": "2026.09.0",
+  "effective_from": "2026-09-01",
+  "models": [
+    {
+      "schema": "adu-model/1",
+      "model_id": "adu-s-450",
+      "version": "1.0.0",
+      "maturity": "concept_only",
+      "title": "Compact Studio",
+      "program": {
+        "stories": 1,
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "use": "accessory_dwelling_unit",
+        "occupancy_assumption": "residential_single_household"
+      },
+      "envelope": {
+        "gross_area_sqft": {
+          "min": 400,
+          "max": 500
+        },
+        "width_ft": {
+          "min": 16,
+          "max": 20
+        },
+        "depth_ft": {
+          "min": 22,
+          "max": 28
+        },
+        "height_ft": {
+          "max": 16
+        },
+        "increment_grid_ft": 0.5,
+        "invariants": {
+          "stories": 1,
+          "bedrooms": 0,
+          "bathrooms": 1,
+          "structural_grid_bay_ft": 4,
+          "area_band_sqft": {
+            "min": 400,
+            "max": 500
+          }
+        }
+      },
+      "parameters": [
+        {
+          "key": "footprint_width_ft",
+          "category": "geometry",
+          "type": "number",
+          "unit": "ft",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT",
+            "PV-AREA"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 16,
+            "max": 20
+          },
+          "increment": 0.5,
+          "default": 18
+        },
+        {
+          "key": "footprint_depth_ft",
+          "category": "geometry",
+          "type": "number",
+          "unit": "ft",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT",
+            "PV-AREA"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 22,
+            "max": 28
+          },
+          "increment": 0.5,
+          "default": 25
+        },
+        {
+          "key": "layout_variant",
+          "category": "layout",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "open",
+            "alcove"
+          ],
+          "default": "open"
+        },
+        {
+          "key": "entry_side",
+          "category": "layout",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "front",
+            "left",
+            "right"
+          ],
+          "default": "front"
+        },
+        {
+          "key": "orientation_deg",
+          "category": "layout",
+          "type": "number",
+          "unit": "deg",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 0,
+            "max": 270
+          },
+          "increment": 90,
+          "default": 0
+        },
+        {
+          "key": "roof_form",
+          "category": "geometry",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "gable",
+            "shed"
+          ],
+          "default": "gable"
+        },
+        {
+          "key": "window_package",
+          "category": "geometry",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "standard",
+            "tall"
+          ],
+          "default": "standard"
+        },
+        {
+          "key": "exterior_finish",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "stucco-smooth",
+            "lap-siding",
+            "board-and-batten"
+          ],
+          "default": "stucco-smooth"
+        },
+        {
+          "key": "exterior_palette",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "warm-white",
+            "sand-dune",
+            "soft-clay",
+            "sage",
+            "charcoal"
+          ],
+          "default": "warm-white"
+        },
+        {
+          "key": "interior_tier",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "essential",
+            "comfort"
+          ],
+          "default": "essential"
+        }
+      ],
+      "constraints": [
+        {
+          "rule_id": "MC-S450-001",
+          "if": {
+            "roof_form": "shed"
+          },
+          "deny": {
+            "window_package": [
+              "tall"
+            ]
+          },
+          "reason_code": "shed_roof_excludes_tall_window_package"
+        },
+        {
+          "rule_id": "MC-S450-002",
+          "if": {
+            "layout_variant": "alcove"
+          },
+          "deny": {
+            "interior_tier": [
+              "comfort"
+            ]
+          },
+          "reason_code": "alcove_layout_excludes_comfort_tier"
+        }
+      ],
+      "geometry": {
+        "source_ref": "models/geometry/adu-s-450@1",
+        "format": "adu-geometry-source/1",
+        "units": {
+          "length": "ft",
+          "area": "sqft",
+          "angle": "deg"
+        },
+        "coordinate_system": {
+          "origin": "front_left_exterior_wall_corner",
+          "x_axis": "width_to_right",
+          "y_axis": "depth_to_rear",
+          "z_axis": "height_up",
+          "handedness": "right"
+        },
+        "digest": "sha256:413d7fdd70b1000434ba9f758ffca287962306ddd74d1d64eb8694c49b183b09"
+      },
+      "derived_artifacts": [
+        {
+          "contents": [
+            "footprint_outline",
+            "space_zones",
+            "entry_door",
+            "dimension_strings"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "plan",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-s-450@1/plan",
+          "source_binding": "models/geometry/adu-s-450@1",
+          "version": "1.0.0",
+          "digest": "sha256:4e71232309215c8273b0822b21bbfe610e60822170477457098a7a3444de430c"
+        },
+        {
+          "contents": [
+            "front_facade_outline",
+            "roof_profile",
+            "window_package_openings"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "elevation",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-s-450@1/elevation-front",
+          "source_binding": "models/geometry/adu-s-450@1",
+          "version": "1.0.0",
+          "digest": "sha256:be90ef9101d468b296d2506e5a738b855c19a383ee01b34575717a8e9c0af587"
+        },
+        {
+          "contents": [
+            "side_facade_outline",
+            "roof_profile"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "elevation",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-s-450@1/elevation-side",
+          "source_binding": "models/geometry/adu-s-450@1",
+          "version": "1.0.0",
+          "digest": "sha256:ee69a38402cca9ca64d5abf4121c7c5e86d9d05f10cf84dc3cf9ffcb3aa63d41"
+        },
+        {
+          "contents": [
+            "massing_render"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "render",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-s-450@1/render-concept",
+          "source_binding": "models/geometry/adu-s-450@1",
+          "version": "1.0.0",
+          "conceptual": true,
+          "marked_conceptual_until": "design_validated",
+          "digest": "sha256:7d390f5fa29f0323a57599405adb05a96b87af876f0e626f59678150dd66fbf7"
+        }
+      ],
+      "provenance": {
+        "origin": "west_coast_kbp_original",
+        "created_by": "West Coast KBP",
+        "creation_record": "docs/shared-briefs/PRODUCT-001-original-parametric-adu-catalog/STARTER-CATALOG.md",
+        "attestation": "Geometry authored by West Coast KBP from the PRODUCT-001 starter catalog envelopes. No municipal, third-party, or licensed drawing was used as a geometry input.",
+        "municipal_source_used": false,
+        "third_party_geometry_used": false
+      },
+      "validation": {
+        "validator_version": "model-contract/1.0.0",
+        "checks": [
+          "schema_and_identifier_validity",
+          "parameter_range_and_increment_validity",
+          "gross_area_and_footprint_envelope_consistency",
+          "constraint_evaluation_for_published_defaults",
+          "deterministic_geometry_digest",
+          "derived_artifact_binding",
+          "provenance_completeness",
+          "replay_stability"
+        ],
+        "evidence_refs": [
+          "src/lib/studio/modelContract.test.ts"
+        ],
+        "result": "passed"
+      },
+      "released_at": "2026-08-07T00:00:00Z"
+    },
+    {
+      "schema": "adu-model/1",
+      "model_id": "adu-a-600",
+      "version": "1.0.0",
+      "maturity": "concept_only",
+      "title": "One Bedroom",
+      "program": {
+        "stories": 1,
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "use": "accessory_dwelling_unit",
+        "occupancy_assumption": "residential_single_household"
+      },
+      "envelope": {
+        "gross_area_sqft": {
+          "min": 550,
+          "max": 650
+        },
+        "width_ft": {
+          "min": 18,
+          "max": 24
+        },
+        "depth_ft": {
+          "min": 25,
+          "max": 34
+        },
+        "height_ft": {
+          "max": 16
+        },
+        "increment_grid_ft": 0.5,
+        "invariants": {
+          "stories": 1,
+          "bedrooms": 1,
+          "bathrooms": 1,
+          "structural_grid_bay_ft": 4,
+          "area_band_sqft": {
+            "min": 550,
+            "max": 650
+          }
+        }
+      },
+      "parameters": [
+        {
+          "key": "footprint_width_ft",
+          "category": "geometry",
+          "type": "number",
+          "unit": "ft",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT",
+            "PV-AREA"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 18,
+            "max": 24
+          },
+          "increment": 0.5,
+          "default": 20
+        },
+        {
+          "key": "footprint_depth_ft",
+          "category": "geometry",
+          "type": "number",
+          "unit": "ft",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT",
+            "PV-AREA"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 25,
+            "max": 34
+          },
+          "increment": 0.5,
+          "default": 30
+        },
+        {
+          "key": "layout_variant",
+          "category": "layout",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "open",
+            "separated"
+          ],
+          "default": "open"
+        },
+        {
+          "key": "entry_side",
+          "category": "layout",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "front",
+            "left",
+            "right"
+          ],
+          "default": "front"
+        },
+        {
+          "key": "orientation_deg",
+          "category": "layout",
+          "type": "number",
+          "unit": "deg",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 0,
+            "max": 270
+          },
+          "increment": 90,
+          "default": 0
+        },
+        {
+          "key": "roof_form",
+          "category": "geometry",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "gable",
+            "shed",
+            "hip"
+          ],
+          "default": "gable"
+        },
+        {
+          "key": "window_package",
+          "category": "geometry",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "standard",
+            "tall"
+          ],
+          "default": "standard"
+        },
+        {
+          "key": "exterior_finish",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "stucco-smooth",
+            "lap-siding",
+            "board-and-batten"
+          ],
+          "default": "stucco-smooth"
+        },
+        {
+          "key": "exterior_palette",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "warm-white",
+            "sand-dune",
+            "soft-clay",
+            "sage",
+            "charcoal"
+          ],
+          "default": "warm-white"
+        },
+        {
+          "key": "interior_tier",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "essential",
+            "comfort"
+          ],
+          "default": "essential"
+        }
+      ],
+      "constraints": [
+        {
+          "rule_id": "MC-A600-001",
+          "if": {
+            "roof_form": "hip"
+          },
+          "deny": {
+            "window_package": [
+              "tall"
+            ]
+          },
+          "reason_code": "hip_roof_excludes_tall_window_package"
+        }
+      ],
+      "geometry": {
+        "source_ref": "models/geometry/adu-a-600@1",
+        "format": "adu-geometry-source/1",
+        "units": {
+          "length": "ft",
+          "area": "sqft",
+          "angle": "deg"
+        },
+        "coordinate_system": {
+          "origin": "front_left_exterior_wall_corner",
+          "x_axis": "width_to_right",
+          "y_axis": "depth_to_rear",
+          "z_axis": "height_up",
+          "handedness": "right"
+        },
+        "digest": "sha256:802fd8b26974995d1fadf2a0b51f436a0efac5a95181cc7a8fd25a25c54f1a35"
+      },
+      "derived_artifacts": [
+        {
+          "contents": [
+            "footprint_outline",
+            "space_zones",
+            "entry_door",
+            "dimension_strings"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "plan",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-a-600@1/plan",
+          "source_binding": "models/geometry/adu-a-600@1",
+          "version": "1.0.0",
+          "digest": "sha256:4f11f7b91e9be5d8f72bea4366c6233f3d9b4cfb499be85b55c5aac27302c7a3"
+        },
+        {
+          "contents": [
+            "front_facade_outline",
+            "roof_profile",
+            "window_package_openings"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "elevation",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-a-600@1/elevation-front",
+          "source_binding": "models/geometry/adu-a-600@1",
+          "version": "1.0.0",
+          "digest": "sha256:489fb3e48efdabc1c0d371e0b62272221a82f76990342af6e5f058d8ae112331"
+        },
+        {
+          "contents": [
+            "side_facade_outline",
+            "roof_profile"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "elevation",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-a-600@1/elevation-side",
+          "source_binding": "models/geometry/adu-a-600@1",
+          "version": "1.0.0",
+          "digest": "sha256:b3103511b7111a8a62bd43cda6537449192e5674f9755067ecde025f501a7d72"
+        },
+        {
+          "contents": [
+            "massing_render"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "render",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-a-600@1/render-concept",
+          "source_binding": "models/geometry/adu-a-600@1",
+          "version": "1.0.0",
+          "conceptual": true,
+          "marked_conceptual_until": "design_validated",
+          "digest": "sha256:962413c03ae15a100c72c8c89d1f35f9da91fab6491f0544f92d57bfd06fd0f0"
+        }
+      ],
+      "provenance": {
+        "origin": "west_coast_kbp_original",
+        "created_by": "West Coast KBP",
+        "creation_record": "docs/shared-briefs/PRODUCT-001-original-parametric-adu-catalog/STARTER-CATALOG.md",
+        "attestation": "Geometry authored by West Coast KBP from the PRODUCT-001 starter catalog envelopes. No municipal, third-party, or licensed drawing was used as a geometry input.",
+        "municipal_source_used": false,
+        "third_party_geometry_used": false
+      },
+      "validation": {
+        "validator_version": "model-contract/1.0.0",
+        "checks": [
+          "schema_and_identifier_validity",
+          "parameter_range_and_increment_validity",
+          "gross_area_and_footprint_envelope_consistency",
+          "constraint_evaluation_for_published_defaults",
+          "deterministic_geometry_digest",
+          "derived_artifact_binding",
+          "provenance_completeness",
+          "replay_stability"
+        ],
+        "evidence_refs": [
+          "src/lib/studio/modelContract.test.ts"
+        ],
+        "result": "passed"
+      },
+      "released_at": "2026-08-07T00:00:00Z"
+    },
+    {
+      "schema": "adu-model/1",
+      "model_id": "adu-b-800",
+      "version": "1.0.0",
+      "maturity": "concept_only",
+      "title": "Two Bedroom",
+      "program": {
+        "stories": 1,
+        "bedrooms": 2,
+        "bathrooms": 1,
+        "use": "accessory_dwelling_unit",
+        "occupancy_assumption": "residential_single_household"
+      },
+      "envelope": {
+        "gross_area_sqft": {
+          "min": 750,
+          "max": 850
+        },
+        "width_ft": {
+          "min": 22,
+          "max": 28
+        },
+        "depth_ft": {
+          "min": 28,
+          "max": 38
+        },
+        "height_ft": {
+          "max": 16
+        },
+        "increment_grid_ft": 0.5,
+        "invariants": {
+          "stories": 1,
+          "bedrooms": 2,
+          "bathrooms": 1,
+          "structural_grid_bay_ft": 4,
+          "area_band_sqft": {
+            "min": 750,
+            "max": 850
+          }
+        }
+      },
+      "parameters": [
+        {
+          "key": "footprint_width_ft",
+          "category": "geometry",
+          "type": "number",
+          "unit": "ft",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT",
+            "PV-AREA"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 22,
+            "max": 28
+          },
+          "increment": 0.5,
+          "default": 25
+        },
+        {
+          "key": "footprint_depth_ft",
+          "category": "geometry",
+          "type": "number",
+          "unit": "ft",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT",
+            "PV-AREA"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 28,
+            "max": 38
+          },
+          "increment": 0.5,
+          "default": 32
+        },
+        {
+          "key": "layout_variant",
+          "category": "layout",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "split-bedroom",
+            "corridor"
+          ],
+          "default": "split-bedroom"
+        },
+        {
+          "key": "entry_side",
+          "category": "layout",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "front",
+            "left",
+            "right"
+          ],
+          "default": "front"
+        },
+        {
+          "key": "orientation_deg",
+          "category": "layout",
+          "type": "number",
+          "unit": "deg",
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN",
+            "PV-INCREMENT"
+          ],
+          "depends_on": [],
+          "range": {
+            "min": 0,
+            "max": 270
+          },
+          "increment": 90,
+          "default": 0
+        },
+        {
+          "key": "roof_form",
+          "category": "geometry",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "gable",
+            "hip"
+          ],
+          "default": "gable"
+        },
+        {
+          "key": "window_package",
+          "category": "geometry",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "plan",
+            "elevation_front",
+            "elevation_side",
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "standard",
+            "tall",
+            "clerestory"
+          ],
+          "default": "standard"
+        },
+        {
+          "key": "exterior_finish",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "stucco-smooth",
+            "lap-siding",
+            "board-and-batten"
+          ],
+          "default": "stucco-smooth"
+        },
+        {
+          "key": "exterior_palette",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "warm-white",
+            "sand-dune",
+            "soft-clay",
+            "sage",
+            "charcoal"
+          ],
+          "default": "warm-white"
+        },
+        {
+          "key": "interior_tier",
+          "category": "presentation",
+          "type": "enum",
+          "unit": null,
+          "affects": [
+            "render_concept"
+          ],
+          "validation_rule_ids": [
+            "PV-TYPE",
+            "PV-DOMAIN"
+          ],
+          "depends_on": [],
+          "allowed": [
+            "essential",
+            "comfort"
+          ],
+          "default": "essential"
+        }
+      ],
+      "constraints": [
+        {
+          "rule_id": "MC-B800-001",
+          "if": {
+            "roof_form": "hip"
+          },
+          "deny": {
+            "window_package": [
+              "clerestory"
+            ]
+          },
+          "reason_code": "hip_roof_excludes_clerestory_package"
+        }
+      ],
+      "geometry": {
+        "source_ref": "models/geometry/adu-b-800@1",
+        "format": "adu-geometry-source/1",
+        "units": {
+          "length": "ft",
+          "area": "sqft",
+          "angle": "deg"
+        },
+        "coordinate_system": {
+          "origin": "front_left_exterior_wall_corner",
+          "x_axis": "width_to_right",
+          "y_axis": "depth_to_rear",
+          "z_axis": "height_up",
+          "handedness": "right"
+        },
+        "digest": "sha256:e6154a336d258343350bcc64ece2425b50c6e0da06d3046db6d9300eeedefe59"
+      },
+      "derived_artifacts": [
+        {
+          "contents": [
+            "footprint_outline",
+            "space_zones",
+            "entry_door",
+            "dimension_strings"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "plan",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-b-800@1/plan",
+          "source_binding": "models/geometry/adu-b-800@1",
+          "version": "1.0.0",
+          "digest": "sha256:ca136dcb68ed64782c44bcdddc74328fea7fdb71761929ee665d768ad7472281"
+        },
+        {
+          "contents": [
+            "front_facade_outline",
+            "roof_profile",
+            "window_package_openings"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "elevation",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-b-800@1/elevation-front",
+          "source_binding": "models/geometry/adu-b-800@1",
+          "version": "1.0.0",
+          "digest": "sha256:f38ae2174fd879391e151e976a215813c11cf58d16dc79511768aad7362a4d05"
+        },
+        {
+          "contents": [
+            "side_facade_outline",
+            "roof_profile"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "elevation",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-b-800@1/elevation-side",
+          "source_binding": "models/geometry/adu-b-800@1",
+          "version": "1.0.0",
+          "digest": "sha256:b462680ac6091e039681e5bb0951b18e7ff2df3338b2b28ad7e96df96c752817"
+        },
+        {
+          "contents": [
+            "massing_render"
+          ],
+          "generator": "adu-derived-artifact/1",
+          "kind": "render",
+          "materialization": "specified_not_generated",
+          "ref": "models/derived/adu-b-800@1/render-concept",
+          "source_binding": "models/geometry/adu-b-800@1",
+          "version": "1.0.0",
+          "conceptual": true,
+          "marked_conceptual_until": "design_validated",
+          "digest": "sha256:69f10f0e5055b30b2190127155c98dcb3c6bdf3b309c512f6ce97368ef3befc0"
+        }
+      ],
+      "provenance": {
+        "origin": "west_coast_kbp_original",
+        "created_by": "West Coast KBP",
+        "creation_record": "docs/shared-briefs/PRODUCT-001-original-parametric-adu-catalog/STARTER-CATALOG.md",
+        "attestation": "Geometry authored by West Coast KBP from the PRODUCT-001 starter catalog envelopes. No municipal, third-party, or licensed drawing was used as a geometry input.",
+        "municipal_source_used": false,
+        "third_party_geometry_used": false
+      },
+      "validation": {
+        "validator_version": "model-contract/1.0.0",
+        "checks": [
+          "schema_and_identifier_validity",
+          "parameter_range_and_increment_validity",
+          "gross_area_and_footprint_envelope_consistency",
+          "constraint_evaluation_for_published_defaults",
+          "deterministic_geometry_digest",
+          "derived_artifact_binding",
+          "provenance_completeness",
+          "replay_stability"
+        ],
+        "evidence_refs": [
+          "src/lib/studio/modelContract.test.ts"
+        ],
+        "result": "passed"
+      },
+      "released_at": "2026-08-07T00:00:00Z"
+    }
+  ],
+  "release_digest": "sha256:a2fca45a44d35a1a3201e581f68cded217848fcc4eab70be9ff35eb81ec584ab"
+}
