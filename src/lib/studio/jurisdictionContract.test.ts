@@ -42,15 +42,24 @@ const SATISFYING_FACTS: SiteFacts = {
 
 async function inputFor(overrides: Partial<EvaluationInput> = {}): Promise<EvaluationInput> {
   const bound = overrides.model ?? model();
+  const configuration = overrides.configuration ?? defaultConfiguration(bound);
   const profile = overrides.profile ?? clone(syntheticProfile);
+  const siteFacts =
+    overrides.site_facts === undefined ? clone(SATISFYING_FACTS) : overrides.site_facts;
 
   return {
     model: bound,
-    configuration: overrides.configuration ?? defaultConfiguration(bound),
-    configuration_hash: overrides.configuration_hash ?? null,
+    configuration,
+    configuration_hash: overrides.configuration_hash ?? (await computeDigest(configuration)),
     profile,
     profile_digest: overrides.profile_digest ?? (await computeDigest(profile)),
-    site_facts: overrides.site_facts === undefined ? clone(SATISFYING_FACTS) : overrides.site_facts,
+    site_facts: siteFacts,
+    site_facts_digest:
+      overrides.site_facts_digest === undefined
+        ? siteFacts === null
+          ? null
+          : await computeDigest(siteFacts)
+        : overrides.site_facts_digest,
     as_of: overrides.as_of ?? "2026-08-07",
   };
 }
@@ -293,6 +302,103 @@ describe("fail-closed classes", () => {
     expect((await evaluateJurisdiction(input)).reason_code).toBe("unknown_model_subject");
   });
 
+  it("does not evaluate a mutable model version alias", async () => {
+    const bound = clone(model());
+    bound.version = "latest";
+
+    const evaluation = await evaluateJurisdiction(await inputFor({ model: bound }));
+
+    expect(evaluation.status).toBe("not_evaluated");
+    expect(evaluation.reason_code).toBe("mutable_version_alias");
+  });
+
+  it("does not evaluate an invalid model configuration even when re-sealed", async () => {
+    const configuration = {
+      ...defaultConfiguration(model()),
+      unrecognized_parameter: "foreign",
+    };
+
+    const evaluation = await evaluateJurisdiction(
+      await inputFor({
+        configuration,
+        configuration_hash: await computeDigest(configuration),
+      }),
+    );
+
+    expect(evaluation.status).toBe("not_evaluated");
+    expect(evaluation.reason_code).toBe("unknown_parameter_key");
+  });
+
+  it("does not accept an arbitrary configuration hash", async () => {
+    const evaluation = await evaluateJurisdiction(
+      await inputFor({ configuration_hash: `sha256:${"a".repeat(64)}` }),
+    );
+
+    expect(evaluation.status).toBe("not_evaluated");
+    expect(evaluation.reason_code).toBe("configuration_hash_mismatch");
+  });
+
+  it("does not evaluate site facts whose digest does not match", async () => {
+    const evaluation = await evaluateJurisdiction(
+      await inputFor({ site_facts_digest: `sha256:${"a".repeat(64)}` }),
+    );
+
+    expect(evaluation.status).toBe("not_evaluated");
+    expect(evaluation.reason_code).toBe("site_facts_digest_mismatch");
+  });
+
+  it("does not ignore an unknown site-fact identifier after re-sealing", async () => {
+    const siteFacts = {
+      ...clone(SATISFYING_FACTS),
+      values: {
+        ...(clone(SATISFYING_FACTS)?.values ?? {}),
+        unrecognized_site_fact: 1,
+      },
+    } as SiteFacts;
+
+    const evaluation = await evaluateJurisdiction(
+      await inputFor({
+        site_facts: siteFacts,
+        site_facts_digest: await computeDigest(siteFacts),
+      }),
+    );
+
+    expect(evaluation.status).toBe("not_evaluated");
+    expect(evaluation.reason_code).toBe("unknown_site_fact_identifier");
+  });
+
+  it("returns not_evaluated instead of throwing for a malformed site-facts version", async () => {
+    const siteFacts = {
+      schema: "jurisdiction-site-facts/1",
+      site_facts_version: 1,
+      values: { lot_area_sqft: 6000, rear_setback_ft: 6 },
+    } as unknown as SiteFacts;
+
+    await expect(
+      evaluateJurisdiction(
+        await inputFor({
+          site_facts: siteFacts,
+          site_facts_digest: await computeDigest(siteFacts),
+        }),
+      ),
+    ).resolves.toMatchObject({
+      status: "not_evaluated",
+      reason_code: "invalid_site_facts_version",
+    });
+  });
+
+  it("blocks inaccessible evidence even when a profile forgot its blocking flag", async () => {
+    const input = await resealedProfileInput((profile) => {
+      profile.sources[0].accessible = false;
+      profile.limitations.blocking = false;
+    });
+
+    expect(await evaluateJurisdiction(input)).toMatchObject({
+      status: "blocked_stale_profile",
+      reason_code: "profile_outside_currency_window",
+    });
+  });
+
   it("does not evaluate an impossible calendar date in the profile", async () => {
     const input = await resealedProfileInput((profile) => {
       profile.effective_window.valid_from = "2026-02-29";
@@ -326,18 +432,20 @@ describe("fail-closed classes", () => {
 });
 
 describe("binding, purity, and determinism", () => {
-  it("binds exact model, configuration, profile, site-fact and evaluator versions", async () => {
-    const input = await inputFor({ configuration_hash: `sha256:${"a".repeat(64)}` });
+  it("binds exact model, configuration, profile, site-fact and evaluator versions and digests", async () => {
+    const input = await inputFor();
     const evaluation = await evaluateJurisdiction(input);
 
     expect(evaluation.binding).toEqual({
       model_id: "adu-a-600",
       model_version: "1.0.0",
-      configuration_hash: `sha256:${"a".repeat(64)}`,
+      model_geometry_digest: input.model.geometry.digest,
+      configuration_hash: input.configuration_hash,
       jurisdiction_id: "synthetic-test-authority",
       profile_version: "1.0.0",
       profile_digest: input.profile_digest,
       site_facts_version: "1.0.0",
+      site_facts_digest: input.site_facts_digest,
       as_of: "2026-08-07",
     });
     expect(evaluation.evaluator_version).toBe(EVALUATOR_VERSION);
@@ -349,6 +457,7 @@ describe("binding, purity, and determinism", () => {
     const evaluation = await evaluateJurisdiction(await inputFor({ site_facts: null }));
 
     expect(evaluation.binding.site_facts_version).toBeNull();
+    expect(evaluation.binding.site_facts_digest).toBeNull();
     expect(evaluation.missing_facts).toEqual(["lot_area_sqft", "rear_setback_ft"]);
   });
 
