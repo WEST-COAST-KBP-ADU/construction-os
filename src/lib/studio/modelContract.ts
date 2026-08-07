@@ -49,6 +49,108 @@ export const REQUIRED_CONCEPT_ONLY_CHECKS = Object.freeze([
   "replay_stability",
 ]);
 
+/**
+ * Exact key sets for every schema-owned record. Anything not listed is an
+ * unknown key and is terminal — this is what keeps foreign metadata such as a
+ * municipal plan reference out of owned geometry.
+ */
+type KeySet = { required: readonly string[]; optional?: readonly string[] };
+
+const K = {
+  geometrySource: {
+    required: [
+      "schema", "geometry_id", "model_id", "origin", "units", "coordinate_system",
+      "footprint", "massing", "structural_grid", "spaces", "openings",
+      "reference_configuration", "notes",
+    ],
+  },
+  release: {
+    required: ["schema", "release_version", "effective_from", "models", "release_digest"],
+  },
+  units: { required: ["length", "area", "angle"] },
+  coordinateSystem: { required: ["origin", "x_axis", "y_axis", "z_axis", "handedness"] },
+  space: { required: ["space_id", "role", "area_fraction"] },
+  footprint: { required: ["shape", "derivation"] },
+  massing: {
+    required: ["stories", "wall_plate_height_ft", "roof_pitch_rise_per_12", "max_overall_height_ft"],
+  },
+  structuralGrid: {
+    required: ["bay_spacing_ft", "exterior_wall_framing", "slab_edge_offset_ft"],
+  },
+  openings: { required: ["entry_door", "window_packages"] },
+  entryDoor: { required: ["width_ft", "height_ft", "placed_on"] },
+  windowPackage: { required: ["head_height_ft", "sill_height_ft", "count_per_facade"] },
+  program: { required: ["stories", "bedrooms", "bathrooms", "use", "occupancy_assumption"] },
+  envelope: {
+    required: [
+      "gross_area_sqft", "width_ft", "depth_ft", "height_ft", "increment_grid_ft", "invariants",
+    ],
+  },
+  invariants: {
+    required: ["stories", "bedrooms", "bathrooms", "structural_grid_bay_ft", "area_band_sqft"],
+  },
+  range: { required: ["min", "max"] },
+  heightLimit: { required: ["max"] },
+  parameter: {
+    required: [
+      "key", "category", "type", "unit", "default", "affects", "validation_rule_ids", "depends_on",
+    ],
+    optional: ["range", "increment", "allowed"],
+  },
+  constraint: { required: ["rule_id", "if", "deny", "reason_code"] },
+  geometryBinding: {
+    required: ["source_ref", "format", "units", "coordinate_system", "digest"],
+  },
+  derivedArtifact: {
+    required: [
+      "contents", "digest", "generator", "kind", "materialization", "ref", "source_binding", "version",
+    ],
+    optional: ["conceptual", "marked_conceptual_until"],
+  },
+  provenance: {
+    required: [
+      "origin", "created_by", "creation_record", "attestation",
+      "municipal_source_used", "third_party_geometry_used",
+    ],
+  },
+  validation: { required: ["validator_version", "checks", "evidence_refs", "result"] },
+} as const satisfies Record<string, KeySet>;
+
+/**
+ * Rejects an unknown or missing key on a schema-owned record. `missingCode`
+ * and `unknownCode` are separate so a caller can report a domain-specific
+ * reason rather than a generic shape error.
+ */
+function assertExactKeys(
+  value: unknown,
+  keys: KeySet,
+  missingCode: string,
+  unknownCode: string,
+): Record<string, unknown> {
+  if (!isPlainObject(value)) {
+    fail(missingCode);
+  }
+
+  const allowed = new Set<string>([...keys.required, ...(keys.optional ?? [])]);
+
+  for (const key of Object.keys(value)) {
+    if (!allowed.has(key)) {
+      fail(unknownCode);
+    }
+  }
+
+  for (const key of keys.required) {
+    if (!(key in value)) {
+      fail(missingCode);
+    }
+  }
+
+  return value;
+}
+
+const RELEASE_VERSION_PATTERN = /^\d{4}\.\d{2}\.\d+$/;
+const CALENDAR_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
 const MODEL_ID_PATTERN = /^adu-[a-z]-\d{3}$/;
 const SEMVER_PATTERN = /^\d+\.\d+\.\d+$/;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/;
@@ -132,6 +234,13 @@ function isMultipleOf(value: number, increment: number): boolean {
 }
 
 export function assertValidGeometrySource(source: AduGeometrySource): void {
+  const record = assertExactKeys(
+    source,
+    K.geometrySource,
+    "missing_geometry_field",
+    "unknown_geometry_field",
+  );
+
   if (source.schema !== GEOMETRY_SCHEMA) {
     fail("unknown_geometry_schema");
   }
@@ -149,14 +258,72 @@ export function assertValidGeometrySource(source: AduGeometrySource): void {
   }
 
   assertUnits(source.units);
+  assertExactKeys(
+    source.coordinate_system,
+    K.coordinateSystem,
+    "missing_geometry_field",
+    "unknown_geometry_field",
+  );
+  assertExactKeys(record.footprint, K.footprint, "missing_geometry_field", "unknown_geometry_field");
+  assertExactKeys(record.massing, K.massing, "missing_geometry_field", "unknown_geometry_field");
+  assertExactKeys(
+    record.structural_grid,
+    K.structuralGrid,
+    "missing_geometry_field",
+    "unknown_geometry_field",
+  );
+
+  const openings = assertExactKeys(
+    record.openings,
+    K.openings,
+    "missing_geometry_field",
+    "unknown_geometry_field",
+  );
+  assertExactKeys(
+    openings.entry_door,
+    K.entryDoor,
+    "missing_geometry_field",
+    "unknown_geometry_field",
+  );
+
+  if (!isPlainObject(openings.window_packages)) {
+    fail("missing_geometry_field");
+  }
+
+  for (const windowPackage of Object.values(openings.window_packages)) {
+    assertExactKeys(
+      windowPackage,
+      K.windowPackage,
+      "missing_geometry_field",
+      "unknown_geometry_field",
+    );
+  }
 
   if (!Array.isArray(source.spaces) || source.spaces.length === 0) {
     fail("missing_geometry_spaces");
   }
 
+  const spaceIds = new Set<string>();
+  for (const space of source.spaces) {
+    assertExactKeys(space, K.space, "missing_geometry_field", "unknown_geometry_field");
+
+    if (spaceIds.has(space.space_id)) {
+      fail("duplicate_space_id");
+    }
+    spaceIds.add(space.space_id);
+
+    if (typeof space.area_fraction !== "number" || space.area_fraction <= 0) {
+      fail("invalid_space_area_fraction");
+    }
+  }
+
   const fractionTotal = source.spaces.reduce((total, space) => total + space.area_fraction, 0);
   if (Math.round(fractionTotal * 1000) !== 1000) {
     fail("space_area_fractions_do_not_sum_to_one");
+  }
+
+  if (!isPlainObject(record.reference_configuration)) {
+    fail("missing_geometry_field");
   }
 }
 
@@ -366,6 +533,49 @@ export function assertValidModelStructure(model: AduModel): void {
     fail("presentation_asset_cannot_be_geometry_source");
   }
 
+  assertExactKeys(model.program, K.program, "missing_model_field", "unknown_model_field");
+  assertExactKeys(model.geometry, K.geometryBinding, "missing_model_field", "unknown_model_field");
+  assertExactKeys(model.provenance, K.provenance, "missing_model_field", "unknown_model_field");
+  assertExactKeys(model.validation, K.validation, "missing_model_field", "unknown_model_field");
+  assertExactKeys(
+    model.geometry.coordinate_system,
+    K.coordinateSystem,
+    "missing_model_field",
+    "unknown_model_field",
+  );
+
+  const envelope = assertExactKeys(
+    model.envelope,
+    K.envelope,
+    "missing_model_field",
+    "unknown_model_field",
+  );
+  assertExactKeys(envelope.gross_area_sqft, K.range, "missing_model_field", "unknown_model_field");
+  assertExactKeys(envelope.width_ft, K.range, "missing_model_field", "unknown_model_field");
+  assertExactKeys(envelope.depth_ft, K.range, "missing_model_field", "unknown_model_field");
+  assertExactKeys(envelope.height_ft, K.heightLimit, "missing_model_field", "unknown_model_field");
+
+  const invariants = assertExactKeys(
+    envelope.invariants,
+    K.invariants,
+    "missing_model_field",
+    "unknown_model_field",
+  );
+  assertExactKeys(
+    invariants.area_band_sqft,
+    K.range,
+    "missing_model_field",
+    "unknown_model_field",
+  );
+
+  if (
+    invariants.stories !== model.program.stories ||
+    invariants.bedrooms !== model.program.bedrooms ||
+    invariants.bathrooms !== model.program.bathrooms
+  ) {
+    fail("invariants_disagree_with_program");
+  }
+
   if (model.parameters.length === 0) {
     fail("missing_parameters");
   }
@@ -376,6 +586,10 @@ export function assertValidModelStructure(model: AduModel): void {
       fail("duplicate_parameter_key");
     }
     parameterKeys.add(parameter.key);
+    assertExactKeys(parameter, K.parameter, "missing_model_field", "unknown_model_field");
+    if (parameter.range) {
+      assertExactKeys(parameter.range, K.range, "missing_model_field", "unknown_model_field");
+    }
     assertValidParameter(parameter);
   }
 
@@ -385,6 +599,7 @@ export function assertValidModelStructure(model: AduModel): void {
       fail("duplicate_constraint_rule_id");
     }
     ruleIds.add(rule.rule_id);
+    assertExactKeys(rule, K.constraint, "missing_model_field", "unknown_model_field");
 
     for (const key of [...Object.keys(rule.if), ...Object.keys(rule.deny)]) {
       if (!parameterKeys.has(key)) {
@@ -409,6 +624,8 @@ export function assertValidModelStructure(model: AduModel): void {
   }
 
   for (const artifact of model.derived_artifacts) {
+    assertExactKeys(artifact, K.derivedArtifact, "missing_model_field", "unknown_model_field");
+
     if (!DIGEST_PATTERN.test(artifact.digest)) {
       fail("invalid_digest_format");
     }
@@ -460,6 +677,58 @@ export function assertValidModelStructure(model: AduModel): void {
   assertConfigurationValid(model, defaultConfiguration(model));
 }
 
+/**
+ * The digest-bound geometry source declares one canonical configuration. It
+ * must be a valid configuration of the bound model AND must equal the model's
+ * published defaults, so the canonical geometry can never drift from what the
+ * catalog advertises.
+ */
+function assertReferenceConfiguration(model: AduModel, source: AduGeometrySource): void {
+  const defaults = defaultConfiguration(model);
+  const reference = source.reference_configuration;
+
+  assertExactKeys(
+    reference,
+    { required: Object.keys(defaults) },
+    "missing_reference_configuration_key",
+    "unknown_reference_configuration_key",
+  );
+
+  assertConfigurationValid(model, reference);
+
+  for (const [key, value] of Object.entries(defaults)) {
+    if (reference[key] !== value) {
+      fail("reference_configuration_does_not_match_default");
+    }
+  }
+}
+
+/**
+ * Every value the model offers must have a geometry definition behind it. A
+ * roof form or window package with no geometry would render as best-effort,
+ * which the contract forbids.
+ */
+function assertGeometryCoversAllowLists(model: AduModel, source: AduGeometrySource): void {
+  const massing = source.massing as { roof_pitch_rise_per_12?: Record<string, unknown> };
+  const openings = source.openings as { window_packages?: Record<string, unknown> };
+
+  const roofForms = model.parameters.find((parameter) => parameter.key === "roof_form")?.allowed;
+  for (const form of roofForms ?? []) {
+    if (!massing.roof_pitch_rise_per_12 || !(form in massing.roof_pitch_rise_per_12)) {
+      fail("roof_form_missing_geometry_definition");
+    }
+  }
+
+  const packages = model.parameters.find(
+    (parameter) => parameter.key === "window_package",
+  )?.allowed;
+  for (const windowPackage of packages ?? []) {
+    if (!openings.window_packages || !(windowPackage in openings.window_packages)) {
+      fail("window_package_missing_geometry_definition");
+    }
+  }
+}
+
 export async function assertValidModel(
   model: AduModel,
   geometrySource: AduGeometrySource,
@@ -474,6 +743,20 @@ export async function assertValidModel(
   if (geometrySource.geometry_id !== `${model.geometry.source_ref.split("/").pop()}`) {
     fail("geometry_reference_mismatch");
   }
+
+  if (canonicalDigestInput(geometrySource.units) !== canonicalDigestInput(model.geometry.units)) {
+    fail("geometry_units_mismatch");
+  }
+
+  if (
+    canonicalDigestInput(geometrySource.coordinate_system) !==
+    canonicalDigestInput(model.geometry.coordinate_system)
+  ) {
+    fail("geometry_coordinate_system_mismatch");
+  }
+
+  assertReferenceConfiguration(model, geometrySource);
+  assertGeometryCoversAllowLists(model, geometrySource);
 
   const recomputed = await computeDigest(geometrySource);
   if (recomputed !== model.geometry.digest) {
@@ -494,17 +777,31 @@ export async function assertValidRelease(
   release: AduModelRelease,
   geometrySources: Record<string, AduGeometrySource>,
 ): Promise<void> {
+  assertExactKeys(release, K.release, "missing_release_field", "unknown_release_field");
+
   if (release.schema !== RELEASE_SCHEMA) {
     fail("unknown_release_schema");
   }
 
   assertNoMutableAlias(release.release_version, "mutable_release_alias");
 
+  if (!RELEASE_VERSION_PATTERN.test(release.release_version)) {
+    fail("invalid_release_version");
+  }
+
+  if (!CALENDAR_DATE_PATTERN.test(release.effective_from)) {
+    fail("invalid_effective_from");
+  }
+
+  if (Number.isNaN(Date.parse(`${release.effective_from}T00:00:00Z`))) {
+    fail("invalid_effective_from");
+  }
+
   if (!DIGEST_PATTERN.test(release.release_digest)) {
     fail("invalid_digest_format");
   }
 
-  if (release.models.length === 0) {
+  if (!Array.isArray(release.models) || release.models.length === 0) {
     fail("empty_release");
   }
 

@@ -142,6 +142,14 @@ export type ModelValidation = {
   result: "passed";
 };
 
+export type ModelInvariants = {
+  stories: number;
+  bedrooms: number;
+  bathrooms: number;
+  structural_grid_bay_ft: number;
+  area_band_sqft: NumericRange;
+};
+
 export type AduModel = {
   schema: "adu-model/1";
   model_id: string;
@@ -161,7 +169,7 @@ export type AduModel = {
     depth_ft: NumericRange;
     height_ft: { max: number };
     increment_grid_ft: number;
-    invariants: Record<string, unknown>;
+    invariants: ModelInvariants;
   };
   parameters: ModelParameter[];
   constraints: ModelConstraint[];

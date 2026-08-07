@@ -559,3 +559,319 @@ describe("fail-closed rejection — release level", () => {
     expect(() => findModel(release, "adu-x-999", "1.0.0")).toThrow("unknown_model_release");
   });
 });
+
+/**
+ * Re-seals a release so every geometry, derived-artifact and release digest is
+ * internally consistent again.
+ *
+ * Every test in the two blocks below mutates a source or model and then
+ * re-seals before asserting. That is the point: a rejection proves the schema,
+ * cross-binding or envelope rule fired on its own merits, and not merely that
+ * a digest stopped matching. Without re-sealing, these tests would pass for
+ * the wrong reason.
+ */
+async function seal(
+  models: AduModel[],
+  sources: Record<string, AduGeometrySource>,
+): Promise<AduModelRelease> {
+  for (const model of models) {
+    for (const artifact of model.derived_artifacts) {
+      artifact.digest = await computeDigest(artifact, ["digest"]);
+    }
+
+    const source = sources[model.geometry.source_ref];
+    if (source) {
+      model.geometry.digest = await computeDigest(source);
+    }
+  }
+
+  const core = {
+    schema: release.schema,
+    release_version: release.release_version,
+    effective_from: release.effective_from,
+    models,
+  };
+
+  return { ...core, release_digest: await computeDigest(core) } as AduModelRelease;
+}
+
+const freshModels = (): AduModel[] => clone(release.models);
+const freshSources = (): Record<string, AduGeometrySource> => clone(GEOMETRY_SOURCES);
+
+/** Mutates the adu-s-450 geometry source, re-seals, and returns the pair. */
+async function sealedWithSourceMutation(
+  mutate: (source: AduGeometrySource) => void,
+): Promise<[AduModelRelease, Record<string, AduGeometrySource>]> {
+  const models = freshModels();
+  const sources = freshSources();
+  mutate(sources["models/geometry/adu-s-450@1"]);
+
+  return [await seal(models, sources), sources];
+}
+
+describe("F-1 — unknown-key enforcement across the whole object graph", () => {
+  it("re-sealing an unmutated release still validates (control)", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    const resealed = await seal(models, sources);
+
+    expect(resealed.release_digest).toBe(release.release_digest);
+    await expect(assertValidRelease(resealed, sources)).resolves.toBeUndefined();
+  });
+
+  it("rejects an unknown key on a geometry source even with digests recomputed", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      (source as unknown as Record<string, unknown>).municipal_plan_id = "SAC-ADU-460-2022";
+    });
+
+    // The digest is valid — only the schema rule can reject this.
+    await expect(computeDigest(sources["models/geometry/adu-s-450@1"])).resolves.toBe(
+      tampered.models.find((model) => model.model_id === "adu-s-450")!.geometry.digest,
+    );
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("unknown_geometry_field");
+  });
+
+  it("rejects a municipal source_url smuggled into geometry openings", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      (source.openings as Record<string, unknown>).source_url =
+        "https://adu.cityofsacramento.org/Shelf-ready-plans";
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("unknown_geometry_field");
+  });
+
+  it("rejects an unknown key on a nested geometry record", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      (source.massing as Record<string, unknown>).traced_from = "permit_set_sheet_A2";
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("unknown_geometry_field");
+  });
+
+  it("rejects an unknown key on a geometry space entry", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      (source.spaces[0] as unknown as Record<string, unknown>).copied_from = "sheet_A2";
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("unknown_geometry_field");
+  });
+
+  it("rejects a missing geometry field", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      delete (source as Partial<AduGeometrySource>).structural_grid;
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("missing_geometry_field");
+  });
+
+  it("rejects a duplicate space id", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      source.spaces[1].space_id = source.spaces[0].space_id;
+      source.spaces[0].area_fraction = 0.37;
+      source.spaces[1].area_fraction = 0.37;
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("duplicate_space_id");
+  });
+
+  it("rejects an unknown key on the release object with digests recomputed", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    const sealed = await seal(models, sources);
+    const tampered = {
+      ...sealed,
+      source_url: "https://drive.google.com/drive/folders/example",
+    } as unknown as AduModelRelease;
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("unknown_release_field");
+  });
+
+  it("rejects a missing release field", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    const sealed = await seal(models, sources) as Partial<AduModelRelease>;
+    delete sealed.effective_from;
+
+    await expect(assertValidRelease(sealed as AduModelRelease, sources)).rejects.toThrow(
+      "missing_release_field",
+    );
+  });
+
+  it("rejects an unknown key on the model geometry binding", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    (models[0].geometry as unknown as Record<string, unknown>).municipal_plan_ref = "SAC-460";
+    const tampered = await seal(models, sources);
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow("unknown_model_field");
+  });
+
+  it("rejects an unknown key on provenance, a parameter, and a derived artifact", async () => {
+    for (const mutate of [
+      (model: AduModel) => {
+        (model.provenance as unknown as Record<string, unknown>).licensed_from = "A Plus";
+      },
+      (model: AduModel) => {
+        (model.parameters[0] as unknown as Record<string, unknown>).traced_from = "sheet_A2";
+      },
+      (model: AduModel) => {
+        (model.derived_artifacts[0] as unknown as Record<string, unknown>).scanned_from = "pdf";
+      },
+    ]) {
+      const models = freshModels();
+      const sources = freshSources();
+      mutate(models[0]);
+
+      await expect(assertValidRelease(await seal(models, sources), sources)).rejects.toThrow(
+        "unknown_model_field",
+      );
+    }
+  });
+
+  it("rejects an unknown key on the envelope invariants", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    (models[0].envelope.invariants as Record<string, unknown>).permit_number = "B-2025-1187";
+
+    await expect(assertValidRelease(await seal(models, sources), sources)).rejects.toThrow(
+      "unknown_model_field",
+    );
+  });
+});
+
+describe("F-2 — canonical reference configuration and geometry cross-binding", () => {
+  it("rejects an out-of-envelope reference configuration with digests recomputed", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      source.reference_configuration.footprint_width_ft = 999;
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+      "parameter_value_out_of_range",
+    );
+  });
+
+  it("rejects an unknown parameter in the reference configuration", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      source.reference_configuration.jurisdiction = "sacramento";
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+      "unknown_reference_configuration_key",
+    );
+  });
+
+  it("rejects a missing parameter in the reference configuration", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      delete source.reference_configuration.roof_form;
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+      "missing_reference_configuration_key",
+    );
+  });
+
+  it("rejects a reference configuration that is valid but is not the published default", async () => {
+    const model = modelOf("adu-s-450");
+    const width = model.parameters.find((parameter) => parameter.key === "footprint_width_ft")!;
+    const alternative = 19;
+
+    // 19 x 25 = 475 sq ft — inside the envelope and on the increment grid,
+    // so only the default-binding rule can reject it.
+    expect(alternative).not.toBe(width.default);
+    expect(alternative * 25).toBeGreaterThanOrEqual(model.envelope.gross_area_sqft.min);
+    expect(alternative * 25).toBeLessThanOrEqual(model.envelope.gross_area_sqft.max);
+
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      source.reference_configuration.footprint_width_ft = alternative;
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+      "reference_configuration_does_not_match_default",
+    );
+  });
+
+  it("rejects a reference configuration that violates a model constraint", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      source.reference_configuration.layout_variant = "alcove";
+      source.reference_configuration.interior_tier = "comfort";
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow();
+  });
+
+  it("rejects a geometry coordinate system that disagrees with the model binding", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      source.coordinate_system.origin = "rear_right_exterior_wall_corner";
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+      "geometry_coordinate_system_mismatch",
+    );
+  });
+
+  it("rejects a roof form the geometry source cannot build", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      delete (source.massing as { roof_pitch_rise_per_12: Record<string, unknown> })
+        .roof_pitch_rise_per_12.gable;
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+      "roof_form_missing_geometry_definition",
+    );
+  });
+
+  it("rejects a window package the geometry source cannot build", async () => {
+    const [tampered, sources] = await sealedWithSourceMutation((source) => {
+      delete (source.openings as { window_packages: Record<string, unknown> }).window_packages
+        .tall;
+    });
+
+    await expect(assertValidRelease(tampered, sources)).rejects.toThrow(
+      "window_package_missing_geometry_definition",
+    );
+  });
+
+  it("rejects envelope invariants that disagree with the declared program", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    (models[0].envelope.invariants as Record<string, unknown>).bedrooms = 3;
+
+    await expect(assertValidRelease(await seal(models, sources), sources)).rejects.toThrow(
+      "invariants_disagree_with_program",
+    );
+  });
+});
+
+describe("release version and effective date validation", () => {
+  it("rejects a malformed release version", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    const sealed = await seal(models, sources);
+    sealed.release_version = "v2";
+
+    await expect(assertValidRelease(sealed, sources)).rejects.toThrow("invalid_release_version");
+  });
+
+  it("rejects a malformed effective date", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    const sealed = await seal(models, sources);
+    sealed.effective_from = "September 2026";
+
+    await expect(assertValidRelease(sealed, sources)).rejects.toThrow("invalid_effective_from");
+  });
+
+  it("rejects an impossible calendar date", async () => {
+    const models = freshModels();
+    const sources = freshSources();
+    const sealed = await seal(models, sources);
+    sealed.effective_from = "2026-13-45";
+
+    await expect(assertValidRelease(sealed, sources)).rejects.toThrow("invalid_effective_from");
+  });
+
+  it("accepts the committed release version and effective date", () => {
+    expect(release.release_version).toBe("2026.09.0");
+    expect(release.effective_from).toBe("2026-09-01");
+  });
+});
