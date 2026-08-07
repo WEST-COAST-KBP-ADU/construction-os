@@ -1,5 +1,7 @@
 import {
   MUTABLE_ALIASES,
+  assertConfigurationValid,
+  assertValidModelStructure,
   canonicalDigestInput,
   computeDigest,
   isCalendarDate,
@@ -171,10 +173,11 @@ export type SiteFacts = {
 export type EvaluationInput = {
   model: AduModel;
   configuration: ModelConfigurationValues;
-  configuration_hash: string | null;
+  configuration_hash: string;
   profile: JurisdictionProfile;
   profile_digest: string;
   site_facts: SiteFacts;
+  site_facts_digest: string | null;
   /** Staleness is measured against this supplied date. Never read from a clock. */
   as_of: string;
 };
@@ -198,11 +201,13 @@ export type JurisdictionEvaluation = {
   binding: {
     model_id: string;
     model_version: string;
-    configuration_hash: string | null;
+    model_geometry_digest: string;
+    configuration_hash: string;
     jurisdiction_id: string;
     profile_version: string;
     profile_digest: string;
     site_facts_version: string | null;
+    site_facts_digest: string | null;
     as_of: string;
   };
   results: RequirementResult[];
@@ -256,6 +261,12 @@ const K = {
     ],
   },
   siteFacts: { required: ["schema", "site_facts_version", "values"] },
+  evaluationInput: {
+    required: [
+      "model", "configuration", "configuration_hash", "profile", "profile_digest",
+      "site_facts", "site_facts_digest", "as_of",
+    ],
+  },
 } as const satisfies Record<string, KeySet>;
 
 function fail(code: string): never {
@@ -640,28 +651,45 @@ function isStale(profile: JurisdictionProfile, asOf: string): boolean {
     return true;
   }
 
-  return profile.limitations.blocking === true;
+  return (
+    profile.limitations.blocking === true ||
+    profile.limitations.conflicts.length > 0 ||
+    profile.limitations.inaccessible_evidence.length > 0 ||
+    profile.sources.some((source) => source.accessible === false)
+  );
+}
+
+function stringField(value: unknown): string {
+  return typeof value === "string" ? value : "";
 }
 
 function blocked(
-  input: EvaluationInput,
+  input: unknown,
   status: TerminalStatus,
   reasonCode: string | null,
   results: RequirementResult[] = [],
   missingFacts: string[] = [],
 ): JurisdictionEvaluation {
+  const inputRecord = isPlainObject(input) ? input : {};
+  const model = isPlainObject(inputRecord.model) ? inputRecord.model : {};
+  const geometry = isPlainObject(model.geometry) ? model.geometry : {};
+  const profile = isPlainObject(inputRecord.profile) ? inputRecord.profile : {};
+  const siteFacts = isPlainObject(inputRecord.site_facts) ? inputRecord.site_facts : null;
+
   return {
     schema: EVALUATION_SCHEMA,
     evaluator_version: EVALUATOR_VERSION,
     binding: {
-      model_id: input.model?.model_id ?? "",
-      model_version: input.model?.version ?? "",
-      configuration_hash: input.configuration_hash ?? null,
-      jurisdiction_id: input.profile?.jurisdiction_id ?? "",
-      profile_version: input.profile?.profile_version ?? "",
-      profile_digest: input.profile_digest ?? "",
-      site_facts_version: input.site_facts?.site_facts_version ?? null,
-      as_of: input.as_of,
+      model_id: stringField(model.model_id),
+      model_version: stringField(model.version),
+      model_geometry_digest: stringField(geometry.digest),
+      configuration_hash: stringField(inputRecord.configuration_hash),
+      jurisdiction_id: stringField(profile.jurisdiction_id),
+      profile_version: stringField(profile.profile_version),
+      profile_digest: stringField(inputRecord.profile_digest),
+      site_facts_version: siteFacts === null ? null : stringField(siteFacts.site_facts_version),
+      site_facts_digest: siteFacts === null ? null : stringField(inputRecord.site_facts_digest),
+      as_of: stringField(inputRecord.as_of),
     },
     results,
     missing_facts: missingFacts,
@@ -677,11 +705,31 @@ function blocked(
  * mutates any input. Anything it cannot evaluate deterministically becomes a
  * blocked status rather than a guess.
  */
-export async function evaluateJurisdiction(
+async function evaluateJurisdictionChecked(
   input: EvaluationInput,
 ): Promise<JurisdictionEvaluation> {
+  assertExactKeys(
+    input, K.evaluationInput, "missing_evaluation_input_field", "unknown_evaluation_input_field",
+  );
+
   if (!isCalendarDate(input.as_of)) {
     return blocked(input, "not_evaluated", "invalid_as_of_date");
+  }
+
+  try {
+    assertValidModelStructure(input.model);
+    assertConfigurationValid(input.model, input.configuration);
+  } catch (error) {
+    return blocked(input, "not_evaluated", (error as Error).message);
+  }
+
+  if (!DIGEST_PATTERN.test(input.configuration_hash)) {
+    return blocked(input, "not_evaluated", "invalid_configuration_hash");
+  }
+
+  const recomputedConfigurationHash = await computeDigest(input.configuration);
+  if (recomputedConfigurationHash !== input.configuration_hash) {
+    return blocked(input, "not_evaluated", "configuration_hash_mismatch");
   }
 
   try {
@@ -699,7 +747,11 @@ export async function evaluateJurisdiction(
     return blocked(input, "not_evaluated", "profile_digest_mismatch");
   }
 
-  if (input.site_facts !== null) {
+  if (input.site_facts === null) {
+    if (input.site_facts_digest !== null) {
+      return blocked(input, "not_evaluated", "site_facts_digest_without_site_facts");
+    }
+  } else {
     try {
       assertExactKeys(
         input.site_facts, K.siteFacts, "missing_site_facts_field", "unknown_site_facts_field",
@@ -712,12 +764,48 @@ export async function evaluateJurisdiction(
       return blocked(input, "not_evaluated", "unknown_site_facts_schema");
     }
 
+    if (typeof input.site_facts.site_facts_version !== "string") {
+      return blocked(input, "not_evaluated", "invalid_site_facts_version");
+    }
+
     if (MUTABLE_ALIASES.includes(input.site_facts.site_facts_version.toLowerCase())) {
       return blocked(input, "not_evaluated", "mutable_site_facts_alias");
     }
 
     if (!SEMVER_PATTERN.test(input.site_facts.site_facts_version)) {
       return blocked(input, "not_evaluated", "invalid_site_facts_version");
+    }
+
+    if (!isPlainObject(input.site_facts.values)) {
+      return blocked(input, "not_evaluated", "invalid_site_facts_values");
+    }
+
+    const knownSiteFactSubjects = new Set(
+      input.profile.requirements
+        .filter((requirement) => requirement.subject_source === "site_fact")
+        .map((requirement) => requirement.subject),
+    );
+
+    for (const [key, value] of Object.entries(input.site_facts.values)) {
+      if (!knownSiteFactSubjects.has(key)) {
+        return blocked(input, "not_evaluated", "unknown_site_fact_identifier");
+      }
+
+      if (
+        (typeof value !== "number" || !Number.isFinite(value)) &&
+        typeof value !== "string"
+      ) {
+        return blocked(input, "not_evaluated", "invalid_site_fact_value");
+      }
+    }
+
+    if (typeof input.site_facts_digest !== "string" || !DIGEST_PATTERN.test(input.site_facts_digest)) {
+      return blocked(input, "not_evaluated", "invalid_site_facts_digest");
+    }
+
+    const recomputedSiteFactsDigest = await computeDigest(input.site_facts);
+    if (recomputedSiteFactsDigest !== input.site_facts_digest) {
+      return blocked(input, "not_evaluated", "site_facts_digest_mismatch");
     }
   }
 
@@ -810,6 +898,20 @@ export async function evaluateJurisdiction(
   }
 
   return blocked(input, "reference_consistent", null, results, missingFacts);
+}
+
+export async function evaluateJurisdiction(
+  input: EvaluationInput,
+): Promise<JurisdictionEvaluation> {
+  try {
+    return await evaluateJurisdictionChecked(input);
+  } catch (error) {
+    return blocked(
+      input,
+      "not_evaluated",
+      error instanceof Error ? error.message : "invalid_evaluation_input",
+    );
+  }
 }
 
 /** Canonical serialization of an evaluation, for replay and comparison. */
