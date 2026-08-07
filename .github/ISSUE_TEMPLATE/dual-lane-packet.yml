@@ -1,0 +1,106 @@
+name: Dual-lane engineering packet
+description: Dispatch one bounded research, implementation, or review packet across the two engineering lanes.
+title: "[PACKET-ID] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One Issue = one bounded outcome. Pin exact SHAs. The artifact author cannot accept the same artifact. Tony alone adopts decisions and merges pull requests.
+
+  - type: dropdown
+    id: packet_type
+    attributes:
+      label: Packet type
+      options:
+        - RESEARCH
+        - IMPLEMENTATION
+        - REVIEW
+    validations:
+      required: true
+
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      placeholder: WEST-COAST-KBP-ADU/construction-os
+    validations:
+      required: true
+
+  - type: input
+    id: base_sha
+    attributes:
+      label: Exact base SHA
+      description: Full 40-character commit SHA. Do not use a moving branch name alone.
+    validations:
+      required: true
+
+  - type: input
+    id: lane_a
+    attributes:
+      label: Lane A operational lead and executor
+      placeholder: ChatGPT operational lead; Claude Code executor
+    validations:
+      required: true
+
+  - type: dropdown
+    id: lane_b
+    attributes:
+      label: Lane B independent engineer
+      options:
+        - Fable 5
+        - Opus 5
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Single outcome
+      description: State one verifiable result, not a list of unrelated objectives.
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Owned or read-only surface
+      description: List exact paths, routes, PR, or evidence surface.
+    validations:
+      required: true
+
+  - type: input
+    id: shared_artifact
+    attributes:
+      label: Durable shared artifact
+      placeholder: docs/shared-briefs/PACKET-ID/BRIEF.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: Required tests, checks, screenshots, citations, or review verdict.
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals and stop conditions
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: invariants
+    attributes:
+      label: Protocol invariants
+      options:
+        - label: One implementation scope uses one branch and one Draft PR.
+          required: true
+        - label: RESULT, REVIEW_REQUEST, and REVIEW_VERDICT will pin an exact head SHA.
+          required: true
+        - label: The artifact author will not issue its acceptance verdict.
+          required: true
+        - label: Owner alone merges or adopts the result.
+          required: true
