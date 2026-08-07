@@ -38,8 +38,8 @@ architecture:
   review at the exact author result SHA.
 - The accepted Owner direction appears in `DECISION.md`.
 - Address-first and phone-first paths are explicit.
-- `FUNNEL-CONTRACT.md` defines four separate records, twelve funnel stages,
-  human-only commitment transitions, public-surface CTA mapping, first-party
+- `FUNNEL-CONTRACT.md` defines four separate records, fourteen funnel states,
+  complete terminal/loss semantics, human-only commitment transitions, public-surface CTA mapping, first-party
   non-PII metrics, failure behavior, and privacy/retention gates.
 - PII is prohibited from model, Catalog, GIS, jurisdiction, evaluation, and
   immutable scenario artifacts.
@@ -78,14 +78,30 @@ privacy text, verified recipient, storage/delivery provider, retention/deletion
 period, access controls, abuse controls, secret handling, and failed-delivery
 semantics.
 
+## Independent review reconciliation
+
+Fable 5 reviewed author SHA
+`509ac04ed9d99263caf25537a868194df0040cfb` and returned
+`BLOCKED FOR REVISION` at reviewer SHA
+`e78544c1a73ea968c4a1b628bf902b7505def7cb`.
+
+The revision closes F-1 before runtime implementation by:
+
+- routing valid but non-fit or property-absent candidates to human review;
+- permitting authorized-human loss recording from contact-approved, contacted,
+  consultation, and proposal stages;
+- defining terminal and new-record re-entry semantics;
+- correcting the funnel-state count;
+- making phone-first absence explicit;
+- deferring pre-submission measurement to `FUNNEL-MEASUREMENT-001`;
+- adding inquiry-originated site-snapshot retention to the production gate.
+
 ## Remaining gates
 
-1. Fable 5 writes `FABLE-ANALYSIS.md` on this branch, pinned to the exact author
-   result SHA, with exactly one terminal recommendation.
-2. ChatGPT reconciles the analysis against repository evidence.
-3. Tony's merge decision.
-4. Claude Code implementation of LEAD-CONTRACT-001 from the merged decision.
-5. Independent review and Tony merge of each runtime slice.
+1. Independent verification of the exact revised head.
+2. Tony's merge decision.
+3. Claude Code implementation of LEAD-CONTRACT-001 from the merged decision.
+4. Independent review and Tony merge of each runtime slice.
 
 This outcome records commercial architecture. It does not certify feasibility
 for any parcel or authorize production lead collection.
