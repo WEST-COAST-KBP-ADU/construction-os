@@ -534,6 +534,17 @@ export function transitionFunnelState(command: unknown, priorEvents: readonly un
       typedPrior.push(prior as FunnelEvent);
     }
 
+    if (typedPrior.length > 0) {
+      if (typedPrior.some((event) => event.journey_id !== typedCommand.journey_id)) {
+        return { ok: false, reason_code: "journey_mismatch" };
+      }
+      for (let index = 1; index < typedPrior.length; index += 1) {
+        if (typedPrior[index].from_state !== typedPrior[index - 1].to_state) {
+          return { ok: false, reason_code: "prior_ledger_discontinuity" };
+        }
+      }
+    }
+
     const sameIdempotency = typedPrior.find((event) => event.idempotency_key === typedCommand.idempotency_key);
     if (sameIdempotency) {
       return sameEvent(sameIdempotency, typedCommand)
@@ -541,6 +552,13 @@ export function transitionFunnelState(command: unknown, priorEvents: readonly un
         : { ok: false, reason_code: "idempotency_conflict" };
     }
     if (typedPrior.some((event) => event.event_id === typedCommand.event_id)) return { ok: false, reason_code: "duplicate_event_id" };
+    if (typedPrior.length > 0) {
+      const currentState = typedPrior[typedPrior.length - 1].to_state;
+      if (TERMINAL_FUNNEL_STATES.includes(currentState as (typeof TERMINAL_FUNNEL_STATES)[number])) {
+        return { ok: false, reason_code: "terminal_state_transition_forbidden" };
+      }
+      if (typedCommand.from_state !== currentState) return { ok: false, reason_code: "from_state_discontinuity" };
+    }
     if (TERMINAL_FUNNEL_STATES.includes(typedCommand.from_state as (typeof TERMINAL_FUNNEL_STATES)[number])) return { ok: false, reason_code: "terminal_state_transition_forbidden" };
 
     const rule = PERMITTED_TRANSITIONS.find((candidate) => candidate.from === typedCommand.from_state && candidate.to === typedCommand.to_state);

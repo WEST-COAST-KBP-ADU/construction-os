@@ -127,6 +127,21 @@ function event(overrides: Partial<FunnelEvent> = {}): FunnelEvent {
   };
 }
 
+function transitionEvent(from: FunnelEvent["from_state"], to: FunnelEvent["to_state"], suffix: string): FunnelEvent {
+  const rule = PERMITTED_TRANSITIONS.find((entry) => entry.from === from && entry.to === to);
+  if (!rule) throw new Error(`Missing transition fixture for ${from} -> ${to}`);
+  return event({
+    event_id: `event_${suffix.padEnd(16, "0")}`,
+    idempotency_key: `idem_${suffix.padEnd(16, "0")}`,
+    lead_candidate_id: ["property_intent", "screening_candidate"].includes(to) ? null : IDS.lead,
+    from_state: from,
+    to_state: to,
+    actor_type: rule.actor,
+    authority_basis: rule.basis,
+    reason_code: rule.reason,
+  });
+}
+
 function deepFreeze<T>(value: T): T {
   if (value && typeof value === "object" && !Object.isFrozen(value)) {
     Object.freeze(value);
@@ -311,6 +326,44 @@ describe("deterministic funnel transition", () => {
     }
   });
 
+  it("rejects a fabricated stage skip against the ledger-derived current state", () => {
+    const prior = transitionEvent("anonymous_visit", "property_intent", "priorstage");
+    const command = transitionEvent("proposal", "won", "fabricatedstage");
+    expect(transitionFunnelState(command, [prior])).toEqual({ ok: false, reason_code: "from_state_discontinuity" });
+  });
+
+  it.each([
+    ["won", "proposal", "won", "proposal", "lost"],
+    ["lost", "proposal", "lost", "proposal", "won"],
+    ["rejected", "owner_review_required", "rejected", "owner_review_required", "approved_for_contact"],
+    ["archived", "owner_review_required", "archived", "owner_review_required", "approved_for_contact"],
+  ] as const)("enforces ledger-derived terminality for %s", (_terminal, priorFrom, priorTo, commandFrom, commandTo) => {
+    const prior = transitionEvent(priorFrom, priorTo, `prior${priorTo}`);
+    const command = transitionEvent(commandFrom, commandTo, `after${priorTo}`);
+    expect(transitionFunnelState(command, [prior])).toEqual({ ok: false, reason_code: "terminal_state_transition_forbidden" });
+  });
+
+  it("rejects a command from a different journey", () => {
+    const prior = transitionEvent("anonymous_visit", "property_intent", "samejourney");
+    const command = {
+      ...transitionEvent("property_intent", "screening_candidate", "otherjourney"),
+      journey_id: "journey_ffffffffffffffff",
+    };
+    expect(transitionFunnelState(command, [prior])).toEqual({ ok: false, reason_code: "journey_mismatch" });
+  });
+
+  it("rejects a discontinuous prior ledger before an idempotent replay", () => {
+    const first = transitionEvent("anonymous_visit", "property_intent", "ledgerfirst");
+    const broken = transitionEvent("screening_candidate", "lead_candidate", "ledgerbroken");
+    expect(transitionFunnelState(structuredClone(broken), [first, broken])).toEqual({ ok: false, reason_code: "prior_ledger_discontinuity" });
+  });
+
+  it("accepts a same-journey continuation from the ledger-derived current state", () => {
+    const prior = transitionEvent("anonymous_visit", "property_intent", "validprior");
+    const command = transitionEvent("property_intent", "screening_candidate", "validnext");
+    expect(transitionFunnelState(command, [prior])).toEqual({ ok: true, event: command, idempotent_replay: false });
+  });
+
   it("rejects technical reference_consistent as transition authority", () => {
     const command = { ...event({
       lead_candidate_id: IDS.lead,
@@ -352,6 +405,15 @@ describe("deterministic funnel transition", () => {
     expect(JSON.stringify(command)).toBe(before);
     expect(now).not.toHaveBeenCalled();
     now.mockRestore();
+  });
+
+  it("does not mutate a deeply frozen command or prior ledger", () => {
+    const prior = deepFreeze(transitionEvent("anonymous_visit", "property_intent", "frozenprior"));
+    const command = deepFreeze(transitionEvent("property_intent", "screening_candidate", "frozencommand"));
+    const ledger = deepFreeze([prior] as const);
+    const before = JSON.stringify({ command, ledger });
+    expect(transitionFunnelState(command, ledger)).toEqual({ ok: true, event: command, idempotent_replay: false });
+    expect(JSON.stringify({ command, ledger })).toBe(before);
   });
 
   it("never throws for malformed commands or prior events", () => {
