@@ -21,6 +21,6 @@ Lifecycle: `draft → owner_review → approved → in_progress → done` (or
 | [TASK-0011](TASK-0011-city-and-resource-pages.md) | City pages and resources — **deprioritized to last** (owner, 2026-08-04) | approved | 2026-08-03 |
 | [TASK-0012](TASK-0012-phase-0-governance-disposition.md) | Record the bounded Phase 0 lead-generation disposition | done | 2026-08-04 |
 | [TASK-0013](TASK-0013-studio-spike-no-pii.md) | Concept studio spike — no PII, no capture, 2D-first | in_progress | 2026-08-04 |
+| [TASK-0014](TASK-0014-dual-lane-github-coordination.md) | Dual-lane GitHub Issue coordination | in_progress | 2026-08-06 |
 
 Builder entry point: [HANDOVER-portal-v1.md](HANDOVER-portal-v1.md)
-
