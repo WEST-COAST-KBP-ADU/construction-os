@@ -17,13 +17,14 @@
   --color-forest-deep: #171b1a;
   --color-forest-deep-surface: #171b1a;
   --color-forest-soft: #e8e2d8;
-  --color-gold: #a9713c;
+  --color-gold: #b17a45;
   --color-gold-deep: #714820;
   --color-gold-soft: #efe3d2;
   --color-ink: #242826;
   --color-ink-muted: #5d6661;
   --color-ink-subtle: #737b76;
   --color-ink-inverse: #f8f6f1;
+  --color-ink-inverse-muted: #c8c5be;
   --color-line: #d6d0c5;
   --color-line-strong: #83796d;
   --color-success: #236544;
@@ -1372,6 +1373,7 @@
     --color-ink-muted: #c8ceca;
     --color-ink-subtle: #9ea6a1;
     --color-ink-inverse: #f8f6f1;
+    --color-ink-inverse-muted: #c8ceca;
     --color-line: #353b38;
     --color-line-strong: #707b75;
     --color-success: #8cc9a3;
@@ -2171,7 +2173,7 @@ a {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-ink-subtle);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-body-sm);
   font-weight: var(--font-weight-medium);
 }
@@ -2333,6 +2335,10 @@ a {
 
 .content-section--dark .content-section__eyebrow {
   color: var(--color-gold);
+}
+
+.content-section--dark .content-section__intro {
+  color: var(--color-ink-inverse-muted);
 }
 
 .content-section--dark .content-section__title {
