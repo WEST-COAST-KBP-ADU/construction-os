@@ -2676,11 +2676,13 @@ a {
   line-height: var(--line-height-heading);
 }
 
-@media (min-width: 42rem) {
+@media (min-width: 55rem) {
   .site-footer__navigation-groups {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
+@media (min-width: 42rem) {
   .hero__actions,
   .cta-actions {
     flex-direction: row;
