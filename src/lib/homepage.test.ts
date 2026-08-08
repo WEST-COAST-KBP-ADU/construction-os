@@ -73,11 +73,27 @@ describe("TASK-0010 residential homepage", () => {
       throw new Error("Residential Addition homepage card is missing.");
     }
 
+    expect(
+      linkedServices.map(({ slug, icon }) => ({ slug, icon })),
+    ).toEqual([
+      { slug: "detached-adu", icon: "detached" },
+      { slug: "garage-conversion", icon: "garage" },
+      { slug: "attached-adu", icon: "attached" },
+      { slug: "jadu", icon: "jadu" },
+    ]);
     expect(residentialAddition.id).toBe("residential-addition");
     expect(residentialAddition.title).toBe("Residential Addition");
+    expect(residentialAddition.icon).toBe("addition");
+    expect(residentialAddition.description).toContain("not yet published");
+    expect(residentialAddition.description).toContain("pending owner review");
     expect("href" in residentialAddition).toBe(false);
     expect(page).toContain("homepageServices.map");
-    expect(page).toContain('service.kind === "linked"');
+
+    const linkedCardRenderings = page.match(
+      /\{service\.kind === "linked" \? \(\s*<Link href=\{service\.href\} className="balanced-link">[\s\S]*?<\/Link>\s*\) : null\}/g,
+    );
+
+    expect(linkedCardRenderings).toHaveLength(1);
   });
 
   it("keeps service breadcrumbs connected to one homepage anchor", () => {
