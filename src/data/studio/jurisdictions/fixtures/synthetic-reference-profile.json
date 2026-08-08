@@ -1,0 +1,166 @@
+{
+  "schema": "jurisdiction-profile/1",
+  "jurisdiction_id": "synthetic-test-authority",
+  "authority_name": "Synthetic Test Authority (does not exist)",
+  "profile_version": "1.0.0",
+  "adoption": {
+    "status": "not_adopted",
+    "synthetic": true,
+    "notice": "Synthetic test-only fixture. This is not a real jurisdiction, is not derived from any official or municipal source, and is never adopted. Requires official source verification."
+  },
+  "code_cycle": {
+    "cycle_id": "synthetic-cycle-a",
+    "stated_by": "synthetic_fixture",
+    "effective_from": "2026-01-01",
+    "effective_to": null
+  },
+  "effective_window": {
+    "valid_from": "2026-01-01",
+    "valid_to": "2026-12-31",
+    "checked_at": "2026-08-01"
+  },
+  "sources": [
+    {
+      "source_id": "SYN-SRC-1",
+      "title": "Synthetic reference document A",
+      "locator": "fixture://synthetic-reference-profile/doc-a",
+      "retrieved_at": "2026-08-01T00:00:00Z",
+      "digest": null,
+      "accessible": true
+    },
+    {
+      "source_id": "SYN-SRC-2",
+      "title": "Synthetic reference document B",
+      "locator": "fixture://synthetic-reference-profile/doc-b",
+      "retrieved_at": "2026-08-01T00:00:00Z",
+      "digest": null,
+      "accessible": true
+    }
+  ],
+  "requirements": [
+    {
+      "requirement_id": "SYN-REQ-001",
+      "topic": "dimensional_envelope",
+      "subject": "gross_floor_area_sqft",
+      "subject_source": "model_configuration",
+      "operator": "lte",
+      "value": 800,
+      "unit": "sqft",
+      "applies_when": null,
+      "evidence": {
+        "source_id": "SYN-SRC-1",
+        "anchor": "section-1"
+      },
+      "effective_date": "2026-01-01",
+      "interpretation_note": "Synthetic area ceiling. Carries no regulatory meaning.",
+      "deterministic": true,
+      "requires_professional_interpretation": false
+    },
+    {
+      "requirement_id": "SYN-REQ-002",
+      "topic": "height",
+      "subject": "max_overall_height_ft",
+      "subject_source": "model_configuration",
+      "operator": "lte",
+      "value": 16,
+      "unit": "ft",
+      "applies_when": {
+        "subject": "stories",
+        "operator": "lte",
+        "value": 1
+      },
+      "evidence": {
+        "source_id": "SYN-SRC-1",
+        "anchor": "section-2"
+      },
+      "effective_date": "2026-01-01",
+      "interpretation_note": "Synthetic height ceiling for single-story only.",
+      "deterministic": true,
+      "requires_professional_interpretation": false
+    },
+    {
+      "requirement_id": "SYN-REQ-003",
+      "topic": "dimensional_envelope",
+      "subject": "footprint_width_ft",
+      "subject_source": "model_configuration",
+      "operator": "lte",
+      "value": 30,
+      "unit": "ft",
+      "applies_when": null,
+      "evidence": {
+        "source_id": "SYN-SRC-1",
+        "anchor": "section-3"
+      },
+      "effective_date": "2026-01-01",
+      "interpretation_note": "Synthetic width ceiling.",
+      "deterministic": true,
+      "requires_professional_interpretation": false
+    },
+    {
+      "requirement_id": "SYN-REQ-004",
+      "topic": "site",
+      "subject": "lot_area_sqft",
+      "subject_source": "site_fact",
+      "operator": "gte",
+      "value": 4000,
+      "unit": "sqft",
+      "applies_when": null,
+      "evidence": {
+        "source_id": "SYN-SRC-2",
+        "anchor": "section-4"
+      },
+      "effective_date": "2026-01-01",
+      "interpretation_note": "Synthetic minimum lot area. Requires a supplied site fact.",
+      "deterministic": true,
+      "requires_professional_interpretation": false
+    },
+    {
+      "requirement_id": "SYN-REQ-005",
+      "topic": "setback",
+      "subject": "rear_setback_ft",
+      "subject_source": "site_fact",
+      "operator": "gte",
+      "value": 4,
+      "unit": "ft",
+      "applies_when": null,
+      "evidence": {
+        "source_id": "SYN-SRC-2",
+        "anchor": "section-5"
+      },
+      "effective_date": "2026-01-01",
+      "interpretation_note": "Synthetic rear setback. Requires a supplied site fact.",
+      "deterministic": true,
+      "requires_professional_interpretation": false
+    }
+  ],
+  "submission": {
+    "checklist": [
+      "synthetic-item-a",
+      "synthetic-item-b"
+    ],
+    "forms": [
+      "SYN-FORM-1"
+    ],
+    "review_path": "synthetic reference path; carries no regulatory meaning",
+    "site_specific_inputs": [
+      "lot_area_sqft",
+      "rear_setback_ft"
+    ]
+  },
+  "limitations": {
+    "missing_facts": [],
+    "conflicts": [],
+    "inaccessible_evidence": [],
+    "interpretation_boundaries": [
+      "All values are invented for testing and must never be presented to a visitor."
+    ],
+    "blocking": false
+  },
+  "review": {
+    "reviewer": "synthetic_fixture",
+    "reviewed_at": "2026-08-01",
+    "currency_state": "current",
+    "currency_valid_to": "2026-12-31"
+  },
+  "disclaimer_version": "jd1"
+}
