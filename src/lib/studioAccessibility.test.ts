@@ -55,6 +55,7 @@ describe("Studio comparison accessibility", () => {
 
     expect(pageTokens).toBeDefined();
     expect(compareRule).toContain("background: var(--studio-accent-dark)");
+    expect(compareRule).toContain("color: white");
     expect(hoverRule).toContain("background: var(--studio-ink)");
 
     const restingBackground = token(pageTokens!, "--studio-accent-dark");
@@ -71,6 +72,10 @@ describe("Studio comparison accessibility", () => {
     expect(workbench).toMatch(
       /comparisonOpen\s*\?\s*\([\s\S]*?<section[\s\S]*?id="studio-comparison-panel"[\s\S]*?aria-labelledby="comparison-heading"/,
     );
+    expect(workbench).toContain(
+      "onClick={() => setComparisonOpen((open) => !open)}",
+    );
+    expect(workbench).toContain("onClick={() => setComparisonOpen(false)}");
     expect(workbench.match(/aria-controls="studio-comparison-panel"/g)).toHaveLength(1);
     expect(workbench.match(/id="studio-comparison-panel"/g)).toHaveLength(1);
   });
