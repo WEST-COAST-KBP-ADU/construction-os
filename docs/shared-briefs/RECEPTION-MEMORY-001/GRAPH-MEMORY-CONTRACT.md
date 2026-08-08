@@ -4,6 +4,10 @@
 
 Graph memory is a Product 2 data plane behind deterministic policy. It is not exposed to the model, public client, voice provider, or Product 1 runtime. Vector similarity may propose candidates; it never authorizes retrieval, linking, or identity.
 
+## Tenant model
+
+A tenant is one operating business boundary. At adoption exactly one tenant exists: West Coast KBP ADU. The tenant field provides structural isolation and future-proofing; a new tenant can be minted only by an owner-accepted decision record. No cross-tenant edge, read, context packet, proposed mutation, Deedseal request, or grant is expressible. A missing, unknown, or mismatched tenant refuses before traversal or disclosure.
+
 ## Node classes
 
 - `Subject`: opaque customer/person identity; PII lives only in a protected identity vault reference.
