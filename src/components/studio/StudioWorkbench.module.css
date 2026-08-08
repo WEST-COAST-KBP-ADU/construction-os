@@ -316,7 +316,7 @@
   min-height: 3rem;
   border: 1px solid var(--studio-accent-dark);
   border-radius: 0.25rem;
-  background: var(--studio-accent);
+  background: var(--studio-accent-dark);
   color: white;
   cursor: pointer;
   font-size: 0.78rem;
@@ -325,7 +325,7 @@
 }
 
 .compareButton:hover {
-  background: var(--studio-accent-dark);
+  background: var(--studio-ink);
 }
 
 .currentConfig {
