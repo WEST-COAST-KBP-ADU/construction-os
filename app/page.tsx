@@ -1,42 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { homepageServices, type HomepageServiceIcon } from "@/src/lib/homepageServices";
 import { buildBusinessJsonLd, serializeJsonLd } from "@/src/lib/structuredData";
 
-const servicePaths = [
-  {
-    title: "Detached ADU",
-    description: "Private, independent living space for family, guests, or multi-generational use.",
-    href: "/services/detached-adu",
-    icon: "detached",
-  },
-  {
-    title: "Garage Conversion",
-    description: "Transform underused space into comfortable, code-conscious living space.",
-    href: "/services/garage-conversion",
-    icon: "garage",
-  },
-  {
-    title: "Attached ADU",
-    description: "Connected space planned to work with the home's architecture and everyday flow.",
-    href: "/compare",
-    icon: "attached",
-  },
-  {
-    title: "JADU",
-    description: "A compact way to make more useful space within the home you already have.",
-    href: "/faq",
-    icon: "jadu",
-  },
-  {
-    title: "Residential Addition",
-    description: "More room, light, and function through an addition that belongs with the home.",
-    href: "/process",
-    icon: "addition",
-  },
-] as const;
-
-function ServiceIcon({ variant }: { variant: (typeof servicePaths)[number]["icon"] }) {
+function ServiceIcon({ variant }: { variant: HomepageServiceIcon }) {
   return (
     <svg className="balanced-service__icon" viewBox="0 0 64 52" aria-hidden="true">
       <path d="M5 48V18L32 5l27 13v30M5 48h54" />
@@ -90,7 +58,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="balanced-solutions" aria-labelledby="solutions-title">
+      <section id="services" className="balanced-solutions" aria-labelledby="solutions-title">
         <div className="portal-container balanced-solutions__intro">
           <div className="balanced-solutions__copy">
             <p className="balanced-kicker">Built for real California homes</p>
@@ -113,14 +81,19 @@ export default function Home() {
 
         <div className="portal-container">
           <ul className="balanced-services">
-            {servicePaths.map((service) => (
-              <li key={service.title} className="balanced-service">
+            {homepageServices.map((service) => (
+              <li
+                key={service.kind === "linked" ? service.slug : service.id}
+                className="balanced-service"
+              >
                 <ServiceIcon variant={service.icon} />
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
-                <Link href={service.href} className="balanced-link">
-                  Learn more <span aria-hidden="true">↗</span>
-                </Link>
+                {service.kind === "linked" ? (
+                  <Link href={service.href} className="balanced-link">
+                    Learn more <span aria-hidden="true">↗</span>
+                  </Link>
+                ) : null}
               </li>
             ))}
           </ul>
