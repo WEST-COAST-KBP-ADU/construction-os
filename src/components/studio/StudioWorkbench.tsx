@@ -319,6 +319,8 @@ export default function StudioWorkbench() {
         <button
           type="button"
           className={styles.compareButton}
+          aria-expanded={comparisonOpen}
+          aria-controls="studio-comparison-panel"
           onClick={() => setComparisonOpen((open) => !open)}
         >
           {comparisonOpen ? "Close comparison" : "Compare concepts"}
@@ -343,7 +345,11 @@ export default function StudioWorkbench() {
       <p className={styles.status} role="status" aria-live="polite">{status}</p>
 
       {comparisonOpen ? (
-        <section className={styles.comparisonPanel} aria-labelledby="comparison-heading">
+        <section
+          id="studio-comparison-panel"
+          className={styles.comparisonPanel}
+          aria-labelledby="comparison-heading"
+        >
           <div className={styles.comparisonHeader}>
             <div>
               <p>In-memory comparison</p>
