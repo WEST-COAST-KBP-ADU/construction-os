@@ -270,3 +270,103 @@ author commit invalidates it. Codex reconciles findings in the author-owned
 files; Tony alone accepts the architecture and merges.
 
 BLOCKED FOR REVISION
+
+*(Superseded by the Revision 1 re-review below. Retained as the record of the
+original verdict.)*
+
+---
+
+## 8. Revision 1 re-review — closure
+
+| Item | Value |
+| :-- | :-- |
+| **Exact author revision SHA** | `c2baf22d8be3b34584ec3aad3e9c7b98d99a6d60` |
+| Previously reviewed author SHA | `0f6b34abee50b0e4b9068837a9c54934a2113d0d` |
+| Reviewer file at prior verdict | `51e628627864993de340638346d8ca8a2086c7a2` — verified ancestor of the revision |
+| Revision scope | exactly `DECISION.md` (+3/−2) and `GRAPH-MEMORY-CONTRACT.md` (+4/−0); **+7/−2 total** |
+| `FABLE-ANALYSIS.md` | **untouched by the author** — verified by path-scoped diff; the reviewer file remains reviewer-owned |
+| Merge simulation vs `main@9df7937` | clean, zero conflicts |
+| Reviewer non-authorship | unchanged: I authored none of the six author files; my only artifact is this analysis |
+
+### F-1 — CLOSED
+
+The author took the second of the two offered corrections: the supersession
+claim is withdrawn rather than deferred. `DECISION.md:5-6` now reads that
+DR-0016 **remains operative** for public automated voice, that this
+architecture *prepares* EN/ES/RU without changing public voice policy, and
+that any public EN/ES/RU voice activation must carry an owner-accepted record
+explicitly amending or superseding DR-0016.
+
+The fix went further than the header line, which is what makes it a real
+closure rather than a patch: the body prose at `DECISION.md:16` was also
+corrected from "Public conversational service supports English, Spanish, and
+Russian…" to "The architecture **targets** conversational service in English,
+Spanish, and Russian… DR-0016 remains operative… until the separate
+public-voice activation gate adopts the required superseding or amending
+decision record." Had only the header changed, the body would have carried the
+same contradiction into merged `main`.
+
+**Residual-contradiction sweep across all six author files:** every remaining
+EN/ES/RU reference is now in a preparation, test, or gate context —
+`BRIEF.md:24` states DR-0016's English-only rule as current fact,
+`OUTCOME.md:33` scopes EN/ES/RU to Slice 4 synthetic test cases,
+`OUTCOME.md:41` to Slice 6 provider quality evaluation, and `OUTCOME.md:57` to
+a *separate owner gate* for public EN/ES/RU voice. No file asserts an active
+public language policy. The only surviving "supersede" matches are the graph's
+own `supersedes` edge class and its correction semantics, which are unrelated.
+Merging this packet no longer places two contradictory language policies on
+`main`.
+
+### F-2 — CLOSED
+
+`GRAPH-MEMORY-CONTRACT.md` §Tenant model now defines the term before first
+use: one operating business boundary; exactly one tenant at adoption (West
+Coast KBP ADU); the field is structural isolation and future-proofing; a new
+tenant may be minted only by an owner-accepted decision record; no
+cross-tenant edge, read, context packet, proposed mutation, Deedseal request,
+or grant is expressible.
+
+The author added one guarantee beyond what was requested — "A missing,
+unknown, or mismatched tenant refuses before traversal or disclosure" — which
+fixes the *ordering* of the check, not merely its existence. That closes the
+narrow window in which a tenant mismatch could have been detected after a
+traversal had already touched data. Every prior tenant reference
+(`DECISION.md:31` invariant 8, `GRAPH-MEMORY-CONTRACT.md:30` edge fields,
+`:40` read binding, `:69` negative probes, `DEEDSEAL-INTEGRATION-BOUNDARY.md:35`
+request binding, `OUTCOME.md:25` Slice 2) is now anchored to a definition, so
+Slice 1 can freeze schemas containing `tenant` without a later definition
+reopening them.
+
+### Regression check — none
+
+`OUTCOME.md` is byte-unchanged: the ten-slice plan (Slices 0–10, eleven
+headings) is intact, and the critical path — Slices 0–4 as Product 2 contract
+work while Product 1 finishes, Slice 5 and every live effect behind the
+Product 1 fork gate, Slices 6–10 behind provider, privacy, security, and owner
+activation — is unaltered. `RECEPTION-CONTRACT.md` and
+`DEEDSEAL-INTEGRATION-BOUNDARY.md` are untouched. Nothing in the twelve attack
+areas that held at `0f6b34a` was weakened: the revision only removed a false
+claim and added a missing definition.
+
+### Observations still open
+
+O-1 through O-7 from §5 were non-blocking and are not addressed by this
+revision, correctly — they are Slice 1/2/4/9 acceptance items rather than
+architecture defects. They stand as written: `AuthorizationEdge` naming,
+context-packet TTL versus revocation of in-flight packets, co-participant
+project authorization, constant-shape identity responses against timing
+enumeration, the Deedseal evidence pseudonymity statement, per-language human
+fallback capacity, and the OUTCOME note settling parallel contract work
+against the Product 1 decision's intent.
+
+### Closure verdict
+
+Both blocking findings are fully closed, the corrections are precise and go
+one step past the minimum in both cases, and no previously accepted property
+regressed. Slice 1 can now be cut without reopening architecture.
+
+Closure pins to author revision SHA
+`c2baf22d8be3b34584ec3aad3e9c7b98d99a6d60`; any new author commit invalidates
+it. Tony alone accepts the architecture and merges PR #75.
+
+NO BLOCKING FINDING
