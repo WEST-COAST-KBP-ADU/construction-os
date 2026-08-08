@@ -101,8 +101,8 @@ describe("portal visual-system regressions", () => {
     expect(stylesheet).toMatch(
       /\.development-notice__supporting\s*\{[\s\S]*?color:\s*var\(--color-ink-muted\)/,
     );
-    expect(stylesheet).toMatch(
-      /\.breadcrumb\s*\{[\s\S]*?color:\s*var\(--color-ink-muted\)/,
+    expect(stylesheet).toContain(
+      ".breadcrumb {\n  display: flex;\n  align-items: center;\n  gap: var(--space-2);\n  color: var(--color-ink-muted);",
     );
     expect(stylesheet).toMatch(
       /\.content-section--dark \.content-section__intro\s*\{[\s\S]*?color:\s*var\(--color-ink-inverse-muted\)/,
