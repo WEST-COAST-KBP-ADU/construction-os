@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import ContentHero from "@/src/components/content/ContentHero";
 import FaqSection from "@/src/components/content/FaqSection";
 import IndexedGrid from "@/src/components/content/IndexedGrid";
+import JourneyExit from "@/src/components/content/JourneyExit";
 import { contentPageLabels, processPage } from "@/src/lib/contentPages";
 import { buildProcessPageJsonLd, serializeJsonLd } from "@/src/lib/structuredData";
 
@@ -82,6 +83,7 @@ export default function ProcessRoute() {
       </section>
 
       <FaqSection items={processPage.faq} />
+      <JourneyExit route="process" />
     </main>
   );
 }

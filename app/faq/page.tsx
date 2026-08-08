@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import ContentHero from "@/src/components/content/ContentHero";
+import JourneyExit from "@/src/components/content/JourneyExit";
 import { contentPageLabels, faqPage } from "@/src/lib/contentPages";
 import { buildFaqPageJsonLd, serializeJsonLd } from "@/src/lib/structuredData";
 
@@ -84,6 +85,8 @@ export default function FaqRoute() {
           </div>
         </section>
       ))}
+
+      <JourneyExit route="faq" />
     </main>
   );
 }
