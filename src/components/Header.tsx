@@ -23,7 +23,7 @@ export default function Header() {
     <header className="site-header">
       <div className="portal-container site-header__inner">
         <Link href="/" className="brand" aria-label={accessibility.brandHomeLabel}>
-          <span className="brand__mark" aria-hidden="true">WK</span>
+          <span className="brand-seal" aria-hidden="true"><span /></span>
           <span className="brand__wordmark">
             <span className="brand__name">{name}</span>
             <span className="brand__tagline">{tagline}</span>
