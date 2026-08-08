@@ -5,6 +5,10 @@ import { describe, expect, it } from "vitest";
 
 const stylesheet = readFileSync(resolve(process.cwd(), "app/globals.css"), "utf8");
 const compareRoute = readFileSync(resolve(process.cwd(), "app/compare/page.tsx"), "utf8");
+const studioStylesheet = readFileSync(
+  resolve(process.cwd(), "src/components/studio/StudioWorkbench.module.css"),
+  "utf8",
+);
 
 function hexToLuminance(hex: string): number {
   const channels = hex
@@ -138,7 +142,34 @@ describe("portal visual-system regressions", () => {
 
     expect(stylesheet).toContain(":where(a, button, summary):focus-visible");
     expect(stylesheet).toContain(
-      "box-shadow: 0 0 0 0.125rem var(--color-focus-contrast);",
+      ":is(a, button, summary):focus-visible:not([disabled])",
     );
+    expect(stylesheet).toContain(
+      "box-shadow: 0 0 0 0.125rem var(--color-focus-contrast) !important;",
+    );
+    expect(stylesheet).toContain(
+      'button[aria-pressed="true"]:focus-visible:not([disabled]):not([style*="--swatch-color"])',
+    );
+    expect(stylesheet).toContain(
+      "inset 0 0 0 0.0625rem var(--studio-accent, var(--color-gold-deep)),",
+    );
+    expect(stylesheet).toContain(
+      'button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled])',
+    );
+    expect(stylesheet).toContain(
+      "0 0 0 0.3125rem var(--color-focus-contrast) !important;",
+    );
+    expect(studioStylesheet).toMatch(
+      /\.optionSelected\s*\{[\s\S]*?box-shadow:\s*inset 0 0 0 1px var\(--studio-accent\)/,
+    );
+    expect(studioStylesheet).toMatch(
+      /\.swatch\.optionSelected\s*\{[\s\S]*?box-shadow:\s*0 0 0 2px var\(--studio-paper\), 0 0 0 3px var\(--studio-accent\)/,
+    );
+    expect(
+      stylesheet.lastIndexOf(
+        ":is(a, button, summary):focus-visible:not([disabled])",
+      ),
+    ).toBeGreaterThan(stylesheet.indexOf(".development-notice__supporting"));
+  });
   });
 });
