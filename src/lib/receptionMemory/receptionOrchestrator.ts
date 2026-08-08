@@ -53,6 +53,7 @@ export const ORCHESTRATOR_REFUSAL_CODES = Object.freeze([
   "invalid_transition", "terminal_state", "disclosure_required",
   "consent_required", "consent_scope_widening", "identity_required",
   "identity_scope_widening", "context_scope_required",
+  "context_scope_mismatch",
   "policy_request_required", "policy_request_widening", "lifecycle_command_required",
   "lifecycle_command_widening", "invalid_orchestrator_state",
   "invalid_semantic_fixture_shape", "unknown_semantic_token", "mixed_locale_tokens",
@@ -122,6 +123,7 @@ export type ReceptionOrchestratorSuccess = Readonly<{
   semantic_digest: string;
   evidence: ReceptionEvidence;
   context_packet: ContextPacket | null;
+  context_policy_request: ContextPolicyRequest | null;
   lifecycle_state: MemoryLifecycleState;
 }>;
 export type ReceptionOrchestratorFailure = Readonly<{ ok: false; reason_code: OrchestratorRefusalCode }>;
@@ -140,7 +142,7 @@ const REQUEST_KEYS = ["schema", "request_id", "tenant_id", "subject_id", "projec
 const SEMANTIC_KEYS = ["intent", "subject_slot", "project_slot", "purpose_slot"] as const;
 const FIXTURE_KEYS = ["schema", "locale", "intent_token", "subject_token", "project_token", "purpose_token"] as const;
 const STATE_KEYS = ["reception_state", "last_request_id", "last_request_digest", "last_result"] as const;
-const RESULT_SHELL_KEYS = ["ok", "schema", "request_digest", "semantic_digest", "evidence", "context_packet", "lifecycle_state"] as const;
+const RESULT_SHELL_KEYS = ["ok", "schema", "request_digest", "semantic_digest", "evidence", "context_packet", "context_policy_request", "lifecycle_state"] as const;
 const EVIDENCE_KEYS = ["schema", "request_id", "request_digest", "semantic_digest", "tenant_id", "subject_id", "session_id", "from_state", "to_state", "outcome", "occurred_at"] as const;
 const ID = /^[a-z][a-z0-9_]{2,95}$/;
 const DIGEST = /^sha256:[a-f0-9]{64}$/;
@@ -218,7 +220,9 @@ function validCachedResult(value: unknown): value is Omit<ReceptionOrchestratorS
     typeof value.semantic_digest === "string" && DIGEST.test(value.semantic_digest) &&
     validEvidence(value.evidence) && value.evidence.request_digest === value.request_digest &&
     value.evidence.semantic_digest === value.semantic_digest &&
-    (value.context_packet === null || (plain(value.context_packet) && canonicalData(value.context_packet))) &&
+    ((value.context_packet === null && value.context_policy_request === null) ||
+      (plain(value.context_packet) && canonicalData(value.context_packet) &&
+        plain(value.context_policy_request) && canonicalData(value.context_policy_request))) &&
     plain(value.lifecycle_state) && canonicalData(value.lifecycle_state);
 }
 
@@ -320,6 +324,7 @@ async function evaluateRequest(
   lifecycleState: MemoryLifecycleState,
   requestDigest: string,
   priorContext: ContextPacket | null,
+  priorPolicyRequest: ContextPolicyRequest | null,
 ): Promise<Readonly<{ ok: true; shell: Omit<ReceptionOrchestratorSuccess, "state"> }> | ReceptionOrchestratorFailure> {
   const sequenceProblem = sequenceFailure(request);
   if (sequenceProblem) return fail(sequenceProblem);
@@ -360,6 +365,7 @@ async function evaluateRequest(
   }
 
   let contextPacket: ContextPacket | null = null;
+  let contextPolicyRequest: ContextPolicyRequest | null = null;
   let nextLifecycle = frozen(structuredClone(lifecycleState));
   if (request.semantic.intent === "retrieve_context") {
     if (request.policy_request === null || activeIdentity === null || activeConsent === null) return fail("policy_request_required");
@@ -390,11 +396,12 @@ async function evaluateRequest(
     });
     if (!checkedPacket.ok) return fail(checkedPacket.reason_code);
     contextPacket = checkedPacket.value;
+    contextPolicyRequest = frozen(structuredClone(request.policy_request));
   } else if (request.policy_request !== null) return fail("policy_request_widening");
 
   if (request.semantic.intent === "apply_memory_effect") {
     if (request.lifecycle_command === null || activeIdentity === null || activeConsent === null) return fail("lifecycle_command_required");
-    if (priorContext === null) return fail("context_scope_required");
+    if (priorContext === null || priorPolicyRequest === null) return fail("context_scope_required");
     const gate = authorizeMemoryRetrieval(lifecycleState, {
       tenant_id: request.tenant_id,
       subject_id: request.subject_id,
@@ -419,7 +426,18 @@ async function evaluateRequest(
       evaluated_at: request.evaluated_at,
     });
     if (!scoped.ok) return fail(scoped.reason_code);
-    contextPacket = scoped.value;
+    const rederived = await assembleCanonicalContextPacket(
+      graph,
+      priorPolicyRequest,
+      activeIdentity,
+      activeConsent,
+    );
+    if (!rederived.ok) return fail(rederived.reason_code);
+    if (rederived.value.packet_digest !== scoped.value.packet_digest) {
+      return fail("context_scope_mismatch");
+    }
+    contextPacket = rederived.value;
+    contextPolicyRequest = frozen(structuredClone(priorPolicyRequest));
     const lifecycle = await executeMemoryLifecycleCommand(lifecycleState, request.lifecycle_command, activeIdentity, activeConsent);
     if (!lifecycle.ok) return fail(lifecycle.reason_code);
     nextLifecycle = lifecycle.state;
@@ -427,7 +445,7 @@ async function evaluateRequest(
 
   const semanticDigest = await computeSemanticDigest(request.semantic);
   const evidence = frozen({ schema: RECEPTION_EVIDENCE_SCHEMA, request_id: request.request_id, request_digest: requestDigest, semantic_digest: semanticDigest, tenant_id: TENANT_ID, subject_id: request.subject_id, session_id: request.session_id, from_state: request.from_state, to_state: request.to_state, outcome: "accepted" as const, occurred_at: request.evaluated_at });
-  const shell = frozen({ ok: true as const, schema: RECEPTION_RESULT_SCHEMA, request_digest: requestDigest, semantic_digest: semanticDigest, evidence, context_packet: contextPacket, lifecycle_state: nextLifecycle });
+  const shell = frozen({ ok: true as const, schema: RECEPTION_RESULT_SCHEMA, request_digest: requestDigest, semantic_digest: semanticDigest, evidence, context_packet: contextPacket, context_policy_request: contextPolicyRequest, lifecycle_state: nextLifecycle });
   return frozen({ ok: true as const, shell });
 }
 
@@ -444,6 +462,7 @@ export async function orchestrateReception(
       if (tenant && "value" in tenant && tenant.value !== TENANT_ID) return fail("invalid_tenant");
     }
     if (!exact(requestInput, REQUEST_KEYS)) return fail("invalid_request_shape");
+    if (!canonicalData(requestInput)) return fail("invalid_request_shape");
     const request = requestInput as unknown as ReceptionOrchestrationRequest;
     if (request.schema !== RECEPTION_REQUEST_SCHEMA) return fail("invalid_schema");
     if (!ID.test(request.request_id)) return fail("invalid_request_id");
@@ -470,7 +489,15 @@ export async function orchestrateReception(
     } else if (stateInput.reception_state !== request.from_state) return fail("invalid_transition");
 
     const priorContext = stateInput.last_result?.context_packet ?? null;
-    const evaluated = await evaluateRequest(request, graph, lifecycleState, requestDigest, priorContext);
+    const priorPolicyRequest = stateInput.last_result?.context_policy_request ?? null;
+    const evaluated = await evaluateRequest(
+      request,
+      graph,
+      lifecycleState,
+      requestDigest,
+      priorContext,
+      priorPolicyRequest,
+    );
     if (!evaluated.ok) return evaluated;
     if (replay && stateInput.last_result !== null &&
         await computeDigest(stateInput.last_result) !== await computeDigest(evaluated.shell)) return fail("semantic_replay_mismatch");

@@ -45,6 +45,7 @@ const IDS = Object.freeze({
   otherSubjectNode: "node_gggggggggggggggg",
   sharedSummaryNode: "node_hhhhhhhhhhhhhhhh",
   authorizationNode: "node_iiiiiiiiiiiiiiii",
+  otherProjectNode: "node_jjjjjjjjjjjjjjjj",
   sourceA: "source_aaaaaaaaaaaaaaaa",
   sourceB: "source_bbbbbbbbbbbbbbbb",
 });
@@ -522,6 +523,66 @@ describe("traversal exclusions and participant authority", () => {
     if (!result.ok) return;
     expect(result.value.edges.some((entry) => entry.kind === "disputes")).toBe(false);
     expect(result.value.exclusions).toContain("excluded_non_allowlisted_edge");
+  });
+
+  it("excludes a connected project outside the exact project binding", async () => {
+    const graph = projectGraph();
+    edgeCounter = 20;
+    const withOtherProject = {
+      ...graph,
+      nodes: [
+        ...graph.nodes,
+        node(IDS.otherProjectNode, "project", {
+          project_id: IDS.otherProject,
+        }),
+      ],
+      edges: [
+        ...graph.edges,
+        edge(
+          IDS.primarySubjectNode,
+          IDS.otherProjectNode,
+          "participates_in_project",
+        ),
+      ],
+    };
+    const result = await assembleCanonicalContextPacket(
+      withOtherProject,
+      request(),
+      identity(),
+      consent(),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(
+      result.value.nodes.some(
+        (entry) => entry.node_id === IDS.otherProjectNode,
+      ),
+    ).toBe(false);
+    expect(result.value.exclusions).toContain("excluded_other_project");
+  });
+
+  it("excludes allowlisted edges that are inactive at evaluation time", async () => {
+    const graph = projectGraph();
+    const withInactivePropertyEdge = {
+      ...graph,
+      edges: graph.edges.map((entry) =>
+        entry.kind === "associated_with_property"
+          ? { ...entry, valid_until: "2026-08-08T07:01:00Z" }
+          : entry,
+      ),
+    };
+    const result = await assembleCanonicalContextPacket(
+      withInactivePropertyEdge,
+      request(),
+      identity(),
+      consent(),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(
+      result.value.nodes.some((entry) => entry.node_id === IDS.propertyNode),
+    ).toBe(false);
+    expect(result.value.exclusions).toContain("excluded_inactive_edge");
   });
 
   it("excludes a co-participant node without explicit grant and edge", async () => {
