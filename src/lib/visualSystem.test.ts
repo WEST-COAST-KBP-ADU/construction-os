@@ -76,11 +76,16 @@ describe("portal visual-system regressions", () => {
       const surface = token(tokens, "--color-surface");
       const mutedSurface = token(tokens, "--color-surface-muted");
       const mutedInk = token(tokens, "--color-ink-muted");
+      const inverseMutedInk = token(tokens, "--color-ink-inverse-muted");
       const headingInk = token(tokens, "--color-forest-deep");
+      const darkSurface = token(tokens, "--color-forest-deep-surface");
+      const bronze = token(tokens, "--color-gold");
 
       expect(contrastRatio(mutedInk, surface)).toBeGreaterThanOrEqual(4.5);
       expect(contrastRatio(mutedInk, mutedSurface)).toBeGreaterThanOrEqual(4.5);
       expect(contrastRatio(headingInk, mutedSurface)).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(inverseMutedInk, darkSurface)).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(bronze, darkSurface)).toBeGreaterThanOrEqual(4.5);
     }
 
     expect(stylesheet).toMatch(
@@ -91,6 +96,12 @@ describe("portal visual-system regressions", () => {
     );
     expect(stylesheet).toMatch(
       /\.development-notice__supporting\s*\{[\s\S]*?color:\s*var\(--color-ink-muted\)/,
+    );
+    expect(stylesheet).toMatch(
+      /\.breadcrumb\s*\{[\s\S]*?color:\s*var\(--color-ink-muted\)/,
+    );
+    expect(stylesheet).toMatch(
+      /\.content-section--dark \.content-section__intro\s*\{[\s\S]*?color:\s*var\(--color-ink-inverse-muted\)/,
     );
   });
 
