@@ -8,6 +8,7 @@ import {
   processPage,
   servicePages,
   serviceSlugs,
+  type FaqItem,
 } from "./contentPages";
 import {
   buildAboutPageJsonLd,
@@ -85,7 +86,7 @@ describe("TASK-0008 service and trust content", () => {
   });
 
   it("publishes the approved FAQ themes without weakening verification language", () => {
-    const items = faqPage.groups.flatMap((group) => group.items);
+    const items = faqPage.groups.flatMap<FaqItem>((group) => group.items);
 
     expect(faqPage.groups).toHaveLength(3);
     expect(items).toHaveLength(9);
