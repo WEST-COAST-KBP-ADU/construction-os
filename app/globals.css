@@ -2073,6 +2073,11 @@ a {
   width: fit-content;
 }
 
+.site-footer__navigation-groups .footer__navigation {
+  width: auto;
+  min-width: 0;
+}
+
 .footer__links {
   display: grid;
   gap: var(--space-2);
