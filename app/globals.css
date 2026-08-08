@@ -25,14 +25,15 @@
   --color-ink-subtle: #737b76;
   --color-ink-inverse: #f8f6f1;
   --color-line: #d6d0c5;
-  --color-line-strong: #b8afa2;
+  --color-line-strong: #83796d;
   --color-success: #236544;
   --color-success-soft: #e0f0e5;
-  --color-warning: #714820;
-  --color-warning-soft: #efe3d2;
+  --color-warning: #8a3f0a;
+  --color-warning-soft: #f7e3ca;
   --color-danger: #8b3636;
   --color-danger-soft: #f9e7e5;
-  --color-focus: #714820;
+  --color-focus: #1a708f;
+  --color-focus-contrast: #f8f6f1;
 
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-source-serif), serif;
@@ -1372,14 +1373,15 @@
     --color-ink-subtle: #9ea6a1;
     --color-ink-inverse: #f8f6f1;
     --color-line: #353b38;
-    --color-line-strong: #59625d;
+    --color-line-strong: #707b75;
     --color-success: #8cc9a3;
     --color-success-soft: #183c2b;
-    --color-warning: #e2b988;
-    --color-warning-soft: #3b2c1e;
+    --color-warning: #ffb061;
+    --color-warning-soft: #42290f;
     --color-danger: #efabab;
     --color-danger-soft: #482728;
-    --color-focus: #e2b988;
+    --color-focus: #57c7d4;
+    --color-focus-contrast: #f8f6f1;
     --shadow-card: 0 0.75rem 2.5rem rgb(0 0 0 / 0.22);
     --shadow-card-hover: 0 1.25rem 3.25rem rgb(0 0 0 / 0.34);
     --shadow-panel: 0 1.5rem 4.5rem rgb(0 0 0 / 0.4);
@@ -1418,9 +1420,10 @@ a {
   text-decoration: none;
 }
 
-:where(a, button):focus-visible {
+:where(a, button, summary):focus-visible {
   outline: var(--focus-outline-width) solid var(--color-focus);
   outline-offset: var(--focus-outline-offset);
+  box-shadow: 0 0 0 0.125rem var(--color-focus-contrast);
 }
 
 ::selection {
@@ -1476,7 +1479,7 @@ a {
 }
 
 .brand__tagline {
-  color: var(--color-ink-subtle);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
@@ -2961,7 +2964,7 @@ a {
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-forest);
+  color: var(--color-forest-deep);
   white-space: nowrap;
 }
 
@@ -2972,5 +2975,5 @@ a {
 }
 
 .development-notice__supporting {
-  color: var(--color-ink-subtle);
+  color: var(--color-ink-muted);
 }
