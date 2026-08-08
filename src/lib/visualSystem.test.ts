@@ -171,5 +171,4 @@ describe("portal visual-system regressions", () => {
       ),
     ).toBeGreaterThan(stylesheet.indexOf(".development-notice__supporting"));
   });
-  });
 });
