@@ -1425,7 +1425,6 @@ a {
 :where(a, button, summary):focus-visible {
   outline: var(--focus-outline-width) solid var(--color-focus);
   outline-offset: var(--focus-outline-offset);
-  box-shadow: 0 0 0 0.125rem var(--color-focus-contrast);
 }
 
 ::selection {
@@ -2982,4 +2981,26 @@ a {
 
 .development-notice__supporting {
   color: var(--color-ink-muted);
+}
+
+/* DESIGN-003: compose the focus ring after component shadows. The focused
+ * declaration is intentionally important so local CTA and Studio shadows
+ * cannot remove the contrast layer. Selected Studio states are recomposed
+ * below so their meaning remains visible while focused. */
+:is(a, button, summary):focus-visible:not([disabled]) {
+  box-shadow: 0 0 0 0.125rem var(--color-focus-contrast) !important;
+}
+
+button[aria-pressed="true"]:focus-visible:not([disabled]):not([style*="--swatch-color"]) {
+  box-shadow:
+    inset 0 0 0 0.0625rem var(--studio-accent, var(--color-gold-deep)),
+    0 0 0 0.125rem var(--color-focus-contrast) !important;
+}
+
+button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled]) {
+  outline-offset: 0.375rem;
+  box-shadow:
+    0 0 0 0.125rem var(--studio-paper, var(--color-surface)),
+    0 0 0 0.1875rem var(--studio-accent, var(--color-gold-deep)),
+    0 0 0 0.3125rem var(--color-focus-contrast) !important;
 }
