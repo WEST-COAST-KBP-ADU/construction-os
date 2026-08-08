@@ -2,7 +2,8 @@
 
 - Status: **PROPOSED — FABLE REVIEW AND OWNER ACCEPTANCE REQUIRED**
 - Architecture Issue: #74
-- Supersedes on acceptance: DR-0016 only for the public EN/ES/RU language direction; DR-0004 and BOUNDARIES only through later privacy/retention activation records
+- Current policy: DR-0016 remains operative for public automated voice; this architecture prepares EN/ES/RU but does not change public voice policy
+- Required future record: any public EN/ES/RU voice activation must include an owner-accepted decision record that explicitly amends or supersedes DR-0016; DR-0004 and BOUNDARIES change only through later privacy/retention activation records
 - Does not activate production behavior
 
 ## Proposed decision
@@ -12,7 +13,7 @@ Product 2 adopts one provider-neutral reception domain with two channel adapters
 - web text/voice on the Product 2 customer surface;
 - phone/SIP through a separate real-time media service, never through a long-lived Next.js/Vercel request path.
 
-Public conversational service supports English, Spanish, and Russian only after each language passes equivalent safety, quality, disclosure, refusal, and escalation tests. Channel or language does not change authority.
+The architecture targets conversational service in English, Spanish, and Russian only after each language passes equivalent safety, quality, disclosure, refusal, and escalation tests. Channel or language does not change authority. DR-0016 remains operative for public automated voice until the separate public-voice activation gate adopts the required superseding or amending decision record.
 
 Durable returning-customer continuity is a Product 2 graph-memory service. It is not provider memory, model conversation history, a transcript archive, a vector database used as authority, or Deedseal's evidence ledger.
 
