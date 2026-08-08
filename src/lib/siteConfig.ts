@@ -9,9 +9,17 @@
  * anchors until explicit Owner approval.
  */
 
+export type FunnelContribution =
+  | "acquisition"
+  | "trust"
+  | "qualification"
+  | "conversion"
+  | "handoff";
+
 export type NavLink = {
   label: string;
   href: string;
+  funnelContribution: FunnelContribution;
 };
 
 export type SectionCopy = {
@@ -108,13 +116,21 @@ export const siteConfig = {
   },
 
   nav: [
-    { label: "ADU Services", href: "/services/detached-adu" },
-    { label: "Concept Studio", href: "/studio" },
-    { label: "Sacramento ADU", href: "/adu-builder/sacramento" },
-    { label: "Our Process", href: "/process" },
-    { label: "Compare", href: "/compare" },
-    { label: "FAQ", href: "/faq" },
-    { label: "About", href: "/about" },
+    {
+      label: "ADU Services",
+      href: "/services/detached-adu",
+      funnelContribution: "acquisition",
+    },
+    { label: "Concept Studio", href: "/studio", funnelContribution: "conversion" },
+    {
+      label: "Sacramento ADU",
+      href: "/adu-builder/sacramento",
+      funnelContribution: "acquisition",
+    },
+    { label: "Our Process", href: "/process", funnelContribution: "trust" },
+    { label: "Compare", href: "/compare", funnelContribution: "qualification" },
+    { label: "FAQ", href: "/faq", funnelContribution: "trust" },
+    { label: "About", href: "/about", funnelContribution: "trust" },
   ] satisfies NavLink[],
 
   hero: {
@@ -418,10 +434,15 @@ export const siteConfig = {
   footer: {
     coverageLabel: "Coverage",
     coverage: [
-      { label: "City of Sacramento", href: "/adu-builder/sacramento" },
+      {
+        label: "City of Sacramento",
+        href: "/adu-builder/sacramento",
+        funnelContribution: "trust",
+      },
       {
         label: "Unincorporated Sacramento County",
         href: "/adu-builder/sacramento-county",
+        funnelContribution: "trust",
       },
     ] satisfies NavLink[],
     trustProof:
