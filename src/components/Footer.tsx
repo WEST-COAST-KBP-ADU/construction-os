@@ -20,18 +20,33 @@ export default function Footer() {
             <p className="footer__trust">{footer.trustProof}</p>
           </div>
 
-          <nav className="footer__navigation" aria-label={labels.explore}>
-            <p className="footer__eyebrow">{labels.explore}</p>
-            <ul className="footer__links">
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="footer__link">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <div className="site-footer__navigation-groups">
+            <nav className="footer__navigation" aria-label={labels.explore}>
+              <p className="footer__eyebrow">{labels.explore}</p>
+              <ul className="footer__links">
+                {nav.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="footer__link">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <nav className="footer__navigation" aria-label={footer.coverageLabel}>
+              <p className="footer__eyebrow">{footer.coverageLabel}</p>
+              <ul className="footer__links">
+                {footer.coverage.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className="footer__link">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
         </div>
 
         <div className="site-footer__legal">
