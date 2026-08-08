@@ -9,6 +9,8 @@ import {
   MEMORY_OPERATIONS,
   RECEPTION_AUDIENCE,
   TENANT_ID,
+  computeContextPacketDigest,
+  type ContextPacket,
   type GraphEdge,
   type GraphNode,
   type IdentityAssertion,
@@ -300,7 +302,7 @@ describe("channel-neutral reception orchestration", () => {
     }
     const forged = structuredClone(first.state) as unknown as { last_result: Record<string, unknown> };
     forged.last_result.context_packet = { arbitrary: "forged" };
-    expect(await orchestrateReception(forged, turn(), GRAPH, createEmptyMemoryLifecycleState())).toEqual({ ok: false, reason_code: "semantic_replay_mismatch" });
+    expect(await orchestrateReception(forged, turn(), GRAPH, createEmptyMemoryLifecycleState())).toEqual({ ok: false, reason_code: "invalid_orchestrator_state" });
   });
 
   it("refuses changed, cross-session, and cross-purpose replay", async () => {
@@ -323,6 +325,28 @@ describe("channel-neutral reception orchestration", () => {
     const hostile = Object.create(null);
     Object.defineProperty(hostile, "reception_state", { get() { throw new Error("hostile"); } });
     expect((await orchestrateReception(hostile, turn(), GRAPH, createEmptyMemoryLifecycleState())).ok).toBe(false);
+  });
+
+  it("refuses a nested throwing getter with a stable shape code before digesting", async () => {
+    let getterCalls = 0;
+    const hostileConsent = structuredClone(consent()) as Record<string, unknown>;
+    Object.defineProperty(hostileConsent, "policy_version", {
+      enumerable: true,
+      get() {
+        getterCalls += 1;
+        throw new Error("hostile nested getter");
+      },
+    });
+    const result = await orchestrateReception(
+      createReceptionOrchestratorState(),
+      turn("anonymous", "disclosed", "disclose_memory", "request_aaaaaaaaaaaaaaaa", {
+        consent: hostileConsent,
+      }),
+      GRAPH,
+      createEmptyMemoryLifecycleState(),
+    );
+    expect(result).toEqual({ ok: false, reason_code: "invalid_request_shape" });
+    expect(getterCalls).toBe(0);
   });
 
   it("refuses the wrong tenant before an incomplete shape and validates bindings", async () => {
@@ -371,6 +395,53 @@ describe("channel-neutral reception orchestration", () => {
     expect(replay).toEqual(active);
   });
 
+  it("re-derives prior context and refuses digest-consistent caller-owned variants", async () => {
+    const scoped = await toContextScoped();
+    expect(scoped.context_packet).not.toBeNull();
+    const source = structuredClone(scoped.context_packet) as ContextPacket;
+    const subjectOnly = {
+      ...source,
+      nodes: source.nodes.filter((node) => node.kind === "subject"),
+      edges: [],
+    } as ContextPacket;
+    const elevated = {
+      ...source,
+      maximum_disclosure_class: "project_sensitive",
+    } as ContextPacket;
+    const injected = {
+      ...source,
+      nodes: [
+        ...source.nodes,
+        {
+          ...source.nodes.find((node) => node.kind === "subject")!,
+          node_id: "node_injectedaaaaaaaa",
+        },
+      ].sort((left, right) => left.node_id.localeCompare(right.node_id)),
+    } as ContextPacket;
+
+    for (const candidate of [subjectOnly, elevated, injected]) {
+      const forgedPacket = {
+        ...candidate,
+        packet_digest: await computeContextPacketDigest(candidate),
+      } as ContextPacket;
+      const forgedState = structuredClone(scoped.state) as unknown as {
+        last_result: { context_packet: ContextPacket };
+      };
+      forgedState.last_result.context_packet = forgedPacket;
+      const result = await orchestrateReception(
+        forgedState,
+        turn("context_scoped", "active", "apply_memory_effect", "request_ffffffffffffffff", {
+          consent: consent(),
+          identity: identity(),
+          lifecycle_command: lifecycleCommand(),
+        }),
+        GRAPH,
+        scoped.lifecycle_state,
+      );
+      expect(result).toEqual({ ok: false, reason_code: "context_scope_mismatch" });
+    }
+  });
+
   it("cannot advance by repeating disclose_memory across later states", async () => {
     const disclosed = await accepted(createReceptionOrchestratorState(), turn());
     expect(await orchestrateReception(disclosed.state, turn("disclosed", "consent_candidate", "disclose_memory", "request_bbbbbbbbbbbbbbbb"), GRAPH, disclosed.lifecycle_state)).toEqual({ ok: false, reason_code: "consent_required" });
@@ -389,6 +460,7 @@ describe("channel-neutral reception orchestration", () => {
     expect(await orchestrateReception(scoped.state, turn("context_scoped", "active", "apply_memory_effect", "request_ffffffffffffffff", { consent: consent(), identity: identity() }), GRAPH, scoped.lifecycle_state)).toEqual({ ok: false, reason_code: "lifecycle_command_required" });
     const missingScope = structuredClone(scoped.state) as unknown as { last_result: Record<string, unknown> };
     missingScope.last_result.context_packet = null;
+    missingScope.last_result.context_policy_request = null;
     expect(await orchestrateReception(missingScope, turn("context_scoped", "active", "apply_memory_effect", "request_ffffffffffffffff", { consent: consent(), identity: identity(), lifecycle_command: lifecycleCommand() }), GRAPH, scoped.lifecycle_state)).toEqual({ ok: false, reason_code: "context_scope_required" });
   });
 
