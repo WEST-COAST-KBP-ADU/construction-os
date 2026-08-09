@@ -87,6 +87,7 @@
     <text x="48" y="143" class="subtitle">Exact-coordinate editable fallback for owner/Fable review</text>
     <rect x="48" y="174" width="984" height="66" rx="4" class="truth"/>
     <text x="540" y="216" text-anchor="middle" class="truth-text">CANDIDATE · NOT ADOPTED · NOT FOR CONSTRUCTION</text>
+    <text x="48" y="266" class="tiny">Provenance: zone coordinates, topology and roof assumptions from the #114 RESULT. Three opening rows (D-ENTRY-01, D-BED-01, O-HALL-LIV-01) are revised per the #115 §7 fork verdict and supersede their #114 values.</text>
 
     <text x="48" y="292" class="eyebrow">SOURCE PIN</text>
     <text x="48" y="330" class="mono">WEST-COAST-KBP-ADU/construction-os</text>
@@ -135,8 +136,8 @@
       </g>
     </g>
 
-    <g id="adjacency-graph" transform="translate(600 192)" data-evidence="derived only from published candidate openings">
-      <path id="edge-entry-hall" data-opening-derived-edge="ENTRY–HALL" d="M228 98 L228 170" class="graph-edge"/>
+    <g id="adjacency-graph" transform="translate(600 192)" data-evidence="edges derived from published candidate openings; ENTRY–HALL is an open zone boundary with no separating wall">
+      <path id="edge-entry-hall" data-open-boundary-edge="ENTRY–HALL" data-evidence-note="no separating wall or opening; SP-ENTRY-01 and SP-HALL-01 share their full x=16–20 ft boundary as open circulation" d="M228 98 L228 170" class="graph-edge"/>
       <path id="edge-hall-bedroom" data-opening-derived-edge="HALL–BEDROOM" d="M200 202 L96 250" class="graph-edge"/>
       <path id="edge-hall-bath" data-opening-derived-edge="HALL–BATH" d="M242 208 L342 250" class="graph-edge"/>
       <path id="edge-hall-living" data-opening-derived-edge="HALL–LIVING" d="M228 220 C228 300 250 330 265 390" class="graph-edge"/>
@@ -192,9 +193,9 @@
       <path d="M384 0 V432 M0 216 H384 M224 216 V432 M0 432 H480 M384 504 H480 M384 504 V720" class="wall-int"/>
 
       <!-- doors and cased openings, exact published offsets -->
-      <line id="D-ENTRY-01" data-opening-id="D-ENTRY-01" data-host="FRONT" data-offset-in="198" data-width-in="36" data-hand="RH" data-operation="inswing" x1="396" y1="0" x2="468" y2="0" class="opening-cut"/>
+      <line id="D-ENTRY-01" data-opening-id="D-ENTRY-01" data-provenance="revised per #115 §7 fork verdict; superseded value: offset 17 ft 0 in, #114 RESULT" data-host="FRONT" data-offset-in="198" data-width-in="36" data-hand="RH" data-operation="inswing" x1="396" y1="0" x2="468" y2="0" class="opening-cut"/>
       <path d="M468 0 V72 M468 72 A72 72 0 0 0 396 0" class="door"/>
-      <line id="D-BED-01" data-opening-id="D-BED-01" data-host="P-01" data-offset-in="66" data-width-in="36" x1="384" y1="132" x2="384" y2="204" class="opening-cut"/>
+      <line id="D-BED-01" data-opening-id="D-BED-01" data-provenance="revised per #115 §7 fork verdict; superseded value: offset y=6 ft 0 in, #114 RESULT" data-host="P-01" data-offset-in="66" data-width-in="36" x1="384" y1="132" x2="384" y2="204" class="opening-cut"/>
       <path d="M384 204 H312 M312 204 A72 72 0 0 1 384 132" class="door-unknown"/>
       <line id="D-BATH-01" data-opening-id="D-BATH-01" data-host="P-04" data-offset-in="144" data-width-in="36" x1="384" y1="288" x2="384" y2="360" class="opening-cut"/>
       <path d="M384 288 H456 M456 288 A72 72 0 0 1 384 360" class="door-unknown"/>
@@ -202,7 +203,7 @@
       <path d="M384 552 H448 M448 552 A64 64 0 0 1 384 616" class="door-unknown"/>
       <line id="O-KIT-LIV-01" data-opening-id="O-KIT-LIV-01" data-host="P-05" data-offset-in="24" data-width-in="72" x1="48" y1="432" x2="192" y2="432" class="opening-cut"/>
       <line x1="48" y1="432" x2="192" y2="432" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/>
-      <line id="O-HALL-LIV-01" data-opening-id="O-HALL-LIV-01" data-host="P-05" data-offset-in="198" data-width-in="36" x1="396" y1="432" x2="468" y2="432" class="opening-cut"/>
+      <line id="O-HALL-LIV-01" data-opening-id="O-HALL-LIV-01" data-provenance="revised per #115 §7 fork verdict; superseded value: width 4 ft 0 in at offset 16 ft 0 in, #114 RESULT" data-host="P-05" data-offset-in="198" data-width-in="36" x1="396" y1="432" x2="468" y2="432" class="opening-cut"/>
       <line x1="396" y1="432" x2="468" y2="432" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/>
 
       <!-- windows, exact published host offsets -->
@@ -286,7 +287,7 @@
     <text x="48" y="108" class="title">Diagrammatic relationships only</text>
     <text x="48" y="143" class="subtitle">Gable 4:12 · ridge parallel +y/depth · front/rear gable ends · nominal 12-in eave</text>
 
-    <g id="roof-plan" transform="translate(78 205)" data-roof="published-candidate-assumptions-only">
+    <g id="roof-plan" transform="translate(78 205)" data-roof="published-candidate-assumptions-only" data-projection="true top view: FRONT page-bottom, +x page-right, +y page-up; plan geometry is symmetric under this re-projection, gable-end labels re-placed accordingly">
       <text x="160" y="-22" text-anchor="middle" class="eyebrow">ROOF PLAN LOGIC</text>
       <rect x="-10" y="-10" width="340" height="500" fill="#EEE8DE" stroke="#81756A" stroke-width="2"/>
       <rect x="0" y="0" width="320" height="480" fill="none" stroke="#202522" stroke-width="4"/>
@@ -294,7 +295,7 @@
       <line x1="0" y1="240" x2="145" y2="240" class="graph-edge"/><line x1="320" y1="240" x2="175" y2="240" class="graph-edge"/>
       <text x="170" y="90" class="mono-small">RIDGE +y</text><text x="170" y="112" class="tiny">parallel to depth</text>
       <text x="10" y="522" class="mono-small">NOMINAL 12-IN EAVE · ALL SIDES</text>
-      <text x="160" y="-38" text-anchor="middle" class="mono-small">FRONT GABLE END</text><text x="160" y="548" text-anchor="middle" class="mono-small">REAR GABLE END</text>
+      <text x="160" y="-38" text-anchor="middle" class="mono-small">REAR GABLE END</text><text x="160" y="548" text-anchor="middle" class="mono-small">FRONT GABLE END</text>
     </g>
 
     <g id="section-diagram" transform="translate(510 230)">
@@ -302,11 +303,11 @@
       <line x1="30" y1="430" x2="470" y2="430" stroke="#202522" stroke-width="5"/>
       <line x1="60" y1="430" x2="60" y2="178" stroke="#202522" stroke-width="5"/>
       <line x1="440" y1="430" x2="440" y2="178" stroke="#202522" stroke-width="5"/>
-      <path d="M40 188 L250 68 L460 188" fill="none" stroke="#74451F" stroke-width="7"/>
+      <path d="M40 185 L250 115 L460 185" fill="none" stroke="#74451F" stroke-width="7" data-slope="rise 70 / run 210 = exactly 4:12 each side; eave points at 1-ft overhang"/>
       <line x1="60" y1="178" x2="440" y2="178" stroke="#81756A" stroke-width="2" stroke-dasharray="8 6"/>
       <line x1="20" y1="430" x2="20" y2="178" class="dim"/><line x1="10" y1="430" x2="30" y2="430" class="dim"/><line x1="10" y1="178" x2="30" y2="178" class="dim"/>
       <text x="4" y="304" text-anchor="middle" class="dim-text" transform="rotate(-90 4 304)">9'-0" WALL PLATE</text>
-      <path d="M250 68 L390 148" stroke="#117990" stroke-width="2"/><text x="346" y="104" class="mono">4:12</text>
+      <path d="M250 115 L394 163" stroke="#117990" stroke-width="2" data-slope="rise 48 / run 144 = exactly 4:12"/><text x="346" y="128" class="mono">4:12</text>
       <text x="250" y="472" text-anchor="middle" class="small">20-ft gross width · ridge height not adopted</text>
       <text x="250" y="500" text-anchor="middle" class="tiny">No assembly, structure, ceiling, insulation, venting or MEP conclusion</text>
     </g>
