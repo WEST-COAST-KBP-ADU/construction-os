@@ -4,96 +4,99 @@ Owner of this file: the team lead under `OPERATING-MODEL-v4` (adopted
 2026-08-09, `main@9de3fbc`). Merged `main` is the only truth; this board is an
 index of it, never a substitute.
 
-Synchronized: 2026-08-09 from `main@c9ea40a`, against 19 open Issues and 10 open
-PRs read from GitHub at that anchor.
+Synchronized: 2026-08-09 (second sync) from `main@7cd7e2d`.
+
+## Merged this cycle — eight Owner merges
+
+| PR | What landed | Anchor |
+| :-- | :-- | :-- |
+| #121 | `OPERATING-MODEL-v4` + `DR-0017` — Claude lead, parallel Codex execution, session contract, harness-enforced no-self-merge | `9de3fbc` |
+| #120 | `DESIGN-004` colour system, full-checkout verified before merge | `c9ea40a` |
+| #122 | Registry synchronization; GPT-5.6 critical-fork lane; Worker 1–3 numbering; two-stream rule | `75b3c81` |
+| #126 | `vitest.config.ts` — full `npm test` restored (#117) | `1f018cc` |
+| #124 | Typed public route registry, sitemap derived from it (#96 safe work) | `2ab4a64` |
+| #125 | `adu-executable-geometry/1` contract: 38 refusal codes, JCS canonical JSON, q16 integers, 24 mutation probes (#123) | `bd74c19` |
+| #127 | Projection render-generation and namespace regression guards, mutant-verified (#116) | `5c6b48d` |
+| #128 | `GEOMETRY-PROGRAM-001` shared brief + D01–D13 Owner decision surface | `7cd7e2d` |
+
+`main` is fully green: 21 test files, 417 tests, lint and production build clean.
+Issues closed this cycle: #108, #112, #116, #117, #118, #123.
 
 ## Lane occupancy
 
-Executor lanes are numbered Worker 1–3 by Owner convention (2026-08-09); each
-worker is one external Codex session running one packet at a time.
+| Lane | Engagement | State |
+| :--- | :--- | :--- |
+| Lead | Queue, remediation, evidence, gates | active; also executed #117, #116, and the A600 correction packets after executor no-shows |
+| Workers 1–3 (Codex) | — | **idle — environment defect.** All three launched sessions lacked a repository checkout (`fatal: not a git repository`); one delivered unrunnable code, one delivered nothing, one stopped correctly at preflight. Do not relaunch until sessions have a provisioned clone. |
+| Critical-fork review (GPT-5.6) | #115 — A600 gate | fourth-cycle verdict pending at exact head `6fc0d96` |
+| Fable 5 advisory (cross-repo) | `kbp-dev-office` PR #212 | `BLOCKED FOR REVISION` published: un-superseded iPad-console decision; stale anchors; two moderate findings |
 
-| Lane | Packet | State |
-| :--- | :----- | :---- |
-| Worker 1 | #123 `EXECUTABLE-GEOMETRY-SCHEMA-001` | DISPATCH issued; launch pending |
-| Worker 2 | #117 `TEST-HARNESS-ALIAS-001`, then #116 `STUDIO-PROJECTION-COVERAGE-001` | DISPATCH issued; launch pending |
-| Worker 3 | #96 `IA-REGISTRY-001` | DISPATCH issued; launch pending |
-| Independent review | non-author lane | idle; engaged at each executor RESULT |
-| Critical-fork review | #115 — GPT-5.6, dual-key with Fable 5 | arms when #114 publishes its final result |
+## Geometry program — the critical path
 
-## Recently adopted by Owner merge
+Schema layer merged (#125). Decision surface on `main`
+(`docs/shared-briefs/GEOMETRY-PROGRAM-001/DECISION.md`). A600 candidate at
+PR #119 head `6fc0d96`, SHA-256 `0f45841b…`.
 
-- `OPERATING-MODEL-v4` and `DR-0017` — PR #121, `main@9de3fbc`. Claude lead,
-  parallel Codex execution, session contract, harness-enforced no-self-merge.
-- `DESIGN-004` colour system — PR #120, `main@c9ea40a`. Two files:
-  `app/globals.css`, `src/lib/visualSystem.test.ts`. Full-checkout verification
-  at the reviewed head is recorded on the PR: 384 tests pass, lint clean, build
-  succeeds.
-- `STUDIO-MODEL-PROJECTION-001` — PR #109, `main@4bb02f3`.
+| Cycle | Head | Verdict | Defects |
+| :-- | :-- | :-- | :-- |
+| 1 | `8f6c63c1` | BLOCKED | mirrored plan projection; two evidence-free adjacency edges; three junction-colliding opening rows |
+| 2 | `15586303` | BLOCKED | provenance missing on revised rows; ENTRY–HALL mislabelled opening-derived; roof plan orientation; section drawn 6.86:12 |
+| 3 | `36aba39` | BLOCKED | CF-3/CF-4 closed; provenance still contradicted on metadata/footer; adjacency arrows; clipped provenance line |
+| 4 | `6fc0d96` | **pending** | RF-1/RF-2/NF-1 corrections applied and lead-verified |
+
+After a clean verdict: Owner reads `DECISION.md`, adopts/revises D01–D13 →
+`ADU-A600-EXECUTABLE-PROFILE-001` → professional test fit → `/models`, Studio
+migration off legacy `2026.08.0`, model-bound renders for Home.
+
+## Rendered-evidence gate — closed at lab level
+
+56-cell Playwright sweep on the production build at `main@7cd7e2d`: 8 routes ×
+3 viewports × 2 schemes + reduced-motion controls. Zero failures: no horizontal
+overflow, zero console errors, one `h1` per route, focus visible 16/16, and the
+computed body background matches the adopted palette byte-exactly in both
+schemes (`#F3EFE7` / `#101513`). Recorded on #118 (closed). **Lab evidence only**
+— canonical-domain field evidence remains open under TASK-0013 / P0–P3.
+
+## Cross-repository program
+
+`kbp-dev-office` PR #212 (`PRODUCT-SYSTEM-0001`) directs one product program:
+Deedseal horizontal platform, Construction OS first vertical, Codex
+technical/product lead, Fable 5 advisory. The Fable advisory verdict is
+`BLOCKED FOR REVISION` (B-1 un-superseded iPad decision, B-2 stale anchors).
+After its revision and Owner merge there, a successor task cuts a local adoption
+packet **in this repository under this repository's own operating model** —
+`docs/tasks/product-system-implementation-0001/TASK.md` in that repo. Until that
+local packet is Owner-merged here, v4 remains this repository's operating model
+unchanged.
 
 ## Open queue
 
-### Engineering
-
 | Issue | Work | State |
 | :--- | :--- | :--- |
-| #117 | Restore full `npm test` on `main` | dispatched — no `vitest.config.ts` exists, so the tsconfig `@/*` alias does not resolve under vitest and `src/lib/homepage.test.ts` fails at import |
-| #116 | Projection generation and namespace regression guards | dispatched |
-| #115 | Adversarial decision review of the geometry foundation | prepared; decision-fork lane |
-| #108 | Fail-closed canonical model read projection | PR #109 merged; verify remaining scope, then close or re-scope |
+| #115 | A600 fork gate | verdict pending, cycle 4 |
+| #114 | A600 candidate | PR #119 open at `6fc0d96`, body current |
+| #105 | Model-bound Home hero | blocked: Owner direction adoption + geometry-derived assets |
+| #96 | IA contract adoption | registry safe-work merged; Owner decisions 1–13 of the proposal remain open |
+| #91 | Current-surface route/CTA/visual audit | partially covered by the #118 lab sweep; durable RESULT still absent |
+| #85/#86, #83/#84 | Reception-memory slices 3–4 | PRs open, **not Draft**; awaiting non-author review path |
+| #88/#90 | Reception-memory hardening | draft, reviewed non-blocking |
+| #59 | `[CONTROL]` queue issue | overlaps this board — one should link to the other |
+| #64, #68, #51–#61 | Research contour | gated; `Requires official source verification.` |
 
-### Landing and public surface
+## Blockers
 
-| Issue | Work | State |
-| :--- | :--- | :--- |
-| #105 | Owned model-bound Home hero and asset provenance contract | next landing dispatch |
-| #96 | Public route, navigation, and CTA contract | queued behind #105 |
-| #114 | A600 dimensioned owner-gate design candidate | Draft PR #119 open |
-| #91 | Independent current-surface route, CTA, and visual audit | open |
-| #118 | Colour system and token normalization | PR #120 merged; verify token-normalization scope, then close or re-scope |
-
-### Reception memory — architecture contour
-
-| Issue | PR | State |
-| :--- | :--- | :--- |
-| #88 | #90 (draft) | reviewed non-blocking hardening, not closed |
-| #85 | #86 | open, **not Draft** |
-| #83 | #84 | open, **not Draft** |
-
-### Research — gated
-
-`#68` material sourcing, `#64` PRODUCT-001 architecture review packet, `#60`,
-`#53`, `#51` pre-approved ADU plan verification (PRs #61, #54, #52, #44, #45,
-#43). All research output remains a proposal until an Owner gate is recorded,
-and any jurisdiction or feasibility statement carries
-`Requires official source verification.`
-
-## Divergence and hygiene findings
-
-- **Issue #112 is superseded.** `OPERATING-MODEL-004` was Owner-adopted on
-  2026-08-08 but lived only as Issue text; `OPERATING-MODEL-v4` now carries that
-  shape in committed bytes. #112 also still pins `main@65164b9` and calls PR #109
-  an active mutation; both are stale. Close it against v4.
-- **Three PRs were open rather than Draft** — #120 was merged from that state,
-  and #86 and #84 remain open. The standing rule is Draft until the Owner gate.
-  Either restore Draft or change the rule deliberately.
-- **Issue #59** `[CONTROL] Product 2 ordered execution queue` overlaps this
-  board. One of the two is the queue; the other should link to it.
-
-## Blockers unchanged by this synchronization
-
-- Canonical-domain DNS and HTTP behaviour remain **NOT VERIFIED**. A green Vercel
-  check is build evidence, not proof the owner-visible domain serves those bytes.
-- Deployed p75 LCP/INP/CLS for TASK-0013 remains unavailable; lab measurement is
-  not field evidence.
-- RP-0008 remains partial: ten empirical fixture traces are absent.
-- Rendered viewport, dark-scheme, and reduced-motion matrices for the merged
-  colour system remain unverified.
+- **Codex executor environment** — sessions need a provisioned repository clone
+  before any relaunch. Three failures out of three launches.
+- Canonical-domain DNS/HTTP: **NOT VERIFIED**; deployed p75 CWV absent
+  (TASK-0013, P0/P3). Vercel READY is build evidence only.
+- RP-0008: ten empirical fixture traces absent.
+- #105 asset inputs: renders, hero pair, provenance records do not exist and
+  cannot be produced by an executor lane.
 
 ## Standing constraints
 
 - Demo posture: no contact surface, no PII, no external effect.
-- Sacramento leads build order; other jurisdictions require official-source
-  research before a page exists.
+- Sacramento leads build order; other jurisdictions research-gated.
 - No AI in the visitor-facing decision path. Studio stays 2D-first.
 - One packet = one bounded outcome = one branch = one Draft PR = one declared
   file allowlist. Merge to `main` may auto-deploy. The Owner alone merges.
