@@ -9,13 +9,14 @@
   "repository":"WEST-COAST-KBP-ADU/construction-os",
   "source_sha":"65164b9a0bdebdfcc0fe023c95683fe2d87b2561",
   "source_issue":114,
+  "revision_authority":"Issue #115 fork verdict s7 - three opening rows superseded",
   "source_comment":"https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/114#issuecomment-5229285353",
   "coordinate_system":{"origin":"FRONT-LEFT exterior corner","x":"RIGHT","y":"REAR","z":"UP"},
   "digital_scale":"24 SVG units = 1 ft",
   "machine_geometry_unit":"q16 integer (1/16 inch)",
   "projection":"true top view: FRONT page-bottom, +x page-right, +y page-up",
   "truth_state":"CANDIDATE / NOT ADOPTED / NOT FOR CONSTRUCTION",
-  "geometry_source":"Only coordinates and opening proposals already published in Issue #114; no new geometry invented",
+  "geometry_source":"Zone coordinates, topology and roof assumptions published in Issue #114 RESULT; three opening rows (D-ENTRY-01, D-BED-01, O-HALL-LIV-01) revised per the Issue #115 fork verdict and superseding their #114 values; no new geometry invented",
   "figma_target":"https://www.figma.com/design/z4roePYcx5oINGzNDHCb52",
   "figma_state":"Existing file retained; import deferred while authenticated Starter seat is View-only"
 }
@@ -65,6 +66,7 @@
       .axis { stroke:#117990; stroke-width:2.5; marker-end:url(#arrow-cyan); }
       .graph-node { fill:#FCFBF8; stroke:#2A3E36; stroke-width:2; }
       .graph-edge { stroke:#81756A; stroke-width:2.5; fill:none; marker-end:url(#arrow); }
+      .graph-link { stroke:#81756A; stroke-width:2.5; fill:none; }
       .graph-wet { stroke:#117990; stroke-width:4; fill:none; }
       .note-box { fill:#F7F3EB; stroke:#D3CABC; stroke-width:1.5; }
       .warning-box { fill:#EBDAC5; stroke:#74451F; stroke-width:2; }
@@ -87,9 +89,11 @@
     <text x="48" y="143" class="subtitle">Exact-coordinate editable fallback for owner/Fable review</text>
     <rect x="48" y="174" width="984" height="66" rx="4" class="truth"/>
     <text x="540" y="216" text-anchor="middle" class="truth-text">CANDIDATE · NOT ADOPTED · NOT FOR CONSTRUCTION</text>
-    <text x="48" y="266" class="tiny">Provenance: zone coordinates, topology and roof assumptions from the #114 RESULT. Three opening rows (D-ENTRY-01, D-BED-01, O-HALL-LIV-01) are revised per the #115 §7 fork verdict and supersede their #114 values.</text>
+    <text x="48" y="258" class="tiny">Provenance: zone coordinates, topology and roof assumptions from the #114 RESULT.</text>
+    <text x="48" y="274" class="tiny">Three opening rows — D-ENTRY-01, D-BED-01, O-HALL-LIV-01 — are revised per the</text>
+    <text x="48" y="290" class="tiny">#115 §7 fork verdict and supersede their #114 values.</text>
 
-    <text x="48" y="292" class="eyebrow">SOURCE PIN</text>
+    <text x="48" y="318" class="eyebrow">SOURCE PIN</text>
     <text x="48" y="330" class="mono">WEST-COAST-KBP-ADU/construction-os</text>
     <text x="48" y="361" class="mono">main@65164b9a0bdebdfcc0fe023c95683fe2d87b2561</text>
     <text x="48" y="392" class="mono">Issue #114 · RESULT comment 5229285353</text>
@@ -97,7 +101,7 @@
 
     <line x1="48" y1="456" x2="1032" y2="456" class="rule"/>
     <text x="48" y="500" class="eyebrow">ALLOWED EVIDENCE</text>
-    <text x="48" y="538" class="body">• Published #114 zone polygons, opening schedule, D01–D11 delta, and limitations</text>
+    <text x="48" y="538" class="body">• Published #114 zone polygons, D01–D11 delta and limitations; opening schedule as revised by #115</text>
     <text x="48" y="570" class="body">• 20 ft × 30 ft gross envelope; 24 SVG units = 1 ft digital drafting scale</text>
     <text x="48" y="602" class="body">• Inter + Source Serif 4 presentation direction; neutral technical plan graphics</text>
     <text x="48" y="634" class="body">• Existing Figma target retained for later import: z4roePYcx5oINGzNDHCb52</text>
@@ -137,12 +141,12 @@
     </g>
 
     <g id="adjacency-graph" transform="translate(600 192)" data-evidence="edges derived from published candidate openings; ENTRY–HALL is an open zone boundary with no separating wall">
-      <path id="edge-entry-hall" data-open-boundary-edge="ENTRY–HALL" data-evidence-note="no separating wall or opening; SP-ENTRY-01 and SP-HALL-01 share their full x=16–20 ft boundary as open circulation" d="M228 98 L228 170" class="graph-edge"/>
-      <path id="edge-hall-bedroom" data-opening-derived-edge="HALL–BEDROOM" d="M200 202 L96 250" class="graph-edge"/>
-      <path id="edge-hall-bath" data-opening-derived-edge="HALL–BATH" d="M242 208 L342 250" class="graph-edge"/>
-      <path id="edge-hall-living" data-opening-derived-edge="HALL–LIVING" d="M228 220 C228 300 250 330 265 390" class="graph-edge"/>
-      <path id="edge-kitchen-living" data-opening-derived-edge="KITCHEN–LIVING" d="M170 415 L190 415" class="graph-edge"/>
-      <path id="edge-living-storage" data-opening-derived-edge="LIVING–STORAGE" d="M340 415 L350 415" class="graph-edge"/>
+      <path id="edge-entry-hall" data-open-boundary-edge="ENTRY–HALL" data-evidence-note="no separating wall or opening; SP-ENTRY-01 and SP-HALL-01 share their full x=16–20 ft boundary as open circulation" d="M228 98 L228 170" class="graph-link"/>
+      <path id="edge-hall-bedroom" data-opening-derived-edge="HALL–BEDROOM" d="M200 202 L96 250" class="graph-link"/>
+      <path id="edge-hall-bath" data-opening-derived-edge="HALL–BATH" d="M242 208 L342 250" class="graph-link"/>
+      <path id="edge-hall-living" data-opening-derived-edge="HALL–LIVING" d="M228 220 C228 300 250 330 265 390" class="graph-link"/>
+      <path id="edge-kitchen-living" data-opening-derived-edge="KITCHEN–LIVING" d="M170 415 L190 415" class="graph-link"/>
+      <path id="edge-living-storage" data-opening-derived-edge="LIVING–STORAGE" d="M340 415 L350 415" class="graph-link"/>
       <path data-intent-edge="KITCHEN↔BATH" d="M95 390 C170 340 290 340 360 300" class="graph-wet" opacity="0.55"/>
       <rect x="158" y="48" width="140" height="50" rx="25" class="graph-node"/><text x="228" y="80" text-anchor="middle" class="small">ENTRY</text>
       <rect x="158" y="170" width="140" height="50" rx="25" class="graph-node"/><text x="228" y="202" text-anchor="middle" class="small">HALL</text>
@@ -349,6 +353,6 @@
     <text x="540" y="1001" text-anchor="middle" class="inverse tiny">Editable SVG fallback complete; existing Figma file remains the later import target.</text>
   </g>
 
-  <text x="80" y="3555" class="mono-small">SOURCE-LOCKED FALLBACK · EXACT ZONE/OPENING PROPOSALS FROM ISSUE #114 · NO NEW BUILDING GEOMETRY · 2026-08-08 AMERICA/LOS_ANGELES</text>
+  <text x="80" y="3555" class="mono-small">SOURCE-LOCKED FALLBACK · ZONES/ROOF FROM ISSUE #114 · THREE OPENING ROWS REVISED PER ISSUE #115 · NO NEW BUILDING GEOMETRY · 2026-08-08 AMERICA/LOS_ANGELES</text>
   <text x="2320" y="3555" text-anchor="end" class="mono-small">California Material Modernism presentation / neutral technical plan</text>
 </svg>
