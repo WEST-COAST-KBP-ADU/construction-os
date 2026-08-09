@@ -50,10 +50,12 @@ enforce are preserved without exception:
 - evidence by artifact, never by assertion;
 - Owner-only adoption and Owner-only merge.
 
-Lane identity is recorded by the model that actually ran. Claude Opus 5 and
-Fable 5 remain distinct lanes and are not recorded interchangeably, because
-collapsing them would make the authorship-separation rule unverifiable from the
-records themselves.
+Lane identity is recorded as the declared engagement plus the model that
+actually ran. On 2026-08-09 the Owner moved the lead session to Fable 5; roles
+are engagement-scoped, so a decision-fork or review engagement still never runs
+in the session that authored or led the bytes it examines, and records never
+collapse two engagements into one — that would make the authorship-separation
+rule unverifiable from the records themselves.
 
 ## Consequences
 

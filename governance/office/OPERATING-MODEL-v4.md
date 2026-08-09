@@ -33,19 +33,22 @@ This record commits that shape and retires the ambiguity.
 Each engagement declares exactly one role. A lane that authored or repaired the
 bytes cannot review them at that head SHA.
 
-Lane identity is recorded by the model that actually ran. Claude Opus 5 and
-Fable 5 are distinct lanes and are never recorded interchangeably — collapsing
-them would make the author-never-reviews-itself rule unverifiable from records.
+Lane identity is recorded as the declared engagement plus the model that
+actually ran. Roles are engagement-scoped, not model-scoped: when two lanes run
+the same model family, they remain distinct engagements in distinct sessions,
+and a fork or review engagement never runs in the session that authored or led
+the bytes it examines. Records never collapse two engagements into one — that
+would make the author-never-reviews-itself rule unverifiable.
 
 ## 3. Model assignment
 
 | Lane | Model | Reason |
 | :--- | :---- | :----- |
-| Team lead | Opus 5 | Decomposition, cross-record contradiction detection, and gate preparation are the reasoning-heavy surfaces. |
+| Team lead | Fable 5 (Owner-directed 2026-08-09); Opus 5 when Fable 5 is unavailable | Decomposition, cross-record contradiction detection, and gate preparation are the reasoning-heavy surfaces. |
 | Executor | Codex, highest available reasoning tier for implementation packets | Packets are bounded but correctness-critical; a cheaper tier moves cost from execution to review and remediation. |
 | Executor, mechanical packets | Codex, fast tier | Renames, moves, formatting, and other packets with no design judgement. |
 | Independent reviewer | The lane that did not author the bytes | Separation of authorship is the control; model tier is secondary to it. |
-| Decision fork | Fable 5 | Reserved for adversarial advice at Owner-facing forks. |
+| Decision fork | Fable 5, in a separate session that did not author or lead the bytes | Reserved for adversarial advice at Owner-facing forks. |
 
 ## 4. Controlled loop
 
