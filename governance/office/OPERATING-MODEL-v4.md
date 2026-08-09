@@ -1,7 +1,7 @@
 # Operating Model v4 — Claude lead, parallel Codex execution
 
-Status: **PROPOSED**. Becomes operative only if the Owner merges this record.
-Nothing in this file is adopted by its own presence on a branch.
+Status: **ADOPTED**. The Owner merged PR #121 on 2026-08-09 at
+`main@9de3fbc`. Operative from that commit.
 
 Supersedes: `OPERATING-MODEL-v3.md`.
 Consolidates: Issue #112 `OPERATING-MODEL-004`, adopted by the Owner on

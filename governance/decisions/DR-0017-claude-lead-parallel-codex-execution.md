@@ -1,6 +1,6 @@
 # DR-0017 — Claude lead with parallel Codex execution
 
-- **Status:** proposed — pending Owner adoption by merge
+- **Status:** adopted — Owner merged PR #121 on 2026-08-09 at `main@9de3fbc`
 - **Date:** 2026-08-09
 - **Supersedes:** the role allocation in `OPERATING-MODEL-v3`
 - **Consolidates:** Issue #112 `OPERATING-MODEL-004` (Owner-adopted 2026-08-08,
