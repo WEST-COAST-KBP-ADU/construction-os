@@ -252,4 +252,45 @@ describe("STUDIO-MODEL-PROJECTION-001", () => {
       "studio_projection_render_truth_boundary_invalid",
     );
   });
+
+  it("refuses a digest-consistent render generation that diverges from immutable geometry", async () => {
+    const candidate = cloneRelease();
+    const model = candidate.models[1];
+    const render = model.derived_artifacts.find((artifact) => artifact.kind === "render");
+    if (!render) throw new Error("fixture_missing_render");
+
+    const geometrySubject = /^models\/geometry\/(adu-[a-z]-\d{3})@([1-9]\d*)$/.exec(
+      model.geometry.source_ref,
+    );
+    if (!geometrySubject) throw new Error("fixture_missing_geometry_subject");
+
+    const divergentGeneration = String(Number(geometrySubject[2]) + 1);
+    render.ref = `models/derived/${geometrySubject[1]}@${divergentGeneration}/render-concept`;
+    await resealArtifact(render);
+    await resealRelease(candidate);
+
+    await expect(buildStudioModelProjection(candidate, cloneSources())).rejects.toThrowError(
+      "studio_projection_render_subject_mismatch",
+    );
+  });
+
+  it("refuses a digest-consistent render reference outside the exact models/derived namespace", async () => {
+    const candidate = cloneRelease();
+    const model = candidate.models[0];
+    const render = model.derived_artifacts.find((artifact) => artifact.kind === "render");
+    if (!render) throw new Error("fixture_missing_render");
+
+    const geometrySubject = /^models\/geometry\/(adu-[a-z]-\d{3})@([1-9]\d*)$/.exec(
+      model.geometry.source_ref,
+    );
+    if (!geometrySubject) throw new Error("fixture_missing_geometry_subject");
+
+    render.ref = `models/derived-preview/${geometrySubject[1]}@${geometrySubject[2]}/render-concept`;
+    await resealArtifact(render);
+    await resealRelease(candidate);
+
+    await expect(buildStudioModelProjection(candidate, cloneSources())).rejects.toThrowError(
+      "studio_projection_render_ref_invalid",
+    );
+  });
 });
