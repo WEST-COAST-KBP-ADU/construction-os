@@ -12,6 +12,8 @@
   "source_comment":"https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/114#issuecomment-5229285353",
   "coordinate_system":{"origin":"FRONT-LEFT exterior corner","x":"RIGHT","y":"REAR","z":"UP"},
   "digital_scale":"24 SVG units = 1 ft",
+  "machine_geometry_unit":"q16 integer (1/16 inch)",
+  "projection":"true top view: FRONT page-bottom, +x page-right, +y page-up",
   "truth_state":"CANDIDATE / NOT ADOPTED / NOT FOR CONSTRUCTION",
   "geometry_source":"Only coordinates and opening proposals already published in Issue #114; no new geometry invented",
   "figma_target":"https://www.figma.com/design/z4roePYcx5oINGzNDHCb52",
@@ -133,11 +135,14 @@
       </g>
     </g>
 
-    <g id="adjacency-graph" transform="translate(600 192)" data-evidence="derived only from published candidate polygons and openings">
-      <path d="M228 98 L228 170" class="graph-edge"/><path d="M200 202 L96 250" class="graph-edge"/><path d="M242 208 L342 250" class="graph-edge"/>
-      <path d="M80 286 L80 368" class="graph-edge"/><path d="M228 214 L228 368" class="graph-edge"/><path d="M342 286 L290 390" class="graph-edge"/>
-      <path d="M110 420 L228 420" class="graph-edge"/><path d="M272 420 L355 420" class="graph-edge"/>
-      <path d="M112 272 L310 272" class="graph-wet" opacity="0.55"/>
+    <g id="adjacency-graph" transform="translate(600 192)" data-evidence="derived only from published candidate openings">
+      <path id="edge-entry-hall" data-opening-derived-edge="ENTRY–HALL" d="M228 98 L228 170" class="graph-edge"/>
+      <path id="edge-hall-bedroom" data-opening-derived-edge="HALL–BEDROOM" d="M200 202 L96 250" class="graph-edge"/>
+      <path id="edge-hall-bath" data-opening-derived-edge="HALL–BATH" d="M242 208 L342 250" class="graph-edge"/>
+      <path id="edge-hall-living" data-opening-derived-edge="HALL–LIVING" d="M228 220 C228 300 250 330 265 390" class="graph-edge"/>
+      <path id="edge-kitchen-living" data-opening-derived-edge="KITCHEN–LIVING" d="M170 415 L190 415" class="graph-edge"/>
+      <path id="edge-living-storage" data-opening-derived-edge="LIVING–STORAGE" d="M340 415 L350 415" class="graph-edge"/>
+      <path data-intent-edge="KITCHEN↔BATH" d="M95 390 C170 340 290 340 360 300" class="graph-wet" opacity="0.55"/>
       <rect x="158" y="48" width="140" height="50" rx="25" class="graph-node"/><text x="228" y="80" text-anchor="middle" class="small">ENTRY</text>
       <rect x="158" y="170" width="140" height="50" rx="25" class="graph-node"/><text x="228" y="202" text-anchor="middle" class="small">HALL</text>
       <rect x="20" y="250" width="150" height="50" rx="25" class="graph-node"/><text x="95" y="282" text-anchor="middle" class="small">BEDROOM</text>
@@ -146,7 +151,7 @@
       <rect x="190" y="390" width="150" height="50" rx="25" class="graph-node"/><text x="265" y="422" text-anchor="middle" class="small">LIVING</text>
       <rect x="350" y="390" width="150" height="50" rx="25" class="graph-node"/><text x="425" y="422" text-anchor="middle" class="small">STORAGE</text>
       <text x="228" y="18" text-anchor="middle" class="eyebrow">CANDIDATE ADJACENCY</text>
-      <text x="228" y="326" text-anchor="middle" class="tiny">blue = concentrated wet-core intent</text>
+      <text x="228" y="326" text-anchor="middle" class="tiny">blue = KITCHEN↔BATH wet-core intent</text>
     </g>
 
     <line x1="48" y1="608" x2="1032" y2="608" class="rule"/>
@@ -170,15 +175,16 @@
     <text x="48" y="108" class="title">20 ft × 30 ft gross envelope</text>
     <text x="48" y="143" class="subtitle">24 SVG units = 1 ft · origin FRONT-LEFT · +x RIGHT · +y REAR</text>
 
-    <g id="plan-scale-24" transform="translate(280 180)" data-scale-svg-units-per-foot="24">
-      <!-- closed gross-zone polygons; ft points are authoritative source metadata -->
-      <polygon id="SP-BED-01" data-candidate-id="SP-BED-01" data-points-ft="0,0 16,0 16,9 0,9" data-area-sqft="144" points="0,0 384,0 384,216 0,216" class="zone-bed zone-line"/>
-      <polygon id="SP-ENTRY-01" data-candidate-id="SP-ENTRY-01" data-points-ft="16,0 20,0 20,6 16,6" data-area-sqft="24" points="384,0 480,0 480,144 384,144" class="zone-entry zone-line"/>
-      <polygon id="SP-HALL-01" data-candidate-id="SP-HALL-01" data-points-ft="16,6 20,6 20,18 16,18" data-area-sqft="48" points="384,144 480,144 480,432 384,432" class="zone-hall zone-line"/>
-      <polygon id="SP-KIT-01" data-candidate-id="SP-KIT-01" data-points-ft="0,9 9.333333333333,9 9.333333333333,18 0,18" data-area-sqft="84" points="0,216 224,216 224,432 0,432" class="zone-kit zone-line"/>
-      <polygon id="SP-BATH-01" data-candidate-id="SP-BATH-01" data-points-ft="9.333333333333,9 16,9 16,18 9.333333333333,18" data-area-sqft="60" points="224,216 384,216 384,432 224,432" class="zone-bath zone-line"/>
-      <polygon id="SP-LIV-01" data-candidate-id="SP-LIV-01" data-points-ft="0,18 20,18 20,21 16,21 16,30 0,30" data-area-sqft="204" points="0,432 480,432 480,504 384,504 384,720 0,720" class="zone-liv zone-line"/>
-      <polygon id="SP-STOR-01" data-candidate-id="SP-STOR-01" data-points-ft="16,21 20,21 20,30 16,30" data-area-sqft="36" points="384,504 480,504 480,720 384,720" class="zone-stor zone-line"/>
+    <g id="plan-scale-24" transform="translate(280 180)" data-svg-units-per-inch="2" data-q16-per-inch="16">
+      <!-- closed gross-zone polygons; q16 points are authoritative source metadata -->
+      <g id="model-geometry" transform="translate(0 720) scale(1 -1)" data-projection="true-top-view">
+      <polygon id="SP-BED-01" data-candidate-id="SP-BED-01" data-points-q16="0,0 3072,0 3072,1728 0,1728" data-area-sqft="144" points="0,0 384,0 384,216 0,216" class="zone-bed zone-line"/>
+      <polygon id="SP-ENTRY-01" data-candidate-id="SP-ENTRY-01" data-points-q16="3072,0 3840,0 3840,1152 3072,1152" data-area-sqft="24" points="384,0 480,0 480,144 384,144" class="zone-entry zone-line"/>
+      <polygon id="SP-HALL-01" data-candidate-id="SP-HALL-01" data-points-q16="3072,1152 3840,1152 3840,3456 3072,3456" data-area-sqft="48" points="384,144 480,144 480,432 384,432" class="zone-hall zone-line"/>
+      <polygon id="SP-KIT-01" data-candidate-id="SP-KIT-01" data-points-q16="0,1728 1792,1728 1792,3456 0,3456" data-area-sqft="84" points="0,216 224,216 224,432 0,432" class="zone-kit zone-line"/>
+      <polygon id="SP-BATH-01" data-candidate-id="SP-BATH-01" data-points-q16="1792,1728 3072,1728 3072,3456 1792,3456" data-area-sqft="60" points="224,216 384,216 384,432 224,432" class="zone-bath zone-line"/>
+      <polygon id="SP-LIV-01" data-candidate-id="SP-LIV-01" data-points-q16="0,3456 3840,3456 3840,4032 3072,4032 3072,5760 0,5760" data-area-sqft="204" points="0,432 480,432 480,504 384,504 384,720 0,720" class="zone-liv zone-line"/>
+      <polygon id="SP-STOR-01" data-candidate-id="SP-STOR-01" data-points-q16="3072,4032 3840,4032 3840,5760 3072,5760" data-area-sqft="36" points="384,504 480,504 480,720 384,720" class="zone-stor zone-line"/>
       <rect width="480" height="720" fill="url(#candidate-hatch)" opacity="0.28"/>
 
       <!-- candidate wall bands, not assemblies -->
@@ -186,43 +192,44 @@
       <path d="M384 0 V432 M0 216 H384 M224 216 V432 M0 432 H480 M384 504 H480 M384 504 V720" class="wall-int"/>
 
       <!-- doors and cased openings, exact published offsets -->
-      <line id="D-ENTRY-01" data-opening-id="D-ENTRY-01" data-host="FRONT" data-offset-ft="17" data-width-ft="3" x1="408" y1="0" x2="480" y2="0" class="opening-cut"/>
-      <path d="M480 0 V72 M480 72 A72 72 0 0 0 408 0" class="door"/>
-      <line id="D-BED-01" data-opening-id="D-BED-01" data-host="P-01" data-offset-ft="6" data-width-ft="3" x1="384" y1="144" x2="384" y2="216" class="opening-cut"/>
-      <path d="M384 216 H312 M312 216 A72 72 0 0 1 384 144" class="door-unknown"/>
-      <line id="D-BATH-01" data-opening-id="D-BATH-01" data-host="P-04" data-offset-ft="12" data-width-ft="3" x1="384" y1="288" x2="384" y2="360" class="opening-cut"/>
+      <line id="D-ENTRY-01" data-opening-id="D-ENTRY-01" data-host="FRONT" data-offset-in="198" data-width-in="36" data-hand="RH" data-operation="inswing" x1="396" y1="0" x2="468" y2="0" class="opening-cut"/>
+      <path d="M468 0 V72 M468 72 A72 72 0 0 0 396 0" class="door"/>
+      <line id="D-BED-01" data-opening-id="D-BED-01" data-host="P-01" data-offset-in="66" data-width-in="36" x1="384" y1="132" x2="384" y2="204" class="opening-cut"/>
+      <path d="M384 204 H312 M312 204 A72 72 0 0 1 384 132" class="door-unknown"/>
+      <line id="D-BATH-01" data-opening-id="D-BATH-01" data-host="P-04" data-offset-in="144" data-width-in="36" x1="384" y1="288" x2="384" y2="360" class="opening-cut"/>
       <path d="M384 288 H456 M456 288 A72 72 0 0 1 384 360" class="door-unknown"/>
-      <line id="D-STOR-01" data-opening-id="D-STOR-01" data-host="P-06" data-offset-ft="23" data-width-ft="2.666666666667" x1="384" y1="552" x2="384" y2="616" class="opening-cut"/>
+      <line id="D-STOR-01" data-opening-id="D-STOR-01" data-host="P-06" data-offset-in="276" data-width-in="32" x1="384" y1="552" x2="384" y2="616" class="opening-cut"/>
       <path d="M384 552 H448 M448 552 A64 64 0 0 1 384 616" class="door-unknown"/>
-      <line id="O-KIT-LIV-01" data-opening-id="O-KIT-LIV-01" data-host="P-05" data-offset-ft="2" data-width-ft="6" x1="48" y1="432" x2="192" y2="432" class="opening-cut"/>
+      <line id="O-KIT-LIV-01" data-opening-id="O-KIT-LIV-01" data-host="P-05" data-offset-in="24" data-width-in="72" x1="48" y1="432" x2="192" y2="432" class="opening-cut"/>
       <line x1="48" y1="432" x2="192" y2="432" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/>
-      <line id="O-HALL-LIV-01" data-opening-id="O-HALL-LIV-01" data-host="P-05" data-offset-ft="16" data-width-ft="4" x1="384" y1="432" x2="480" y2="432" class="opening-cut"/>
-      <line x1="384" y1="432" x2="480" y2="432" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/>
+      <line id="O-HALL-LIV-01" data-opening-id="O-HALL-LIV-01" data-host="P-05" data-offset-in="198" data-width-in="36" x1="396" y1="432" x2="468" y2="432" class="opening-cut"/>
+      <line x1="396" y1="432" x2="468" y2="432" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/>
 
       <!-- windows, exact published host offsets -->
-      <line id="W-BED-01" data-opening-id="W-BED-01" data-host="LEFT" data-offset-ft="2.5" data-width-ft="4" x1="0" y1="60" x2="0" y2="156" class="window-cut"/><line x1="0" y1="60" x2="0" y2="156" class="window"/>
-      <line id="W-KIT-01" data-opening-id="W-KIT-01" data-host="LEFT" data-offset-ft="11" data-width-ft="4" x1="0" y1="264" x2="0" y2="360" class="window-cut"/><line x1="0" y1="264" x2="0" y2="360" class="window"/>
-      <line id="W-LIV-03" data-opening-id="W-LIV-03" data-host="LEFT" data-offset-ft="23" data-width-ft="4" x1="0" y1="552" x2="0" y2="648" class="window-cut"/><line x1="0" y1="552" x2="0" y2="648" class="window"/>
-      <line id="W-LIV-01" data-opening-id="W-LIV-01" data-host="REAR" data-offset-ft="1.5" data-width-ft="5" x1="36" y1="720" x2="156" y2="720" class="window-cut"/><line x1="36" y1="720" x2="156" y2="720" class="window"/>
-      <line id="W-LIV-02" data-opening-id="W-LIV-02" data-host="REAR" data-offset-ft="9.5" data-width-ft="5" x1="228" y1="720" x2="348" y2="720" class="window-cut"/><line x1="228" y1="720" x2="348" y2="720" class="window"/>
-      <line id="W-ENTRY-01" data-opening-id="W-ENTRY-01" data-host="RIGHT" data-offset-ft="1.5" data-width-ft="2" x1="480" y1="36" x2="480" y2="84" class="window-cut"/><line x1="480" y1="36" x2="480" y2="84" class="window"/>
+      <line id="W-BED-01" data-opening-id="W-BED-01" data-host="LEFT" data-offset-in="30" data-width-in="48" x1="0" y1="60" x2="0" y2="156" class="window-cut"/><line x1="0" y1="60" x2="0" y2="156" class="window"/>
+      <line id="W-KIT-01" data-opening-id="W-KIT-01" data-host="LEFT" data-offset-in="132" data-width-in="48" x1="0" y1="264" x2="0" y2="360" class="window-cut"/><line x1="0" y1="264" x2="0" y2="360" class="window"/>
+      <line id="W-LIV-03" data-opening-id="W-LIV-03" data-host="LEFT" data-offset-in="276" data-width-in="48" x1="0" y1="552" x2="0" y2="648" class="window-cut"/><line x1="0" y1="552" x2="0" y2="648" class="window"/>
+      <line id="W-LIV-01" data-opening-id="W-LIV-01" data-host="REAR" data-offset-in="18" data-width-in="60" x1="36" y1="720" x2="156" y2="720" class="window-cut"/><line x1="36" y1="720" x2="156" y2="720" class="window"/>
+      <line id="W-LIV-02" data-opening-id="W-LIV-02" data-host="REAR" data-offset-in="114" data-width-in="60" x1="228" y1="720" x2="348" y2="720" class="window-cut"/><line x1="228" y1="720" x2="348" y2="720" class="window"/>
+      <line id="W-ENTRY-01" data-opening-id="W-ENTRY-01" data-host="RIGHT" data-offset-in="18" data-width-in="24" x1="480" y1="36" x2="480" y2="84" class="window-cut"/><line x1="480" y1="36" x2="480" y2="84" class="window"/>
+      </g>
 
       <!-- labels -->
-      <text x="180" y="96" text-anchor="middle" class="mono">SP-BED-01</text><text x="180" y="122" text-anchor="middle" class="small">16' × 9' · 144 sf gross</text>
-      <text x="432" y="104" text-anchor="middle" class="mono-small">SP-ENTRY-01</text><text x="432" y="127" text-anchor="middle" class="tiny">4' × 6' · 24 sf</text>
-      <text x="468" y="238" text-anchor="middle" class="mono-small" transform="rotate(90 468 238)">SP-HALL-01 · 4' × 12' · 48 sf</text>
-      <text x="112" y="312" text-anchor="middle" class="mono">SP-KIT-01</text><text x="112" y="338" text-anchor="middle" class="small">9'4" × 9' · 84 sf</text>
-      <text x="304" y="312" text-anchor="middle" class="mono">SP-BATH-01</text><text x="304" y="338" text-anchor="middle" class="small">6'8" × 9' · 60 sf</text>
-      <text x="190" y="566" text-anchor="middle" class="mono">SP-LIV-01</text><text x="190" y="592" text-anchor="middle" class="small">L-shaped · 204 sf gross</text>
-      <text x="456" y="652" text-anchor="middle" class="mono-small" transform="rotate(90 456 652)">SP-STOR-01 · 4' × 9' · 36 sf</text>
+      <text x="180" y="624" text-anchor="middle" class="mono">SP-BED-01</text><text x="180" y="598" text-anchor="middle" class="small">16' × 9' · 144 sf gross</text>
+      <text x="432" y="616" text-anchor="middle" class="mono-small">SP-ENTRY-01</text><text x="432" y="593" text-anchor="middle" class="tiny">4' × 6' · 24 sf</text>
+      <text x="468" y="482" text-anchor="middle" class="mono-small" transform="rotate(-90 468 482)">SP-HALL-01 · 4' × 12' · 48 sf</text>
+      <text x="112" y="408" text-anchor="middle" class="mono">SP-KIT-01</text><text x="112" y="382" text-anchor="middle" class="small">9'4" × 9' · 84 sf</text>
+      <text x="304" y="408" text-anchor="middle" class="mono">SP-BATH-01</text><text x="304" y="382" text-anchor="middle" class="small">6'8" × 9' · 60 sf</text>
+      <text x="190" y="154" text-anchor="middle" class="mono">SP-LIV-01</text><text x="190" y="128" text-anchor="middle" class="small">L-shaped · 204 sf gross</text>
+      <text x="456" y="68" text-anchor="middle" class="mono-small" transform="rotate(-90 456 68)">SP-STOR-01 · 4' × 9' · 36 sf</text>
 
       <!-- opening IDs adjacent to geometry -->
-      <text x="442" y="22" text-anchor="middle" class="mono-small">D-ENTRY-01</text>
-      <text x="370" y="186" text-anchor="end" class="mono-small">D-BED-01</text>
-      <text x="370" y="276" text-anchor="end" class="mono-small">D-BATH-01</text>
-      <text x="394" y="538" text-anchor="start" class="mono-small">D-STOR-01</text>
-      <text x="120" y="451" text-anchor="middle" class="mono-small">O-KIT-LIV-01 · 6'</text>
-      <text x="474" y="451" text-anchor="end" class="mono-small">O-HALL-LIV-01 · 4'</text>
+      <text x="432" y="698" text-anchor="middle" class="mono-small">D-ENTRY-01 · RH</text>
+      <text x="370" y="534" text-anchor="end" class="mono-small">D-BED-01</text>
+      <text x="370" y="444" text-anchor="end" class="mono-small">D-BATH-01</text>
+      <text x="394" y="182" text-anchor="start" class="mono-small">D-STOR-01</text>
+      <text x="120" y="269" text-anchor="middle" class="mono-small">O-KIT-LIV-01 · 6'</text>
+      <text x="466" y="269" text-anchor="end" class="mono-small">O-HALL-LIV-01 · 3'</text>
     </g>
 
     <!-- gross dimensions -->
@@ -234,7 +241,7 @@
     </g>
 
     <!-- orientation axes -->
-    <g transform="translate(820 208)"><circle cx="0" cy="0" r="5" fill="#117990"/><line x1="0" y1="0" x2="90" y2="0" class="axis"/><line x1="0" y1="0" x2="0" y2="90" class="axis"/><text x="102" y="6" class="mono-small">+x RIGHT</text><text x="12" y="104" class="mono-small">+y REAR</text><text x="0" y="-18" text-anchor="middle" class="mono-small">FRONT-LEFT ORIGIN</text></g>
+    <g transform="translate(820 298)"><circle cx="0" cy="0" r="5" fill="#117990"/><line x1="0" y1="0" x2="90" y2="0" class="axis"/><line x1="0" y1="0" x2="0" y2="-90" class="axis"/><text x="102" y="6" class="mono-small">+x RIGHT</text><text x="12" y="-98" class="mono-small">+y REAR / PAGE-UP</text><text x="0" y="24" text-anchor="middle" class="mono-small">FRONT-LEFT ORIGIN</text></g>
     <g transform="translate(810 350)"><rect width="220" height="178" rx="4" class="note-box"/><text x="16" y="30" class="eyebrow">OPENING KEY</text><line x1="18" y1="62" x2="70" y2="62" class="door"/><text x="86" y="68" class="small">door / hand candidate</text><line x1="18" y1="98" x2="70" y2="98" class="window"/><text x="86" y="104" class="small">window proposal</text><line x1="18" y1="134" x2="70" y2="134" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/><text x="86" y="140" class="small">cased opening</text><text x="16" y="166" class="tiny">All net-clear evidence unknown.</text></g>
     <rect x="810" y="560" width="220" height="340" rx="4" class="warning-box"/>
     <text x="826" y="592" class="eyebrow">TRUTH NOTES</text>
@@ -242,7 +249,7 @@
     <text x="826" y="720" class="small">Furniture and fixtures:</text><text x="826" y="744" class="small">not authored; feasibility</text><text x="826" y="768" class="small">remains unverified.</text>
     <text x="826" y="808" class="small">Window/door code, fire,</text><text x="826" y="832" class="small">energy, privacy, egress,</text><text x="826" y="856" class="small">manufacturer gates remain.</text>
     <text x="826" y="884" class="tiny">SVG pixels are presentation only.</text>
-    <text x="48" y="1020" class="mono-small">FRONT = top · REAR = bottom · LEFT/RIGHT follow the published right-handed coordinate frame</text>
+    <text x="48" y="1020" class="mono-small">TRUE TOP VIEW · FRONT = page-bottom · REAR = page-top · +x right · +y up</text>
   </g>
 
   <!-- 03 — Facade/opening schedule -->
@@ -255,12 +262,12 @@
       <rect width="984" height="44" class="table-head"/>
       <text x="12" y="29" class="mono-small">ID / HOST</text><text x="230" y="29" class="mono-small">NOMINAL W×H</text><text x="390" y="29" class="mono-small">SILL / HEAD</text><text x="555" y="29" class="mono-small">OFFSET</text><text x="715" y="29" class="mono-small">OPERATION / EVIDENCE</text>
       <g class="tiny">
-        <rect y="44" width="984" height="58" class="table-alt"/><text x="12" y="68">D-ENTRY-01 · FRONT / entry</text><text x="230" y="68">3' × 6'8"</text><text x="390" y="68">0 / 6'8"</text><text x="555" y="68">17' from LEFT</text><text x="715" y="68">RH inswing candidate</text><text x="715" y="91">net clear unknown</text>
-        <rect y="102" width="984" height="58" fill="#FCFBF8"/><text x="12" y="126">D-BED-01 · P-01 / bedroom</text><text x="230" y="126">3' × 6'8"</text><text x="390" y="126">0 / 6'8"</text><text x="555" y="126">y=6' FRONT</text><text x="715" y="126">into bedroom; hand unknown</text><text x="715" y="149">net clear unknown</text>
+        <rect y="44" width="984" height="58" class="table-alt"/><text x="12" y="68">D-ENTRY-01 · FRONT / entry</text><text x="230" y="68">3' × 6'8"</text><text x="390" y="68">0 / 6'8"</text><text x="555" y="68">16'6" from LEFT</text><text x="715" y="68">RH inswing candidate</text><text x="715" y="91">jambs 16'6"–19'6"; net clear unknown</text>
+        <rect y="102" width="984" height="58" fill="#FCFBF8"/><text x="12" y="126">D-BED-01 · P-01 / bedroom</text><text x="230" y="126">3' × 6'8"</text><text x="390" y="126">0 / 6'8"</text><text x="555" y="126">y=5'6" FRONT</text><text x="715" y="126">jambs 5'6"–8'6"; hand unknown</text><text x="715" y="149">net clear unknown</text>
         <rect y="160" width="984" height="58" class="table-alt"/><text x="12" y="184">D-BATH-01 · P-04 / bath</text><text x="230" y="184">3' × 6'8"</text><text x="390" y="184">0 / 6'8"</text><text x="555" y="184">y=12' FRONT</text><text x="715" y="184">outswing to hall; hand unknown</text><text x="715" y="207">net clear unknown</text>
         <rect y="218" width="984" height="58" fill="#FCFBF8"/><text x="12" y="242">D-STOR-01 · P-06 / stor</text><text x="230" y="242">2'8" × 6'8"</text><text x="390" y="242">0 / 6'8"</text><text x="555" y="242">y=23' FRONT</text><text x="715" y="242">into storage; hand unknown</text>
         <rect y="276" width="984" height="58" class="table-alt"/><text x="12" y="300">O-KIT-LIV-01 · P-05</text><text x="230" y="300">6' cased</text><text x="390" y="300">floor / 6'8"</text><text x="555" y="300">x=2' LEFT</text><text x="715" y="300">open; no leaf</text>
-        <rect y="334" width="984" height="58" fill="#FCFBF8"/><text x="12" y="358">O-HALL-LIV-01 · P-05</text><text x="230" y="358">4' cased</text><text x="390" y="358">floor / 6'8"</text><text x="555" y="358">x=16' LEFT</text><text x="715" y="358">open; no leaf</text>
+        <rect y="334" width="984" height="58" fill="#FCFBF8"/><text x="12" y="358">O-HALL-LIV-01 · P-05</text><text x="230" y="358">3' cased</text><text x="390" y="358">floor / 6'8"</text><text x="555" y="358">x=16'6" LEFT</text><text x="715" y="358">jambs 16'6"–19'6"; no leaf</text>
         <rect y="392" width="984" height="58" class="table-alt"/><text x="12" y="416">W-BED-01 · LEFT / bed</text><text x="230" y="416">4' × 4'</text><text x="390" y="416">2'6" / 6'6"</text><text x="555" y="416">2'6" FRONT</text><text x="715" y="416">casement; EERO unknown</text>
         <rect y="450" width="984" height="58" fill="#FCFBF8"/><text x="12" y="474">W-KIT-01 · LEFT / kitchen</text><text x="230" y="474">4' × 3'</text><text x="390" y="474">3'6" / 6'6"</text><text x="555" y="474">11' FRONT</text><text x="715" y="474">awning candidate</text>
         <rect y="508" width="984" height="58" class="table-alt"/><text x="12" y="532">W-LIV-01 · REAR / living</text><text x="230" y="532">5' × 4'</text><text x="390" y="532">2'6" / 6'6"</text><text x="555" y="532">1'6" LEFT</text><text x="715" y="532">casement-pair candidate</text>
