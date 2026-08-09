@@ -45,6 +45,7 @@ const SEMVER_PATTERN = /^\d+\.\d+\.\d+$/;
 const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const MUTABLE_VERSION_ALIASES = new Set(["latest", "current", "stable", "head", "next"]);
+const BIGINT_ZERO = BigInt(0);
 
 const TOP_LEVEL_KEYS = [
   "schema",
@@ -674,7 +675,7 @@ function orientation(first: Point, second: Point, third: Point): bigint {
 
 function onSegment(first: Point, point: Point, second: Point): boolean {
   return (
-    orientation(first, second, point) === 0n &&
+    orientation(first, second, point) === BIGINT_ZERO &&
     point.x >= (first.x < second.x ? first.x : second.x) &&
     point.x <= (first.x > second.x ? first.x : second.x) &&
     point.y >= (first.y < second.y ? first.y : second.y) &&
@@ -687,13 +688,14 @@ function segmentsIntersect(first: Point, second: Point, third: Point, fourth: Po
   const two = orientation(first, second, fourth);
   const three = orientation(third, fourth, first);
   const four = orientation(third, fourth, second);
-  const opposite = (left: bigint, right: bigint): boolean => (left < 0n && right > 0n) || (left > 0n && right < 0n);
+  const opposite = (left: bigint, right: bigint): boolean =>
+    (left < BIGINT_ZERO && right > BIGINT_ZERO) || (left > BIGINT_ZERO && right < BIGINT_ZERO);
   return (
     (opposite(one, two) && opposite(three, four)) ||
-    (one === 0n && onSegment(first, third, second)) ||
-    (two === 0n && onSegment(first, fourth, second)) ||
-    (three === 0n && onSegment(third, first, fourth)) ||
-    (four === 0n && onSegment(third, second, fourth))
+    (one === BIGINT_ZERO && onSegment(first, third, second)) ||
+    (two === BIGINT_ZERO && onSegment(first, fourth, second)) ||
+    (three === BIGINT_ZERO && onSegment(third, first, fourth)) ||
+    (four === BIGINT_ZERO && onSegment(third, second, fourth))
   );
 }
 
@@ -702,11 +704,14 @@ function properSegmentsIntersect(first: Point, second: Point, third: Point, four
   const two = orientation(first, second, fourth);
   const three = orientation(third, fourth, first);
   const four = orientation(third, fourth, second);
-  return (one < 0n && two > 0n || one > 0n && two < 0n) && (three < 0n && four > 0n || three > 0n && four < 0n);
+  return (
+    ((one < BIGINT_ZERO && two > BIGINT_ZERO) || (one > BIGINT_ZERO && two < BIGINT_ZERO)) &&
+    ((three < BIGINT_ZERO && four > BIGINT_ZERO) || (three > BIGINT_ZERO && four < BIGINT_ZERO))
+  );
 }
 
 function twiceSignedArea(points: readonly Point[]): bigint {
-  let area = 0n;
+  let area = BIGINT_ZERO;
   for (let index = 0; index < points.length - 1; index += 1) {
     area += points[index].x * points[index + 1].y - points[index + 1].x * points[index].y;
   }
@@ -724,7 +729,9 @@ function pointInRing(point: Point, ring: Ring, strict = false): boolean {
       const vertical = previousPoint.y - currentPoint.y;
       const left = (previousPoint.x - currentPoint.x) * (point.y - currentPoint.y);
       const right = (point.x - currentPoint.x) * vertical;
-      if ((vertical > 0n && left > right) || (vertical < 0n && left < right)) inside = !inside;
+      if ((vertical > BIGINT_ZERO && left > right) || (vertical < BIGINT_ZERO && left < right)) {
+        inside = !inside;
+      }
     }
   }
   return inside;
@@ -759,7 +766,7 @@ function ringFromVertexIds(
     }
   }
   const area2 = twiceSignedArea(points);
-  if (area2 <= 0n) fail("XG_RING_DEGENERATE", pointer);
+  if (area2 <= BIGINT_ZERO) fail("XG_RING_DEGENERATE", pointer);
   if (area2 !== BigInt(declaredArea)) fail("XG_AREA_ACCOUNTING_MISMATCH", pointer);
   return { points, area2 };
 }
@@ -813,10 +820,10 @@ function assertRegionsAndAreaAccounting(profile: ExecutableGeometryProfile, ring
       }
     }
   }
-  let totalGross = 0n;
-  let totalRegions = 0n;
-  let net = 0n;
-  let nonNet = 0n;
+  let totalGross = BIGINT_ZERO;
+  let totalRegions = BIGINT_ZERO;
+  let net = BIGINT_ZERO;
+  let nonNet = BIGINT_ZERO;
   profile.gross_envelopes.forEach((entry) => { totalGross += BigInt(entry.area2_q16sq); });
   profile.plan_regions.forEach((entry) => {
     totalRegions += BigInt(entry.area2_q16sq);
@@ -908,8 +915,8 @@ function wallLengthQ16(wall: UnknownRecord, vertices: ReadonlyMap<string, Unknow
   const end = requireReference(vertices, wall.end_vertex_id, "");
   const dx = BigInt(end.x_q16 as number) - BigInt(start.x_q16 as number);
   const dy = BigInt(end.y_q16 as number) - BigInt(start.y_q16 as number);
-  if (dx !== 0n && dy !== 0n) return dx < 0n ? -dx : dx;
-  const distance = dx === 0n ? (dy < 0n ? -dy : dy) : (dx < 0n ? -dx : dx);
+  if (dx !== BIGINT_ZERO && dy !== BIGINT_ZERO) return dx < BIGINT_ZERO ? -dx : dx;
+  const distance = dx === BIGINT_ZERO ? (dy < BIGINT_ZERO ? -dy : dy) : (dx < BIGINT_ZERO ? -dx : dx);
   return distance;
 }
 
@@ -1004,7 +1011,7 @@ function isPlanar(vertices: readonly UnknownRecord[]): boolean {
   ];
   return vertices.slice(3).every((entry) => {
     const point = asPoint(entry);
-    return normal[0] * (point[0] - a[0]) + normal[1] * (point[1] - a[1]) + normal[2] * (point[2] - a[2]) === 0n;
+    return normal[0] * (point[0] - a[0]) + normal[1] * (point[1] - a[1]) + normal[2] * (point[2] - a[2]) === BIGINT_ZERO;
   });
 }
 
@@ -1042,11 +1049,11 @@ function assertRoof(profile: ExecutableGeometryProfile): void {
     const maxX = xs.reduce((max, value) => value > max ? value : max, xs[0]);
     const spanY = ys.reduce((min, value) => value < min ? value : min, ys[0]);
     const maxY = ys.reduce((max, value) => value > max ? value : max, ys[0]);
-    const options = [maxX - spanX, maxY - spanY].filter((value) => value > 0n);
+    const options = [maxX - spanX, maxY - spanY].filter((value) => value > BIGINT_ZERO);
     const run = options.reduce((smallest, value) => value < smallest ? value : smallest);
     const rise = maxZ - minZ;
     const declared = BigInt(plane.pitch.rise) * run === BigInt(plane.pitch.run) * rise;
-    if (rise <= 0n || !declared) fail("XG_ROOF_PITCH_MISMATCH", `/roof_planes/${index}/pitch`);
+    if (rise <= BIGINT_ZERO || !declared) fail("XG_ROOF_PITCH_MISMATCH", `/roof_planes/${index}/pitch`);
   });
   profile.roof_edges.forEach((edge, index) => {
     const usedBy = edgeUse.get(edge.roof_edge_id) ?? [];
