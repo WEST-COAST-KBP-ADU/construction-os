@@ -2,6 +2,7 @@ import {
   assertValidRelease,
   defaultConfiguration,
 } from "./modelContract";
+import { MODEL_MATURITY_STATES } from "./types";
 import type {
   AduGeometrySource,
   AduModel,
@@ -131,8 +132,20 @@ function projectRender(model: AduModel): StudioProjectedModel["render"] {
     fail("studio_projection_render_is_not_unmaterialized");
   }
 
-  if (render.conceptual !== true || render.marked_conceptual_until === undefined) {
+  if (
+    !render.ref ||
+    !render.source_binding ||
+    render.conceptual !== true ||
+    render.marked_conceptual_until === undefined
+  ) {
     fail("studio_projection_render_truth_boundary_missing");
+  }
+
+  const modelMaturityIndex = MODEL_MATURITY_STATES.indexOf(model.maturity);
+  const boundaryIndex = MODEL_MATURITY_STATES.indexOf(render.marked_conceptual_until);
+
+  if (boundaryIndex <= modelMaturityIndex) {
+    fail("studio_projection_render_truth_boundary_invalid");
   }
 
   assertImmutableReference(render.ref, "studio_projection_mutable_render_ref");
