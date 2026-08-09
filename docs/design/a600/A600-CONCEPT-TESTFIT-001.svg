@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="3600" viewBox="0 0 2400 3600" role="img" aria-labelledby="artifact-title artifact-desc">
+  <title id="artifact-title">A600 Concept Test-Fit 001 — editable owner decision artifact</title>
+  <desc id="artifact-desc">Six-frame candidate decision artifact for an original 20 by 30 foot, 600 square foot ADU test-fit. Candidate only, not adopted, not for construction.</desc>
+  <metadata id="a600-source"><![CDATA[
+{
+  "artifact":"A600-CONCEPT-TESTFIT-001",
+  "artifact_kind":"editable-svg-decision-artifact",
+  "repository":"WEST-COAST-KBP-ADU/construction-os",
+  "source_sha":"65164b9a0bdebdfcc0fe023c95683fe2d87b2561",
+  "source_issue":114,
+  "source_comment":"https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/114#issuecomment-5229285353",
+  "coordinate_system":{"origin":"FRONT-LEFT exterior corner","x":"RIGHT","y":"REAR","z":"UP"},
+  "digital_scale":"24 SVG units = 1 ft",
+  "truth_state":"CANDIDATE / NOT ADOPTED / NOT FOR CONSTRUCTION",
+  "geometry_source":"Only coordinates and opening proposals already published in Issue #114; no new geometry invented",
+  "figma_target":"https://www.figma.com/design/z4roePYcx5oINGzNDHCb52",
+  "figma_state":"Existing file retained; import deferred while authenticated Starter seat is View-only"
+}
+  ]]></metadata>
+  <defs>
+    <style><![CDATA[
+      .canvas { fill:#F3EFE7; }
+      .panel { fill:#FCFBF8; stroke:#D3CABC; stroke-width:2; }
+      .eyebrow { font:600 16px Inter,Arial,sans-serif; letter-spacing:2.4px; fill:#74451F; }
+      .title { font:600 34px "Source Serif 4",Georgia,serif; fill:#202522; }
+      .subtitle { font:500 20px Inter,Arial,sans-serif; fill:#59615D; }
+      .body { font:400 18px Inter,Arial,sans-serif; fill:#202522; }
+      .small { font:400 15px Inter,Arial,sans-serif; fill:#59615D; }
+      .tiny { font:400 13px Inter,Arial,sans-serif; fill:#59615D; }
+      .mono { font:500 14px "Roboto Mono",ui-monospace,monospace; fill:#202522; }
+      .mono-small { font:500 12px "Roboto Mono",ui-monospace,monospace; fill:#59615D; }
+      .inverse { fill:#F7F3EB; }
+      .rule { stroke:#D3CABC; stroke-width:2; }
+      .rule-strong { stroke:#81756A; stroke-width:2; }
+      .bronze { fill:#C58A52; }
+      .forest { fill:#2A3E36; }
+      .forest-deep { fill:#121A17; }
+      .signal { fill:#39D98A; }
+      .truth { fill:#121A17; }
+      .truth-text { font:700 17px Inter,Arial,sans-serif; letter-spacing:1.3px; fill:#F7F3EB; }
+      .tag { fill:#EBDAC5; stroke:#C58A52; stroke-width:1.5; }
+      .tag-text { font:600 14px Inter,Arial,sans-serif; fill:#74451F; }
+      .table-head { fill:#E6DED2; }
+      .table-alt { fill:#F7F3EB; }
+      .zone-bed { fill:#E7DFD4; }
+      .zone-entry { fill:#EBDAC5; }
+      .zone-hall { fill:#E6DED2; }
+      .zone-kit { fill:#DCE6E1; }
+      .zone-bath { fill:#D6E3DF; }
+      .zone-liv { fill:#EEE8DE; }
+      .zone-stor { fill:#DDD6CC; }
+      .zone-line { stroke:#81756A; stroke-width:1.5; }
+      .wall-ext { fill:none; stroke:#202522; stroke-width:12; stroke-linejoin:miter; }
+      .wall-int { fill:none; stroke:#59615D; stroke-width:9; stroke-linecap:square; }
+      .opening-cut { stroke:#FCFBF8; stroke-width:14; }
+      .door { stroke:#74451F; stroke-width:3; fill:none; }
+      .door-unknown { stroke:#74451F; stroke-width:2; stroke-dasharray:7 5; fill:none; }
+      .window-cut { stroke:#FCFBF8; stroke-width:15; }
+      .window { stroke:#117990; stroke-width:5; }
+      .dim { stroke:#81756A; stroke-width:1.5; fill:none; }
+      .dim-text { font:500 14px "Roboto Mono",ui-monospace,monospace; fill:#59615D; }
+      .axis { stroke:#117990; stroke-width:2.5; marker-end:url(#arrow-cyan); }
+      .graph-node { fill:#FCFBF8; stroke:#2A3E36; stroke-width:2; }
+      .graph-edge { stroke:#81756A; stroke-width:2.5; fill:none; marker-end:url(#arrow); }
+      .graph-wet { stroke:#117990; stroke-width:4; fill:none; }
+      .note-box { fill:#F7F3EB; stroke:#D3CABC; stroke-width:1.5; }
+      .warning-box { fill:#EBDAC5; stroke:#74451F; stroke-width:2; }
+    ]]></style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#81756A"/></marker>
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#117990"/></marker>
+    <pattern id="candidate-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#C58A52" stroke-width="2" opacity="0.18"/></pattern>
+  </defs>
+
+  <rect class="canvas" width="2400" height="3600"/>
+  <g id="brand-signal" transform="translate(88 38)"><circle cx="13" cy="13" r="12" fill="#39D98A" opacity="0.18"/><circle cx="13" cy="13" r="7" class="signal"/><circle cx="13" cy="13" r="3" fill="#121A17"/></g>
+  <text x="124" y="57" class="eyebrow">WEST COAST KBP · PRODUCT 2 · OWNER DECISION SURFACE</text>
+  <text x="2310" y="57" text-anchor="end" class="mono-small">A600-CONCEPT-TESTFIT-001 / SVG FALLBACK</text>
+
+  <!-- 00 — Evidence & truth boundary -->
+  <g id="frame-00-evidence" transform="translate(80 80)" data-frame="00 — Evidence &amp; truth boundary">
+    <rect class="panel" width="1080" height="1070" rx="8"/>
+    <text x="48" y="58" class="eyebrow">00 · EVIDENCE &amp; TRUTH BOUNDARY</text>
+    <text x="48" y="108" class="title">A600 original concept test-fit</text>
+    <text x="48" y="143" class="subtitle">Exact-coordinate editable fallback for owner/Fable review</text>
+    <rect x="48" y="174" width="984" height="66" rx="4" class="truth"/>
+    <text x="540" y="216" text-anchor="middle" class="truth-text">CANDIDATE · NOT ADOPTED · NOT FOR CONSTRUCTION</text>
+
+    <text x="48" y="292" class="eyebrow">SOURCE PIN</text>
+    <text x="48" y="330" class="mono">WEST-COAST-KBP-ADU/construction-os</text>
+    <text x="48" y="361" class="mono">main@65164b9a0bdebdfcc0fe023c95683fe2d87b2561</text>
+    <text x="48" y="392" class="mono">Issue #114 · RESULT comment 5229285353</text>
+    <text x="48" y="423" class="mono">Original family: adu-a-600@1.0.0</text>
+
+    <line x1="48" y1="456" x2="1032" y2="456" class="rule"/>
+    <text x="48" y="500" class="eyebrow">ALLOWED EVIDENCE</text>
+    <text x="48" y="538" class="body">• Published #114 zone polygons, opening schedule, D01–D11 delta, and limitations</text>
+    <text x="48" y="570" class="body">• 20 ft × 30 ft gross envelope; 24 SVG units = 1 ft digital drafting scale</text>
+    <text x="48" y="602" class="body">• Inter + Source Serif 4 presentation direction; neutral technical plan graphics</text>
+    <text x="48" y="634" class="body">• Existing Figma target retained for later import: z4roePYcx5oINGzNDHCb52</text>
+
+    <text x="48" y="694" class="eyebrow">EXCLUDED / UNKNOWN</text>
+    <text x="48" y="732" class="body">No copied municipal, competitor, client, stock, manufacturer, or generated geometry.</text>
+    <text x="48" y="764" class="body">No parcel fit, permit, code, accessibility, egress, energy, structural, MEP, fire/WUI,</text>
+    <text x="48" y="796" class="body">professional architectural, price, schedule, availability, or construction claim.</text>
+
+    <rect x="48" y="842" width="984" height="164" rx="5" class="warning-box"/>
+    <text x="76" y="883" class="eyebrow">FIGMA CONTINUITY</text>
+    <text x="76" y="920" class="body">The existing single Figma file remains canonical for later import. No second file was created.</text>
+    <text x="76" y="952" class="body">Current authenticated plan: Starter · View seat · existing file reports no edit access.</text>
+    <text x="76" y="984" class="small">This SVG is the bounded fallback authorized after the MCP quota/access block.</text>
+  </g>
+
+  <!-- 01 — Program & adjacency -->
+  <g id="frame-01-program" transform="translate(1240 80)" data-frame="01 — Program &amp; adjacency">
+    <rect class="panel" width="1080" height="1070" rx="8"/>
+    <text x="48" y="58" class="eyebrow">01 · PROGRAM &amp; ADJACENCY</text>
+    <text x="48" y="108" class="title">600 sq ft gross program budget</text>
+    <text x="48" y="143" class="subtitle">Exact non-overlapping gross allocation; net area remains unknown</text>
+
+    <g transform="translate(48 180)">
+      <rect width="500" height="44" class="table-head"/>
+      <text x="16" y="29" class="mono">CANDIDATE ZONE</text><text x="470" y="29" text-anchor="end" class="mono">SQ FT</text>
+      <g transform="translate(0 44)">
+        <rect width="500" height="52" class="table-alt"/><text x="16" y="33" class="body">SP-LIV-01 · living / dining</text><text x="470" y="33" text-anchor="end" class="mono">204</text>
+        <rect y="52" width="500" height="52" fill="#FCFBF8"/><text x="16" y="85" class="body">SP-BED-01 · bedroom</text><text x="470" y="85" text-anchor="end" class="mono">144</text>
+        <rect y="104" width="500" height="52" class="table-alt"/><text x="16" y="137" class="body">SP-KIT-01 · kitchen</text><text x="470" y="137" text-anchor="end" class="mono">84</text>
+        <rect y="156" width="500" height="52" fill="#FCFBF8"/><text x="16" y="189" class="body">SP-ENTRY-01 + SP-HALL-01</text><text x="470" y="189" text-anchor="end" class="mono">72</text>
+        <rect y="208" width="500" height="52" class="table-alt"/><text x="16" y="241" class="body">SP-BATH-01 · bathroom</text><text x="470" y="241" text-anchor="end" class="mono">60</text>
+        <rect y="260" width="500" height="52" fill="#FCFBF8"/><text x="16" y="293" class="body">SP-STOR-01 · storage / mech</text><text x="470" y="293" text-anchor="end" class="mono">36</text>
+        <line x1="0" y1="312" x2="500" y2="312" class="rule-strong"/>
+        <text x="16" y="353" class="eyebrow">TOTAL GROSS</text><text x="470" y="353" text-anchor="end" class="mono">600</text>
+      </g>
+    </g>
+
+    <g id="adjacency-graph" transform="translate(600 192)" data-evidence="derived only from published candidate polygons and openings">
+      <path d="M228 98 L228 170" class="graph-edge"/><path d="M200 202 L96 250" class="graph-edge"/><path d="M242 208 L342 250" class="graph-edge"/>
+      <path d="M80 286 L80 368" class="graph-edge"/><path d="M228 214 L228 368" class="graph-edge"/><path d="M342 286 L290 390" class="graph-edge"/>
+      <path d="M110 420 L228 420" class="graph-edge"/><path d="M272 420 L355 420" class="graph-edge"/>
+      <path d="M112 272 L310 272" class="graph-wet" opacity="0.55"/>
+      <rect x="158" y="48" width="140" height="50" rx="25" class="graph-node"/><text x="228" y="80" text-anchor="middle" class="small">ENTRY</text>
+      <rect x="158" y="170" width="140" height="50" rx="25" class="graph-node"/><text x="228" y="202" text-anchor="middle" class="small">HALL</text>
+      <rect x="20" y="250" width="150" height="50" rx="25" class="graph-node"/><text x="95" y="282" text-anchor="middle" class="small">BEDROOM</text>
+      <rect x="285" y="250" width="150" height="50" rx="25" class="graph-node"/><text x="360" y="282" text-anchor="middle" class="small">BATH</text>
+      <rect x="20" y="390" width="150" height="50" rx="25" class="graph-node"/><text x="95" y="422" text-anchor="middle" class="small">KITCHEN</text>
+      <rect x="190" y="390" width="150" height="50" rx="25" class="graph-node"/><text x="265" y="422" text-anchor="middle" class="small">LIVING</text>
+      <rect x="350" y="390" width="150" height="50" rx="25" class="graph-node"/><text x="425" y="422" text-anchor="middle" class="small">STORAGE</text>
+      <text x="228" y="18" text-anchor="middle" class="eyebrow">CANDIDATE ADJACENCY</text>
+      <text x="228" y="326" text-anchor="middle" class="tiny">blue = concentrated wet-core intent</text>
+    </g>
+
+    <line x1="48" y1="608" x2="1032" y2="608" class="rule"/>
+    <text x="48" y="654" class="eyebrow">INTENT CHECKS</text>
+    <g transform="translate(48 680)">
+      <rect width="304" height="132" rx="4" class="note-box"/><text x="18" y="32" class="eyebrow">PRIVACY</text><text x="18" y="65" class="small">Front-left bedroom screened</text><text x="18" y="90" class="small">from rear living by mid-band.</text><text x="18" y="115" class="tiny">Door swing/clearance unresolved.</text>
+      <rect x="340" width="304" height="132" rx="4" class="note-box"/><text x="358" y="32" class="eyebrow">DAYLIGHT</text><text x="358" y="65" class="small">Rear primary living; left</text><text x="358" y="90" class="small">secondary bed/kitchen/living.</text><text x="358" y="115" class="tiny">Site/fire/privacy gates remain.</text>
+      <rect x="680" width="304" height="132" rx="4" class="note-box"/><text x="698" y="32" class="eyebrow">CIRCULATION</text><text x="698" y="65" class="small">4-ft gross entry/hall path.</text><text x="698" y="90" class="small">72 sq ft exact allocation.</text><text x="698" y="115" class="tiny">Net clear/turning unresolved.</text>
+    </g>
+    <rect x="48" y="846" width="984" height="158" rx="4" class="tag"/>
+    <text x="72" y="883" class="eyebrow">AREA RECONCILIATION</text>
+    <text x="72" y="919" class="body">204 + 144 + 84 + 72 + 60 + 36 = 600 sq ft gross · delta 0.</text>
+    <text x="72" y="951" class="body">6-in exterior and 4.5-in interior wall bands are proposals only.</text>
+    <text x="72" y="980" class="small">No net usable-area, assembly, accessibility, or compliance conclusion.</text>
+  </g>
+
+  <!-- 02 — Dimensioned plan candidate -->
+  <g id="frame-02-plan" transform="translate(80 1230)" data-frame="02 — Dimensioned plan candidate">
+    <rect class="panel" width="1080" height="1070" rx="8"/>
+    <text x="48" y="58" class="eyebrow">02 · DIMENSIONED PLAN CANDIDATE</text>
+    <text x="48" y="108" class="title">20 ft × 30 ft gross envelope</text>
+    <text x="48" y="143" class="subtitle">24 SVG units = 1 ft · origin FRONT-LEFT · +x RIGHT · +y REAR</text>
+
+    <g id="plan-scale-24" transform="translate(280 180)" data-scale-svg-units-per-foot="24">
+      <!-- closed gross-zone polygons; ft points are authoritative source metadata -->
+      <polygon id="SP-BED-01" data-candidate-id="SP-BED-01" data-points-ft="0,0 16,0 16,9 0,9" data-area-sqft="144" points="0,0 384,0 384,216 0,216" class="zone-bed zone-line"/>
+      <polygon id="SP-ENTRY-01" data-candidate-id="SP-ENTRY-01" data-points-ft="16,0 20,0 20,6 16,6" data-area-sqft="24" points="384,0 480,0 480,144 384,144" class="zone-entry zone-line"/>
+      <polygon id="SP-HALL-01" data-candidate-id="SP-HALL-01" data-points-ft="16,6 20,6 20,18 16,18" data-area-sqft="48" points="384,144 480,144 480,432 384,432" class="zone-hall zone-line"/>
+      <polygon id="SP-KIT-01" data-candidate-id="SP-KIT-01" data-points-ft="0,9 9.333333333333,9 9.333333333333,18 0,18" data-area-sqft="84" points="0,216 224,216 224,432 0,432" class="zone-kit zone-line"/>
+      <polygon id="SP-BATH-01" data-candidate-id="SP-BATH-01" data-points-ft="9.333333333333,9 16,9 16,18 9.333333333333,18" data-area-sqft="60" points="224,216 384,216 384,432 224,432" class="zone-bath zone-line"/>
+      <polygon id="SP-LIV-01" data-candidate-id="SP-LIV-01" data-points-ft="0,18 20,18 20,21 16,21 16,30 0,30" data-area-sqft="204" points="0,432 480,432 480,504 384,504 384,720 0,720" class="zone-liv zone-line"/>
+      <polygon id="SP-STOR-01" data-candidate-id="SP-STOR-01" data-points-ft="16,21 20,21 20,30 16,30" data-area-sqft="36" points="384,504 480,504 480,720 384,720" class="zone-stor zone-line"/>
+      <rect width="480" height="720" fill="url(#candidate-hatch)" opacity="0.28"/>
+
+      <!-- candidate wall bands, not assemblies -->
+      <rect width="480" height="720" class="wall-ext"/>
+      <path d="M384 0 V432 M0 216 H384 M224 216 V432 M0 432 H480 M384 504 H480 M384 504 V720" class="wall-int"/>
+
+      <!-- doors and cased openings, exact published offsets -->
+      <line id="D-ENTRY-01" data-opening-id="D-ENTRY-01" data-host="FRONT" data-offset-ft="17" data-width-ft="3" x1="408" y1="0" x2="480" y2="0" class="opening-cut"/>
+      <path d="M480 0 V72 M480 72 A72 72 0 0 0 408 0" class="door"/>
+      <line id="D-BED-01" data-opening-id="D-BED-01" data-host="P-01" data-offset-ft="6" data-width-ft="3" x1="384" y1="144" x2="384" y2="216" class="opening-cut"/>
+      <path d="M384 216 H312 M312 216 A72 72 0 0 1 384 144" class="door-unknown"/>
+      <line id="D-BATH-01" data-opening-id="D-BATH-01" data-host="P-04" data-offset-ft="12" data-width-ft="3" x1="384" y1="288" x2="384" y2="360" class="opening-cut"/>
+      <path d="M384 288 H456 M456 288 A72 72 0 0 1 384 360" class="door-unknown"/>
+      <line id="D-STOR-01" data-opening-id="D-STOR-01" data-host="P-06" data-offset-ft="23" data-width-ft="2.666666666667" x1="384" y1="552" x2="384" y2="616" class="opening-cut"/>
+      <path d="M384 552 H448 M448 552 A64 64 0 0 1 384 616" class="door-unknown"/>
+      <line id="O-KIT-LIV-01" data-opening-id="O-KIT-LIV-01" data-host="P-05" data-offset-ft="2" data-width-ft="6" x1="48" y1="432" x2="192" y2="432" class="opening-cut"/>
+      <line x1="48" y1="432" x2="192" y2="432" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/>
+      <line id="O-HALL-LIV-01" data-opening-id="O-HALL-LIV-01" data-host="P-05" data-offset-ft="16" data-width-ft="4" x1="384" y1="432" x2="480" y2="432" class="opening-cut"/>
+      <line x1="384" y1="432" x2="480" y2="432" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/>
+
+      <!-- windows, exact published host offsets -->
+      <line id="W-BED-01" data-opening-id="W-BED-01" data-host="LEFT" data-offset-ft="2.5" data-width-ft="4" x1="0" y1="60" x2="0" y2="156" class="window-cut"/><line x1="0" y1="60" x2="0" y2="156" class="window"/>
+      <line id="W-KIT-01" data-opening-id="W-KIT-01" data-host="LEFT" data-offset-ft="11" data-width-ft="4" x1="0" y1="264" x2="0" y2="360" class="window-cut"/><line x1="0" y1="264" x2="0" y2="360" class="window"/>
+      <line id="W-LIV-03" data-opening-id="W-LIV-03" data-host="LEFT" data-offset-ft="23" data-width-ft="4" x1="0" y1="552" x2="0" y2="648" class="window-cut"/><line x1="0" y1="552" x2="0" y2="648" class="window"/>
+      <line id="W-LIV-01" data-opening-id="W-LIV-01" data-host="REAR" data-offset-ft="1.5" data-width-ft="5" x1="36" y1="720" x2="156" y2="720" class="window-cut"/><line x1="36" y1="720" x2="156" y2="720" class="window"/>
+      <line id="W-LIV-02" data-opening-id="W-LIV-02" data-host="REAR" data-offset-ft="9.5" data-width-ft="5" x1="228" y1="720" x2="348" y2="720" class="window-cut"/><line x1="228" y1="720" x2="348" y2="720" class="window"/>
+      <line id="W-ENTRY-01" data-opening-id="W-ENTRY-01" data-host="RIGHT" data-offset-ft="1.5" data-width-ft="2" x1="480" y1="36" x2="480" y2="84" class="window-cut"/><line x1="480" y1="36" x2="480" y2="84" class="window"/>
+
+      <!-- labels -->
+      <text x="180" y="96" text-anchor="middle" class="mono">SP-BED-01</text><text x="180" y="122" text-anchor="middle" class="small">16' × 9' · 144 sf gross</text>
+      <text x="432" y="104" text-anchor="middle" class="mono-small">SP-ENTRY-01</text><text x="432" y="127" text-anchor="middle" class="tiny">4' × 6' · 24 sf</text>
+      <text x="468" y="238" text-anchor="middle" class="mono-small" transform="rotate(90 468 238)">SP-HALL-01 · 4' × 12' · 48 sf</text>
+      <text x="112" y="312" text-anchor="middle" class="mono">SP-KIT-01</text><text x="112" y="338" text-anchor="middle" class="small">9'4" × 9' · 84 sf</text>
+      <text x="304" y="312" text-anchor="middle" class="mono">SP-BATH-01</text><text x="304" y="338" text-anchor="middle" class="small">6'8" × 9' · 60 sf</text>
+      <text x="190" y="566" text-anchor="middle" class="mono">SP-LIV-01</text><text x="190" y="592" text-anchor="middle" class="small">L-shaped · 204 sf gross</text>
+      <text x="456" y="652" text-anchor="middle" class="mono-small" transform="rotate(90 456 652)">SP-STOR-01 · 4' × 9' · 36 sf</text>
+
+      <!-- opening IDs adjacent to geometry -->
+      <text x="442" y="22" text-anchor="middle" class="mono-small">D-ENTRY-01</text>
+      <text x="370" y="186" text-anchor="end" class="mono-small">D-BED-01</text>
+      <text x="370" y="276" text-anchor="end" class="mono-small">D-BATH-01</text>
+      <text x="394" y="538" text-anchor="start" class="mono-small">D-STOR-01</text>
+      <text x="120" y="451" text-anchor="middle" class="mono-small">O-KIT-LIV-01 · 6'</text>
+      <text x="474" y="451" text-anchor="end" class="mono-small">O-HALL-LIV-01 · 4'</text>
+    </g>
+
+    <!-- gross dimensions -->
+    <g>
+      <line x1="280" y1="164" x2="760" y2="164" class="dim"/><line x1="280" y1="154" x2="280" y2="174" class="dim"/><line x1="760" y1="154" x2="760" y2="174" class="dim"/>
+      <text x="520" y="157" text-anchor="middle" class="dim-text">20'-0" GROSS</text>
+      <line x1="260" y1="180" x2="260" y2="900" class="dim"/><line x1="250" y1="180" x2="270" y2="180" class="dim"/><line x1="250" y1="900" x2="270" y2="900" class="dim"/>
+      <text x="244" y="540" text-anchor="middle" class="dim-text" transform="rotate(-90 244 540)">30'-0" GROSS</text>
+    </g>
+
+    <!-- orientation axes -->
+    <g transform="translate(820 208)"><circle cx="0" cy="0" r="5" fill="#117990"/><line x1="0" y1="0" x2="90" y2="0" class="axis"/><line x1="0" y1="0" x2="0" y2="90" class="axis"/><text x="102" y="6" class="mono-small">+x RIGHT</text><text x="12" y="104" class="mono-small">+y REAR</text><text x="0" y="-18" text-anchor="middle" class="mono-small">FRONT-LEFT ORIGIN</text></g>
+    <g transform="translate(810 350)"><rect width="220" height="178" rx="4" class="note-box"/><text x="16" y="30" class="eyebrow">OPENING KEY</text><line x1="18" y1="62" x2="70" y2="62" class="door"/><text x="86" y="68" class="small">door / hand candidate</text><line x1="18" y1="98" x2="70" y2="98" class="window"/><text x="86" y="104" class="small">window proposal</text><line x1="18" y1="134" x2="70" y2="134" stroke="#C58A52" stroke-width="3" stroke-dasharray="10 6"/><text x="86" y="140" class="small">cased opening</text><text x="16" y="166" class="tiny">All net-clear evidence unknown.</text></g>
+    <rect x="810" y="560" width="220" height="340" rx="4" class="warning-box"/>
+    <text x="826" y="592" class="eyebrow">TRUTH NOTES</text>
+    <text x="826" y="628" class="small">Gross polygons tile exactly.</text><text x="826" y="656" class="small">Wall bands are diagram</text><text x="826" y="680" class="small">proposals, not assemblies.</text>
+    <text x="826" y="720" class="small">Furniture and fixtures:</text><text x="826" y="744" class="small">not authored; feasibility</text><text x="826" y="768" class="small">remains unverified.</text>
+    <text x="826" y="808" class="small">Window/door code, fire,</text><text x="826" y="832" class="small">energy, privacy, egress,</text><text x="826" y="856" class="small">manufacturer gates remain.</text>
+    <text x="826" y="884" class="tiny">SVG pixels are presentation only.</text>
+    <text x="48" y="1020" class="mono-small">FRONT = top · REAR = bottom · LEFT/RIGHT follow the published right-handed coordinate frame</text>
+  </g>
+
+  <!-- 03 — Facade/opening schedule -->
+  <g id="frame-03-openings" transform="translate(1240 1230)" data-frame="03 — Facade/opening schedule">
+    <rect class="panel" width="1080" height="1070" rx="8"/>
+    <text x="48" y="58" class="eyebrow">03 · FACADE / OPENING SCHEDULE</text>
+    <text x="48" y="108" class="title">Room-driven candidate openings</text>
+    <text x="48" y="143" class="subtitle">Stable IDs, hosts, published offsets, operation and evidence state</text>
+    <g transform="translate(48 180)">
+      <rect width="984" height="44" class="table-head"/>
+      <text x="12" y="29" class="mono-small">ID / HOST</text><text x="230" y="29" class="mono-small">NOMINAL W×H</text><text x="390" y="29" class="mono-small">SILL / HEAD</text><text x="555" y="29" class="mono-small">OFFSET</text><text x="715" y="29" class="mono-small">OPERATION / EVIDENCE</text>
+      <g class="tiny">
+        <rect y="44" width="984" height="58" class="table-alt"/><text x="12" y="68">D-ENTRY-01 · FRONT / entry</text><text x="230" y="68">3' × 6'8"</text><text x="390" y="68">0 / 6'8"</text><text x="555" y="68">17' from LEFT</text><text x="715" y="68">RH inswing candidate</text><text x="715" y="91">net clear unknown</text>
+        <rect y="102" width="984" height="58" fill="#FCFBF8"/><text x="12" y="126">D-BED-01 · P-01 / bedroom</text><text x="230" y="126">3' × 6'8"</text><text x="390" y="126">0 / 6'8"</text><text x="555" y="126">y=6' FRONT</text><text x="715" y="126">into bedroom; hand unknown</text><text x="715" y="149">net clear unknown</text>
+        <rect y="160" width="984" height="58" class="table-alt"/><text x="12" y="184">D-BATH-01 · P-04 / bath</text><text x="230" y="184">3' × 6'8"</text><text x="390" y="184">0 / 6'8"</text><text x="555" y="184">y=12' FRONT</text><text x="715" y="184">outswing to hall; hand unknown</text><text x="715" y="207">net clear unknown</text>
+        <rect y="218" width="984" height="58" fill="#FCFBF8"/><text x="12" y="242">D-STOR-01 · P-06 / stor</text><text x="230" y="242">2'8" × 6'8"</text><text x="390" y="242">0 / 6'8"</text><text x="555" y="242">y=23' FRONT</text><text x="715" y="242">into storage; hand unknown</text>
+        <rect y="276" width="984" height="58" class="table-alt"/><text x="12" y="300">O-KIT-LIV-01 · P-05</text><text x="230" y="300">6' cased</text><text x="390" y="300">floor / 6'8"</text><text x="555" y="300">x=2' LEFT</text><text x="715" y="300">open; no leaf</text>
+        <rect y="334" width="984" height="58" fill="#FCFBF8"/><text x="12" y="358">O-HALL-LIV-01 · P-05</text><text x="230" y="358">4' cased</text><text x="390" y="358">floor / 6'8"</text><text x="555" y="358">x=16' LEFT</text><text x="715" y="358">open; no leaf</text>
+        <rect y="392" width="984" height="58" class="table-alt"/><text x="12" y="416">W-BED-01 · LEFT / bed</text><text x="230" y="416">4' × 4'</text><text x="390" y="416">2'6" / 6'6"</text><text x="555" y="416">2'6" FRONT</text><text x="715" y="416">casement; EERO unknown</text>
+        <rect y="450" width="984" height="58" fill="#FCFBF8"/><text x="12" y="474">W-KIT-01 · LEFT / kitchen</text><text x="230" y="474">4' × 3'</text><text x="390" y="474">3'6" / 6'6"</text><text x="555" y="474">11' FRONT</text><text x="715" y="474">awning candidate</text>
+        <rect y="508" width="984" height="58" class="table-alt"/><text x="12" y="532">W-LIV-01 · REAR / living</text><text x="230" y="532">5' × 4'</text><text x="390" y="532">2'6" / 6'6"</text><text x="555" y="532">1'6" LEFT</text><text x="715" y="532">casement-pair candidate</text>
+        <rect y="566" width="984" height="58" fill="#FCFBF8"/><text x="12" y="590">W-LIV-02 · REAR / living</text><text x="230" y="590">5' × 4'</text><text x="390" y="590">2'6" / 6'6"</text><text x="555" y="590">9'6" LEFT</text><text x="715" y="590">casement-pair candidate</text>
+        <rect y="624" width="984" height="58" class="table-alt"/><text x="12" y="648">W-LIV-03 · LEFT / living</text><text x="230" y="648">4' × 4'</text><text x="390" y="648">2'6" / 6'6"</text><text x="555" y="648">23' FRONT</text><text x="715" y="648">casement candidate</text>
+        <rect y="682" width="984" height="58" fill="#FCFBF8"/><text x="12" y="706">W-ENTRY-01 · RIGHT / entry</text><text x="230" y="706">2' × 4'</text><text x="390" y="706">3' / 7'</text><text x="555" y="706">1'6" FRONT</text><text x="715" y="706">fixed candidate</text>
+      </g>
+    </g>
+    <g transform="translate(48 956)"><rect width="984" height="66" rx="4" class="warning-box"/><text x="20" y="28" class="small">FRONT quiet / one entry · RIGHT restrained service side · REAR paired primary living daylight · LEFT staggered secondary daylight</text><text x="20" y="52" class="tiny">Bath: mechanical-only ventilation candidate. Fire distance, WUI, energy, privacy, manufacturer, egress and local review can delete or relocate any row.</text></g>
+  </g>
+
+  <!-- 04 — Roof/form & section logic -->
+  <g id="frame-04-roof" transform="translate(80 2380)" data-frame="04 — Roof/form &amp; section logic">
+    <rect class="panel" width="1080" height="1070" rx="8"/>
+    <text x="48" y="58" class="eyebrow">04 · ROOF / FORM &amp; SECTION LOGIC</text>
+    <text x="48" y="108" class="title">Diagrammatic relationships only</text>
+    <text x="48" y="143" class="subtitle">Gable 4:12 · ridge parallel +y/depth · front/rear gable ends · nominal 12-in eave</text>
+
+    <g id="roof-plan" transform="translate(78 205)" data-roof="published-candidate-assumptions-only">
+      <text x="160" y="-22" text-anchor="middle" class="eyebrow">ROOF PLAN LOGIC</text>
+      <rect x="-10" y="-10" width="340" height="500" fill="#EEE8DE" stroke="#81756A" stroke-width="2"/>
+      <rect x="0" y="0" width="320" height="480" fill="none" stroke="#202522" stroke-width="4"/>
+      <line x1="160" y1="-10" x2="160" y2="490" stroke="#74451F" stroke-width="5"/>
+      <line x1="0" y1="240" x2="145" y2="240" class="graph-edge"/><line x1="320" y1="240" x2="175" y2="240" class="graph-edge"/>
+      <text x="170" y="90" class="mono-small">RIDGE +y</text><text x="170" y="112" class="tiny">parallel to depth</text>
+      <text x="10" y="522" class="mono-small">NOMINAL 12-IN EAVE · ALL SIDES</text>
+      <text x="160" y="-38" text-anchor="middle" class="mono-small">FRONT GABLE END</text><text x="160" y="548" text-anchor="middle" class="mono-small">REAR GABLE END</text>
+    </g>
+
+    <g id="section-diagram" transform="translate(510 230)">
+      <text x="250" y="-47" text-anchor="middle" class="eyebrow">TRANSVERSE SECTION LOGIC</text>
+      <line x1="30" y1="430" x2="470" y2="430" stroke="#202522" stroke-width="5"/>
+      <line x1="60" y1="430" x2="60" y2="178" stroke="#202522" stroke-width="5"/>
+      <line x1="440" y1="430" x2="440" y2="178" stroke="#202522" stroke-width="5"/>
+      <path d="M40 188 L250 68 L460 188" fill="none" stroke="#74451F" stroke-width="7"/>
+      <line x1="60" y1="178" x2="440" y2="178" stroke="#81756A" stroke-width="2" stroke-dasharray="8 6"/>
+      <line x1="20" y1="430" x2="20" y2="178" class="dim"/><line x1="10" y1="430" x2="30" y2="430" class="dim"/><line x1="10" y1="178" x2="30" y2="178" class="dim"/>
+      <text x="4" y="304" text-anchor="middle" class="dim-text" transform="rotate(-90 4 304)">9'-0" WALL PLATE</text>
+      <path d="M250 68 L390 148" stroke="#117990" stroke-width="2"/><text x="346" y="104" class="mono">4:12</text>
+      <text x="250" y="472" text-anchor="middle" class="small">20-ft gross width · ridge height not adopted</text>
+      <text x="250" y="500" text-anchor="middle" class="tiny">No assembly, structure, ceiling, insulation, venting or MEP conclusion</text>
+    </g>
+
+    <line x1="48" y1="790" x2="1032" y2="790" class="rule"/>
+    <text x="48" y="832" class="eyebrow">UNRESOLVED PROFESSIONAL / SITE GATES</text>
+    <text x="48" y="870" class="small">01 structure / soils · 02 fire / WUI / AHJ · 03 energy / envelope · 04 roof drainage</text>
+    <text x="48" y="898" class="small">05 MEP / utilities · 06 survey / setbacks / easements · 07 height / coverage · 08 grading / drainage</text>
+    <text x="48" y="926" class="small">09 accessibility interpretation · 10 opening fire separation · 11 ventilation · 12 local amendments</text>
+    <rect x="48" y="958" width="984" height="66" rx="4" class="truth"/>
+    <text x="540" y="986" text-anchor="middle" class="truth-text">DIAGRAMMATIC ONLY · NO CONSTRUCTION OR COMPLIANCE INFERENCE</text>
+    <text x="540" y="1012" text-anchor="middle" class="inverse tiny">Any roof change creates a new topology/height/drainage/structure/opening/camera decision.</text>
+  </g>
+
+  <!-- 05 — Decision delta -->
+  <g id="frame-05-delta" transform="translate(1240 2380)" data-frame="05 — Decision delta">
+    <rect class="panel" width="1080" height="1070" rx="8"/>
+    <text x="48" y="58" class="eyebrow">05 · DECISION DELTA</text>
+    <text x="48" y="108" class="title">D01–D11 smallest decision set</text>
+    <text x="48" y="143" class="subtitle">“Accepted” means inside this candidate only — never owner-adopted architecture</text>
+    <g transform="translate(48 178)">
+      <rect width="984" height="42" class="table-head"/><text x="12" y="28" class="mono-small">ID</text><text x="64" y="28" class="mono-small">STATUS / EXACT CANDIDATE VALUE</text><text x="650" y="28" class="mono-small">CHANGE CONSEQUENCE</text>
+      <g class="tiny">
+        <rect y="42" width="984" height="62" class="table-alt"/><text x="12" y="68">D01</text><text x="64" y="68">assumption · 20'×30' / 600 sf</text><text x="64" y="90">gross rectangle</text><text x="650" y="68">regenerates all zones, openings, facades,</text><text x="650" y="90">roof, cameras and catalog facts</text>
+        <rect y="104" width="984" height="62" fill="#FCFBF8"/><text x="12" y="130">D02</text><text x="64" y="130">exact fit · 204/84/144/60/72/36 sf</text><text x="650" y="130">moves polygons; invalidates circulation,</text><text x="650" y="152">furniture, openings and reconciliation</text>
+        <rect y="166" width="984" height="62" class="table-alt"/><text x="12" y="192">D03</text><text x="64" y="192">proposed topology · bed/entry front;</text><text x="64" y="214">wet mid-band; living/storage rear</text><text x="650" y="192">new profile; changes privacy, wet core,</text><text x="650" y="214">circulation, facades and openings</text>
+        <rect y="228" width="984" height="62" fill="#FCFBF8"/><text x="12" y="254">D04</text><text x="64" y="254">FRONT entry · RIGHT service · REAR</text><text x="64" y="276">primary · LEFT secondary daylight</text><text x="650" y="254">mirroring changes hosts, offsets, handing,</text><text x="650" y="276">site review, rhythm and cameras</text>
+        <rect y="290" width="984" height="62" class="table-alt"/><text x="12" y="316">D05</text><text x="64" y="316">4:12 gable · +y ridge · 12-in eave ·</text><text x="64" y="338">9-ft plate</text><text x="650" y="316">new topology/height/drainage/eave/fire/</text><text x="650" y="338">structure/section/camera decisions</text>
+        <rect y="352" width="984" height="62" fill="#FCFBF8"/><text x="12" y="378">D06</text><text x="64" y="378">3'×6'8" nominal entry</text><text x="64" y="400">net clear remains unknown</text><text x="650" y="378">changes door geometry, catalog wording,</text><text x="650" y="400">threshold/landing/access review</text>
+        <rect y="414" width="984" height="62" class="table-alt"/><text x="12" y="440">D07</text><text x="64" y="440">room-driven opening schedule in 03</text><text x="64" y="462">stable IDs / hosts / offsets / evidence</text><text x="650" y="440">updates plan/facades/egress/fire/energy/</text><text x="650" y="462">renders and ordering</text>
+        <rect y="476" width="984" height="62" fill="#FCFBF8"/><text x="12" y="502">D08</text><text x="64" y="502">unresolved · no assembly schedule</text><text x="64" y="524">6-in / 4.5-in are graphics only</text><text x="650" y="502">changes net area, junctions, openings,</text><text x="650" y="524">structure/fire/acoustic/energy facts</text>
+        <rect y="538" width="984" height="62" class="table-alt"/><text x="12" y="564">D09</text><text x="64" y="564">universal-ready intent · 4-ft gross path</text><text x="64" y="586">no accessibility or no-step claim</text><text x="650" y="564">changes doors, bath, controls, area, site</text><text x="650" y="586">work and professional review</text>
+        <rect y="600" width="984" height="62" fill="#FCFBF8"/><text x="12" y="626">D10</text><text x="64" y="626">right-handed origin · +x/+y/+z</text><text x="64" y="648">no implicit mirror</text><text x="650" y="626">changes coordinates, normals, hands, hosts,</text><text x="650" y="648">digests, facades, cameras and identity</text>
+        <rect y="662" width="984" height="62" class="table-alt"/><text x="12" y="688">D11</text><text x="64" y="688">exact rational ft / 4-in increments;</text><text x="64" y="710">1/16-in JSON quantum unresolved</text><text x="650" y="688">changes closure, equality, canonical bytes,</text><text x="650" y="710">digests, round trips and mutation tests</text>
+      </g>
+    </g>
+    <rect x="48" y="934" width="984" height="92" rx="4" class="truth"/>
+    <text x="540" y="970" text-anchor="middle" class="truth-text">A600 CANDIDATE READY FOR OWNER / FABLE DESIGN REVIEW</text>
+    <text x="540" y="1001" text-anchor="middle" class="inverse tiny">Editable SVG fallback complete; existing Figma file remains the later import target.</text>
+  </g>
+
+  <text x="80" y="3555" class="mono-small">SOURCE-LOCKED FALLBACK · EXACT ZONE/OPENING PROPOSALS FROM ISSUE #114 · NO NEW BUILDING GEOMETRY · 2026-08-08 AMERICA/LOS_ANGELES</text>
+  <text x="2320" y="3555" text-anchor="end" class="mono-small">California Material Modernism presentation / neutral technical plan</text>
+</svg>
