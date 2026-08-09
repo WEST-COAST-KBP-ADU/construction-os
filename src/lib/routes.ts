@@ -128,15 +128,14 @@ const dynamicRouteData = {
 >;
 
 export function expandRoutePaths(route: PublicRoute): string[] {
-  if (route.dynamicSegment.source === "none") {
+  const { dynamicSegment } = route;
+
+  if (dynamicSegment.source === "none") {
     return [route.path];
   }
 
-  return dynamicRouteData[route.dynamicSegment.source].map((page) =>
-    route.path.replace(
-      \`[\${route.dynamicSegment.parameter}]\`,
-      page.slug,
-    ),
+  return dynamicRouteData[dynamicSegment.source].map((page) =>
+    route.path.replace(`[${dynamicSegment.parameter}]`, page.slug),
   );
 }
 

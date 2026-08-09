@@ -29,16 +29,16 @@ const expectedRegistryPaths = [
 
 const expectedBaseSitemapUrls = [
   siteConfig.url,
-  "/studio",
-  "/about",
-  "/compare",
-  "/process",
-  "/faq",
+  toPublicRouteUrl("/studio", siteConfig.url),
+  toPublicRouteUrl("/about", siteConfig.url),
+  toPublicRouteUrl("/compare", siteConfig.url),
+  toPublicRouteUrl("/process", siteConfig.url),
+  toPublicRouteUrl("/faq", siteConfig.url),
   ...servicePages.map((page) =>
-    toPublicRouteUrl(\`/services/\${page.slug}\`, siteConfig.url),
+    toPublicRouteUrl(`/services/${page.slug}`, siteConfig.url),
   ),
   ...jurisdictionPages.map((page) =>
-    toPublicRouteUrl(\`/adu-builder/\${page.slug}\`, siteConfig.url),
+    toPublicRouteUrl(`/adu-builder/${page.slug}`, siteConfig.url),
   ),
 ];
 
@@ -57,7 +57,7 @@ function pageFiles(directory: string): string[] {
 function routePathForPage(pageFile: string): string {
   const directory = relative(appRoot, dirname(pageFile));
 
-  return directory === "" ? "/" : \`/\${directory.split(sep).join("/")}\`;
+  return directory === "" ? "/" : `/${directory.split(sep).join("/")}`;
 }
 
 const filesystemRoutePaths = pageFiles(appRoot)
@@ -143,10 +143,10 @@ describe("public route registry", () => {
       },
     ]);
     expect(expandRoutePaths(dynamicRoutes[0]!)).toEqual(
-      servicePages.map((page) => \`/services/\${page.slug}\`),
+      servicePages.map((page) => `/services/${page.slug}`),
     );
     expect(expandRoutePaths(dynamicRoutes[1]!)).toEqual(
-      jurisdictionPages.map((page) => \`/adu-builder/\${page.slug}\`),
+      jurisdictionPages.map((page) => `/adu-builder/${page.slug}`),
     );
   });
 
