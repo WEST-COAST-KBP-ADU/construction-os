@@ -186,4 +186,20 @@ describe("STUDIO-MODEL-PROJECTION-001", () => {
       "studio_projection_mutable_render_ref",
     );
   });
+
+  it("refuses a digest-consistent non-advancing conceptual boundary", async () => {
+    const candidate = cloneRelease();
+    const render = candidate.models[0].derived_artifacts.find(
+      (artifact) => artifact.kind === "render",
+    );
+    if (!render) throw new Error("fixture_missing_render");
+
+    render.marked_conceptual_until = "concept_only";
+    await resealArtifact(render);
+    await resealRelease(candidate);
+
+    await expect(buildStudioModelProjection(candidate, cloneSources())).rejects.toThrowError(
+      "studio_projection_render_truth_boundary_invalid",
+    );
+  });
 });
