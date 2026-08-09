@@ -9,13 +9,16 @@ PRs read from GitHub at that anchor.
 
 ## Lane occupancy
 
+Executor lanes are numbered Worker 1–3 by Owner convention (2026-08-09); each
+worker is one external Codex session running one packet at a time.
+
 | Lane | Packet | State |
 | :--- | :----- | :---- |
-| Engineering slot 1 | #117 `TEST-HARNESS-ALIAS-001` | DISPATCH issued; awaiting executor RESULT |
-| Engineering slot 2 | #116 `STUDIO-PROJECTION-COVERAGE-001` | DISPATCH issued; awaiting executor RESULT |
-| Landing slot | #105 `VISUAL-HOME-001` | next dispatch |
+| Worker 1 | #123 `EXECUTABLE-GEOMETRY-SCHEMA-001` | DISPATCH issued; launch pending |
+| Worker 2 | #117 `TEST-HARNESS-ALIAS-001`, then #116 `STUDIO-PROJECTION-COVERAGE-001` | DISPATCH issued; launch pending |
+| Worker 3 | #96 `IA-REGISTRY-001` | DISPATCH issued; launch pending |
 | Independent review | non-author lane | idle; engaged at each executor RESULT |
-| Decision fork | #115 `FABLE-GATE-MODEL-PROGRAM-001` | prepared; starts after the geometry results publish |
+| Critical-fork review | #115 — GPT-5.6, dual-key with Fable 5 | arms when #114 publishes its final result |
 
 ## Recently adopted by Owner merge
 
