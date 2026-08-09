@@ -1,7 +1,14 @@
 # STATE — single shared board
 
-Owner of this file: operational lead / registrar under OPERATING-MODEL-v3.
-Merged `main` is the only truth; this board is the index, not the source.
+Owner of this file: the team lead under the operating model in force —
+`OPERATING-MODEL-v3` until the Owner merges `OPERATING-MODEL-v4`, and v4
+thereafter. Merged `main` is the only truth; this board is the index, not the
+source.
+
+The queue below is stale at `main@4bb02f3` and is not a current statement of
+work. It was last synchronized at `main@cdee150` and does not reflect the
+packets merged since, nor the 19 open Issues and 10 open PRs now live. Refresh
+it from authoritative surfaces before relying on any row.
 
 Updated: 2026-08-05 — post-WORK-ORDER-003 registry synchronization from
 `main@cdee1503ba5fab5481a0ad07393f1ca36191b909`.
