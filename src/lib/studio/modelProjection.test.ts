@@ -33,8 +33,7 @@ function cloneSources(): Record<string, AduGeometrySource> {
 }
 
 async function resealArtifact(artifact: ModelDerivedArtifact): Promise<void> {
-  const { digest: _digest, ...specification } = artifact;
-  artifact.digest = await computeDigest(specification);
+  artifact.digest = await computeDigest(artifact, ["digest"]);
 }
 
 async function resealRelease(candidate: AduModelRelease): Promise<void> {
@@ -184,6 +183,57 @@ describe("STUDIO-MODEL-PROJECTION-001", () => {
 
     await expect(buildStudioModelProjection(candidate, cloneSources())).rejects.toThrowError(
       "studio_projection_mutable_render_ref",
+    );
+  });
+
+  it("refuses a digest-consistent render reference for another model", async () => {
+    const candidate = cloneRelease();
+    const compactRender = candidate.models[0].derived_artifacts.find(
+      (artifact) => artifact.kind === "render",
+    );
+    const premiumRender = candidate.models[2].derived_artifacts.find(
+      (artifact) => artifact.kind === "render",
+    );
+    if (!compactRender || !premiumRender) throw new Error("fixture_missing_render");
+
+    compactRender.ref = premiumRender.ref;
+    await resealArtifact(compactRender);
+    await resealRelease(candidate);
+
+    await expect(buildStudioModelProjection(candidate, cloneSources())).rejects.toThrowError(
+      "studio_projection_render_subject_mismatch",
+    );
+  });
+
+  it("refuses a digest-consistent legacy image render reference", async () => {
+    const candidate = cloneRelease();
+    const render = candidate.models[1].derived_artifacts.find(
+      (artifact) => artifact.kind === "render",
+    );
+    if (!render) throw new Error("fixture_missing_render");
+
+    render.ref = "/images/attainable-adu-hero-concept-v1.webp";
+    await resealArtifact(render);
+    await resealRelease(candidate);
+
+    await expect(buildStudioModelProjection(candidate, cloneSources())).rejects.toThrowError(
+      "studio_projection_render_ref_invalid",
+    );
+  });
+
+  it("refuses a digest-consistent query-suffixed mutable render reference", async () => {
+    const candidate = cloneRelease();
+    const render = candidate.models[2].derived_artifacts.find(
+      (artifact) => artifact.kind === "render",
+    );
+    if (!render) throw new Error("fixture_missing_render");
+
+    render.ref = "models/derived/adu-b-800@1/latest?cache=1";
+    await resealArtifact(render);
+    await resealRelease(candidate);
+
+    await expect(buildStudioModelProjection(candidate, cloneSources())).rejects.toThrowError(
+      "studio_projection_render_ref_invalid",
     );
   });
 

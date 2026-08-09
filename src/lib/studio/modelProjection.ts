@@ -17,6 +17,9 @@ export const STUDIO_MODEL_PROJECTION_SCHEMA = "studio-model-projection/1" as con
 export const STUDIO_RENDER_STATE = "specified_not_generated" as const;
 
 const MUTABLE_REFERENCE_SEGMENTS = new Set(["latest", "current", "stable", "head", "next"]);
+const GEOMETRY_REFERENCE_PATTERN = /^models\/geometry\/(adu-[a-z]-\d{3})@([1-9]\d*)$/;
+const RENDER_REFERENCE_PATTERN =
+  /^models\/derived\/(adu-[a-z]-\d{3})@([1-9]\d*)\/render-concept$/;
 
 export type StudioProjectedParameter = {
   key: string;
@@ -92,6 +95,25 @@ function assertImmutableReference(reference: string, code: string): void {
   }
 }
 
+function assertCanonicalRenderReference(model: AduModel, reference: string): void {
+  const geometrySubject = GEOMETRY_REFERENCE_PATTERN.exec(model.geometry.source_ref);
+  const renderSubject = RENDER_REFERENCE_PATTERN.exec(reference);
+
+  if (renderSubject === null) {
+    fail("studio_projection_render_ref_invalid");
+  }
+
+  if (
+    geometrySubject === null ||
+    geometrySubject[1] !== model.model_id ||
+    renderSubject[1] !== model.model_id ||
+    renderSubject[1] !== geometrySubject[1] ||
+    renderSubject[2] !== geometrySubject[2]
+  ) {
+    fail("studio_projection_render_subject_mismatch");
+  }
+}
+
 function deepFreeze<T>(value: T): T {
   if (value !== null && typeof value === "object" && !Object.isFrozen(value)) {
     Object.freeze(value);
@@ -150,6 +172,7 @@ function projectRender(model: AduModel): StudioProjectedModel["render"] {
 
   assertImmutableReference(render.ref, "studio_projection_mutable_render_ref");
   assertImmutableReference(render.source_binding, "studio_projection_mutable_geometry_ref");
+  assertCanonicalRenderReference(model, render.ref);
 
   return {
     state: STUDIO_RENDER_STATE,
