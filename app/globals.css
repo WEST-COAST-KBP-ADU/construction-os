@@ -9,32 +9,34 @@
  * type size, space, radius, shadow, and motion value is defined here.
  */
 :root {
-  --color-canvas: #f4f1ea;
-  --color-surface: #ffffff;
-  --color-surface-muted: #e7e2d8;
-  --color-surface-raised: #ffffff;
-  --color-forest: #353b38;
-  --color-forest-deep: #171b1a;
-  --color-forest-deep-surface: #171b1a;
-  --color-forest-soft: #e8e2d8;
-  --color-gold: #b17a45;
-  --color-gold-deep: #714820;
-  --color-gold-soft: #efe3d2;
-  --color-ink: #242826;
-  --color-ink-muted: #5d6661;
-  --color-ink-subtle: #737b76;
-  --color-ink-inverse: #f8f6f1;
-  --color-ink-inverse-muted: #c8c5be;
-  --color-line: #d6d0c5;
-  --color-line-strong: #83796d;
-  --color-success: #236544;
+  --color-canvas: #F3EFE7;
+  --color-surface: #FCFBF8;
+  --color-surface-muted: #E6DED2;
+  --color-surface-raised: #FCFBF8;
+  --color-forest: #2A3E36;
+  --color-forest-deep: #121A17;
+  --color-forest-deep-surface: #121A17;
+  --color-forest-soft: #E7DFD4;
+  --color-gold: #C58A52;
+  --color-gold-deep: #74451F;
+  --color-gold-soft: #EBDAC5;
+  --color-ink: #202522;
+  --color-ink-muted: #59615D;
+  --color-ink-subtle: #5D6560;
+  --color-ink-inverse: #F7F3EB;
+  --color-ink-inverse-muted: #C9CEC9;
+  --color-line: #D3CABC;
+  --color-line-strong: #81756A;
+  --color-success: #1F6A45;
   --color-success-soft: #e0f0e5;
-  --color-warning: #8a3f0a;
+  --color-warning: #91450C;
   --color-warning-soft: #f7e3ca;
-  --color-danger: #8b3636;
+  --color-danger: #8E3838;
   --color-danger-soft: #f9e7e5;
-  --color-focus: #1a708f;
-  --color-focus-contrast: #f8f6f1;
+  --color-focus: #117990;
+  --color-focus-contrast: #FCFBF8;
+  --color-signal: #39D98A;
+  --color-signal-rgb: 57 217 138;
 
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-source-serif), serif;
@@ -119,15 +121,15 @@
   height: 1.875rem;
   align-items: center;
   justify-content: center;
-  border: var(--line-width) solid rgb(57 217 138 / 0.25);
+  border: var(--line-width) solid rgb(var(--color-signal-rgb) / 0.25);
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(57 217 138 / 0.12), transparent 65%);
+  background: radial-gradient(circle, rgb(var(--color-signal-rgb) / 0.12), transparent 65%);
 }
 
 .brand-seal::before,
 .brand-seal::after {
   position: absolute;
-  border: var(--line-width) solid rgb(57 217 138 / 0.14);
+  border: var(--line-width) solid rgb(var(--color-signal-rgb) / 0.14);
   border-radius: 50%;
   content: "";
 }
@@ -144,8 +146,8 @@
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 50%;
-  background: #39d98a;
-  box-shadow: 0 0 0.75rem #39d98a;
+  background: var(--color-signal);
+  box-shadow: 0 0 0.75rem var(--color-signal);
   animation: brand-signal-pulse 2.4s ease-in-out infinite;
 }
 
@@ -153,12 +155,12 @@
   0%,
   100% {
     opacity: 0.78;
-    box-shadow: 0 0 0.5rem rgb(57 217 138 / 0.68);
+    box-shadow: 0 0 0.5rem rgb(var(--color-signal-rgb) / 0.68);
   }
 
   50% {
     opacity: 1;
-    box-shadow: 0 0 1rem rgb(57 217 138 / 0.92);
+    box-shadow: 0 0 1rem rgb(var(--color-signal-rgb) / 0.92);
   }
 }
 
@@ -1358,32 +1360,34 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-canvas: #101312;
-    --color-surface: #171b19;
-    --color-surface-muted: #202522;
-    --color-surface-raised: #262c29;
-    --color-forest: #333a36;
-    --color-forest-deep: #f2f0ea;
-    --color-forest-deep-surface: #0d100f;
-    --color-forest-soft: #292f2c;
-    --color-gold: #c18a52;
-    --color-gold-deep: #e2b988;
-    --color-gold-soft: #3a2b1e;
-    --color-ink: #f2f0ea;
-    --color-ink-muted: #c8ceca;
-    --color-ink-subtle: #9ea6a1;
-    --color-ink-inverse: #f8f6f1;
-    --color-ink-inverse-muted: #c8ceca;
-    --color-line: #353b38;
-    --color-line-strong: #707b75;
-    --color-success: #8cc9a3;
+    --color-canvas: #101513;
+    --color-surface: #171D1B;
+    --color-surface-muted: #222A27;
+    --color-surface-raised: #29322E;
+    --color-forest: #35443D;
+    --color-forest-deep: #F3EFE7;
+    --color-forest-deep-surface: #0C110F;
+    --color-forest-soft: #2B342F;
+    --color-gold: #D9A36D;
+    --color-gold-deep: #E9BE91;
+    --color-gold-soft: #3C2C20;
+    --color-ink: #F3EFE7;
+    --color-ink-muted: #C9CEC9;
+    --color-ink-subtle: #A4ADA7;
+    --color-ink-inverse: #F7F3EB;
+    --color-ink-inverse-muted: #C9CEC9;
+    --color-line: #37413D;
+    --color-line-strong: #738078;
+    --color-success: #8FD1A8;
     --color-success-soft: #183c2b;
-    --color-warning: #ffb061;
+    --color-warning: #FFB568;
     --color-warning-soft: #42290f;
-    --color-danger: #efabab;
+    --color-danger: #F0AEAE;
     --color-danger-soft: #482728;
-    --color-focus: #57c7d4;
-    --color-focus-contrast: #f8f6f1;
+    --color-focus: #5CCAD2;
+    --color-focus-contrast: #F7F3EB;
+    --color-signal: #39D98A;
+    --color-signal-rgb: 57 217 138;
     --shadow-card: 0 0.75rem 2.5rem rgb(0 0 0 / 0.22);
     --shadow-card-hover: 0 1.25rem 3.25rem rgb(0 0 0 / 0.34);
     --shadow-panel: 0 1.5rem 4.5rem rgb(0 0 0 / 0.4);
