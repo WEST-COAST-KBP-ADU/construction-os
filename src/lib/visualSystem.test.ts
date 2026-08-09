@@ -59,7 +59,7 @@ const LIGHT_PALETTE = {
   "--color-gold-soft": "#EBDAC5",
   "--color-ink": "#202522",
   "--color-ink-muted": "#59615D",
-  "--color-ink-subtle": "#676F6A",
+  "--color-ink-subtle": "#5D6560",
   "--color-ink-inverse": "#F7F3EB",
   "--color-ink-inverse-muted": "#C9CEC9",
   "--color-line": "#D3CABC",
@@ -179,6 +179,7 @@ describe("portal visual-system regressions", () => {
       const surface = token(tokens, "--color-surface");
       const mutedSurface = token(tokens, "--color-surface-muted");
       const mutedInk = token(tokens, "--color-ink-muted");
+      const subtleInk = token(tokens, "--color-ink-subtle");
       const inverseMutedInk = token(tokens, "--color-ink-inverse-muted");
       const headingInk = token(tokens, "--color-forest-deep");
       const darkSurface = token(tokens, "--color-forest-deep-surface");
@@ -199,6 +200,7 @@ describe("portal visual-system regressions", () => {
         expect(contrastRatio(bronzeDeep, lightSurface)).toBeGreaterThanOrEqual(4.5);
       }
 
+      expect(contrastRatio(subtleInk, mutedSurface)).toBeGreaterThanOrEqual(4.5);
       expect(contrastRatio(inverseMutedInk, darkSurface)).toBeGreaterThanOrEqual(4.5);
       expect(contrastRatio(bronze, darkSurface)).toBeGreaterThanOrEqual(4.5);
     }
