@@ -1,7 +1,7 @@
 # Operating Model v4 — Claude lead, parallel Codex execution
 
-Status: **PROPOSED**. Becomes operative only if the Owner merges this record.
-Nothing in this file is adopted by its own presence on a branch.
+Status: **ADOPTED**. The Owner merged PR #121 on 2026-08-09 at
+`main@9de3fbc`. Operative from that commit.
 
 Supersedes: `OPERATING-MODEL-v3.md`.
 Consolidates: Issue #112 `OPERATING-MODEL-004`, adopted by the Owner on
@@ -28,7 +28,8 @@ This record commits that shape and retires the ambiguity.
 | **Team lead — Claude (Opus 5)** | Live SourceTrue verification, critical-path selection, decomposition into bounded packets, lane assignment and deconfliction, queue and index maintenance, evidence reconciliation, Owner-gate preparation, and continuous forward motion until an Owner-only gate. | Merge, approve or certify its own work, waive a boundary, adopt a decision, or expand a packet mid-execution. |
 | **Executor — Codex sessions (up to three concurrent)** | Implementation of exactly one issued packet per session: repository code, docs, tests, validators, and build evidence, in one branch and one Draft PR. | Expand scope, merge, mark Ready, self-review, or act outside the issued packet. |
 | **Independent reviewer — non-author lane** | Read-only adversarial review at one exact head SHA, with one SHA-pinned verdict. | Edit the reviewed head, approve, merge, or treat green CI as acceptance. |
-| **Fable 5 — decision fork** | Independent adversarial advice at forks affecting product architecture, trust boundaries, public claims, irreversible product identity, or multiple downstream packets. | Adopt, implement, or merge anything. Its finding informs the Owner; it does not decide. |
+| **Critical-fork reviewer — GPT-5.6** | Owner-directed (2026-08-09): independent adversarial review at forks affecting product architecture, trust boundaries, public claims, irreversible product identity, or multiple downstream packets. Runs on the dedicated subscription, in a session that did not author the bytes. | Adopt, implement, or merge anything. Its verdict informs the Owner; it does not decide. |
+| **Fable 5 — second fork lane** | Dual-family adversarial verdict alongside GPT-5.6 where a fork gate names it or the Owner requests it. | Same limits as the critical-fork reviewer. |
 
 Each engagement declares exactly one role. A lane that authored or repaired the
 bytes cannot review them at that head SHA.
@@ -48,7 +49,7 @@ would make the author-never-reviews-itself rule unverifiable.
 | Executor | Codex, highest available reasoning tier for implementation packets | Packets are bounded but correctness-critical; a cheaper tier moves cost from execution to review and remediation. |
 | Executor, mechanical packets | Codex, fast tier | Renames, moves, formatting, and other packets with no design judgement. |
 | Independent reviewer | The lane that did not author the bytes | Separation of authorship is the control; model tier is secondary to it. |
-| Decision fork | Fable 5, in a separate session that did not author or lead the bytes | Reserved for adversarial advice at Owner-facing forks. |
+| Critical-fork review | GPT-5.6 on the dedicated subscription, in a session that did not author the bytes; Fable 5 joins for a dual-family verdict where the gate names it | Owner-directed 2026-08-09. |
 
 ## 4. Controlled loop
 
@@ -82,6 +83,10 @@ would make the author-never-reviews-itself rule unverifiable.
 
 ## 6. Speed rules
 
+- Work runs in at least two persistent streams: **Stream A — engineering and
+  the model program**, **Stream B — public surface**. Each stream keeps its
+  executor slot filled; a drained stream queue is a lead defect. The lead cuts
+  the next packet before the current one returns.
 - Keep executor slots filled with non-overlapping critical-path work whenever
   useful work exists.
 - A blocked mutation lane converts immediately to research, test design, or
