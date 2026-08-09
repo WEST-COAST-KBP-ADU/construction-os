@@ -1,0 +1,249 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://westcoastkbp.com/schemas/adu-executable-geometry-1.schema.json",
+  "title": "adu-executable-geometry/1",
+  "description": "Immutable, model-bound executable geometry. This schema validates exact structure only; reference, topology, geometric, evidence, and digest invariants are terminal runtime checks.",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "required": [
+    "schema", "profile_id", "profile_version", "adoption_state", "maturity", "model_binding", "provenance", "units", "precision", "coordinate_frame", "levels", "plan_vertices", "gross_envelopes", "plan_regions", "spaces", "floor_plates", "wall_runs", "wall_junctions", "roof_vertices", "roof_edges", "roof_planes", "openings", "material_slots", "assembly_slots", "area_accounting", "professional_gates", "profile_digest"
+  ],
+  "properties": {
+    "schema": { "const": "adu-executable-geometry/1" },
+    "profile_id": { "$ref": "#/$defs/profileId" },
+    "profile_version": { "$ref": "#/$defs/semver" },
+    "adoption_state": { "enum": ["candidate_not_adopted", "owner_adopted", "retired"] },
+    "maturity": { "$ref": "#/$defs/maturity" },
+    "model_binding": { "$ref": "#/$defs/modelBinding" },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "units": { "$ref": "#/$defs/units" },
+    "precision": { "$ref": "#/$defs/precision" },
+    "coordinate_frame": { "$ref": "#/$defs/coordinateFrame" },
+    "levels": { "$ref": "#/$defs/levels" },
+    "plan_vertices": { "$ref": "#/$defs/planVertices" },
+    "gross_envelopes": { "$ref": "#/$defs/grossEnvelopes" },
+    "plan_regions": { "$ref": "#/$defs/planRegions" },
+    "spaces": { "$ref": "#/$defs/spaces" },
+    "floor_plates": { "$ref": "#/$defs/floorPlates" },
+    "wall_runs": { "$ref": "#/$defs/wallRuns" },
+    "wall_junctions": { "$ref": "#/$defs/wallJunctions" },
+    "roof_vertices": { "$ref": "#/$defs/roofVertices" },
+    "roof_edges": { "$ref": "#/$defs/roofEdges" },
+    "roof_planes": { "$ref": "#/$defs/roofPlanes" },
+    "openings": { "$ref": "#/$defs/openings" },
+    "material_slots": { "$ref": "#/$defs/slots" },
+    "assembly_slots": { "$ref": "#/$defs/slots" },
+    "area_accounting": { "$ref": "#/$defs/areaAccounting" },
+    "professional_gates": { "$ref": "#/$defs/gates" },
+    "profile_digest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*(?:-[a-z0-9_]+)*$" },
+    "profileId": { "type": "string", "pattern": "^adu-[a-z]-[0-9]{3}-profile-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "semver": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "q16": { "type": "integer", "minimum": -1000000000, "maximum": 1000000000 },
+    "nonNegativeQ16": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+    "positiveQ16": { "type": "integer", "minimum": 1, "maximum": 1000000000 },
+    "idArray": { "type": "array", "items": { "$ref": "#/$defs/id" }, "minItems": 1 },
+    "slotRole": { "enum": ["exterior_field", "exterior_trim", "roof_field", "glazing", "entry", "interior_floor", "interior_wall", "casework"] },
+    "maturity": { "enum": ["concept_only", "design_validated", "engineering_reviewed", "permit_package"] },
+    "modelBinding": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["model_id", "model_version", "release_version", "release_digest", "geometry_source_ref", "geometry_source_digest", "reference_configuration", "reference_configuration_digest"],
+      "properties": {
+        "model_id": { "$ref": "#/$defs/id" },
+        "model_version": { "$ref": "#/$defs/semver" },
+        "release_version": { "type": "string", "pattern": "^\\d{4}\\.\\d{2}\\.\\d+$" },
+        "release_digest": { "$ref": "#/$defs/digest" },
+        "geometry_source_ref": { "type": "string", "minLength": 1 },
+        "geometry_source_digest": { "$ref": "#/$defs/digest" },
+        "reference_configuration": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "integer"] },
+          "minProperties": 1
+        },
+        "reference_configuration_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["origin", "author", "creation_record", "attestation", "design_input_evidence_refs", "municipal_source_used", "third_party_geometry_used", "copied_plan_geometry_used"],
+      "properties": {
+        "origin": { "const": "west_coast_kbp_original" },
+        "author": { "type": "string", "minLength": 1 },
+        "creation_record": { "type": "string", "minLength": 1 },
+        "attestation": { "type": "string", "minLength": 1 },
+        "design_input_evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "municipal_source_used": { "const": false },
+        "third_party_geometry_used": { "const": false },
+        "copied_plan_geometry_used": { "const": false }
+      }
+    },
+    "units": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["length", "area"],
+      "properties": { "length": { "const": "q16_in" }, "area": { "const": "q16sq" } }
+    },
+    "precision": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["length_quantum_q16", "coordinate_bound_q16"],
+      "properties": { "length_quantum_q16": { "const": 1 }, "coordinate_bound_q16": { "$ref": "#/$defs/positiveQ16" } }
+    },
+    "coordinateFrame": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["origin", "x_axis", "y_axis", "z_axis", "handedness", "canonical_orientation"],
+      "properties": {
+        "origin": { "const": "front_left_exterior_wall_corner" },
+        "x_axis": { "const": "right" },
+        "y_axis": { "const": "rear" },
+        "z_axis": { "const": "up" },
+        "handedness": { "const": "right" },
+        "canonical_orientation": { "const": 0 }
+      }
+    },
+    "level": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["level_id", "authored_order", "floor_z_q16", "ceiling_z_q16"],
+      "properties": {
+        "level_id": { "$ref": "#/$defs/id" },
+        "authored_order": { "type": "integer", "minimum": 0 },
+        "floor_z_q16": { "$ref": "#/$defs/q16" },
+        "ceiling_z_q16": { "$ref": "#/$defs/q16" }
+      }
+    },
+    "levels": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/level" } },
+    "planVertex": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["vertex_id", "authored_order", "level_id", "x_q16", "y_q16"],
+      "properties": {
+        "vertex_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "x_q16": { "$ref": "#/$defs/q16" }, "y_q16": { "$ref": "#/$defs/q16" }
+      }
+    },
+    "planVertices": { "type": "array", "minItems": 3, "items": { "$ref": "#/$defs/planVertex" } },
+    "grossEnvelope": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["envelope_id", "authored_order", "level_id", "ring_vertex_ids", "area2_q16sq"],
+      "properties": {
+        "envelope_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "ring_vertex_ids": { "$ref": "#/$defs/idArray" }, "area2_q16sq": { "$ref": "#/$defs/positiveQ16" }
+      }
+    },
+    "grossEnvelopes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/grossEnvelope" } },
+    "planRegion": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["region_id", "authored_order", "level_id", "role", "owner_ref", "ring_vertex_ids", "area2_q16sq"],
+      "properties": {
+        "region_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "role": { "enum": ["space", "exterior_wall", "partition", "junction", "reserved_void"] }, "owner_ref": { "$ref": "#/$defs/id" }, "ring_vertex_ids": { "$ref": "#/$defs/idArray" }, "area2_q16sq": { "$ref": "#/$defs/positiveQ16" }
+      }
+    },
+    "planRegions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/planRegion" } },
+    "space": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["space_id", "authored_order", "level_id", "program_role", "region_ref", "adjacent_space_refs", "outside_professional_scope", "area2_q16sq"],
+      "properties": {
+        "space_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "program_role": { "type": "string", "minLength": 1 }, "region_ref": { "$ref": "#/$defs/id" }, "adjacent_space_refs": { "type": "array", "items": { "$ref": "#/$defs/id" } }, "outside_professional_scope": { "type": "boolean" }, "area2_q16sq": { "$ref": "#/$defs/positiveQ16" }
+      }
+    },
+    "spaces": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/space" } },
+    "floorPlate": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["floor_plate_id", "authored_order", "level_id", "gross_envelope_ref", "bottom_z_q16", "top_z_q16", "material_slot_refs", "assembly_slot_refs"],
+      "properties": {
+        "floor_plate_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "gross_envelope_ref": { "$ref": "#/$defs/id" }, "bottom_z_q16": { "$ref": "#/$defs/q16" }, "top_z_q16": { "$ref": "#/$defs/q16" }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }
+      }
+    },
+    "floorPlates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/floorPlate" } },
+    "wallRun": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["wall_id", "authored_order", "kind", "level_id", "start_vertex_id", "end_vertex_id", "plan_region_ref", "thickness_q16", "base_z_q16", "head_z_q16", "left_space_ref", "right_space_ref", "material_slot_refs", "assembly_slot_refs", "start_junction_ref", "end_junction_ref", "opening_ids"],
+      "properties": {
+        "wall_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "kind": { "enum": ["exterior", "partition"] }, "level_id": { "$ref": "#/$defs/id" }, "start_vertex_id": { "$ref": "#/$defs/id" }, "end_vertex_id": { "$ref": "#/$defs/id" }, "plan_region_ref": { "$ref": "#/$defs/id" }, "thickness_q16": { "$ref": "#/$defs/positiveQ16" }, "base_z_q16": { "$ref": "#/$defs/q16" }, "head_z_q16": { "$ref": "#/$defs/q16" }, "left_space_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] }, "right_space_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }, "start_junction_ref": { "$ref": "#/$defs/id" }, "end_junction_ref": { "$ref": "#/$defs/id" }, "opening_ids": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "wallRuns": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/wallRun" } },
+    "wallJunction": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["junction_id", "authored_order", "level_id", "region_ref", "member_wall_ids", "rule"],
+      "properties": {
+        "junction_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "region_ref": { "$ref": "#/$defs/id" }, "member_wall_ids": { "$ref": "#/$defs/idArray" }, "rule": { "enum": ["miter", "butt_continuing", "butt_terminating", "tee", "cross"] }
+      }
+    },
+    "wallJunctions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/wallJunction" } },
+    "roofVertex": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["roof_vertex_id", "authored_order", "x_q16", "y_q16", "z_q16"],
+      "properties": { "roof_vertex_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "x_q16": { "$ref": "#/$defs/q16" }, "y_q16": { "$ref": "#/$defs/q16" }, "z_q16": { "$ref": "#/$defs/q16" } }
+    },
+    "roofVertices": { "type": "array", "minItems": 3, "items": { "$ref": "#/$defs/roofVertex" } },
+    "roofEdge": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["roof_edge_id", "authored_order", "start_vertex_id", "end_vertex_id", "role", "adjacent_plane_ids", "overhang_q16", "eave_z_q16", "drainage_role"],
+      "properties": {
+        "roof_edge_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "start_vertex_id": { "$ref": "#/$defs/id" }, "end_vertex_id": { "$ref": "#/$defs/id" }, "role": { "enum": ["eave", "rake", "ridge", "hip", "valley", "high_side", "low_side", "shared"] }, "adjacent_plane_ids": { "$ref": "#/$defs/idArray" }, "overhang_q16": { "$ref": "#/$defs/nonNegativeQ16" }, "eave_z_q16": { "anyOf": [{ "$ref": "#/$defs/q16" }, { "type": "null" }] }, "drainage_role": { "enum": ["discharge", "flow_divide", "no_discharge", "collector_pending_design"] }
+      }
+    },
+    "roofEdges": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/roofEdge" } },
+    "roofPlane": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["roof_plane_id", "authored_order", "edge_ids", "pitch", "fall_direction", "form", "material_slot_refs", "assembly_slot_refs"],
+      "properties": {
+        "roof_plane_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "edge_ids": { "$ref": "#/$defs/idArray" }, "pitch": { "$ref": "#/$defs/pitch" }, "fall_direction": { "enum": ["left", "right", "front", "rear"] }, "form": { "enum": ["gable", "shed", "hip", "valley"] }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }
+      }
+    },
+    "pitch": { "type": "object", "unevaluatedProperties": false, "required": ["rise", "run"], "properties": { "rise": { "$ref": "#/$defs/positiveQ16" }, "run": { "$ref": "#/$defs/positiveQ16" } } },
+    "roofPlanes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/roofPlane" } },
+    "netClear": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["state", "width_q16", "height_q16", "area2_q16sq", "evidence_refs"],
+      "properties": {
+        "state": { "enum": ["not_evaluated", "manufacturer_evidence_pending", "verified", "not_applicable"] }, "width_q16": { "anyOf": [{ "$ref": "#/$defs/nonNegativeQ16" }, { "type": "null" }] }, "height_q16": { "anyOf": [{ "$ref": "#/$defs/nonNegativeQ16" }, { "type": "null" }] }, "area2_q16sq": { "anyOf": [{ "$ref": "#/$defs/nonNegativeQ16" }, { "type": "null" }] }, "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "opening": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["opening_id", "authored_order", "level_id", "kind", "host_wall_id", "datum", "offset_q16", "cut_width_q16", "cut_height_q16", "sill_q16", "head_q16", "nominal_width_q16", "nominal_height_q16", "room_served_refs", "material_slot_refs", "assembly_slot_refs", "net_clear", "operation", "handing"],
+      "properties": {
+        "opening_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "kind": { "enum": ["door", "window"] }, "host_wall_id": { "$ref": "#/$defs/id" }, "datum": { "const": "host_start_to_opening_start" }, "offset_q16": { "$ref": "#/$defs/nonNegativeQ16" }, "cut_width_q16": { "$ref": "#/$defs/positiveQ16" }, "cut_height_q16": { "$ref": "#/$defs/positiveQ16" }, "sill_q16": { "$ref": "#/$defs/q16" }, "head_q16": { "$ref": "#/$defs/q16" }, "nominal_width_q16": { "$ref": "#/$defs/positiveQ16" }, "nominal_height_q16": { "$ref": "#/$defs/positiveQ16" }, "room_served_refs": { "type": "array", "minItems": 1, "items": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] } }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }, "net_clear": { "$ref": "#/$defs/netClear" }, "operation": { "enum": ["swing_in", "swing_out", "sliding", "pocket", "fixed", "casement", "awning", "slider", "single_hung"] }, "handing": { "enum": ["left", "right", "not_applicable"] }
+      }
+    },
+    "openings": { "type": "array", "items": { "$ref": "#/$defs/opening" } },
+    "slot": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["slot_id", "authored_order", "role", "scope", "truth_state"],
+      "properties": { "slot_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "role": { "$ref": "#/$defs/slotRole" }, "scope": { "type": "string", "minLength": 1 }, "truth_state": { "enum": ["unresolved_semantic", "concept_generic"] } }
+    },
+    "slots": { "type": "array", "minItems": 8, "items": { "$ref": "#/$defs/slot" } },
+    "areaAccounting": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["gross_area2_q16sq", "net_area2_q16sq", "region_area2_q16sq", "wall_junction_reserved_area2_q16sq"],
+      "properties": { "gross_area2_q16sq": { "$ref": "#/$defs/positiveQ16" }, "net_area2_q16sq": { "$ref": "#/$defs/nonNegativeQ16" }, "region_area2_q16sq": { "$ref": "#/$defs/positiveQ16" }, "wall_junction_reserved_area2_q16sq": { "$ref": "#/$defs/nonNegativeQ16" } }
+    },
+    "gate": {
+      "type": "object",
+      "unevaluatedProperties": false,
+      "required": ["gate_id", "authored_order", "status", "evidence_refs", "reviewer_role", "checked_at"],
+      "properties": { "gate_id": { "enum": ["architectural_test_fit", "egress_openings", "universal_accessibility", "structural_foundation", "energy", "mep", "fire_wui", "site_jurisdiction"] }, "authored_order": { "type": "integer", "minimum": 0 }, "status": { "enum": ["not_evaluated", "outside_concept_scope", "reviewed_pass", "revision_required"] }, "evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } }, "reviewer_role": { "type": ["string", "null"] }, "checked_at": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" } }
+    },
+    "gates": { "type": "array", "minItems": 8, "items": { "$ref": "#/$defs/gate" } }
+  }
+}
