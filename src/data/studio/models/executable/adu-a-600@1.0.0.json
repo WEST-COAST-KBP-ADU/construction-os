@@ -1,0 +1,1939 @@
+{
+  "schema": "adu-executable-geometry/1",
+  "profile_id": "adu-a-600-profile-owner-adopted",
+  "profile_version": "1.0.0",
+  "adoption_state": "owner_adopted",
+  "maturity": "concept_only",
+  "model_binding": {
+    "model_id": "adu-a-600",
+    "model_version": "1.0.0",
+    "release_version": "2026.09.0",
+    "release_digest": "sha256:a2fca45a44d35a1a3201e581f68cded217848fcc4eab70be9ff35eb81ec584ab",
+    "geometry_source_ref": "models/geometry/adu-a-600@1",
+    "geometry_source_digest": "sha256:802fd8b26974995d1fadf2a0b51f436a0efac5a95181cc7a8fd25a25c54f1a35",
+    "reference_configuration": {
+      "footprint_width_ft": 20,
+      "footprint_depth_ft": 30,
+      "layout_variant": "open",
+      "entry_side": "front",
+      "orientation_deg": 0,
+      "roof_form": "gable",
+      "window_package": "standard",
+      "exterior_finish": "stucco-smooth",
+      "exterior_palette": "warm-white",
+      "interior_tier": "essential"
+    },
+    "reference_configuration_digest": "sha256:dfda43d190c10c8944d6ee779d0bad65292c7e6e9db96051ea6ab4186af3c91b"
+  },
+  "provenance": {
+    "origin": "west_coast_kbp_original",
+    "author": "West Coast KBP",
+    "creation_record": "docs/shared-briefs/GEOMETRY-PROGRAM-001/OUTCOME.md",
+    "attestation": "Exact q16 transcription of the Owner-adopted A600 product basis from the reviewed SVG. D08 assembly thickness and junction solids remain unresolved; no municipal, third-party, copied, professional, permit, code, site, commercial, or construction truth is asserted.",
+    "design_input_evidence_refs": [
+      "docs/design/a600/A600-CONCEPT-TESTFIT-001.svg@085353bf0f7d3bec86eb7c9a46977bde9f822d9a",
+      "sha256:54cb40a6212916d83ab5638ae05330d113a06dc9c09a03fe5f120875f03da5f4",
+      "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/115#issuecomment-5234465734",
+      "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/115#issuecomment-5234481099"
+    ],
+    "municipal_source_used": false,
+    "third_party_geometry_used": false,
+    "copied_plan_geometry_used": false
+  },
+  "units": {
+    "length": "q16_in",
+    "area": "q16sq"
+  },
+  "precision": {
+    "length_quantum_q16": 1,
+    "coordinate_bound_q16": 1000000
+  },
+  "coordinate_frame": {
+    "origin": "front_left_exterior_wall_corner",
+    "x_axis": "right",
+    "y_axis": "rear",
+    "z_axis": "up",
+    "handedness": "right",
+    "canonical_orientation": 0
+  },
+  "levels": [
+    {
+      "level_id": "level-0",
+      "authored_order": 0,
+      "floor_z_q16": 0,
+      "ceiling_z_q16": 1728
+    }
+  ],
+  "plan_vertices": [
+    {
+      "vertex_id": "v-x0-y0",
+      "authored_order": 0,
+      "level_id": "level-0",
+      "x_q16": 0,
+      "y_q16": 0
+    },
+    {
+      "vertex_id": "v-x3072-y0",
+      "authored_order": 1,
+      "level_id": "level-0",
+      "x_q16": 3072,
+      "y_q16": 0
+    },
+    {
+      "vertex_id": "v-x3840-y0",
+      "authored_order": 2,
+      "level_id": "level-0",
+      "x_q16": 3840,
+      "y_q16": 0
+    },
+    {
+      "vertex_id": "v-x3840-y1152",
+      "authored_order": 3,
+      "level_id": "level-0",
+      "x_q16": 3840,
+      "y_q16": 1152
+    },
+    {
+      "vertex_id": "v-x3072-y1152",
+      "authored_order": 4,
+      "level_id": "level-0",
+      "x_q16": 3072,
+      "y_q16": 1152
+    },
+    {
+      "vertex_id": "v-x0-y1728",
+      "authored_order": 5,
+      "level_id": "level-0",
+      "x_q16": 0,
+      "y_q16": 1728
+    },
+    {
+      "vertex_id": "v-x1792-y1728",
+      "authored_order": 6,
+      "level_id": "level-0",
+      "x_q16": 1792,
+      "y_q16": 1728
+    },
+    {
+      "vertex_id": "v-x3072-y1728",
+      "authored_order": 7,
+      "level_id": "level-0",
+      "x_q16": 3072,
+      "y_q16": 1728
+    },
+    {
+      "vertex_id": "v-x0-y3456",
+      "authored_order": 8,
+      "level_id": "level-0",
+      "x_q16": 0,
+      "y_q16": 3456
+    },
+    {
+      "vertex_id": "v-x1792-y3456",
+      "authored_order": 9,
+      "level_id": "level-0",
+      "x_q16": 1792,
+      "y_q16": 3456
+    },
+    {
+      "vertex_id": "v-x3072-y3456",
+      "authored_order": 10,
+      "level_id": "level-0",
+      "x_q16": 3072,
+      "y_q16": 3456
+    },
+    {
+      "vertex_id": "v-x3840-y3456",
+      "authored_order": 11,
+      "level_id": "level-0",
+      "x_q16": 3840,
+      "y_q16": 3456
+    },
+    {
+      "vertex_id": "v-x3072-y4032",
+      "authored_order": 12,
+      "level_id": "level-0",
+      "x_q16": 3072,
+      "y_q16": 4032
+    },
+    {
+      "vertex_id": "v-x3840-y4032",
+      "authored_order": 13,
+      "level_id": "level-0",
+      "x_q16": 3840,
+      "y_q16": 4032
+    },
+    {
+      "vertex_id": "v-x3840-y5760",
+      "authored_order": 14,
+      "level_id": "level-0",
+      "x_q16": 3840,
+      "y_q16": 5760
+    },
+    {
+      "vertex_id": "v-x3072-y5760",
+      "authored_order": 15,
+      "level_id": "level-0",
+      "x_q16": 3072,
+      "y_q16": 5760
+    },
+    {
+      "vertex_id": "v-x0-y5760",
+      "authored_order": 16,
+      "level_id": "level-0",
+      "x_q16": 0,
+      "y_q16": 5760
+    }
+  ],
+  "gross_envelopes": [
+    {
+      "envelope_id": "envelope-a600",
+      "authored_order": 0,
+      "level_id": "level-0",
+      "ring_vertex_ids": [
+        "v-x0-y0",
+        "v-x3072-y0",
+        "v-x3840-y0",
+        "v-x3840-y1152",
+        "v-x3840-y3456",
+        "v-x3840-y4032",
+        "v-x3840-y5760",
+        "v-x3072-y5760",
+        "v-x0-y5760",
+        "v-x0-y3456",
+        "v-x0-y1728",
+        "v-x0-y0"
+      ],
+      "area2_q16sq": 44236800
+    }
+  ],
+  "plan_regions": [
+    {
+      "region_id": "region-bedroom",
+      "authored_order": 0,
+      "level_id": "level-0",
+      "role": "space",
+      "owner_ref": "space-bedroom",
+      "ring_vertex_ids": [
+        "v-x0-y0",
+        "v-x3072-y0",
+        "v-x3072-y1728",
+        "v-x0-y1728",
+        "v-x0-y0"
+      ],
+      "area2_q16sq": 10616832
+    },
+    {
+      "region_id": "region-entry",
+      "authored_order": 1,
+      "level_id": "level-0",
+      "role": "space",
+      "owner_ref": "space-entry",
+      "ring_vertex_ids": [
+        "v-x3072-y0",
+        "v-x3840-y0",
+        "v-x3840-y1152",
+        "v-x3072-y1152",
+        "v-x3072-y0"
+      ],
+      "area2_q16sq": 1769472
+    },
+    {
+      "region_id": "region-hall",
+      "authored_order": 2,
+      "level_id": "level-0",
+      "role": "space",
+      "owner_ref": "space-hall",
+      "ring_vertex_ids": [
+        "v-x3072-y1152",
+        "v-x3840-y1152",
+        "v-x3840-y3456",
+        "v-x3072-y3456",
+        "v-x3072-y1152"
+      ],
+      "area2_q16sq": 3538944
+    },
+    {
+      "region_id": "region-kitchen",
+      "authored_order": 3,
+      "level_id": "level-0",
+      "role": "space",
+      "owner_ref": "space-kitchen",
+      "ring_vertex_ids": [
+        "v-x0-y1728",
+        "v-x1792-y1728",
+        "v-x1792-y3456",
+        "v-x0-y3456",
+        "v-x0-y1728"
+      ],
+      "area2_q16sq": 6193152
+    },
+    {
+      "region_id": "region-bathroom",
+      "authored_order": 4,
+      "level_id": "level-0",
+      "role": "space",
+      "owner_ref": "space-bathroom",
+      "ring_vertex_ids": [
+        "v-x1792-y1728",
+        "v-x3072-y1728",
+        "v-x3072-y3456",
+        "v-x1792-y3456",
+        "v-x1792-y1728"
+      ],
+      "area2_q16sq": 4423680
+    },
+    {
+      "region_id": "region-living",
+      "authored_order": 5,
+      "level_id": "level-0",
+      "role": "space",
+      "owner_ref": "space-living",
+      "ring_vertex_ids": [
+        "v-x0-y3456",
+        "v-x3840-y3456",
+        "v-x3840-y4032",
+        "v-x3072-y4032",
+        "v-x3072-y5760",
+        "v-x0-y5760",
+        "v-x0-y3456"
+      ],
+      "area2_q16sq": 15040512
+    },
+    {
+      "region_id": "region-storage",
+      "authored_order": 6,
+      "level_id": "level-0",
+      "role": "space",
+      "owner_ref": "space-storage",
+      "ring_vertex_ids": [
+        "v-x3072-y4032",
+        "v-x3840-y4032",
+        "v-x3840-y5760",
+        "v-x3072-y5760",
+        "v-x3072-y4032"
+      ],
+      "area2_q16sq": 2654208
+    }
+  ],
+  "spaces": [
+    {
+      "space_id": "space-bedroom",
+      "authored_order": 0,
+      "level_id": "level-0",
+      "program_role": "bedroom",
+      "region_ref": "region-bedroom",
+      "adjacent_space_refs": [
+        "space-hall"
+      ],
+      "outside_professional_scope": true,
+      "area2_q16sq": 10616832
+    },
+    {
+      "space_id": "space-entry",
+      "authored_order": 1,
+      "level_id": "level-0",
+      "program_role": "entry",
+      "region_ref": "region-entry",
+      "adjacent_space_refs": [
+        "space-hall"
+      ],
+      "outside_professional_scope": true,
+      "area2_q16sq": 1769472
+    },
+    {
+      "space_id": "space-hall",
+      "authored_order": 2,
+      "level_id": "level-0",
+      "program_role": "circulation",
+      "region_ref": "region-hall",
+      "adjacent_space_refs": [
+        "space-entry",
+        "space-bedroom",
+        "space-bathroom",
+        "space-living"
+      ],
+      "outside_professional_scope": true,
+      "area2_q16sq": 3538944
+    },
+    {
+      "space_id": "space-kitchen",
+      "authored_order": 3,
+      "level_id": "level-0",
+      "program_role": "kitchen",
+      "region_ref": "region-kitchen",
+      "adjacent_space_refs": [
+        "space-living"
+      ],
+      "outside_professional_scope": true,
+      "area2_q16sq": 6193152
+    },
+    {
+      "space_id": "space-bathroom",
+      "authored_order": 4,
+      "level_id": "level-0",
+      "program_role": "bathroom",
+      "region_ref": "region-bathroom",
+      "adjacent_space_refs": [
+        "space-hall"
+      ],
+      "outside_professional_scope": true,
+      "area2_q16sq": 4423680
+    },
+    {
+      "space_id": "space-living",
+      "authored_order": 5,
+      "level_id": "level-0",
+      "program_role": "living_dining",
+      "region_ref": "region-living",
+      "adjacent_space_refs": [
+        "space-hall",
+        "space-kitchen",
+        "space-storage"
+      ],
+      "outside_professional_scope": true,
+      "area2_q16sq": 15040512
+    },
+    {
+      "space_id": "space-storage",
+      "authored_order": 6,
+      "level_id": "level-0",
+      "program_role": "storage_mechanical",
+      "region_ref": "region-storage",
+      "adjacent_space_refs": [
+        "space-living"
+      ],
+      "outside_professional_scope": true,
+      "area2_q16sq": 2654208
+    }
+  ],
+  "floor_plates": [
+    {
+      "floor_plate_id": "floor-a600",
+      "authored_order": 0,
+      "level_id": "level-0",
+      "gross_envelope_ref": "envelope-a600",
+      "bottom_z_q16": 0,
+      "top_z_q16": null,
+      "material_slot_refs": [
+        "material-interior-floor"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-floor"
+      ]
+    }
+  ],
+  "wall_runs": [
+    {
+      "wall_id": "wall-front-bedroom",
+      "authored_order": 0,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x0-y0",
+      "end_vertex_id": "v-x3072-y0",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-bedroom",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-front-left",
+      "end_junction_ref": "junction-front-bedroom-entry",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-front-entry",
+      "authored_order": 1,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y0",
+      "end_vertex_id": "v-x3840-y0",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-entry",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-front-bedroom-entry",
+      "end_junction_ref": "junction-front-right",
+      "opening_ids": [
+        "d-entry-01"
+      ]
+    },
+    {
+      "wall_id": "wall-right-entry",
+      "authored_order": 2,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3840-y0",
+      "end_vertex_id": "v-x3840-y1152",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-entry",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-front-right",
+      "end_junction_ref": "junction-right-entry-hall",
+      "opening_ids": [
+        "w-entry-01"
+      ]
+    },
+    {
+      "wall_id": "wall-right-hall",
+      "authored_order": 3,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3840-y1152",
+      "end_vertex_id": "v-x3840-y3456",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-hall",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-right-entry-hall",
+      "end_junction_ref": "junction-right-hall-living",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-right-living",
+      "authored_order": 4,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3840-y3456",
+      "end_vertex_id": "v-x3840-y4032",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-living",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-right-hall-living",
+      "end_junction_ref": "junction-right-living-storage",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-right-storage",
+      "authored_order": 5,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3840-y4032",
+      "end_vertex_id": "v-x3840-y5760",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-storage",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-right-living-storage",
+      "end_junction_ref": "junction-rear-right",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-rear-storage",
+      "authored_order": 6,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3840-y5760",
+      "end_vertex_id": "v-x3072-y5760",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-storage",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-rear-right",
+      "end_junction_ref": "junction-rear-storage-living",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-rear-living",
+      "authored_order": 7,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y5760",
+      "end_vertex_id": "v-x0-y5760",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-living",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-rear-storage-living",
+      "end_junction_ref": "junction-rear-left",
+      "opening_ids": [
+        "w-liv-01",
+        "w-liv-02"
+      ]
+    },
+    {
+      "wall_id": "wall-left-living",
+      "authored_order": 8,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x0-y5760",
+      "end_vertex_id": "v-x0-y3456",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-living",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-rear-left",
+      "end_junction_ref": "junction-left-kitchen-living",
+      "opening_ids": [
+        "w-liv-03"
+      ]
+    },
+    {
+      "wall_id": "wall-left-kitchen",
+      "authored_order": 9,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x0-y3456",
+      "end_vertex_id": "v-x0-y1728",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-kitchen",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-left-kitchen-living",
+      "end_junction_ref": "junction-left-bedroom-kitchen",
+      "opening_ids": [
+        "w-kit-01"
+      ]
+    },
+    {
+      "wall_id": "wall-left-bedroom",
+      "authored_order": 10,
+      "kind": "exterior",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x0-y1728",
+      "end_vertex_id": "v-x0-y0",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-bedroom",
+      "right_space_ref": "exterior",
+      "material_slot_refs": [
+        "material-exterior-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-exterior-field"
+      ],
+      "start_junction_ref": "junction-left-bedroom-kitchen",
+      "end_junction_ref": "junction-front-left",
+      "opening_ids": [
+        "w-bed-01"
+      ]
+    },
+    {
+      "wall_id": "wall-bedroom-entry",
+      "authored_order": 11,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y0",
+      "end_vertex_id": "v-x3072-y1152",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-bedroom",
+      "right_space_ref": "space-entry",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-front-bedroom-entry",
+      "end_junction_ref": "junction-bedroom-entry-hall",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-bedroom-hall",
+      "authored_order": 12,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y1152",
+      "end_vertex_id": "v-x3072-y1728",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-bedroom",
+      "right_space_ref": "space-hall",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-bedroom-entry-hall",
+      "end_junction_ref": "junction-bedroom-bathroom-hall",
+      "opening_ids": [
+        "d-bed-01"
+      ]
+    },
+    {
+      "wall_id": "wall-bedroom-kitchen",
+      "authored_order": 13,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x0-y1728",
+      "end_vertex_id": "v-x1792-y1728",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-kitchen",
+      "right_space_ref": "space-bedroom",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-left-bedroom-kitchen",
+      "end_junction_ref": "junction-bedroom-kitchen-bathroom",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-bedroom-bathroom",
+      "authored_order": 14,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x1792-y1728",
+      "end_vertex_id": "v-x3072-y1728",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-bathroom",
+      "right_space_ref": "space-bedroom",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-bedroom-kitchen-bathroom",
+      "end_junction_ref": "junction-bedroom-bathroom-hall",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-kitchen-bathroom",
+      "authored_order": 15,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x1792-y1728",
+      "end_vertex_id": "v-x1792-y3456",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-kitchen",
+      "right_space_ref": "space-bathroom",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-bedroom-kitchen-bathroom",
+      "end_junction_ref": "junction-kitchen-bathroom-living",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-bathroom-hall",
+      "authored_order": 16,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y1728",
+      "end_vertex_id": "v-x3072-y3456",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-bathroom",
+      "right_space_ref": "space-hall",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-bedroom-bathroom-hall",
+      "end_junction_ref": "junction-bathroom-hall-living",
+      "opening_ids": [
+        "d-bath-01"
+      ]
+    },
+    {
+      "wall_id": "wall-kitchen-living",
+      "authored_order": 17,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x0-y3456",
+      "end_vertex_id": "v-x1792-y3456",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-living",
+      "right_space_ref": "space-kitchen",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-left-kitchen-living",
+      "end_junction_ref": "junction-kitchen-bathroom-living",
+      "opening_ids": [
+        "o-kit-liv-01"
+      ]
+    },
+    {
+      "wall_id": "wall-bathroom-living",
+      "authored_order": 18,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x1792-y3456",
+      "end_vertex_id": "v-x3072-y3456",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-living",
+      "right_space_ref": "space-bathroom",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-kitchen-bathroom-living",
+      "end_junction_ref": "junction-bathroom-hall-living",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-hall-living",
+      "authored_order": 19,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y3456",
+      "end_vertex_id": "v-x3840-y3456",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-living",
+      "right_space_ref": "space-hall",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-bathroom-hall-living",
+      "end_junction_ref": "junction-right-hall-living",
+      "opening_ids": [
+        "o-hall-liv-01"
+      ]
+    },
+    {
+      "wall_id": "wall-living-storage-bottom",
+      "authored_order": 20,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y4032",
+      "end_vertex_id": "v-x3840-y4032",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-storage",
+      "right_space_ref": "space-living",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-living-storage-corner",
+      "end_junction_ref": "junction-right-living-storage",
+      "opening_ids": []
+    },
+    {
+      "wall_id": "wall-living-storage",
+      "authored_order": 21,
+      "kind": "partition",
+      "level_id": "level-0",
+      "start_vertex_id": "v-x3072-y4032",
+      "end_vertex_id": "v-x3072-y5760",
+      "plan_region_ref": null,
+      "thickness_q16": null,
+      "base_z_q16": 0,
+      "head_z_q16": 1728,
+      "left_space_ref": "space-living",
+      "right_space_ref": "space-storage",
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "start_junction_ref": "junction-living-storage-corner",
+      "end_junction_ref": "junction-rear-storage-living",
+      "opening_ids": [
+        "d-stor-01"
+      ]
+    }
+  ],
+  "wall_junctions": [
+    {
+      "junction_id": "junction-front-left",
+      "authored_order": 0,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-front-bedroom",
+        "wall-left-bedroom"
+      ],
+      "rule": "miter"
+    },
+    {
+      "junction_id": "junction-front-bedroom-entry",
+      "authored_order": 1,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-front-bedroom",
+        "wall-front-entry",
+        "wall-bedroom-entry"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-front-right",
+      "authored_order": 2,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-front-entry",
+        "wall-right-entry"
+      ],
+      "rule": "miter"
+    },
+    {
+      "junction_id": "junction-right-entry-hall",
+      "authored_order": 3,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-right-entry",
+        "wall-right-hall"
+      ],
+      "rule": "butt_continuing"
+    },
+    {
+      "junction_id": "junction-bedroom-entry-hall",
+      "authored_order": 4,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-bedroom-entry",
+        "wall-bedroom-hall"
+      ],
+      "rule": "butt_continuing"
+    },
+    {
+      "junction_id": "junction-left-bedroom-kitchen",
+      "authored_order": 5,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-left-bedroom",
+        "wall-left-kitchen",
+        "wall-bedroom-kitchen"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-bedroom-kitchen-bathroom",
+      "authored_order": 6,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-bedroom-kitchen",
+        "wall-bedroom-bathroom",
+        "wall-kitchen-bathroom"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-bedroom-bathroom-hall",
+      "authored_order": 7,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-bedroom-bathroom",
+        "wall-bedroom-hall",
+        "wall-bathroom-hall"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-left-kitchen-living",
+      "authored_order": 8,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-left-kitchen",
+        "wall-left-living",
+        "wall-kitchen-living"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-kitchen-bathroom-living",
+      "authored_order": 9,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-kitchen-living",
+        "wall-bathroom-living",
+        "wall-kitchen-bathroom"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-bathroom-hall-living",
+      "authored_order": 10,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-bathroom-living",
+        "wall-hall-living",
+        "wall-bathroom-hall"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-right-hall-living",
+      "authored_order": 11,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-right-hall",
+        "wall-right-living",
+        "wall-hall-living"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-living-storage-corner",
+      "authored_order": 12,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-living-storage-bottom",
+        "wall-living-storage"
+      ],
+      "rule": "miter"
+    },
+    {
+      "junction_id": "junction-right-living-storage",
+      "authored_order": 13,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-right-living",
+        "wall-right-storage",
+        "wall-living-storage-bottom"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-rear-right",
+      "authored_order": 14,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-right-storage",
+        "wall-rear-storage"
+      ],
+      "rule": "miter"
+    },
+    {
+      "junction_id": "junction-rear-storage-living",
+      "authored_order": 15,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-rear-storage",
+        "wall-rear-living",
+        "wall-living-storage"
+      ],
+      "rule": "tee"
+    },
+    {
+      "junction_id": "junction-rear-left",
+      "authored_order": 16,
+      "level_id": "level-0",
+      "region_ref": null,
+      "member_wall_ids": [
+        "wall-rear-living",
+        "wall-left-living"
+      ],
+      "rule": "miter"
+    }
+  ],
+  "roof_vertices": [
+    {
+      "roof_vertex_id": "roof-left-front",
+      "authored_order": 0,
+      "x_q16": 0,
+      "y_q16": 0,
+      "z_q16": 1728
+    },
+    {
+      "roof_vertex_id": "roof-left-rear",
+      "authored_order": 1,
+      "x_q16": 0,
+      "y_q16": 5760,
+      "z_q16": 1728
+    },
+    {
+      "roof_vertex_id": "roof-ridge-front",
+      "authored_order": 2,
+      "x_q16": 1920,
+      "y_q16": 0,
+      "z_q16": 2368
+    },
+    {
+      "roof_vertex_id": "roof-ridge-rear",
+      "authored_order": 3,
+      "x_q16": 1920,
+      "y_q16": 5760,
+      "z_q16": 2368
+    },
+    {
+      "roof_vertex_id": "roof-right-front",
+      "authored_order": 4,
+      "x_q16": 3840,
+      "y_q16": 0,
+      "z_q16": 1728
+    },
+    {
+      "roof_vertex_id": "roof-right-rear",
+      "authored_order": 5,
+      "x_q16": 3840,
+      "y_q16": 5760,
+      "z_q16": 1728
+    }
+  ],
+  "roof_edges": [
+    {
+      "roof_edge_id": "roof-eave-left",
+      "authored_order": 0,
+      "start_vertex_id": "roof-left-front",
+      "end_vertex_id": "roof-left-rear",
+      "role": "eave",
+      "adjacent_plane_ids": [
+        "roof-left"
+      ],
+      "overhang_q16": 192,
+      "eave_z_q16": 1728,
+      "drainage_role": "discharge"
+    },
+    {
+      "roof_edge_id": "roof-rake-left-rear",
+      "authored_order": 1,
+      "start_vertex_id": "roof-left-rear",
+      "end_vertex_id": "roof-ridge-rear",
+      "role": "rake",
+      "adjacent_plane_ids": [
+        "roof-left"
+      ],
+      "overhang_q16": 192,
+      "eave_z_q16": null,
+      "drainage_role": "no_discharge"
+    },
+    {
+      "roof_edge_id": "roof-ridge",
+      "authored_order": 2,
+      "start_vertex_id": "roof-ridge-front",
+      "end_vertex_id": "roof-ridge-rear",
+      "role": "ridge",
+      "adjacent_plane_ids": [
+        "roof-left",
+        "roof-right"
+      ],
+      "overhang_q16": 0,
+      "eave_z_q16": null,
+      "drainage_role": "flow_divide"
+    },
+    {
+      "roof_edge_id": "roof-rake-left-front",
+      "authored_order": 3,
+      "start_vertex_id": "roof-ridge-front",
+      "end_vertex_id": "roof-left-front",
+      "role": "rake",
+      "adjacent_plane_ids": [
+        "roof-left"
+      ],
+      "overhang_q16": 192,
+      "eave_z_q16": null,
+      "drainage_role": "no_discharge"
+    },
+    {
+      "roof_edge_id": "roof-eave-right",
+      "authored_order": 4,
+      "start_vertex_id": "roof-right-rear",
+      "end_vertex_id": "roof-right-front",
+      "role": "eave",
+      "adjacent_plane_ids": [
+        "roof-right"
+      ],
+      "overhang_q16": 192,
+      "eave_z_q16": 1728,
+      "drainage_role": "discharge"
+    },
+    {
+      "roof_edge_id": "roof-rake-right-front",
+      "authored_order": 5,
+      "start_vertex_id": "roof-right-front",
+      "end_vertex_id": "roof-ridge-front",
+      "role": "rake",
+      "adjacent_plane_ids": [
+        "roof-right"
+      ],
+      "overhang_q16": 192,
+      "eave_z_q16": null,
+      "drainage_role": "no_discharge"
+    },
+    {
+      "roof_edge_id": "roof-rake-right-rear",
+      "authored_order": 6,
+      "start_vertex_id": "roof-ridge-rear",
+      "end_vertex_id": "roof-right-rear",
+      "role": "rake",
+      "adjacent_plane_ids": [
+        "roof-right"
+      ],
+      "overhang_q16": 192,
+      "eave_z_q16": null,
+      "drainage_role": "no_discharge"
+    }
+  ],
+  "roof_planes": [
+    {
+      "roof_plane_id": "roof-left",
+      "authored_order": 0,
+      "edge_ids": [
+        "roof-eave-left",
+        "roof-rake-left-rear",
+        "roof-ridge",
+        "roof-rake-left-front"
+      ],
+      "pitch": {
+        "rise": 1,
+        "run": 3
+      },
+      "fall_direction": "left",
+      "form": "gable",
+      "material_slot_refs": [
+        "material-roof-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-roof-field"
+      ]
+    },
+    {
+      "roof_plane_id": "roof-right",
+      "authored_order": 1,
+      "edge_ids": [
+        "roof-eave-right",
+        "roof-rake-right-front",
+        "roof-ridge",
+        "roof-rake-right-rear"
+      ],
+      "pitch": {
+        "rise": 1,
+        "run": 3
+      },
+      "fall_direction": "right",
+      "form": "gable",
+      "material_slot_refs": [
+        "material-roof-field"
+      ],
+      "assembly_slot_refs": [
+        "assembly-roof-field"
+      ]
+    }
+  ],
+  "openings": [
+    {
+      "opening_id": "d-entry-01",
+      "authored_order": 0,
+      "level_id": "level-0",
+      "kind": "door",
+      "host_wall_id": "wall-front-entry",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 96,
+      "cut_width_q16": 576,
+      "cut_height_q16": 1280,
+      "sill_q16": 0,
+      "head_q16": 1280,
+      "nominal_width_q16": 576,
+      "nominal_height_q16": 1280,
+      "room_served_refs": [
+        "space-entry",
+        "exterior"
+      ],
+      "material_slot_refs": [
+        "material-entry"
+      ],
+      "assembly_slot_refs": [
+        "assembly-entry"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "swing_in",
+      "handing": "right"
+    },
+    {
+      "opening_id": "d-bed-01",
+      "authored_order": 1,
+      "level_id": "level-0",
+      "kind": "door",
+      "host_wall_id": "wall-bedroom-hall",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 32,
+      "cut_width_q16": 512,
+      "cut_height_q16": 1280,
+      "sill_q16": 0,
+      "head_q16": 1280,
+      "nominal_width_q16": 512,
+      "nominal_height_q16": 1280,
+      "room_served_refs": [
+        "space-bedroom",
+        "space-hall"
+      ],
+      "material_slot_refs": [
+        "material-entry"
+      ],
+      "assembly_slot_refs": [
+        "assembly-entry"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "not_evaluated",
+      "handing": "not_evaluated"
+    },
+    {
+      "opening_id": "d-bath-01",
+      "authored_order": 2,
+      "level_id": "level-0",
+      "kind": "door",
+      "host_wall_id": "wall-bathroom-hall",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 576,
+      "cut_width_q16": 576,
+      "cut_height_q16": 1280,
+      "sill_q16": 0,
+      "head_q16": 1280,
+      "nominal_width_q16": 576,
+      "nominal_height_q16": 1280,
+      "room_served_refs": [
+        "space-bathroom",
+        "space-hall"
+      ],
+      "material_slot_refs": [
+        "material-entry"
+      ],
+      "assembly_slot_refs": [
+        "assembly-entry"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "swing_out",
+      "handing": "not_evaluated"
+    },
+    {
+      "opening_id": "d-stor-01",
+      "authored_order": 3,
+      "level_id": "level-0",
+      "kind": "door",
+      "host_wall_id": "wall-living-storage",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 384,
+      "cut_width_q16": 512,
+      "cut_height_q16": 1280,
+      "sill_q16": 0,
+      "head_q16": 1280,
+      "nominal_width_q16": 512,
+      "nominal_height_q16": 1280,
+      "room_served_refs": [
+        "space-living",
+        "space-storage"
+      ],
+      "material_slot_refs": [
+        "material-entry"
+      ],
+      "assembly_slot_refs": [
+        "assembly-entry"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "swing_in",
+      "handing": "not_evaluated"
+    },
+    {
+      "opening_id": "o-kit-liv-01",
+      "authored_order": 4,
+      "level_id": "level-0",
+      "kind": "cased_opening",
+      "host_wall_id": "wall-kitchen-living",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 384,
+      "cut_width_q16": 1152,
+      "cut_height_q16": 1280,
+      "sill_q16": 0,
+      "head_q16": 1280,
+      "nominal_width_q16": 1152,
+      "nominal_height_q16": 1280,
+      "room_served_refs": [
+        "space-living",
+        "space-kitchen"
+      ],
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "net_clear": {
+        "state": "not_applicable",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "not_applicable",
+      "handing": "not_applicable"
+    },
+    {
+      "opening_id": "o-hall-liv-01",
+      "authored_order": 5,
+      "level_id": "level-0",
+      "kind": "cased_opening",
+      "host_wall_id": "wall-hall-living",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 96,
+      "cut_width_q16": 576,
+      "cut_height_q16": 1280,
+      "sill_q16": 0,
+      "head_q16": 1280,
+      "nominal_width_q16": 576,
+      "nominal_height_q16": 1280,
+      "room_served_refs": [
+        "space-living",
+        "space-hall"
+      ],
+      "material_slot_refs": [
+        "material-interior-wall"
+      ],
+      "assembly_slot_refs": [
+        "assembly-interior-wall"
+      ],
+      "net_clear": {
+        "state": "not_applicable",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "not_applicable",
+      "handing": "not_applicable"
+    },
+    {
+      "opening_id": "w-bed-01",
+      "authored_order": 6,
+      "level_id": "level-0",
+      "kind": "window",
+      "host_wall_id": "wall-left-bedroom",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 480,
+      "cut_width_q16": 768,
+      "cut_height_q16": 768,
+      "sill_q16": 480,
+      "head_q16": 1248,
+      "nominal_width_q16": 768,
+      "nominal_height_q16": 768,
+      "room_served_refs": [
+        "space-bedroom",
+        "exterior"
+      ],
+      "material_slot_refs": [
+        "material-glazing"
+      ],
+      "assembly_slot_refs": [
+        "assembly-glazing"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "casement",
+      "handing": "not_evaluated"
+    },
+    {
+      "opening_id": "w-kit-01",
+      "authored_order": 7,
+      "level_id": "level-0",
+      "kind": "window",
+      "host_wall_id": "wall-left-kitchen",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 576,
+      "cut_width_q16": 768,
+      "cut_height_q16": 576,
+      "sill_q16": 672,
+      "head_q16": 1248,
+      "nominal_width_q16": 768,
+      "nominal_height_q16": 576,
+      "room_served_refs": [
+        "space-kitchen",
+        "exterior"
+      ],
+      "material_slot_refs": [
+        "material-glazing"
+      ],
+      "assembly_slot_refs": [
+        "assembly-glazing"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "awning",
+      "handing": "not_applicable"
+    },
+    {
+      "opening_id": "w-liv-01",
+      "authored_order": 8,
+      "level_id": "level-0",
+      "kind": "window",
+      "host_wall_id": "wall-rear-living",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 1824,
+      "cut_width_q16": 960,
+      "cut_height_q16": 768,
+      "sill_q16": 480,
+      "head_q16": 1248,
+      "nominal_width_q16": 960,
+      "nominal_height_q16": 768,
+      "room_served_refs": [
+        "space-living",
+        "exterior"
+      ],
+      "material_slot_refs": [
+        "material-glazing"
+      ],
+      "assembly_slot_refs": [
+        "assembly-glazing"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "casement",
+      "handing": "not_evaluated"
+    },
+    {
+      "opening_id": "w-liv-02",
+      "authored_order": 9,
+      "level_id": "level-0",
+      "kind": "window",
+      "host_wall_id": "wall-rear-living",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 288,
+      "cut_width_q16": 960,
+      "cut_height_q16": 768,
+      "sill_q16": 480,
+      "head_q16": 1248,
+      "nominal_width_q16": 960,
+      "nominal_height_q16": 768,
+      "room_served_refs": [
+        "space-living",
+        "exterior"
+      ],
+      "material_slot_refs": [
+        "material-glazing"
+      ],
+      "assembly_slot_refs": [
+        "assembly-glazing"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "casement",
+      "handing": "not_evaluated"
+    },
+    {
+      "opening_id": "w-liv-03",
+      "authored_order": 10,
+      "level_id": "level-0",
+      "kind": "window",
+      "host_wall_id": "wall-left-living",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 576,
+      "cut_width_q16": 768,
+      "cut_height_q16": 768,
+      "sill_q16": 480,
+      "head_q16": 1248,
+      "nominal_width_q16": 768,
+      "nominal_height_q16": 768,
+      "room_served_refs": [
+        "space-living",
+        "exterior"
+      ],
+      "material_slot_refs": [
+        "material-glazing"
+      ],
+      "assembly_slot_refs": [
+        "assembly-glazing"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "casement",
+      "handing": "not_evaluated"
+    },
+    {
+      "opening_id": "w-entry-01",
+      "authored_order": 11,
+      "level_id": "level-0",
+      "kind": "window",
+      "host_wall_id": "wall-right-entry",
+      "datum": "host_start_to_opening_start",
+      "offset_q16": 288,
+      "cut_width_q16": 384,
+      "cut_height_q16": 768,
+      "sill_q16": 576,
+      "head_q16": 1344,
+      "nominal_width_q16": 384,
+      "nominal_height_q16": 768,
+      "room_served_refs": [
+        "space-entry",
+        "exterior"
+      ],
+      "material_slot_refs": [
+        "material-glazing"
+      ],
+      "assembly_slot_refs": [
+        "assembly-glazing"
+      ],
+      "net_clear": {
+        "state": "not_evaluated",
+        "width_q16": null,
+        "height_q16": null,
+        "area2_q16sq": null,
+        "evidence_refs": []
+      },
+      "operation": "fixed",
+      "handing": "not_applicable"
+    }
+  ],
+  "material_slots": [
+    {
+      "slot_id": "material-exterior-field",
+      "authored_order": 0,
+      "role": "exterior_field",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    },
+    {
+      "slot_id": "material-exterior-trim",
+      "authored_order": 1,
+      "role": "exterior_trim",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    },
+    {
+      "slot_id": "material-roof-field",
+      "authored_order": 2,
+      "role": "roof_field",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    },
+    {
+      "slot_id": "material-glazing",
+      "authored_order": 3,
+      "role": "glazing",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    },
+    {
+      "slot_id": "material-entry",
+      "authored_order": 4,
+      "role": "entry",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    },
+    {
+      "slot_id": "material-interior-floor",
+      "authored_order": 5,
+      "role": "interior_floor",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    },
+    {
+      "slot_id": "material-interior-wall",
+      "authored_order": 6,
+      "role": "interior_wall",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    },
+    {
+      "slot_id": "material-casework",
+      "authored_order": 7,
+      "role": "casework",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "concept_generic"
+    }
+  ],
+  "assembly_slots": [
+    {
+      "slot_id": "assembly-exterior-field",
+      "authored_order": 0,
+      "role": "exterior_field",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    },
+    {
+      "slot_id": "assembly-exterior-trim",
+      "authored_order": 1,
+      "role": "exterior_trim",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    },
+    {
+      "slot_id": "assembly-roof-field",
+      "authored_order": 2,
+      "role": "roof_field",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    },
+    {
+      "slot_id": "assembly-glazing",
+      "authored_order": 3,
+      "role": "glazing",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    },
+    {
+      "slot_id": "assembly-entry",
+      "authored_order": 4,
+      "role": "entry",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    },
+    {
+      "slot_id": "assembly-interior-floor",
+      "authored_order": 5,
+      "role": "interior_floor",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    },
+    {
+      "slot_id": "assembly-interior-wall",
+      "authored_order": 6,
+      "role": "interior_wall",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    },
+    {
+      "slot_id": "assembly-casework",
+      "authored_order": 7,
+      "role": "casework",
+      "scope": "adu-a-600-concept-profile",
+      "truth_state": "unresolved_semantic"
+    }
+  ],
+  "area_accounting": {
+    "gross_area2_q16sq": 44236800,
+    "net_area2_q16sq": null,
+    "region_area2_q16sq": 44236800,
+    "wall_junction_reserved_area2_q16sq": null
+  },
+  "professional_gates": [
+    {
+      "gate_id": "architectural_test_fit",
+      "authored_order": 0,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    },
+    {
+      "gate_id": "egress_openings",
+      "authored_order": 1,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    },
+    {
+      "gate_id": "universal_accessibility",
+      "authored_order": 2,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    },
+    {
+      "gate_id": "structural_foundation",
+      "authored_order": 3,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    },
+    {
+      "gate_id": "energy",
+      "authored_order": 4,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    },
+    {
+      "gate_id": "mep",
+      "authored_order": 5,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    },
+    {
+      "gate_id": "fire_wui",
+      "authored_order": 6,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    },
+    {
+      "gate_id": "site_jurisdiction",
+      "authored_order": 7,
+      "status": "not_evaluated",
+      "evidence_refs": [],
+      "reviewer_role": null,
+      "checked_at": null
+    }
+  ],
+  "profile_digest": "sha256:27df292e84fc6e00a2ddc5913c0f6175d94a91a4b0de32bf4dab2c3049eec5b3"
+}

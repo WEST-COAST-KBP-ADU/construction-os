@@ -160,7 +160,7 @@
       "unevaluatedProperties": false,
       "required": ["floor_plate_id", "authored_order", "level_id", "gross_envelope_ref", "bottom_z_q16", "top_z_q16", "material_slot_refs", "assembly_slot_refs"],
       "properties": {
-        "floor_plate_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "gross_envelope_ref": { "$ref": "#/$defs/id" }, "bottom_z_q16": { "$ref": "#/$defs/q16" }, "top_z_q16": { "$ref": "#/$defs/q16" }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }
+        "floor_plate_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "gross_envelope_ref": { "$ref": "#/$defs/id" }, "bottom_z_q16": { "$ref": "#/$defs/q16" }, "top_z_q16": { "anyOf": [{ "$ref": "#/$defs/q16" }, { "type": "null" }] }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }
       }
     },
     "floorPlates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/floorPlate" } },
@@ -169,7 +169,7 @@
       "unevaluatedProperties": false,
       "required": ["wall_id", "authored_order", "kind", "level_id", "start_vertex_id", "end_vertex_id", "plan_region_ref", "thickness_q16", "base_z_q16", "head_z_q16", "left_space_ref", "right_space_ref", "material_slot_refs", "assembly_slot_refs", "start_junction_ref", "end_junction_ref", "opening_ids"],
       "properties": {
-        "wall_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "kind": { "enum": ["exterior", "partition"] }, "level_id": { "$ref": "#/$defs/id" }, "start_vertex_id": { "$ref": "#/$defs/id" }, "end_vertex_id": { "$ref": "#/$defs/id" }, "plan_region_ref": { "$ref": "#/$defs/id" }, "thickness_q16": { "$ref": "#/$defs/positiveQ16" }, "base_z_q16": { "$ref": "#/$defs/q16" }, "head_z_q16": { "$ref": "#/$defs/q16" }, "left_space_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] }, "right_space_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }, "start_junction_ref": { "$ref": "#/$defs/id" }, "end_junction_ref": { "$ref": "#/$defs/id" }, "opening_ids": { "type": "array", "items": { "$ref": "#/$defs/id" } }
+        "wall_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "kind": { "enum": ["exterior", "partition"] }, "level_id": { "$ref": "#/$defs/id" }, "start_vertex_id": { "$ref": "#/$defs/id" }, "end_vertex_id": { "$ref": "#/$defs/id" }, "plan_region_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] }, "thickness_q16": { "anyOf": [{ "$ref": "#/$defs/positiveQ16" }, { "type": "null" }] }, "base_z_q16": { "$ref": "#/$defs/q16" }, "head_z_q16": { "$ref": "#/$defs/q16" }, "left_space_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] }, "right_space_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }, "start_junction_ref": { "$ref": "#/$defs/id" }, "end_junction_ref": { "$ref": "#/$defs/id" }, "opening_ids": { "type": "array", "items": { "$ref": "#/$defs/id" } }
       }
     },
     "wallRuns": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/wallRun" } },
@@ -178,7 +178,7 @@
       "unevaluatedProperties": false,
       "required": ["junction_id", "authored_order", "level_id", "region_ref", "member_wall_ids", "rule"],
       "properties": {
-        "junction_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "region_ref": { "$ref": "#/$defs/id" }, "member_wall_ids": { "$ref": "#/$defs/idArray" }, "rule": { "enum": ["miter", "butt_continuing", "butt_terminating", "tee", "cross"] }
+        "junction_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "region_ref": { "anyOf": [{ "$ref": "#/$defs/id" }, { "type": "null" }] }, "member_wall_ids": { "$ref": "#/$defs/idArray" }, "rule": { "enum": ["miter", "butt_continuing", "butt_terminating", "tee", "cross"] }
       }
     },
     "wallJunctions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/wallJunction" } },
@@ -221,7 +221,7 @@
       "unevaluatedProperties": false,
       "required": ["opening_id", "authored_order", "level_id", "kind", "host_wall_id", "datum", "offset_q16", "cut_width_q16", "cut_height_q16", "sill_q16", "head_q16", "nominal_width_q16", "nominal_height_q16", "room_served_refs", "material_slot_refs", "assembly_slot_refs", "net_clear", "operation", "handing"],
       "properties": {
-        "opening_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "kind": { "enum": ["door", "window"] }, "host_wall_id": { "$ref": "#/$defs/id" }, "datum": { "const": "host_start_to_opening_start" }, "offset_q16": { "$ref": "#/$defs/nonNegativeQ16" }, "cut_width_q16": { "$ref": "#/$defs/positiveQ16" }, "cut_height_q16": { "$ref": "#/$defs/positiveQ16" }, "sill_q16": { "$ref": "#/$defs/q16" }, "head_q16": { "$ref": "#/$defs/q16" }, "nominal_width_q16": { "$ref": "#/$defs/positiveQ16" }, "nominal_height_q16": { "$ref": "#/$defs/positiveQ16" }, "room_served_refs": { "type": "array", "minItems": 1, "items": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] } }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }, "net_clear": { "$ref": "#/$defs/netClear" }, "operation": { "enum": ["swing_in", "swing_out", "sliding", "pocket", "fixed", "casement", "awning", "slider", "single_hung"] }, "handing": { "enum": ["left", "right", "not_applicable"] }
+        "opening_id": { "$ref": "#/$defs/id" }, "authored_order": { "type": "integer", "minimum": 0 }, "level_id": { "$ref": "#/$defs/id" }, "kind": { "enum": ["door", "window", "cased_opening"] }, "host_wall_id": { "$ref": "#/$defs/id" }, "datum": { "const": "host_start_to_opening_start" }, "offset_q16": { "$ref": "#/$defs/nonNegativeQ16" }, "cut_width_q16": { "$ref": "#/$defs/positiveQ16" }, "cut_height_q16": { "$ref": "#/$defs/positiveQ16" }, "sill_q16": { "$ref": "#/$defs/q16" }, "head_q16": { "$ref": "#/$defs/q16" }, "nominal_width_q16": { "$ref": "#/$defs/positiveQ16" }, "nominal_height_q16": { "$ref": "#/$defs/positiveQ16" }, "room_served_refs": { "type": "array", "minItems": 1, "items": { "anyOf": [{ "$ref": "#/$defs/id" }, { "const": "exterior" }] } }, "material_slot_refs": { "$ref": "#/$defs/idArray" }, "assembly_slot_refs": { "$ref": "#/$defs/idArray" }, "net_clear": { "$ref": "#/$defs/netClear" }, "operation": { "enum": ["swing_in", "swing_out", "sliding", "pocket", "fixed", "casement", "awning", "slider", "single_hung", "not_applicable", "not_evaluated"] }, "handing": { "enum": ["left", "right", "not_applicable", "not_evaluated"] }
       }
     },
     "openings": { "type": "array", "items": { "$ref": "#/$defs/opening" } },
@@ -236,7 +236,7 @@
       "type": "object",
       "unevaluatedProperties": false,
       "required": ["gross_area2_q16sq", "net_area2_q16sq", "region_area2_q16sq", "wall_junction_reserved_area2_q16sq"],
-      "properties": { "gross_area2_q16sq": { "$ref": "#/$defs/positiveQ16" }, "net_area2_q16sq": { "$ref": "#/$defs/nonNegativeQ16" }, "region_area2_q16sq": { "$ref": "#/$defs/positiveQ16" }, "wall_junction_reserved_area2_q16sq": { "$ref": "#/$defs/nonNegativeQ16" } }
+      "properties": { "gross_area2_q16sq": { "$ref": "#/$defs/positiveQ16" }, "net_area2_q16sq": { "anyOf": [{ "$ref": "#/$defs/nonNegativeQ16" }, { "type": "null" }] }, "region_area2_q16sq": { "$ref": "#/$defs/positiveQ16" }, "wall_junction_reserved_area2_q16sq": { "anyOf": [{ "$ref": "#/$defs/nonNegativeQ16" }, { "type": "null" }] } }
     },
     "gate": {
       "type": "object",
