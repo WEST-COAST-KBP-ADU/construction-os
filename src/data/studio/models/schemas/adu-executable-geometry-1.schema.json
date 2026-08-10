@@ -6,7 +6,7 @@
   "type": "object",
   "unevaluatedProperties": false,
   "required": [
-    "schema", "profile_id", "profile_version", "adoption_state", "maturity", "model_binding", "provenance", "units", "precision", "geometry_resolution", "coordinate_frame", "levels", "plan_vertices", "gross_envelopes", "plan_regions", "spaces", "floor_plates", "wall_runs", "wall_junctions", "roof_vertices", "roof_edges", "roof_planes", "openings", "material_slots", "assembly_slots", "area_accounting", "professional_gates", "profile_digest"
+    "schema", "profile_id", "profile_version", "adoption_state", "maturity", "model_binding", "provenance", "units", "precision", "coordinate_frame", "levels", "plan_vertices", "gross_envelopes", "plan_regions", "spaces", "floor_plates", "wall_runs", "wall_junctions", "roof_vertices", "roof_edges", "roof_planes", "openings", "material_slots", "assembly_slots", "area_accounting", "professional_gates", "profile_digest"
   ],
   "properties": {
     "schema": { "const": "adu-executable-geometry/1" },
@@ -18,7 +18,6 @@
     "provenance": { "$ref": "#/$defs/provenance" },
     "units": { "$ref": "#/$defs/units" },
     "precision": { "$ref": "#/$defs/precision" },
-    "geometry_resolution": { "$ref": "#/$defs/geometryResolution" },
     "coordinate_frame": { "$ref": "#/$defs/coordinateFrame" },
     "levels": { "$ref": "#/$defs/levels" },
     "plan_vertices": { "$ref": "#/$defs/planVertices" },
@@ -94,16 +93,6 @@
       "unevaluatedProperties": false,
       "required": ["length_quantum_q16", "coordinate_bound_q16"],
       "properties": { "length_quantum_q16": { "const": 1 }, "coordinate_bound_q16": { "$ref": "#/$defs/positiveQ16" } }
-    },
-    "geometryResolution": {
-      "type": "object",
-      "unevaluatedProperties": false,
-      "required": ["state", "unresolved_fields", "blocked_outputs"],
-      "properties": {
-        "state": { "enum": ["materialization_ready", "blocked_unresolved_geometry"] },
-        "unresolved_fields": { "type": "array", "items": { "enum": ["floor_assembly_thickness", "wall_assembly_thickness", "wall_junction_geometry", "roof_assembly_thickness"] }, "uniqueItems": true },
-        "blocked_outputs": { "type": "array", "items": { "enum": ["step", "glb", "render"] }, "uniqueItems": true }
-      }
     },
     "coordinateFrame": {
       "type": "object",

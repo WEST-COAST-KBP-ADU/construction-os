@@ -12,6 +12,7 @@ import {
   type ExecutableGeometryBindingContext,
   type ExecutableGeometryProfile,
   type ExecutableGeometryRefusalCode,
+  type ExecutableGeometryResolution,
   type ExecutableGeometryValidationFailure,
   type ExecutableGeometryValidationResult,
 } from "./executableGeometryTypes";
@@ -57,7 +58,6 @@ const TOP_LEVEL_KEYS = [
   "provenance",
   "units",
   "precision",
-  "geometry_resolution",
   "coordinate_frame",
   "levels",
   "plan_vertices",
@@ -189,19 +189,6 @@ function assertProfileShape(value: unknown): ExecutableGeometryProfile {
 
   assertExactKeys(profile.units, ["length", "area"], "/units");
   assertExactKeys(profile.precision, ["length_quantum_q16", "coordinate_bound_q16"], "/precision");
-  assertExactKeys(
-    profile.geometry_resolution,
-    ["state", "unresolved_fields", "blocked_outputs"],
-    "/geometry_resolution",
-  );
-  assertStringArray(
-    (profile.geometry_resolution as UnknownRecord).unresolved_fields,
-    "/geometry_resolution/unresolved_fields",
-  );
-  assertStringArray(
-    (profile.geometry_resolution as UnknownRecord).blocked_outputs,
-    "/geometry_resolution/blocked_outputs",
-  );
   assertExactKeys(
     profile.coordinate_frame,
     ["origin", "x_axis", "y_axis", "z_axis", "handedness", "canonical_orientation"],
@@ -582,53 +569,88 @@ function assertUnitsAndPrecision(profile: ExecutableGeometryProfile): void {
   });
 }
 
-const UNRESOLVED_D08_FIELDS = [
+const UNRESOLVED_D08_FIELDS: ExecutableGeometryResolution["unresolved_fields"] = [
   "floor_assembly_thickness",
   "wall_assembly_thickness",
   "wall_junction_geometry",
   "roof_assembly_thickness",
 ] as const;
-const BLOCKED_MATERIALIZATION_OUTPUTS = ["step", "glb", "render"] as const;
+const BLOCKED_MATERIALIZATION_OUTPUTS: ExecutableGeometryResolution["blocked_outputs"] = ["step", "glb", "render"];
 
 function sameOrderedStrings(actual: readonly string[], expected: readonly string[]): boolean {
   return actual.length === expected.length && actual.every((value, index) => value === expected[index]);
 }
 
+export function getExecutableGeometryResolution(
+  profile: ExecutableGeometryProfile,
+): ExecutableGeometryResolution {
+  const unresolved_fields: ExecutableGeometryResolution["unresolved_fields"] = [];
+  if (profile.floor_plates.some((plate) => plate.top_z_q16 === null)) {
+    unresolved_fields.push("floor_assembly_thickness");
+  }
+  if (profile.wall_runs.some((wall) => wall.thickness_q16 === null || wall.plan_region_ref === null)) {
+    unresolved_fields.push("wall_assembly_thickness");
+  }
+  if (profile.wall_junctions.some((junction) => junction.region_ref === null)) {
+    unresolved_fields.push("wall_junction_geometry");
+  }
+  if (
+    profile.assembly_slots.some(
+      (slot) => slot.role === "roof_field" && slot.truth_state === "unresolved_semantic",
+    )
+  ) {
+    unresolved_fields.push("roof_assembly_thickness");
+  }
+  return unresolved_fields.length === 0
+    ? { state: "materialization_ready", unresolved_fields, blocked_outputs: [] }
+    : {
+        state: "blocked_unresolved_geometry",
+        unresolved_fields,
+        blocked_outputs: [...BLOCKED_MATERIALIZATION_OUTPUTS],
+      };
+}
+
 function assertGeometryResolution(profile: ExecutableGeometryProfile): void {
-  const resolution = profile.geometry_resolution;
+  const floorAnyUnresolved = profile.floor_plates.some((plate) => plate.top_z_q16 === null);
+  const floorAllUnresolved = profile.floor_plates.every((plate) => plate.top_z_q16 === null);
+  const wallAnyUnresolved = profile.wall_runs.some(
+    (wall) => wall.thickness_q16 === null || wall.plan_region_ref === null,
+  );
+  const wallAllUnresolved = profile.wall_runs.every(
+    (wall) => wall.thickness_q16 === null && wall.plan_region_ref === null,
+  );
+  const junctionAnyUnresolved = profile.wall_junctions.some(
+    (junction) => junction.region_ref === null,
+  );
+  const junctionAllUnresolved = profile.wall_junctions.every(
+    (junction) => junction.region_ref === null,
+  );
+  if (
+    (floorAnyUnresolved && !floorAllUnresolved) ||
+    (wallAnyUnresolved && !wallAllUnresolved) ||
+    (junctionAnyUnresolved && !junctionAllUnresolved)
+  ) {
+    fail("XG_UNRESOLVED_GEOMETRY_SMUGGLED", "/floor_plates");
+  }
+  const resolution = getExecutableGeometryResolution(profile);
   if (resolution.state === "materialization_ready") {
-    if (resolution.unresolved_fields.length !== 0 || resolution.blocked_outputs.length !== 0) {
-      fail("XG_UNRESOLVED_GEOMETRY_SMUGGLED", "/geometry_resolution");
-    }
     if (
-      profile.floor_plates.some((plate) => plate.top_z_q16 === null) ||
-      profile.wall_runs.some((wall) => wall.thickness_q16 === null || wall.plan_region_ref === null) ||
-      profile.wall_junctions.some((junction) => junction.region_ref === null) ||
       profile.area_accounting.net_area2_q16sq === null ||
       profile.area_accounting.wall_junction_reserved_area2_q16sq === null
     ) {
-      fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/geometry_resolution/state");
+      fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/area_accounting");
     }
     return;
   }
-  if (resolution.state !== "blocked_unresolved_geometry") {
-    fail("XG_SHAPE_MISSING_FIELD", "/geometry_resolution/state");
+  if (profile.maturity !== "concept_only") {
+    fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/maturity");
   }
   if (
-    profile.maturity !== "concept_only" ||
     !sameOrderedStrings(resolution.unresolved_fields, UNRESOLVED_D08_FIELDS) ||
-    !sameOrderedStrings(resolution.blocked_outputs, BLOCKED_MATERIALIZATION_OUTPUTS)
-  ) {
-    fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/geometry_resolution");
-  }
-  if (
-    profile.floor_plates.some((plate) => plate.top_z_q16 !== null) ||
-    profile.wall_runs.some((wall) => wall.thickness_q16 !== null || wall.plan_region_ref !== null) ||
-    profile.wall_junctions.some((junction) => junction.region_ref !== null) ||
     profile.area_accounting.net_area2_q16sq !== null ||
     profile.area_accounting.wall_junction_reserved_area2_q16sq !== null
   ) {
-    fail("XG_UNRESOLVED_GEOMETRY_SMUGGLED", "/geometry_resolution");
+    fail("XG_UNRESOLVED_GEOMETRY_SMUGGLED", "/floor_plates");
   }
 }
 
@@ -636,11 +658,8 @@ export function assertExecutableGeometryMaterializable(
   profile: ExecutableGeometryProfile,
   output: "step" | "glb" | "render",
 ): void {
-  if (
-    profile.geometry_resolution.state !== "materialization_ready" ||
-    profile.geometry_resolution.blocked_outputs.includes(output)
-  ) {
-    fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/geometry_resolution/state", [output]);
+  if (getExecutableGeometryResolution(profile).blocked_outputs.includes(output)) {
+    fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/floor_plates", [output]);
   }
 }
 
@@ -924,7 +943,7 @@ function assertRegionsAndAreaAccounting(profile: ExecutableGeometryProfile, ring
     if (entry.role === "space") net += BigInt(entry.area2_q16sq);
     else nonNet += BigInt(entry.area2_q16sq);
   });
-  const unresolved = profile.geometry_resolution.state === "blocked_unresolved_geometry";
+  const unresolved = getExecutableGeometryResolution(profile).state === "blocked_unresolved_geometry";
   if (
     totalGross !== totalRegions ||
     totalGross !== BigInt(profile.area_accounting.gross_area2_q16sq) ||
@@ -950,7 +969,7 @@ function wallSegmentKey(start: string, end: string): string {
 }
 
 function assertWallsAndJunctions(profile: ExecutableGeometryProfile): void {
-  const unresolved = profile.geometry_resolution.state === "blocked_unresolved_geometry";
+  const unresolved = getExecutableGeometryResolution(profile).state === "blocked_unresolved_geometry";
   const regions = mapById(profile.plan_regions as unknown as UnknownRecord[], "region_id");
   const walls = mapById(profile.wall_runs as unknown as UnknownRecord[], "wall_id");
   const junctions = mapById(profile.wall_junctions as unknown as UnknownRecord[], "junction_id");

@@ -60,7 +60,7 @@ function assertA600AdoptionBinding(
     result.profile.profile_id !== "adu-a-600-profile-owner-adopted" ||
     result.profile.profile_version !== "1.0.0" ||
     result.profile.adoption_state !== "owner_adopted" ||
-    result.profile.profile_digest !== "sha256:cb29815c8b2ce306b0bf3cae4fc8810cb3cecc3adba1bfbb62c8c75421ff9afd" ||
+    result.profile.profile_digest !== "sha256:27df292e84fc6e00a2ddc5913c0f6175d94a91a4b0de32bf4dab2c3049eec5b3" ||
     !acceptedEvidence.has("docs/design/a600/A600-CONCEPT-TESTFIT-001.svg@085353bf0f7d3bec86eb7c9a46977bde9f822d9a") ||
     !acceptedEvidence.has("sha256:54cb40a6212916d83ab5638ae05330d113a06dc9c09a03fe5f120875f03da5f4") ||
     !acceptedEvidence.has("https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/115#issuecomment-5234481099")

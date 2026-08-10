@@ -7,6 +7,7 @@ import {
   canonicalizeExecutableGeometry,
   resealExecutableGeometryProfile,
 } from "./executableGeometryCanonical";
+import { getExecutableGeometryResolution } from "./executableGeometryContract";
 import type {
   ExecutableGeometryProfile,
   ExecutableGeometryRefusalCode,
@@ -22,7 +23,7 @@ import {
 const PROFILE_PATH = fileURLToPath(
   new URL("../../data/studio/models/executable/adu-a-600@1.0.0.json", import.meta.url),
 );
-const EXPECTED_DIGEST = "sha256:cb29815c8b2ce306b0bf3cae4fc8810cb3cecc3adba1bfbb62c8c75421ff9afd";
+const EXPECTED_DIGEST = "sha256:27df292e84fc6e00a2ddc5913c0f6175d94a91a4b0de32bf4dab2c3049eec5b3";
 
 function clone(): ExecutableGeometryProfile {
   return JSON.parse(JSON.stringify(A600_EXECUTABLE_PROFILE)) as ExecutableGeometryProfile;
@@ -118,7 +119,7 @@ describe("adu-a-600@1.0.0 executable profile", () => {
   });
 
   it("keeps D08 machine-visible and blocks STEP, GLB, and render materialization", () => {
-    expect(A600_EXECUTABLE_PROFILE.geometry_resolution).toEqual({
+    expect(getExecutableGeometryResolution(A600_EXECUTABLE_PROFILE)).toEqual({
       state: "blocked_unresolved_geometry",
       unresolved_fields: [
         "floor_assembly_thickness",

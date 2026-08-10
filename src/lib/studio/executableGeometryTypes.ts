@@ -342,7 +342,6 @@ export type ExecutableGeometryProfile = {
   provenance: ExecutableGeometryProvenance;
   units: ExecutableGeometryUnits;
   precision: ExecutableGeometryPrecision;
-  geometry_resolution: ExecutableGeometryResolution;
   coordinate_frame: ExecutableGeometryCoordinateFrame;
   levels: ExecutableGeometryLevel[];
   plan_vertices: ExecutableGeometryPlanVertex[];

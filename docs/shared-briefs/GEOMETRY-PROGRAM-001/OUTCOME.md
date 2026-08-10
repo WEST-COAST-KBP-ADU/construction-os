@@ -12,7 +12,7 @@ repository-owned `adu-executable-geometry/1` profile and registered at
 - Exact-head verdict: Issue #115 comment `5234465734`
 - Owner adoption: Issue #115 comment `5234481099`
 - Executable profile: `src/data/studio/models/executable/adu-a-600@1.0.0.json`
-- Executable profile digest: `sha256:cb29815c8b2ce306b0bf3cae4fc8810cb3cecc3adba1bfbb62c8c75421ff9afd`
+- Executable profile digest: `sha256:27df292e84fc6e00a2ddc5913c0f6175d94a91a4b0de32bf4dab2c3049eec5b3`
 
 ## Transcription record
 

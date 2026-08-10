@@ -17,7 +17,7 @@ import type {
   ExecutableGeometryRefusalCode,
 } from "./executableGeometryTypes";
 
-const GOLDEN_TEST_ONLY_DIGEST = "sha256:5c941f64ac905a3602e6ee89d66ec91a5a0cf2a38d42f06eea8f4932045513dd";
+const GOLDEN_TEST_ONLY_DIGEST = "sha256:a83979f41d3d42677c3c4431491e5ba7dcfd1b51b61f4241bd5a2b6edc82d7f9";
 
 async function expectRefusal(
   expectedCode: ExecutableGeometryRefusalCode,

@@ -48,20 +48,6 @@
     "length_quantum_q16": 1,
     "coordinate_bound_q16": 1000000
   },
-  "geometry_resolution": {
-    "state": "blocked_unresolved_geometry",
-    "unresolved_fields": [
-      "floor_assembly_thickness",
-      "wall_assembly_thickness",
-      "wall_junction_geometry",
-      "roof_assembly_thickness"
-    ],
-    "blocked_outputs": [
-      "step",
-      "glb",
-      "render"
-    ]
-  },
   "coordinate_frame": {
     "origin": "front_left_exterior_wall_corner",
     "x_axis": "right",
@@ -1949,5 +1935,5 @@
       "checked_at": null
     }
   ],
-  "profile_digest": "sha256:cb29815c8b2ce306b0bf3cae4fc8810cb3cecc3adba1bfbb62c8c75421ff9afd"
+  "profile_digest": "sha256:27df292e84fc6e00a2ddc5913c0f6175d94a91a4b0de32bf4dab2c3049eec5b3"
 }
