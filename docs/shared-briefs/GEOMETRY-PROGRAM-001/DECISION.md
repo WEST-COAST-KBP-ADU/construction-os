@@ -1,11 +1,11 @@
 # DECISION — GEOMETRY-PROGRAM-001 · D01–D13 package
 
-**Status: NOT ADOPTED.** This file is the Owner decision surface. Nothing here
-is in force until Tony adopts it and the adoption is committed. Context is in
-`BRIEF.md`; the evidence is #111, #113, #114 and the fork verdicts in #115.
-
-Adopt as a package, or revise individual rows and adopt the rest. Every row was
-carried unchanged through three adversarial review cycles unless noted.
+**Status: OWNER ADOPTED AS V1 PRODUCT BASIS — 2026-08-09.** Tony adopted D01–D13
+as one package in Issue #115 comment `5234481099`, against reviewed SVG head
+`085353bf0f7d3bec86eb7c9a46977bde9f822d9a`, artifact SHA-256
+`54cb40a6212916d83ab5638ae05330d113a06dc9c09a03fe5f120875f03da5f4`, and the
+exact-head no-blocking verdict in comment `5234465734`. D08 remains open, D09
+remains intent-only, and the D04 detail remains deferred for S450/B800.
 
 ## The decisions
 
@@ -34,34 +34,20 @@ D07, D10, D11, D12 are engineering policy that protects that identity from
 drifting. D08 and D09 are explicitly left open because deciding them now would
 be claiming professional findings that do not exist.
 
-## Your options
+## Adoption identity
 
-**Adopt the package.** D08 stays open by design; D04's "service facade" nuance is
-recorded as a follow-up before S450 and B800. This unblocks profile authoring.
-
-**Revise rows, adopt the rest.** Name the rows to change and the replacement
-values. Rows that move re-open only their own downstream work.
-
-**Reject.** The candidate returns to design with your direction; the schema layer
-already merged stays valid, since it carries no product geometry.
-
-## Preconditions before this decision is safe to make
-
-1. A clean fork verdict at exact head `36aba39` — the third cycle. Two prior
-   verdicts are spent and cannot certify these bytes.
-2. Nothing else. The professional architectural test fit is required before the
-   geometry is **adopted as buildable**, not before you decide the product shape.
+The Owner decision adopts product-shape policy, not professional or buildable
+geometry. The executable transcription is a separate immutable object. Its
+profile digest, reviewed SVG identity, Owner-decision comment, exact-head verdict,
+and field-by-field transcription record are bound in `OUTCOME.md`. Any authored
+profile value change requires a new profile version and review.
 
 ## What happens after adoption
 
-`ADU-A600-EXECUTABLE-PROFILE-001` authors the real profile against the merged
-schema, then an authorized California design professional test-fits it. Only
-then does `/models` bind to it, Studio migrates off legacy catalog `2026.08.0`,
-and model-bound renders become possible for the Home hero.
-
-Two schema amendments from the first fork verdict fold in at profile-authoring
-time: resolve the `adoption_state`-inside-digest tension so adopted bytes equal
-reviewed bytes, and state the jamb-at-junction rule explicitly.
+`A600-EXECUTABLE-PROFILE-001` materializes the repository-owned concept profile
+against the merged schema. D08 remains machine-visible and blocks STEP, GLB, and
+render materialization. An authorized California design professional test-fit
+and the remaining gates are still required before any maturity promotion.
 
 ## Standing limits
 

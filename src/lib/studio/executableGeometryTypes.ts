@@ -84,7 +84,16 @@ export type ExecutableGeometryWindowOperation =
   | "awning"
   | "slider"
   | "single_hung";
-export type ExecutableGeometryHanding = "left" | "right" | "not_applicable";
+export type ExecutableGeometryOpeningOperation =
+  | ExecutableGeometryDoorOperation
+  | ExecutableGeometryWindowOperation
+  | "not_applicable"
+  | "not_evaluated";
+export type ExecutableGeometryHanding =
+  | "left"
+  | "right"
+  | "not_applicable"
+  | "not_evaluated";
 export type ExecutableGeometryTruthState = "unresolved_semantic" | "concept_generic";
 export type ExecutableGeometryGateStatus =
   | "not_evaluated"
@@ -193,7 +202,7 @@ export type ExecutableGeometryFloorPlate = {
   level_id: string;
   gross_envelope_ref: string;
   bottom_z_q16: number;
-  top_z_q16: number;
+  top_z_q16: number | null;
   material_slot_refs: string[];
   assembly_slot_refs: string[];
 };
@@ -205,8 +214,8 @@ export type ExecutableGeometryWallRun = {
   level_id: string;
   start_vertex_id: string;
   end_vertex_id: string;
-  plan_region_ref: string;
-  thickness_q16: number;
+  plan_region_ref: string | null;
+  thickness_q16: number | null;
   base_z_q16: number;
   head_z_q16: number;
   left_space_ref: string | "exterior";
@@ -222,7 +231,7 @@ export type ExecutableGeometryWallJunction = {
   junction_id: string;
   authored_order: number;
   level_id: string;
-  region_ref: string;
+  region_ref: string | null;
   member_wall_ids: string[];
   rule: ExecutableGeometryJunctionRule;
 };
@@ -270,7 +279,7 @@ export type ExecutableGeometryOpening = {
   opening_id: string;
   authored_order: number;
   level_id: string;
-  kind: ExecutableGeometryOpeningKind;
+  kind: ExecutableGeometryOpeningKind | "cased_opening";
   host_wall_id: string;
   datum: "host_start_to_opening_start";
   offset_q16: number;
@@ -284,7 +293,7 @@ export type ExecutableGeometryOpening = {
   material_slot_refs: string[];
   assembly_slot_refs: string[];
   net_clear: ExecutableGeometryNetClear;
-  operation: ExecutableGeometryDoorOperation | ExecutableGeometryWindowOperation;
+  operation: ExecutableGeometryOpeningOperation;
   handing: ExecutableGeometryHanding;
 };
 
@@ -298,9 +307,20 @@ export type ExecutableGeometrySlot = {
 
 export type ExecutableGeometryAreaAccounting = {
   gross_area2_q16sq: number;
-  net_area2_q16sq: number;
+  net_area2_q16sq: number | null;
   region_area2_q16sq: number;
-  wall_junction_reserved_area2_q16sq: number;
+  wall_junction_reserved_area2_q16sq: number | null;
+};
+
+export type ExecutableGeometryResolution = {
+  state: "materialization_ready" | "blocked_unresolved_geometry";
+  unresolved_fields: Array<
+    | "floor_assembly_thickness"
+    | "wall_assembly_thickness"
+    | "wall_junction_geometry"
+    | "roof_assembly_thickness"
+  >;
+  blocked_outputs: Array<"step" | "glb" | "render">;
 };
 
 export type ExecutableGeometryProfessionalGate = {
@@ -322,6 +342,7 @@ export type ExecutableGeometryProfile = {
   provenance: ExecutableGeometryProvenance;
   units: ExecutableGeometryUnits;
   precision: ExecutableGeometryPrecision;
+  geometry_resolution: ExecutableGeometryResolution;
   coordinate_frame: ExecutableGeometryCoordinateFrame;
   levels: ExecutableGeometryLevel[];
   plan_vertices: ExecutableGeometryPlanVertex[];
@@ -378,6 +399,8 @@ export type ExecutableGeometryRefusalCode =
   | "XG_BINDING_MODEL_MISMATCH"
   | "XG_BINDING_RELEASE_MISMATCH"
   | "XG_BINDING_SOURCE_MISMATCH"
+  | "XG_ADOPTION_BINDING_MISMATCH"
+  | "XG_ADJACENCY_MISMATCH"
   | "XG_DIGEST_MISMATCH"
   | "XG_UNIT_INVALID"
   | "XG_PRECISION_INVALID"
@@ -405,7 +428,9 @@ export type ExecutableGeometryRefusalCode =
   | "XG_MATERIAL_SLOT_UNKNOWN"
   | "XG_MATERIAL_CLAIM_UNSUPPORTED"
   | "XG_GATE_STATUS_MISSING"
-  | "XG_MATURITY_GATE_UNSATISFIED";
+  | "XG_MATURITY_GATE_UNSATISFIED"
+  | "XG_REQUIRED_GEOMETRY_UNRESOLVED"
+  | "XG_UNRESOLVED_GEOMETRY_SMUGGLED";
 
 export type ExecutableGeometryValidationSuccess = {
   ok: true;

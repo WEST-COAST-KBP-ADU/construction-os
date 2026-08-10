@@ -57,6 +57,7 @@ const TOP_LEVEL_KEYS = [
   "provenance",
   "units",
   "precision",
+  "geometry_resolution",
   "coordinate_frame",
   "levels",
   "plan_vertices",
@@ -168,7 +169,6 @@ function assertProfileShape(value: unknown): ExecutableGeometryProfile {
     ],
     "/model_binding",
   );
-  assertRecord(profile.model_binding as UnknownRecord, "/model_binding").reference_configuration;
   assertRecord((profile.model_binding as UnknownRecord).reference_configuration, "/model_binding/reference_configuration");
 
   assertExactKeys(
@@ -189,6 +189,19 @@ function assertProfileShape(value: unknown): ExecutableGeometryProfile {
 
   assertExactKeys(profile.units, ["length", "area"], "/units");
   assertExactKeys(profile.precision, ["length_quantum_q16", "coordinate_bound_q16"], "/precision");
+  assertExactKeys(
+    profile.geometry_resolution,
+    ["state", "unresolved_fields", "blocked_outputs"],
+    "/geometry_resolution",
+  );
+  assertStringArray(
+    (profile.geometry_resolution as UnknownRecord).unresolved_fields,
+    "/geometry_resolution/unresolved_fields",
+  );
+  assertStringArray(
+    (profile.geometry_resolution as UnknownRecord).blocked_outputs,
+    "/geometry_resolution/blocked_outputs",
+  );
   assertExactKeys(
     profile.coordinate_frame,
     ["origin", "x_axis", "y_axis", "z_axis", "handedness", "canonical_orientation"],
@@ -523,8 +536,14 @@ function assertUnitsAndPrecision(profile: ExecutableGeometryProfile): void {
     assertQ16Coordinate(vertex.z_q16, `/roof_vertices/${index}/z_q16`, bound);
   });
   const coordinateFields: Array<[unknown, string]> = [];
-  profile.floor_plates.forEach((entry, index) => coordinateFields.push([entry.bottom_z_q16, `/floor_plates/${index}/bottom_z_q16`], [entry.top_z_q16, `/floor_plates/${index}/top_z_q16`]));
-  profile.wall_runs.forEach((entry, index) => coordinateFields.push([entry.thickness_q16, `/wall_runs/${index}/thickness_q16`], [entry.base_z_q16, `/wall_runs/${index}/base_z_q16`], [entry.head_z_q16, `/wall_runs/${index}/head_z_q16`]));
+  profile.floor_plates.forEach((entry, index) => {
+    coordinateFields.push([entry.bottom_z_q16, `/floor_plates/${index}/bottom_z_q16`]);
+    if (entry.top_z_q16 !== null) coordinateFields.push([entry.top_z_q16, `/floor_plates/${index}/top_z_q16`]);
+  });
+  profile.wall_runs.forEach((entry, index) => {
+    if (entry.thickness_q16 !== null) coordinateFields.push([entry.thickness_q16, `/wall_runs/${index}/thickness_q16`]);
+    coordinateFields.push([entry.base_z_q16, `/wall_runs/${index}/base_z_q16`], [entry.head_z_q16, `/wall_runs/${index}/head_z_q16`]);
+  });
   profile.roof_edges.forEach((entry, index) => {
     coordinateFields.push([entry.overhang_q16, `/roof_edges/${index}/overhang_q16`]);
     if (entry.eave_z_q16 !== null) {
@@ -542,10 +561,10 @@ function assertUnitsAndPrecision(profile: ExecutableGeometryProfile): void {
 
   const areaFields: Array<[unknown, string]> = [
     [profile.area_accounting.gross_area2_q16sq, "/area_accounting/gross_area2_q16sq"],
-    [profile.area_accounting.net_area2_q16sq, "/area_accounting/net_area2_q16sq"],
     [profile.area_accounting.region_area2_q16sq, "/area_accounting/region_area2_q16sq"],
-    [profile.area_accounting.wall_junction_reserved_area2_q16sq, "/area_accounting/wall_junction_reserved_area2_q16sq"],
   ];
+  if (profile.area_accounting.net_area2_q16sq !== null) areaFields.push([profile.area_accounting.net_area2_q16sq, "/area_accounting/net_area2_q16sq"]);
+  if (profile.area_accounting.wall_junction_reserved_area2_q16sq !== null) areaFields.push([profile.area_accounting.wall_junction_reserved_area2_q16sq, "/area_accounting/wall_junction_reserved_area2_q16sq"]);
   profile.gross_envelopes.forEach((entry, index) => areaFields.push([entry.area2_q16sq, `/gross_envelopes/${index}/area2_q16sq`]));
   profile.plan_regions.forEach((entry, index) => areaFields.push([entry.area2_q16sq, `/plan_regions/${index}/area2_q16sq`]));
   profile.spaces.forEach((entry, index) => areaFields.push([entry.area2_q16sq, `/spaces/${index}/area2_q16sq`]));
@@ -561,6 +580,68 @@ function assertUnitsAndPrecision(profile: ExecutableGeometryProfile): void {
       fail("XG_PRECISION_INVALID", `/roof_planes/${index}/pitch`);
     }
   });
+}
+
+const UNRESOLVED_D08_FIELDS = [
+  "floor_assembly_thickness",
+  "wall_assembly_thickness",
+  "wall_junction_geometry",
+  "roof_assembly_thickness",
+] as const;
+const BLOCKED_MATERIALIZATION_OUTPUTS = ["step", "glb", "render"] as const;
+
+function sameOrderedStrings(actual: readonly string[], expected: readonly string[]): boolean {
+  return actual.length === expected.length && actual.every((value, index) => value === expected[index]);
+}
+
+function assertGeometryResolution(profile: ExecutableGeometryProfile): void {
+  const resolution = profile.geometry_resolution;
+  if (resolution.state === "materialization_ready") {
+    if (resolution.unresolved_fields.length !== 0 || resolution.blocked_outputs.length !== 0) {
+      fail("XG_UNRESOLVED_GEOMETRY_SMUGGLED", "/geometry_resolution");
+    }
+    if (
+      profile.floor_plates.some((plate) => plate.top_z_q16 === null) ||
+      profile.wall_runs.some((wall) => wall.thickness_q16 === null || wall.plan_region_ref === null) ||
+      profile.wall_junctions.some((junction) => junction.region_ref === null) ||
+      profile.area_accounting.net_area2_q16sq === null ||
+      profile.area_accounting.wall_junction_reserved_area2_q16sq === null
+    ) {
+      fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/geometry_resolution/state");
+    }
+    return;
+  }
+  if (resolution.state !== "blocked_unresolved_geometry") {
+    fail("XG_SHAPE_MISSING_FIELD", "/geometry_resolution/state");
+  }
+  if (
+    profile.maturity !== "concept_only" ||
+    !sameOrderedStrings(resolution.unresolved_fields, UNRESOLVED_D08_FIELDS) ||
+    !sameOrderedStrings(resolution.blocked_outputs, BLOCKED_MATERIALIZATION_OUTPUTS)
+  ) {
+    fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/geometry_resolution");
+  }
+  if (
+    profile.floor_plates.some((plate) => plate.top_z_q16 !== null) ||
+    profile.wall_runs.some((wall) => wall.thickness_q16 !== null || wall.plan_region_ref !== null) ||
+    profile.wall_junctions.some((junction) => junction.region_ref !== null) ||
+    profile.area_accounting.net_area2_q16sq !== null ||
+    profile.area_accounting.wall_junction_reserved_area2_q16sq !== null
+  ) {
+    fail("XG_UNRESOLVED_GEOMETRY_SMUGGLED", "/geometry_resolution");
+  }
+}
+
+export function assertExecutableGeometryMaterializable(
+  profile: ExecutableGeometryProfile,
+  output: "step" | "glb" | "render",
+): void {
+  if (
+    profile.geometry_resolution.state !== "materialization_ready" ||
+    profile.geometry_resolution.blocked_outputs.includes(output)
+  ) {
+    fail("XG_REQUIRED_GEOMETRY_UNRESOLVED", "/geometry_resolution/state", [output]);
+  }
 }
 
 function mapById<T extends UnknownRecord>(records: readonly T[], idKey: string): Map<string, T> {
@@ -649,6 +730,17 @@ async function assertReferencesAndBindings(
       if (id === entry.space_id) fail("XG_REF_UNRESOLVED", `/spaces/${index}/adjacent_space_refs/${nested}`);
       requireReference(spaces, id, `/spaces/${index}/adjacent_space_refs/${nested}`);
     });
+    if (new Set(entry.adjacent_space_refs).size !== entry.adjacent_space_refs.length) {
+      fail("XG_ADJACENCY_MISMATCH", `/spaces/${index}/adjacent_space_refs`);
+    }
+  });
+  profile.spaces.forEach((entry, index) => {
+    entry.adjacent_space_refs.forEach((id, nested) => {
+      const adjacent = spaces.get(id) as unknown as ExecutableGeometryProfile["spaces"][number];
+      if (!adjacent.adjacent_space_refs.includes(entry.space_id)) {
+        fail("XG_ADJACENCY_MISMATCH", `/spaces/${index}/adjacent_space_refs/${nested}`, [entry.space_id, id]);
+      }
+    });
   });
   profile.floor_plates.forEach((entry, index) => {
     requireReference(levels, entry.level_id, `/floor_plates/${index}/level_id`);
@@ -659,8 +751,10 @@ async function assertReferencesAndBindings(
     requireReference(levels, entry.level_id, `/wall_runs/${index}/level_id`);
     const start = requireReference(vertices, entry.start_vertex_id, `/wall_runs/${index}/start_vertex_id`);
     const end = requireReference(vertices, entry.end_vertex_id, `/wall_runs/${index}/end_vertex_id`);
-    const region = requireReference(regions, entry.plan_region_ref, `/wall_runs/${index}/plan_region_ref`);
-    if (start.level_id !== entry.level_id || end.level_id !== entry.level_id || region.level_id !== entry.level_id) {
+    const region = entry.plan_region_ref === null
+      ? null
+      : requireReference(regions, entry.plan_region_ref, `/wall_runs/${index}/plan_region_ref`);
+    if (start.level_id !== entry.level_id || end.level_id !== entry.level_id || (region !== null && region.level_id !== entry.level_id)) {
       fail("XG_REF_UNRESOLVED", `/wall_runs/${index}`);
     }
     [entry.left_space_ref, entry.right_space_ref].forEach((side, nested) => {
@@ -830,12 +924,15 @@ function assertRegionsAndAreaAccounting(profile: ExecutableGeometryProfile, ring
     if (entry.role === "space") net += BigInt(entry.area2_q16sq);
     else nonNet += BigInt(entry.area2_q16sq);
   });
+  const unresolved = profile.geometry_resolution.state === "blocked_unresolved_geometry";
   if (
     totalGross !== totalRegions ||
     totalGross !== BigInt(profile.area_accounting.gross_area2_q16sq) ||
     totalRegions !== BigInt(profile.area_accounting.region_area2_q16sq) ||
-    net !== BigInt(profile.area_accounting.net_area2_q16sq) ||
-    nonNet !== BigInt(profile.area_accounting.wall_junction_reserved_area2_q16sq)
+    (unresolved
+      ? net !== totalGross || nonNet !== BIGINT_ZERO
+      : net !== BigInt(profile.area_accounting.net_area2_q16sq!) ||
+        nonNet !== BigInt(profile.area_accounting.wall_junction_reserved_area2_q16sq!))
   ) {
     fail("XG_AREA_ACCOUNTING_MISMATCH", "/area_accounting");
   }
@@ -853,6 +950,7 @@ function wallSegmentKey(start: string, end: string): string {
 }
 
 function assertWallsAndJunctions(profile: ExecutableGeometryProfile): void {
+  const unresolved = profile.geometry_resolution.state === "blocked_unresolved_geometry";
   const regions = mapById(profile.plan_regions as unknown as UnknownRecord[], "region_id");
   const walls = mapById(profile.wall_runs as unknown as UnknownRecord[], "wall_id");
   const junctions = mapById(profile.wall_junctions as unknown as UnknownRecord[], "junction_id");
@@ -864,8 +962,10 @@ function assertWallsAndJunctions(profile: ExecutableGeometryProfile): void {
   });
   const cardinality: Record<string, number> = { miter: 2, butt_continuing: 2, butt_terminating: 2, tee: 3, cross: 4 };
   profile.wall_junctions.forEach((junction, index) => {
-    const region = regions.get(junction.region_ref);
-    if (region === undefined || region.role !== "junction") fail("XG_ENCLOSURE_GAP", `/wall_junctions/${index}/region_ref`);
+    const region = junction.region_ref === null ? undefined : regions.get(junction.region_ref);
+    if (unresolved ? junction.region_ref !== null : region === undefined || region.role !== "junction") {
+      fail("XG_ENCLOSURE_GAP", `/wall_junctions/${index}/region_ref`);
+    }
     if (junction.member_wall_ids.length !== cardinality[junction.rule] || new Set(junction.member_wall_ids).size !== junction.member_wall_ids.length) {
       fail("XG_WALL_JUNCTION_INVALID", `/wall_junctions/${index}/member_wall_ids`);
     }
@@ -877,11 +977,20 @@ function assertWallsAndJunctions(profile: ExecutableGeometryProfile): void {
     });
   });
   profile.wall_runs.forEach((wall, index) => {
-    const region = regions.get(wall.plan_region_ref);
-    if (region === undefined || region.role !== (wall.kind === "exterior" ? "exterior_wall" : "partition") || region.owner_ref !== wall.wall_id) {
+    const region = wall.plan_region_ref === null ? undefined : regions.get(wall.plan_region_ref);
+    if (unresolved
+      ? wall.plan_region_ref !== null || wall.thickness_q16 !== null
+      : region === undefined ||
+        region.role !== (wall.kind === "exterior" ? "exterior_wall" : "partition") ||
+        region.owner_ref !== wall.wall_id
+    ) {
       fail("XG_WALL_JUNCTION_INVALID", `/wall_runs/${index}/plan_region_ref`);
     }
-    if (wall.start_vertex_id === wall.end_vertex_id || wall.thickness_q16 <= 0 || wall.head_z_q16 <= wall.base_z_q16) {
+    if (
+      wall.start_vertex_id === wall.end_vertex_id ||
+      (!unresolved && wall.thickness_q16! <= 0) ||
+      wall.head_z_q16 <= wall.base_z_q16
+    ) {
       fail("XG_WALL_JUNCTION_INVALID", `/wall_runs/${index}`);
     }
     const start = junctions.get(wall.start_junction_ref);
@@ -923,6 +1032,7 @@ function wallLengthQ16(wall: UnknownRecord, vertices: ReadonlyMap<string, Unknow
 function assertOpenings(profile: ExecutableGeometryProfile): void {
   const walls = mapById(profile.wall_runs as unknown as UnknownRecord[], "wall_id");
   const vertices = mapById(profile.plan_vertices as unknown as UnknownRecord[], "vertex_id");
+  const spaces = mapById(profile.spaces as unknown as UnknownRecord[], "space_id");
   const openingCount = new Map<string, number>();
   profile.wall_runs.forEach((wall, index) => {
     (wall.opening_ids as string[]).forEach((id) => openingCount.set(id, (openingCount.get(id) ?? 0) + 1));
@@ -948,17 +1058,34 @@ function assertOpenings(profile: ExecutableGeometryProfile): void {
       fail("XG_OPENING_VERTICAL_INVALID", `/openings/${index}/head_q16`);
     }
     const door = opening.kind === "door";
-    const requiresHand = door ? opening.operation === "swing_in" || opening.operation === "swing_out" : opening.operation === "casement";
-    const allowedOperation = door
-      ? new Set(["swing_in", "swing_out", "sliding", "pocket"]).has(opening.operation)
-      : new Set(["fixed", "casement", "awning", "slider", "single_hung"]).has(opening.operation);
-    if (!allowedOperation || (requiresHand && !["left", "right"].includes(opening.handing)) || (!requiresHand && opening.handing !== "not_applicable")) {
+    const cased = opening.kind === "cased_opening";
+    const requiresHand = door
+      ? opening.operation === "swing_in" || opening.operation === "swing_out"
+      : opening.kind === "window" && opening.operation === "casement";
+    const allowedOperation = cased
+      ? opening.operation === "not_applicable"
+      : door
+        ? new Set(["swing_in", "swing_out", "sliding", "pocket", "not_evaluated"]).has(opening.operation)
+        : new Set(["fixed", "casement", "awning", "slider", "single_hung", "not_evaluated"]).has(opening.operation);
+    const allowedHand = requiresHand
+      ? ["left", "right", "not_evaluated"].includes(opening.handing)
+      : opening.operation === "not_evaluated"
+        ? opening.handing === "not_evaluated"
+        : opening.handing === "not_applicable";
+    if (!allowedOperation || !allowedHand) {
       fail("XG_OPENING_HANDING_INVALID", `/openings/${index}/handing`);
     }
     const expectedRooms = new Set([wall.left_space_ref as string, wall.right_space_ref as string]);
     const actualRooms = new Set(opening.room_served_refs);
     if (expectedRooms.size !== actualRooms.size || [...expectedRooms].some((room) => !actualRooms.has(room))) {
       fail("XG_OPENING_ROOM_MISMATCH", `/openings/${index}/room_served_refs`);
+    }
+    const interiorRooms = opening.room_served_refs.filter((room) => room !== "exterior");
+    if (interiorRooms.length === 2) {
+      const first = spaces.get(interiorRooms[0]) as unknown as ExecutableGeometryProfile["spaces"][number] | undefined;
+      if (first === undefined || !first.adjacent_space_refs.includes(interiorRooms[1])) {
+        fail("XG_ADJACENCY_MISMATCH", `/openings/${index}/room_served_refs`, interiorRooms);
+      }
     }
     const clear = opening.net_clear;
     if (clear.state === "verified") {
@@ -1126,6 +1253,7 @@ export async function validateExecutableGeometry(
     const profile = assertProfileShape(value);
     assertIdentifiersAndOrder(profile);
     assertUnitsAndPrecision(profile);
+    assertGeometryResolution(profile);
     await assertReferencesAndBindings(profile, context);
     const rings = assertPrimitiveRings(profile);
     assertRegionsAndAreaAccounting(profile, rings);
