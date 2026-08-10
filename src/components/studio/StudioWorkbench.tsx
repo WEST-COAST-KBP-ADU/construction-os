@@ -21,6 +21,8 @@ import HardieMotionStage, { resolveA600ConceptAsset } from "./HardieMotionStage"
 import styles from "./StudioWorkbench.module.css";
 
 const catalog = catalogData as StudioCatalog;
+const A600_ARCHETYPE_ID = "one-bed-600" as const;
+const PUBLIC_LAUNCH_MODEL_REFUSED = "public_launch_model_refused";
 
 const optionLabels: Record<StudioOptionKey, Record<string, string>> = {
   exterior: {
@@ -67,26 +69,18 @@ const swatches: Record<"exterior" | "palette", Record<string, string>> = {
 };
 
 function defaultsFor(archetype: string): StudioSelections {
-  if (archetype === "one-bed-600") {
-    return {
-      exterior: "lap-siding",
-      palette: "sage",
-      roof: "gable",
-      windows: "standard",
-      interior: "comfort",
-    };
-  }
-
+  if (archetype !== A600_ARCHETYPE_ID) throw new Error(PUBLIC_LAUNCH_MODEL_REFUSED);
   return {
-    exterior: "stucco-smooth",
-    palette: archetype === "studio-450" ? "warm-white" : "sand-dune",
+    exterior: "lap-siding",
+    palette: "sage",
     roof: "gable",
     windows: "standard",
-    interior: archetype === "studio-450" ? "essential" : "comfort",
+    interior: "comfort",
   };
 }
 
 function inputFor(archetype: string, selections = defaultsFor(archetype)): ConfigurationCandidateInput {
+  if (archetype !== A600_ARCHETYPE_ID) throw new Error(PUBLIC_LAUNCH_MODEL_REFUSED);
   const catalogArchetype = catalog.archetypes.find((item) => item.id === archetype);
   if (!catalogArchetype) throw new Error("unknown_archetype");
 
@@ -111,20 +105,20 @@ function sizeLabel(archetypeId: string): string {
 }
 
 export default function StudioWorkbench() {
-  const [archetype, setArchetype] = useState("one-bed-600");
-  const [selections, setSelections] = useState<StudioSelections>(() => defaultsFor("one-bed-600"));
+  const archetype = A600_ARCHETYPE_ID;
+  const [selections, setSelections] = useState<StudioSelections>(() => defaultsFor(A600_ARCHETYPE_ID));
   const [candidate, setCandidate] = useState<ConfigurationCandidate | null>(null);
   const [status, setStatus] = useState("Building deterministic configuration…");
   const [comparisonOpen, setComparisonOpen] = useState(false);
-  const [comparisonInputs, setComparisonInputs] = useState<ConfigurationCandidateInput[]>(() => [
-    inputFor("one-bed-600"),
-    inputFor("studio-450"),
-  ]);
+  const [comparisonInputs, setComparisonInputs] = useState<ConfigurationCandidateInput[]>(() => {
+    const defaults = defaultsFor(A600_ARCHETYPE_ID);
+    return [
+      inputFor(A600_ARCHETYPE_ID, defaults),
+      inputFor(A600_ARCHETYPE_ID, { ...defaults, exterior: "dark-siding", palette: "charcoal" }),
+    ];
+  });
 
-  const activeArchetype = useMemo(
-    () => catalog.archetypes.find((item) => item.id === archetype) ?? catalog.archetypes[0],
-    [archetype],
-  );
+  const activeArchetype = catalog.archetypes.find((item) => item.id === archetype) ?? catalog.archetypes[0];
   const candidateInput = useMemo(() => inputFor(archetype, selections), [archetype, selections]);
 
   useEffect(() => {
@@ -148,12 +142,6 @@ export default function StudioWorkbench() {
     return () => { cancelled = true; };
   }, [candidateInput]);
 
-  function selectArchetype(nextArchetype: string) {
-    setArchetype(nextArchetype);
-    setSelections(defaultsFor(nextArchetype));
-    setComparisonOpen(false);
-  }
-
   function selectOption(key: StudioOptionKey, value: string) {
     const decision = evaluateOption(catalog, archetype, selections, key, value);
     if (!decision.allowed) {
@@ -165,7 +153,10 @@ export default function StudioWorkbench() {
   }
 
   function restoreConcept(item: ConfigurationCandidateInput) {
-    setArchetype(item.archetype);
+    if (item.archetype !== A600_ARCHETYPE_ID) {
+      setStatus("Restore refused: A600 is the only public launch model.");
+      return;
+    }
     setSelections(item.selections);
     setComparisonOpen(false);
   }
@@ -188,7 +179,6 @@ export default function StudioWorkbench() {
     }
   }
 
-  const conceptPreviewAvailable = archetype === "one-bed-600";
   const hashLabel = candidate ? candidate.config_hash.slice(0, 12).toUpperCase() : "PENDING";
 
   return (
@@ -202,7 +192,7 @@ export default function StudioWorkbench() {
         <div className={styles.modelStatus}>
           <span>{activeArchetype.label.replace(" ADU", "")}</span>
           <span>{sizeLabel(archetype)}</span>
-          <small><i aria-hidden="true" />{conceptPreviewAvailable ? "Concept render" : "Preview pending"}</small>
+          <small><i aria-hidden="true" />Concept render</small>
         </div>
 
         <div className={styles.stageWrap}>
@@ -216,25 +206,10 @@ export default function StudioWorkbench() {
         </div>
 
         <section className={styles.dock} aria-label="Exterior concept decisions">
-          <fieldset className={styles.dockGroup}>
-            <legend>Model size</legend>
-            <div className={styles.modelChoices}>
-              {catalog.archetypes.map((item) => {
-                const size = Math.round((item.size_band.min_sqft + item.size_band.max_sqft) / 2);
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className={archetype === item.id ? styles.selected : undefined}
-                    aria-pressed={archetype === item.id}
-                    onClick={() => selectArchetype(item.id)}
-                  >
-                    <span>{size}</span><small>{size} sq ft</small>
-                  </button>
-                );
-              })}
-            </div>
-          </fieldset>
+          <section className={styles.dockGroup} aria-label="Launch model">
+            <h2>Launch model</h2>
+            <p>A600 · One-bedroom ADU · 600 sq ft</p>
+          </section>
 
           {optionKeys.map((key) => {
             const visibleOptions = catalog.options[key].filter((value) =>
@@ -248,11 +223,9 @@ export default function StudioWorkbench() {
                 <div className={styles.materialChoices}>
                   {visibleOptions.map((value) => {
                     const decision = evaluateOption(catalog, archetype, selections, key, value);
-                    const disabled = !conceptPreviewAvailable || !decision.allowed;
+                    const disabled = !decision.allowed;
                     const selected = selections[key] === value;
-                    const reason = !conceptPreviewAvailable
-                      ? "Matched exterior concept preview is available on the 600 model first."
-                      : decision.allowed ? undefined : reasonLabels[decision.reasonCode];
+                    const reason = decision.allowed ? undefined : reasonLabels[decision.reasonCode];
                     const swatch = key === "exterior"
                       ? swatches.exterior[value]
                       : value === "sage" && selections.exterior === "dark-siding"
@@ -277,7 +250,6 @@ export default function StudioWorkbench() {
                     );
                   })}
                 </div>
-                {!conceptPreviewAvailable ? <p>Active on the 600 model first.</p> : null}
               </fieldset>
             );
           })}
@@ -334,7 +306,7 @@ export default function StudioWorkbench() {
               return (
                 <article key={`${item.archetype}-comparison-${index}`}>
                   <div className={styles.comparisonImage}>
-                    {preview ? <Image src={preview} alt="" fill sizes="(max-width: 42rem) 100vw, 33vw" /> : <span>Preview pending</span>}
+                    {preview ? <Image src={preview} alt="" fill sizes="(max-width: 42rem) 100vw, 33vw" /> : <span>Configuration preview unavailable</span>}
                   </div>
                   <p>Concept {String.fromCharCode(65 + index)}</p>
                   <h3>{candidateLabel(item)}</h3>
