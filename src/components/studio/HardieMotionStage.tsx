@@ -75,16 +75,13 @@ export default function HardieMotionStage({
     nonce: 0,
   });
 
-  useEffect(() => {
-    setRenderState((current) => {
-      if (current.current === resolvedAsset) return current;
-      return {
-        current: resolvedAsset,
-        previous: current.current,
-        nonce: current.nonce + 1,
-      };
-    });
-  }, [resolvedAsset]);
+  if (renderState.current !== resolvedAsset) {
+    setRenderState((current) => ({
+      current: resolvedAsset,
+      previous: current.current,
+      nonce: current.nonce + 1,
+    }));
+  }
 
   useEffect(() => {
     if (!renderState.previous) return;
