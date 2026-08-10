@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { servicePages } from "./contentPages";
 import { jurisdictionPages } from "./jurisdictionPages";
+import { PUBLIC_MODEL_IDS } from "./publicModelCatalog";
 import {
   expandRoutePaths,
   getPublishedSitemapEntries,
@@ -18,7 +19,10 @@ const sitemapSource = readFileSync(join(appRoot, "sitemap.ts"), "utf8");
 
 const expectedRegistryPaths = [
   "/",
+  "/models",
+  "/models/[model]",
   "/studio",
+  "/service-areas",
   "/about",
   "/compare",
   "/process",
@@ -29,7 +33,12 @@ const expectedRegistryPaths = [
 
 const expectedBaseSitemapUrls = [
   siteConfig.url,
+  toPublicRouteUrl("/models", siteConfig.url),
+  ...PUBLIC_MODEL_IDS.map((modelId) =>
+    toPublicRouteUrl("/models/" + modelId, siteConfig.url),
+  ),
   toPublicRouteUrl("/studio", siteConfig.url),
+  toPublicRouteUrl("/service-areas", siteConfig.url),
   toPublicRouteUrl("/about", siteConfig.url),
   toPublicRouteUrl("/compare", siteConfig.url),
   toPublicRouteUrl("/process", siteConfig.url),
@@ -65,7 +74,7 @@ const filesystemRoutePaths = pageFiles(appRoot)
   .sort();
 
 describe("public route registry", () => {
-  it("keeps the eight existing public route patterns in the registry", () => {
+  it("keeps every published public route pattern in the registry", () => {
     expect(publicRouteRegistry.map((route) => route.path)).toEqual(
       expectedRegistryPaths,
     );
@@ -132,6 +141,11 @@ describe("public route registry", () => {
       })),
     ).toEqual([
       {
+        path: "/models/[model]",
+        source: "publicModelCatalog",
+        parameter: "model",
+      },
+      {
         path: "/services/[slug]",
         source: "servicePages",
         parameter: "slug",
@@ -143,10 +157,13 @@ describe("public route registry", () => {
       },
     ]);
     expect(expandRoutePaths(dynamicRoutes[0]!)).toEqual(
-      servicePages.map((page) => `/services/${page.slug}`),
+      PUBLIC_MODEL_IDS.map((modelId) => "/models/" + modelId),
     );
     expect(expandRoutePaths(dynamicRoutes[1]!)).toEqual(
-      jurisdictionPages.map((page) => `/adu-builder/${page.slug}`),
+      servicePages.map((page) => "/services/" + page.slug),
+    );
+    expect(expandRoutePaths(dynamicRoutes[2]!)).toEqual(
+      jurisdictionPages.map((page) => "/adu-builder/" + page.slug),
     );
   });
 
@@ -159,5 +176,16 @@ describe("public route registry", () => {
 
       expect(existsSync(pagePath)).toBe(true);
     }
+  });
+
+  it("keeps the new public route families self-canonical", () => {
+    const modelsPage = readFileSync(join(appRoot, "models/page.tsx"), "utf8");
+    const modelDetailPage = readFileSync(join(appRoot, "models/[model]/page.tsx"), "utf8");
+    const serviceAreasPage = readFileSync(join(appRoot, "service-areas/page.tsx"), "utf8");
+
+    expect(modelsPage).toContain('canonical: "/models"');
+    expect(modelDetailPage).toContain("canonical:");
+    expect(modelDetailPage).toContain("model.modelId");
+    expect(serviceAreasPage).toContain('canonical: "/service-areas"');
   });
 });
