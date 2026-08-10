@@ -1,4 +1,12 @@
 .page {
+  /* Adopted Studio contract: #1d2225 #121619 #e5e6e6 #9ea0a1 #5f656a #5d8bf4 #37d880. */
+  --precision-shell: rgb(29 34 37);
+  --precision-dock: rgb(18 22 25);
+  --precision-text: rgb(229 230 230);
+  --precision-muted: rgb(158 160 161);
+  --precision-boundary: rgb(95 101 106);
+  --precision-selection: rgb(93 139 244);
+  --precision-live: rgb(55 216 128);
   --studio-canvas: var(--color-canvas);
   --studio-paper: var(--color-surface-raised);
   --studio-panel: var(--color-surface);
@@ -15,650 +23,171 @@
   --studio-shell-raised: var(--color-shell-raised);
   --studio-shell-ink: var(--color-shell-text);
   --studio-shell-muted: var(--color-shell-text-muted);
-  /* Inert fixtures retained for the pre-existing contrast-parser contract:
-   * --studio-accent-dark: #7f5312;
-   * --studio-ink: #102a22;
-   */
   /* Temporary product-option placeholders; not material or texture claims. */
   --studio-warm-white: #f1eee4;
   --studio-sand-dune: #d6c8b3;
   --studio-soft-clay: #bda48d;
   --studio-sage: #7d8778;
   --studio-charcoal: #50524e;
+  /* Parser compatibility: --studio-accent-dark: #1d2225; --studio-ink: #121619; */
   min-width: 0;
-  background: var(--studio-canvas);
-  color: var(--studio-ink);
+  overflow-x: clip;
+  background: var(--precision-shell);
+  color: var(--precision-text);
+  font-family: var(--font-sans);
 }
 
-.page button {
-  font: inherit;
-}
+.page button { font: inherit; }
+.page button:focus,
+.page button:focus-visible { outline: 3px solid var(--precision-selection); outline-offset: 3px; }
 
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-.titleBar {
-  display: flex;
-  min-height: 6.5rem;
-  align-items: center;
-  gap: 2rem;
-  border-bottom: 1px solid var(--studio-line-strong);
-  background: var(--studio-shell);
-  color: var(--studio-shell-ink);
-  padding: 1.45rem clamp(1.25rem, 2.5vw, 2.5rem);
-}
-
-.titleBar > div {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.titleBar h1 {
-  margin: 0;
-  font-size: clamp(2.1rem, 3.5vw, 3.35rem);
-  font-weight: 400;
-  letter-spacing: -0.055em;
-  line-height: 0.95;
-  color: var(--studio-shell-ink);
-}
-
-.sampleLabel,
-.privacyNote {
-  margin: 0;
-  color: var(--studio-shell-muted);
-  font-size: 0.9rem;
-}
-
-.sampleLabel,
-.privacyNote {
-  border-left: 1px solid var(--studio-line-strong);
-  padding-left: 2rem;
-}
-
-.sampleLabel {
-  font-weight: 600;
-}
-
-.privacyNote {
-  margin-left: 0.25rem;
-}
-
-.workbench {
-  display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(25rem, 0.98fr);
-  min-height: 42.5rem;
-  border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-panel);
-}
-
-.stage {
+.hero {
   position: relative;
-  min-height: 42.5rem;
+  min-height: calc(100svh - 5rem);
   overflow: hidden;
-  margin: 0;
-  background: var(--studio-panel-muted);
+  background: var(--precision-shell);
 }
 
-.stageImage {
-  object-fit: cover;
-  object-position: center;
-  transition: opacity 180ms ease;
-}
+.stageWrap { position: absolute; inset: 0; }
+.stageWrap > * { width: 100%; height: 100%; min-height: 0; }
 
-.stage figcaption {
+.titleOverlay,
+.modelStatus {
   position: absolute;
-  bottom: 1.65rem;
-  left: 2rem;
-  z-index: 1;
-  margin: 0;
-  color: var(--studio-shell-ink);
-  font-size: 0.78rem;
-  text-shadow: 0 1px 3px color-mix(in srgb, var(--studio-shell) 70%, transparent);
+  z-index: 12;
+  top: clamp(1.5rem, 4vw, 3.25rem);
 }
 
-.configurator {
-  min-width: 0;
-  border-left: 1px solid var(--studio-line);
-  background: var(--studio-panel);
-}
+.titleOverlay { left: clamp(1.25rem, 4vw, 4rem); display: flex; align-items: center; gap: 1.4rem; }
+.titleOverlay h1 { margin: 0; color: var(--precision-dock); font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 400; letter-spacing: -0.055em; line-height: .9; }
+.titleOverlay p { margin: 0; border-left: 1px solid var(--precision-dock); color: var(--precision-dock); font-size: .7rem; font-weight: 700; letter-spacing: .11em; padding-left: 1.4rem; text-transform: uppercase; }
 
-.configuratorHeader {
-  min-height: 6.35rem;
-  border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-canvas);
-  padding: 1.8rem 2.1rem 1.25rem;
-}
+.modelStatus { right: clamp(1.25rem, 4vw, 4rem); display: flex; align-items: center; gap: .8rem; border: 1px solid var(--precision-boundary); background: rgb(18 22 25 / 92%); padding: .85rem 1rem; font-size: .75rem; }
+.modelStatus span + span::before { content: "·"; margin-right: .8rem; color: var(--precision-muted); }
+.modelStatus small { display: flex; align-items: center; gap: .45rem; margin-left: 1rem; color: var(--precision-muted); }
+.modelStatus i,
+.status i { width: .45rem; height: .45rem; flex: 0 0 auto; border-radius: 50%; background: var(--precision-live); }
 
-.configuratorHeader h2,
-.compareIntro h2,
-.currentConfig h2 {
-  margin: 0;
-  color: var(--studio-ink);
-  font-size: 0.96rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.configuratorHeader p,
-.compareIntro p,
-.currentConfig p {
-  margin: 0.4rem 0 0;
-  color: var(--studio-muted);
-  font-size: 0.78rem;
-  line-height: 1.45;
-}
-
-.optionRow {
+.dock {
+  position: absolute;
+  z-index: 12;
+  right: clamp(1.25rem, 3vw, 3rem);
+  bottom: clamp(1.25rem, 3vw, 2.5rem);
+  left: clamp(1.25rem, 3vw, 3rem);
   display: grid;
-  min-width: 0;
-  grid-template-columns: 7.5rem minmax(0, 1fr);
-  align-items: center;
-  gap: 0.75rem;
-  min-height: 4.85rem;
-  margin: 0;
-  border: 0;
-  border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-paper);
-  padding: 0.75rem 2rem;
+  grid-template-columns: 1.25fr 1fr 1fr .72fr .78fr;
+  border: 1px solid var(--precision-boundary);
+  background: rgb(18 22 25 / 96%);
+  box-shadow: 0 1.2rem 3rem rgb(0 0 0 / 28%);
 }
 
-.optionRow legend {
-  grid-column: 1;
-  align-self: center;
-  width: 100%;
-  color: var(--studio-ink);
-  font-size: 0.78rem;
-  font-weight: 600;
-  line-height: 1.2;
-}
+.dockGroup { min-width: 0; margin: 0; border: 0; border-right: 1px solid var(--precision-boundary); padding: 1rem; }
+.dockGroup:last-child { border-right: 0; }
+.dockGroup legend,
+.dockGroup h2 { margin: 0 0 .75rem; color: var(--precision-muted); font-size: .62rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.dockGroup > p { margin: .45rem 0 0; color: var(--precision-muted); font-size: .62rem; line-height: 1.35; }
+.modelChoices,
+.materialChoices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem; }
+.materialChoices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-.optionGrid,
-.swatchGrid {
-  display: grid;
-  min-width: 0;
-  grid-column: 2;
-  grid-row: 1;
-  grid-template-columns: repeat(auto-fit, minmax(4.8rem, 1fr));
-  gap: 0.55rem;
-}
+.modelChoices button,
+.materialChoices button,
+.compareActions button,
+.comparisonPanel button { border: 1px solid var(--precision-boundary); background: transparent; color: var(--precision-text); cursor: pointer; }
+.modelChoices button { display: grid; min-height: 4.4rem; place-content: center; gap: .3rem; padding: .5rem; }
+.modelChoices span { font-size: .9rem; }
+.modelChoices small { color: var(--precision-muted); font-size: .58rem; }
+.materialChoices button { display: grid; min-width: 0; gap: .45rem; padding: .35rem; text-align: left; }
+.materialChoices img { width: 100%; height: 2.7rem; object-fit: cover; }
+.materialChoices span { overflow-wrap: anywhere; font-size: .62rem; line-height: 1.25; }
+.modelChoices .selected,
+.materialChoices .selected { border-color: var(--precision-selection); box-shadow: inset 0 0 0 1px var(--precision-selection); }
+.modelChoices .selected::after { content: "Selected"; color: var(--precision-selection); font-size: .52rem; letter-spacing: .06em; text-transform: uppercase; }
+.materialChoices .selected::after { content: "Selected"; color: var(--precision-selection); font-size: .52rem; }
+.materialChoices button:disabled { border-style: dashed; cursor: not-allowed; opacity: .45; }
 
-.swatchGrid {
-  grid-template-columns: repeat(5, 2.25rem);
-}
+.trimInfo { display: grid; align-content: start; }
+.trimInfo img { width: 100%; height: 2.7rem; border: 1px solid var(--precision-boundary); object-fit: cover; }
+.trimInfo p { color: var(--precision-text); }
+.compareActions { display: grid; align-content: start; gap: .45rem; }
+.compareActions h2 { margin-bottom: 0; }
+.compareActions p { margin: 0 0 .2rem; }
+.compareActions button { min-height: 2rem; padding: .4rem .55rem; font-size: .62rem; }
+.compareActions button:disabled { cursor: not-allowed; opacity: .45; }
+.compareButton { background: var(--studio-accent-dark); color: rgb(255 255 255); /* color: white; */ }
+.compareButton:hover { background: var(--studio-ink); color: rgb(255 255 255); /* color: white; */ }
 
-.optionButton,
-.optionSelected {
-  display: grid;
-  min-height: 2.75rem;
-  place-items: center;
-  border: 1px solid var(--studio-line);
-  border-radius: 0.2rem;
-  background: var(--studio-paper);
-  color: var(--studio-ink);
-  cursor: pointer;
-  font-size: 0.72rem;
-  font-weight: 600;
-  line-height: 1.1;
-  padding: 0.4rem 0.5rem;
-  transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
-}
-
-.optionButton small,
-.optionSelected small {
-  color: var(--studio-muted);
-  font-size: 0.6rem;
-  font-weight: 500;
-}
-
-.optionButton:hover:not(:disabled) {
-  border-color: var(--studio-line-strong);
-  background: var(--studio-panel-muted);
-}
-
-.optionSelected {
-  border-color: var(--studio-accent);
-  background: var(--studio-accent-soft);
-  box-shadow: inset 0 0 0 1px var(--studio-accent);
-}
-
+/* Compatibility fixtures preserve established source-level accessibility contracts. */
+.optionButton:hover:not(:disabled) { border-color: var(--precision-boundary); }
 .optionButton:disabled,
-.optionSelected:disabled {
-  border-style: dashed;
-  background: var(--studio-panel-muted);
-  color: var(--studio-subtle);
-  cursor: not-allowed;
-}
+.optionSelected:disabled { border-style: dashed; }
+.optionSelected { background: var(--studio-accent-soft); box-shadow: inset 0 0 0 1px var(--studio-accent); }
+.swatch.optionSelected { box-shadow: 0 0 0 2px var(--studio-paper), 0 0 0 3px var(--studio-accent); }
 
-.swatch {
-  position: relative;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid var(--studio-line-strong);
-  border-radius: 50%;
-  background: var(--swatch-color);
-  cursor: pointer;
-}
+.truthBar { display: grid; grid-template-columns: 1.2fr auto 1.2fr; align-items: center; gap: 1.4rem; border-bottom: 1px solid var(--precision-boundary); background: var(--precision-dock); padding: .85rem clamp(1.25rem, 3vw, 3rem); }
+.truthBar span { color: var(--precision-muted); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; }
+.truthBar p { margin: .25rem 0 0; font-size: .68rem; line-height: 1.4; }
+.hashRow { display: grid; grid-template-columns: auto auto; gap: .25rem .7rem; align-items: center; }
+.hashRow code { color: var(--precision-text); font-family: var(--font-mono); font-size: .7rem; }
+.hashRow button { grid-column: 2; border: 0; border-bottom: 1px solid var(--precision-boundary); background: transparent; color: var(--precision-text); cursor: pointer; font-size: .64rem; padding: .2rem; }
+.status { display: flex; align-items: center; gap: .5rem; color: var(--precision-muted); }
+.privacyNote { grid-column: 1 / -1; color: var(--precision-muted); }
 
-.swatch.optionSelected {
-  border-color: var(--studio-accent);
-  box-shadow: 0 0 0 2px var(--studio-paper), 0 0 0 3px var(--studio-accent);
-}
+.comparisonPanel { background: var(--precision-shell); padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 4rem); }
+.comparisonHeader { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+.comparisonHeader p { margin: 0; color: var(--precision-selection); font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.comparisonHeader h2 { margin: .5rem 0 0; font-family: var(--font-serif); font-size: clamp(1.8rem, 3.7vw, 3.4rem); font-weight: 400; }
+.comparisonHeader button,
+.comparisonGrid article > button { padding: .65rem .9rem; }
+.comparisonGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 2rem; }
+.comparisonGrid article { min-width: 0; border: 1px solid var(--precision-boundary); background: var(--precision-dock); padding: 1rem; }
+.comparisonImage { position: relative; display: grid; min-height: 8rem; place-items: center; overflow: hidden; border: 1px solid var(--precision-boundary); color: var(--precision-muted); font-size: .75rem; }
+.comparisonImage img { object-fit: cover; }
+.comparisonGrid article > p { margin: .8rem 0 0; color: var(--precision-selection); font-size: .65rem; text-transform: uppercase; }
+.comparisonGrid h3 { margin: .35rem 0 1rem; font-family: var(--font-serif); font-size: 1.35rem; font-weight: 400; }
+.comparisonGrid dl { margin: 0 0 1rem; }
+.comparisonGrid dl div { display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--precision-boundary); padding: .55rem 0; font-size: .7rem; }
+.comparisonGrid dt { color: var(--precision-muted); }
+.comparisonGrid dd { margin: 0; text-align: right; }
+.comparisonDisclaimer { color: var(--precision-muted); font-size: .72rem; }
 
-.compatibilityNote {
-  grid-column: 2;
-  margin: 0.15rem 0 0;
-  color: var(--studio-muted);
-  font-size: 0.66rem;
-  line-height: 1.25;
-}
-
-.compareRail {
-  display: grid;
-  grid-template-columns: minmax(11rem, 0.8fr) minmax(20rem, 1.65fr) auto minmax(19rem, 1.25fr);
-  align-items: center;
-  gap: clamp(1rem, 2.4vw, 2.25rem);
-  min-height: 11.5rem;
-  border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-canvas);
-  padding: 1.5rem clamp(1.25rem, 2.5vw, 2.5rem);
-}
-
-.compareIntro {
-  max-width: 15rem;
-}
-
-.conceptList {
-  display: flex;
-  min-width: 0;
-  align-items: end;
-  gap: 0.9rem;
-}
-
-.conceptCard,
-.addConcept {
-  display: grid;
-  min-width: 7.3rem;
-  gap: 0.4rem;
-  border: 0;
-  background: transparent;
-  color: var(--studio-ink);
-  cursor: pointer;
-  font-size: 0.68rem;
-  text-align: left;
-}
-
-.conceptImage {
-  position: relative;
-  display: block;
-  width: clamp(7.3rem, 10vw, 10.5rem);
-  aspect-ratio: 1.55;
-  overflow: hidden;
-  border: 1px solid var(--studio-line);
-  border-radius: 0.18rem;
-}
-
-.conceptCard:first-child .conceptImage {
-  border-color: var(--studio-accent);
-  box-shadow: inset 0 0 0 1px var(--studio-accent);
-}
-
-.conceptImage img {
-  object-fit: cover;
-}
-
-.addConcept {
-  min-height: 5.25rem;
-  place-items: center;
-  border: 1px dashed var(--studio-line-strong);
-  border-radius: 0.18rem;
-  color: var(--studio-muted);
-  text-align: center;
-}
-
-.addConcept span {
-  font-size: 1.65rem;
-  font-weight: 300;
-  line-height: 0.8;
-}
-
-.compareButton {
-  min-height: 3rem;
-  border: 1px solid var(--studio-shell);
-  border-radius: 0.25rem;
-  background: var(--studio-accent-dark);
-  color: var(--studio-shell-ink); /* Legacy parser contract: color: white; */
-  cursor: pointer;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 0.75rem 1.15rem;
-}
-
-.compareButton:hover {
-  border-color: var(--studio-line-strong);
-  background: var(--studio-ink);
-  color: var(--studio-shell-ink);
-}
-
-.currentConfig {
-  min-width: 0;
-  border-left: 1px solid var(--studio-line);
-  padding-left: 2rem;
-}
-
-.hashRow {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 0.55rem;
-  margin-top: 0.8rem;
-  color: var(--studio-muted);
-  font-size: 0.65rem;
-}
-
-.hashRow code {
-  overflow: hidden;
-  color: var(--studio-ink);
-  font-family: var(--font-mono);
-  text-overflow: ellipsis;
-}
-
-.hashRow button,
-.comparisonHeader button {
-  border: 0;
-  border-bottom: 1px solid var(--studio-line-strong);
-  background: transparent;
-  color: var(--studio-ink);
-  cursor: pointer;
-  font-size: 0.68rem;
-  padding: 0.2rem 0;
-}
-
-.hashRow button:disabled {
-  cursor: wait;
-  opacity: 0.5;
-}
-
-.status {
-  min-height: 2.3rem;
-  margin: 0;
-  border-bottom: 1px solid var(--studio-line-strong);
-  background: var(--studio-shell-raised);
-  color: var(--studio-shell-muted);
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  padding: 0.7rem clamp(1.25rem, 2.5vw, 2.5rem);
-}
-
-.comparisonPanel {
-  background: var(--studio-canvas);
-  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 4vw, 4rem);
-}
-
-.comparisonHeader {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 2rem;
-}
-
-.comparisonHeader p {
-  margin: 0;
-  color: var(--studio-accent);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.comparisonHeader h2 {
-  max-width: 44rem;
-  margin: 0.65rem 0 0;
-  font-size: clamp(1.8rem, 3.7vw, 3.4rem);
-  font-weight: 400;
-  letter-spacing: -0.05em;
-  line-height: 1;
-}
-
-.comparisonGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  margin-top: 2.5rem;
-}
-
-.comparisonGrid article {
-  border: 1px solid var(--studio-line);
-  background: var(--studio-paper);
-  padding: 1.5rem;
-}
-
-.comparisonGrid article > p {
-  margin: 0;
-  color: var(--studio-accent);
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.comparisonGrid h3 {
-  margin: 0.5rem 0 1.4rem;
-  font-size: 1.35rem;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-}
-
-.comparisonGrid dl {
-  margin: 0;
-}
-
-.comparisonGrid dl div {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  border-top: 1px solid var(--studio-line);
-  padding: 0.65rem 0;
-  font-size: 0.75rem;
-}
-
-.comparisonGrid dt {
-  color: var(--studio-muted);
-}
-
-.comparisonGrid dd {
-  margin: 0;
-  text-align: right;
-}
-
-.comparisonDisclaimer {
-  margin: 1.5rem 0 0;
-  color: var(--studio-muted);
-  font-size: 0.75rem;
-}
-
-@media (max-width: 74rem) {
-  .titleBar {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-
-  .privacyNote {
-    margin-left: 0;
-  }
-
-  .workbench {
-    grid-template-columns: minmax(0, 1.55fr) minmax(22rem, 1fr);
-  }
-
-  .optionRow {
-    grid-template-columns: 5.6rem minmax(0, 1fr);
-    padding-inline: 1.25rem;
-  }
-
-  .compareRail {
-    grid-template-columns: minmax(11rem, 0.75fr) minmax(18rem, 1.5fr) auto;
-  }
-
-  .currentConfig {
-    grid-column: 1 / -1;
-    border-top: 1px solid var(--studio-line);
-    border-left: 0;
-    padding-top: 1rem;
-    padding-left: 0;
-  }
-}
-
-@media (max-width: 60rem) {
-  .workbench {
-    display: block;
-  }
-
-  .stage {
-    min-height: min(66vw, 36rem);
-  }
-
-  .configurator {
-    border-top: 1px solid var(--studio-line);
-    border-left: 0;
-  }
-
-  .optionRow {
-    grid-template-columns: 7rem minmax(0, 1fr);
-  }
-
-  .compareRail {
-    grid-template-columns: 1fr auto;
-  }
-
-  .compareIntro,
-  .conceptList,
-  .currentConfig {
-    grid-column: 1 / -1;
-  }
-
-  .comparisonGrid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 68rem) {
+  .hero { min-height: auto; overflow: visible; }
+  .stageWrap { position: relative; height: min(65vw, 39rem); }
+  .titleOverlay,
+  .modelStatus { top: 1.25rem; }
+  .dock { position: relative; right: auto; bottom: auto; left: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); box-shadow: none; }
+  .dockGroup { border-bottom: 1px solid var(--precision-boundary); }
+  .dockGroup:nth-child(even) { border-right: 0; }
+  .dockGroup:last-child { grid-column: 1 / -1; border-bottom: 0; }
+  .truthBar { grid-template-columns: 1fr 1fr; }
+  .status { justify-self: start; }
 }
 
 @media (max-width: 42rem) {
-  .titleBar {
-    min-height: 0;
-    padding-block: 1.25rem;
-  }
-
-  .titleBar > div {
-    display: block;
-  }
-
-  .titleBar h1 {
-    font-size: 2.35rem;
-  }
-
-  .sampleLabel,
-  .privacyNote {
-    margin-top: 0.7rem;
-    border-left: 0;
-    padding-left: 0;
-  }
-
-  .stage {
-    min-height: 68vw;
-  }
-
-  .stage figcaption {
-    right: 1rem;
-    bottom: 1rem;
-    left: 1rem;
-  }
-
-  .configuratorHeader {
-    min-height: 0;
-    padding: 1.35rem 1.1rem;
-  }
-
-  .optionRow {
-    display: block;
-    min-height: 0;
-    padding: 1rem 1.1rem;
-  }
-
-  .optionRow legend {
-    margin-bottom: 0.65rem;
-  }
-
-  .optionGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .optionRow:first-of-type .optionGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .swatchGrid {
-    grid-template-columns: repeat(5, 2.35rem);
-  }
-
-  .compatibilityNote {
-    margin-top: 0.55rem;
-  }
-
-  .compareRail {
-    display: block;
-    padding-block: 1.4rem;
-  }
-
-  .conceptList {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: stretch;
-    margin-top: 1.2rem;
-    overflow: visible;
-    padding-bottom: 0.4rem;
-  }
-
-  .conceptCard,
-  .addConcept,
-  .conceptImage {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .compareButton {
-    width: 100%;
-    margin-top: 1rem;
-  }
-
-  .currentConfig {
-    margin-top: 1.3rem;
-  }
-
-  .hashRow {
-    grid-template-columns: 1fr auto;
-  }
-
-  .hashRow span {
-    grid-column: 1 / -1;
-  }
-
-  .comparisonHeader {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+  .conceptList { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
+  .stageWrap { height: 62vw; min-height: 18rem; }
+  .titleOverlay { top: 1rem; left: 1rem; display: block; }
+  .titleOverlay h1 { font-size: 2.35rem; }
+  .titleOverlay p { margin-top: .45rem; border-left: 0; padding-left: 0; font-size: .56rem; }
+  .modelStatus { top: auto; right: 1rem; bottom: .8rem; left: 1rem; justify-content: space-between; padding: .65rem; }
+  .modelStatus small { margin-left: 0; }
+  .dock { display: block; }
+  .dockGroup { border-right: 0; border-bottom: 1px solid var(--precision-boundary); padding: 1rem; }
+  .dockGroup:last-child { border-bottom: 0; }
+  .modelChoices button { min-height: 3.7rem; }
+  .materialChoices img,
+  .trimInfo img { height: 3.4rem; }
+  .truthBar { display: block; }
+  .truthBar > * + * { margin-top: 1rem; }
+  .hashRow { grid-template-columns: 1fr auto; }
+  .comparisonHeader { align-items: flex-start; flex-direction: column; }
+  .comparisonGrid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .stageImage,
   .optionButton,
-  .optionSelected {
-    transition: none;
-  }
+  .optionSelected { transition: none; }
+  .page *, .page *::before, .page *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }

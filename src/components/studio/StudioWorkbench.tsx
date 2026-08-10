@@ -35,22 +35,13 @@ const optionLabels: Record<StudioOptionKey, Record<string, string>> = {
     sage: "Blue concept",
     charcoal: "Charcoal concept",
   },
-  roof: {
-    gable: "Gable",
-    shed: "Shed",
-  },
-  windows: {
-    standard: "Standard",
-    tall: "Tall",
-  },
-  interior: {
-    essential: "Essential",
-    comfort: "Comfort",
-  },
+  roof: { gable: "Gable", shed: "Shed" },
+  windows: { standard: "Standard", tall: "Tall" },
+  interior: { essential: "Essential", comfort: "Comfort" },
 };
 
 const rowLabels: Record<StudioOptionKey, string> = {
-  exterior: "Facade",
+  exterior: "Facade system",
   palette: "Facade color",
   roof: "Roof",
   windows: "Windows",
@@ -63,6 +54,17 @@ const reasonLabels: Record<string, string> = {
 };
 
 const optionKeys: StudioOptionKey[] = ["exterior", "palette"];
+
+const swatches: Record<"exterior" | "palette", Record<string, string>> = {
+  exterior: {
+    "lap-siding": "/images/studio-swatch-lap-blue-concept-v1.webp",
+    "dark-siding": "/images/studio-swatch-panel-blue-concept-v1.webp",
+  },
+  palette: {
+    sage: "/images/studio-swatch-lap-blue-concept-v1.webp",
+    charcoal: "/images/studio-swatch-lap-charcoal-concept-v1.webp",
+  },
+};
 
 function defaultsFor(archetype: string): StudioSelections {
   if (archetype === "one-bed-600") {
@@ -86,9 +88,7 @@ function defaultsFor(archetype: string): StudioSelections {
 
 function inputFor(archetype: string, selections = defaultsFor(archetype)): ConfigurationCandidateInput {
   const catalogArchetype = catalog.archetypes.find((item) => item.id === archetype);
-  if (!catalogArchetype) {
-    throw new Error("unknown_archetype");
-  }
+  if (!catalogArchetype) throw new Error("unknown_archetype");
 
   return {
     schema: "config/1",
@@ -105,10 +105,9 @@ function candidateLabel(candidate: ConfigurationCandidateInput): string {
 }
 
 function sizeLabel(archetypeId: string): string {
-  const archetype = catalog.archetypes.find((item) => item.id === archetypeId);
-  if (!archetype) return "—";
-
-  return `${Math.round((archetype.size_band.min_sqft + archetype.size_band.max_sqft) / 2)} sq ft`;
+  const item = catalog.archetypes.find((archetype) => archetype.id === archetypeId);
+  if (!item) return "—";
+  return `${Math.round((item.size_band.min_sqft + item.size_band.max_sqft) / 2)} sq ft`;
 }
 
 export default function StudioWorkbench() {
@@ -126,15 +125,10 @@ export default function StudioWorkbench() {
     () => catalog.archetypes.find((item) => item.id === archetype) ?? catalog.archetypes[0],
     [archetype],
   );
-
-  const candidateInput = useMemo(
-    () => inputFor(archetype, selections),
-    [archetype, selections],
-  );
+  const candidateInput = useMemo(() => inputFor(archetype, selections), [archetype, selections]);
 
   useEffect(() => {
     let cancelled = false;
-
     async function createCandidate() {
       try {
         assertValidCandidate(catalog, candidateInput);
@@ -150,11 +144,8 @@ export default function StudioWorkbench() {
         }
       }
     }
-
     void createCandidate();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [candidateInput]);
 
   function selectArchetype(nextArchetype: string) {
@@ -169,16 +160,19 @@ export default function StudioWorkbench() {
       setStatus(`Selection refused: ${reasonLabels[decision.reasonCode] ?? decision.reasonCode}`);
       return;
     }
-
     setSelections((current) => ({ ...current, [key]: value }));
+    setComparisonOpen(false);
+  }
+
+  function restoreConcept(item: ConfigurationCandidateInput) {
+    setArchetype(item.archetype);
+    setSelections(item.selections);
     setComparisonOpen(false);
   }
 
   function addCurrentConcept() {
     setComparisonInputs((current) => {
-      const withoutCurrent = current.filter(
-        (item) => JSON.stringify(item) !== JSON.stringify(candidateInput),
-      );
+      const withoutCurrent = current.filter((item) => JSON.stringify(item) !== JSON.stringify(candidateInput));
       return [candidateInput, ...withoutCurrent].slice(0, 3);
     });
     setStatus("Current concept added to the in-memory comparison. Nothing was saved or sent.");
@@ -186,7 +180,6 @@ export default function StudioWorkbench() {
 
   async function copyConfigurationId() {
     if (!candidate) return;
-
     try {
       await navigator.clipboard.writeText(candidate.config_hash);
       setStatus("Configuration ID copied. Nothing was saved or sent.");
@@ -199,45 +192,47 @@ export default function StudioWorkbench() {
   const hashLabel = candidate ? candidate.config_hash.slice(0, 12).toUpperCase() : "PENDING";
 
   return (
-    <div className={styles.page}>
-      <section className={styles.titleBar} aria-labelledby="studio-title">
-        <div>
+    <main className={styles.page}>
+      <section className={styles.hero} aria-labelledby="studio-title">
+        <div className={styles.titleOverlay}>
           <h1 id="studio-title">Concept Studio</h1>
-          <p className={styles.sampleLabel}>New-construction material study</p>
+          <p>Precision configurator</p>
         </div>
-        <p className={styles.privacyNote}>No address or contact information is collected.</p>
-      </section>
 
-      <div className={styles.workbench}>
-        <HardieMotionStage
-          key={archetype}
-          modelId={archetype}
-          modelLabel={activeArchetype.label}
-          exterior={selections.exterior}
-          palette={selections.palette}
-        />
+        <div className={styles.modelStatus}>
+          <span>{activeArchetype.label.replace(" ADU", "")}</span>
+          <span>{sizeLabel(archetype)}</span>
+          <small><i aria-hidden="true" />{conceptPreviewAvailable ? "Concept render" : "Preview pending"}</small>
+        </div>
 
-        <aside className={styles.configurator} aria-labelledby="configure-title">
-          <header className={styles.configuratorHeader}>
-            <h2 id="configure-title">Design the exterior</h2>
-            <p>Choose a model, facade system, and facade color.</p>
-          </header>
+        <div className={styles.stageWrap}>
+          <HardieMotionStage
+            key={archetype}
+            modelId={archetype}
+            modelLabel={activeArchetype.label}
+            exterior={selections.exterior}
+            palette={selections.palette}
+          />
+        </div>
 
-          <fieldset className={styles.optionRow}>
-            <legend>Archetype</legend>
-            <div className={styles.optionGrid}>
-              {catalog.archetypes.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={archetype === item.id ? styles.optionSelected : styles.optionButton}
-                  aria-pressed={archetype === item.id}
-                  onClick={() => selectArchetype(item.id)}
-                >
-                  <span>{Math.round((item.size_band.min_sqft + item.size_band.max_sqft) / 2)}</span>
-                  <small>{item.label.replace(" ADU", "")}</small>
-                </button>
-              ))}
+        <section className={styles.dock} aria-label="Exterior concept decisions">
+          <fieldset className={styles.dockGroup}>
+            <legend>Model size</legend>
+            <div className={styles.modelChoices}>
+              {catalog.archetypes.map((item) => {
+                const size = Math.round((item.size_band.min_sqft + item.size_band.max_sqft) / 2);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={archetype === item.id ? styles.selected : undefined}
+                    aria-pressed={archetype === item.id}
+                    onClick={() => selectArchetype(item.id)}
+                  >
+                    <span>{size}</span><small>{size} sq ft</small>
+                  </button>
+                );
+              })}
             </div>
           </fieldset>
 
@@ -247,160 +242,114 @@ export default function StudioWorkbench() {
                 ? value === "lap-siding" || value === "dark-siding"
                 : value === "sage" || value === "charcoal",
             );
-            const disabledOptions = visibleOptions.filter(
-              (value) =>
-                !conceptPreviewAvailable ||
-                !evaluateOption(catalog, archetype, selections, key, value).allowed,
-            );
-
             return (
-              <fieldset className={styles.optionRow} key={key}>
+              <fieldset className={styles.dockGroup} key={key}>
                 <legend>{rowLabels[key]}</legend>
-                <div className={styles.optionGrid}>
+                <div className={styles.materialChoices}>
                   {visibleOptions.map((value) => {
                     const decision = evaluateOption(catalog, archetype, selections, key, value);
-                    const isSelected = selections[key] === value;
+                    const disabled = !conceptPreviewAvailable || !decision.allowed;
+                    const selected = selections[key] === value;
                     const reason = !conceptPreviewAvailable
                       ? "Matched exterior concept preview is available on the 600 model first."
-                      : decision.allowed
-                        ? undefined
-                        : reasonLabels[decision.reasonCode];
-
+                      : decision.allowed ? undefined : reasonLabels[decision.reasonCode];
+                    const swatch = key === "exterior"
+                      ? swatches.exterior[value]
+                      : value === "sage" && selections.exterior === "dark-siding"
+                        ? "/images/studio-swatch-panel-blue-concept-v1.webp"
+                        : value === "charcoal" && selections.exterior === "dark-siding"
+                          ? "/images/studio-swatch-panel-charcoal-concept-v1.webp"
+                          : swatches.palette[value];
                     return (
                       <button
                         key={value}
                         type="button"
-                        className={[
-                          styles.optionButton,
-                          isSelected ? styles.optionSelected : "",
-                        ].join(" ")}
+                        className={selected ? styles.selected : undefined}
                         aria-label={`${rowLabels[key]}: ${optionLabels[key][value]}${reason ? `. Unavailable: ${reason}` : ""}`}
-                        aria-pressed={isSelected}
-                        disabled={!conceptPreviewAvailable || !decision.allowed}
+                        aria-pressed={selected}
+                        disabled={disabled}
                         title={reason}
                         onClick={() => selectOption(key, value)}
                       >
-                        {optionLabels[key][value]}
+                        <Image src={swatch} alt="" width={160} height={80} />
+                        <span>{optionLabels[key][value]}</span>
                       </button>
                     );
                   })}
                 </div>
-                {disabledOptions.length > 0 ? (
-                  <p className={styles.compatibilityNote}>
-                    {conceptPreviewAvailable
-                      ? "Some choices are unavailable for this configuration."
-                      : "Matched exterior concept choices are active on the 600 model first."}
-                  </p>
-                ) : null}
+                {!conceptPreviewAvailable ? <p>Active on the 600 model first.</p> : null}
               </fieldset>
             );
           })}
-        </aside>
-      </div>
 
-      <section className={styles.compareRail} aria-labelledby="compare-title">
-        <div className={styles.compareIntro}>
-          <h2 id="compare-title">Compare up to 3 concepts</h2>
-          <p>Keep candidate configurations in memory and review them side by side.</p>
-        </div>
+          <section className={`${styles.dockGroup} ${styles.trimInfo}`} aria-label="Fixed trim information">
+            <h2>Trim</h2>
+            <Image src="/images/studio-swatch-white-trim-concept-v1.webp" alt="" width={160} height={80} />
+            <p>White trim concept — fixed in this preview</p>
+          </section>
 
-        <div className={styles.conceptList}>
-          {comparisonInputs.map((item, index) => {
-            const image = resolveA600ConceptAsset(
-              item.archetype,
-              item.selections.exterior,
-              item.selections.palette,
-            );
-            return (
-              <button
-                key={`${item.archetype}-${index}`}
-                type="button"
-                className={styles.conceptCard}
-                onClick={() => {
-                  setArchetype(item.archetype);
-                  setSelections(item.selections);
-                  setComparisonOpen(false);
-                }}
-              >
-                <span>Concept {String.fromCharCode(65 + index)}</span>
-                <span className={styles.conceptImage}>
-                  {image ? (
-                    <Image src={image} alt="" fill sizes="10rem" />
-                  ) : (
-                    <span>Preview pending</span>
-                  )}
-                </span>
-              </button>
-            );
-          })}
-          {comparisonInputs.length < 3 ? (
-            <button type="button" className={styles.addConcept} onClick={addCurrentConcept}>
-              <span aria-hidden="true">+</span>
-              Add current
+          <section className={`${styles.dockGroup} ${styles.compareActions}`} aria-labelledby="compare-title">
+            <h2 id="compare-title">Compare</h2>
+            <p>{comparisonInputs.length} of 3 in memory</p>
+            <button type="button" onClick={addCurrentConcept} disabled={comparisonInputs.length >= 3}>Add current</button>
+            <button
+              type="button"
+              className={styles.compareButton}
+              aria-expanded={comparisonOpen}
+              aria-controls="studio-comparison-panel"
+              onClick={() => setComparisonOpen((open) => !open)}
+            >
+              {comparisonOpen ? "Close comparison" : "Open comparison"}
             </button>
-          ) : null}
-        </div>
-
-        <button
-          type="button"
-          className={styles.compareButton}
-          aria-expanded={comparisonOpen}
-          aria-controls="studio-comparison-panel"
-          onClick={() => setComparisonOpen((open) => !open)}
-        >
-          {comparisonOpen ? "Close comparison" : "Compare concepts"}
-        </button>
-
-        <div className={styles.currentConfig}>
-          <h2>Current configuration</h2>
-          <p>
-            {activeArchetype.label} · {sizeLabel(archetype)} · {optionLabels.exterior[selections.exterior]} ·{" "}
-            {optionLabels.palette[selections.palette]}
-          </p>
-          <div className={styles.hashRow}>
-            <span>Configuration ID</span>
-            <code>{hashLabel}</code>
-            <button type="button" onClick={() => void copyConfigurationId()} disabled={!candidate}>
-              Copy ID
-            </button>
-          </div>
-        </div>
+          </section>
+        </section>
       </section>
 
-      <p className={styles.status} role="status" aria-live="polite">{status}</p>
+      <section className={styles.truthBar} aria-label="Current configuration status">
+        <div>
+          <span>Current configuration</span>
+          <p>{activeArchetype.label} · {sizeLabel(archetype)} · {optionLabels.exterior[selections.exterior]} · {optionLabels.palette[selections.palette]}</p>
+        </div>
+        <div className={styles.hashRow}>
+          <span>Configuration ID</span><code>{hashLabel}</code>
+          <button type="button" onClick={() => void copyConfigurationId()} disabled={!candidate}>Copy ID</button>
+        </div>
+        <p className={styles.status} role="status" aria-live="polite"><i aria-hidden="true" />{status}</p>
+        <p className={styles.privacyNote}>In-memory only. No address or contact information is collected or sent.</p>
+      </section>
 
       {comparisonOpen ? (
-        <section
-          id="studio-comparison-panel"
-          className={styles.comparisonPanel}
-          aria-labelledby="comparison-heading"
-        >
-          <div className={styles.comparisonHeader}>
-            <div>
-              <p>In-memory comparison</p>
-              <h2 id="comparison-heading">Review the trade-offs, without creating a lead.</h2>
-            </div>
+        <section id="studio-comparison-panel" className={styles.comparisonPanel} aria-labelledby="comparison-heading">
+          <header className={styles.comparisonHeader}>
+            <div><p>In-memory comparison</p><h2 id="comparison-heading">Review exact stored selections.</h2></div>
             <button type="button" onClick={() => setComparisonOpen(false)}>Close</button>
-          </div>
+          </header>
           <div className={styles.comparisonGrid}>
-            {comparisonInputs.map((item, index) => (
-              <article key={`${item.archetype}-comparison-${index}`}>
-                <p>Concept {String.fromCharCode(65 + index)}</p>
-                <h3>{candidateLabel(item)}</h3>
-                <dl>
-                  <div><dt>Size</dt><dd>{sizeLabel(item.archetype)}</dd></div>
-                  {optionKeys.map((key) => (
-                    <div key={key}><dt>{rowLabels[key]}</dt><dd>{optionLabels[key][item.selections[key]]}</dd></div>
-                  ))}
-                </dl>
-              </article>
-            ))}
+            {comparisonInputs.map((item, index) => {
+              const preview = resolveA600ConceptAsset(
+                item.archetype,
+                item.selections.exterior,
+                item.selections.palette,
+              );
+              return (
+                <article key={`${item.archetype}-comparison-${index}`}>
+                  <div className={styles.comparisonImage}>
+                    {preview ? <Image src={preview} alt="" fill sizes="(max-width: 42rem) 100vw, 33vw" /> : <span>Preview pending</span>}
+                  </div>
+                  <p>Concept {String.fromCharCode(65 + index)}</p>
+                  <h3>{candidateLabel(item)}</h3>
+                  <dl>
+                    <div><dt>Size</dt><dd>{sizeLabel(item.archetype)}</dd></div>
+                    {optionKeys.map((key) => <div key={key}><dt>{rowLabels[key]}</dt><dd>{optionLabels[key][item.selections[key]]}</dd></div>)}
+                  </dl>
+                  <button type="button" onClick={() => restoreConcept(item)}>Restore exact selection</button>
+                </article>
+              );
+            })}
           </div>
-          <p className={styles.comparisonDisclaimer}>
-            Conceptual only. No property, zoning, permit, buildability, price, or schedule conclusion is made.
-          </p>
+          <p className={styles.comparisonDisclaimer}>Conceptual only. No property, zoning, permit, buildability, price, or schedule conclusion is made.</p>
         </section>
       ) : null}
-    </div>
+    </main>
   );
 }
