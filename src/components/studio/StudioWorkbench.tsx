@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import type { CSSProperties } from "react";
 
 import catalogData from "@/src/data/studio/catalog/releases/2026.08.0.json";
 import { resolveStudioAsset } from "@/src/lib/studio/assetManifest";
@@ -19,6 +18,7 @@ import type {
   StudioSelections,
 } from "@/src/lib/studio/types";
 
+import HardieMotionStage from "./HardieMotionStage";
 import styles from "./StudioWorkbench.module.css";
 
 const catalog = catalogData as StudioCatalog;
@@ -26,15 +26,15 @@ const catalog = catalogData as StudioCatalog;
 const optionLabels: Record<StudioOptionKey, Record<string, string>> = {
   exterior: {
     "stucco-smooth": "Smooth stucco",
-    "lap-siding": "Lap siding",
-    "dark-siding": "Dark siding",
+    "lap-siding": "Hardie Plank",
+    "dark-siding": "Hardie Panel",
   },
   palette: {
     "warm-white": "Warm white",
     "sand-dune": "Sand dune",
     "soft-clay": "Soft clay",
-    sage: "Sage",
-    charcoal: "Charcoal",
+    sage: "Evening Blue",
+    charcoal: "Iron Gray",
   },
   roof: {
     gable: "Gable",
@@ -51,8 +51,8 @@ const optionLabels: Record<StudioOptionKey, Record<string, string>> = {
 };
 
 const rowLabels: Record<StudioOptionKey, string> = {
-  exterior: "Exterior",
-  palette: "Palette",
+  exterior: "Facade",
+  palette: "Facade color",
   roof: "Roof",
   windows: "Windows",
   interior: "Interior",
@@ -63,9 +63,19 @@ const reasonLabels: Record<string, string> = {
   compact_interior_clearance: "The comfort interior is unavailable in the compact studio.",
 };
 
-const optionKeys = Object.keys(rowLabels) as StudioOptionKey[];
+const optionKeys: StudioOptionKey[] = ["exterior", "palette"];
 
 function defaultsFor(archetype: string): StudioSelections {
+  if (archetype === "one-bed-600") {
+    return {
+      exterior: "lap-siding",
+      palette: "sage",
+      roof: "gable",
+      windows: "standard",
+      interior: "comfort",
+    };
+  }
+
   return {
     exterior: "stucco-smooth",
     palette: archetype === "studio-450" ? "warm-white" : "sand-dune",
@@ -187,6 +197,7 @@ export default function StudioWorkbench() {
   }
 
   const mainImage = resolveStudioAsset(activeArchetype.geometry_ref);
+  const hardiePreviewAvailable = archetype === "one-bed-600";
   const hashLabel = candidate ? candidate.config_hash.slice(0, 12).toUpperCase() : "PENDING";
 
   return (
@@ -194,29 +205,24 @@ export default function StudioWorkbench() {
       <section className={styles.titleBar} aria-labelledby="studio-title">
         <div>
           <h1 id="studio-title">Concept Studio</h1>
-          <p className={styles.sampleLabel}>Synthetic sample property</p>
+          <p className={styles.sampleLabel}>New-construction material study</p>
         </div>
         <p className={styles.privacyNote}>No address or contact information is collected.</p>
       </section>
 
       <div className={styles.workbench}>
-        <figure className={styles.stage}>
-          <Image
-            key={mainImage}
-            src={mainImage}
-            alt={`Conceptual exterior view for ${activeArchetype.label}`}
-            fill
-            priority
-            sizes="(max-width: 960px) 100vw, 69vw"
-            className={styles.stageImage}
-          />
-          <figcaption>Conceptual — not a completed West Coast KBP project.</figcaption>
-        </figure>
+        <HardieMotionStage
+          fallbackImage={mainImage}
+          modelId={archetype}
+          modelLabel={activeArchetype.label}
+          exterior={selections.exterior}
+          palette={selections.palette}
+        />
 
         <aside className={styles.configurator} aria-labelledby="configure-title">
           <header className={styles.configuratorHeader}>
-            <h2 id="configure-title">Configure your concept</h2>
-            <p>Explore combinations and compare side by side.</p>
+            <h2 id="configure-title">Design the exterior</h2>
+            <p>Choose a model, facade system, and facade color.</p>
           </header>
 
           <fieldset className={styles.optionRow}>
@@ -238,41 +244,55 @@ export default function StudioWorkbench() {
           </fieldset>
 
           {optionKeys.map((key) => {
-            const disabledOptions = catalog.options[key].filter(
-              (value) => !evaluateOption(catalog, archetype, selections, key, value).allowed,
+            const visibleOptions = catalog.options[key].filter((value) =>
+              key === "exterior"
+                ? value === "lap-siding" || value === "dark-siding"
+                : value === "sage" || value === "charcoal",
+            );
+            const disabledOptions = visibleOptions.filter(
+              (value) =>
+                !hardiePreviewAvailable ||
+                !evaluateOption(catalog, archetype, selections, key, value).allowed,
             );
 
             return (
               <fieldset className={styles.optionRow} key={key}>
                 <legend>{rowLabels[key]}</legend>
-                <div className={key === "palette" ? styles.swatchGrid : styles.optionGrid}>
-                  {catalog.options[key].map((value) => {
+                <div className={styles.optionGrid}>
+                  {visibleOptions.map((value) => {
                     const decision = evaluateOption(catalog, archetype, selections, key, value);
                     const isSelected = selections[key] === value;
-                    const reason = decision.allowed ? undefined : reasonLabels[decision.reasonCode];
+                    const reason = !hardiePreviewAvailable
+                      ? "Matched Hardie visualization is available on the 600 model first."
+                      : decision.allowed
+                        ? undefined
+                        : reasonLabels[decision.reasonCode];
 
                     return (
                       <button
                         key={value}
                         type="button"
                         className={[
-                          key === "palette" ? styles.swatch : styles.optionButton,
+                          styles.optionButton,
                           isSelected ? styles.optionSelected : "",
                         ].join(" ")}
-                        style={key === "palette" ? { "--swatch-color": `var(--studio-${value})` } as CSSProperties : undefined}
                         aria-label={`${rowLabels[key]}: ${optionLabels[key][value]}${reason ? `. Unavailable: ${reason}` : ""}`}
                         aria-pressed={isSelected}
-                        disabled={!decision.allowed}
+                        disabled={!hardiePreviewAvailable || !decision.allowed}
                         title={reason}
                         onClick={() => selectOption(key, value)}
                       >
-                        {key === "palette" ? <span className={styles.visuallyHidden}>{optionLabels[key][value]}</span> : optionLabels[key][value]}
+                        {optionLabels[key][value]}
                       </button>
                     );
                   })}
                 </div>
                 {disabledOptions.length > 0 ? (
-                  <p className={styles.compatibilityNote}>Some choices are unavailable for this configuration.</p>
+                  <p className={styles.compatibilityNote}>
+                    {hardiePreviewAvailable
+                      ? "Some choices are unavailable for this configuration."
+                      : "Matched Hardie choices are active on the 600 model first."}
+                  </p>
                 ) : null}
               </fieldset>
             );
