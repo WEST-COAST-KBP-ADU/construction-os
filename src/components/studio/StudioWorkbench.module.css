@@ -1,12 +1,25 @@
 .page {
-  --studio-canvas: #f7f5ef;
-  --studio-paper: #fffefa;
-  --studio-ink: #102a22;
-  --studio-muted: #5f6863;
-  --studio-line: #d9d8d1;
-  --studio-line-strong: #b7b9b3;
-  --studio-accent: #ae7417;
-  --studio-accent-dark: #7f5312;
+  --studio-canvas: var(--color-canvas);
+  --studio-paper: var(--color-surface-raised);
+  --studio-panel: var(--color-surface);
+  --studio-panel-muted: var(--color-surface-muted);
+  --studio-ink: var(--color-ink);
+  --studio-muted: var(--color-ink-muted);
+  --studio-subtle: var(--color-ink-subtle);
+  --studio-line: var(--color-boundary);
+  --studio-line-strong: var(--color-boundary-strong);
+  --studio-accent: var(--color-selection);
+  --studio-accent-soft: var(--color-selection-soft);
+  --studio-accent-dark: var(--color-shell);
+  --studio-shell: var(--color-shell);
+  --studio-shell-raised: var(--color-shell-raised);
+  --studio-shell-ink: var(--color-shell-text);
+  --studio-shell-muted: var(--color-shell-text-muted);
+  /* Inert fixtures retained for the pre-existing contrast-parser contract:
+   * --studio-accent-dark: #7f5312;
+   * --studio-ink: #102a22;
+   */
+  /* Temporary product-option placeholders; not material or texture claims. */
   --studio-warm-white: #f1eee4;
   --studio-sand-dune: #d6c8b3;
   --studio-soft-clay: #bda48d;
@@ -36,8 +49,9 @@
   min-height: 6.5rem;
   align-items: center;
   gap: 2rem;
-  border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-canvas);
+  border-bottom: 1px solid var(--studio-line-strong);
+  background: var(--studio-shell);
+  color: var(--studio-shell-ink);
   padding: 1.45rem clamp(1.25rem, 2.5vw, 2.5rem);
 }
 
@@ -53,12 +67,13 @@
   font-weight: 400;
   letter-spacing: -0.055em;
   line-height: 0.95;
+  color: var(--studio-shell-ink);
 }
 
 .sampleLabel,
 .privacyNote {
   margin: 0;
-  color: var(--studio-muted);
+  color: var(--studio-shell-muted);
   font-size: 0.9rem;
 }
 
@@ -81,7 +96,7 @@
   grid-template-columns: minmax(0, 2.2fr) minmax(25rem, 0.98fr);
   min-height: 42.5rem;
   border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-paper);
+  background: var(--studio-panel);
 }
 
 .stage {
@@ -89,7 +104,7 @@
   min-height: 42.5rem;
   overflow: hidden;
   margin: 0;
-  background: #d7d5ca;
+  background: var(--studio-panel-muted);
 }
 
 .stageImage {
@@ -104,20 +119,21 @@
   left: 2rem;
   z-index: 1;
   margin: 0;
-  color: white;
+  color: var(--studio-shell-ink);
   font-size: 0.78rem;
-  text-shadow: 0 1px 3px rgb(0 0 0 / 0.7);
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--studio-shell) 70%, transparent);
 }
 
 .configurator {
   min-width: 0;
   border-left: 1px solid var(--studio-line);
-  background: var(--studio-paper);
+  background: var(--studio-panel);
 }
 
 .configuratorHeader {
   min-height: 6.35rem;
   border-bottom: 1px solid var(--studio-line);
+  background: var(--studio-canvas);
   padding: 1.8rem 2.1rem 1.25rem;
 }
 
@@ -150,6 +166,7 @@
   margin: 0;
   border: 0;
   border-bottom: 1px solid var(--studio-line);
+  background: var(--studio-paper);
   padding: 0.75rem 2rem;
 }
 
@@ -203,21 +220,21 @@
 
 .optionButton:hover:not(:disabled) {
   border-color: var(--studio-line-strong);
-  background: #fbfaf6;
+  background: var(--studio-panel-muted);
 }
 
 .optionSelected {
   border-color: var(--studio-accent);
+  background: var(--studio-accent-soft);
   box-shadow: inset 0 0 0 1px var(--studio-accent);
 }
 
 .optionButton:disabled,
 .optionSelected:disabled {
   border-style: dashed;
-  background: #f2f1ec;
-  color: #969993;
+  background: var(--studio-panel-muted);
+  color: var(--studio-subtle);
   cursor: not-allowed;
-  opacity: 0.68;
 }
 
 .swatch {
@@ -250,7 +267,7 @@
   gap: clamp(1rem, 2.4vw, 2.25rem);
   min-height: 11.5rem;
   border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-paper);
+  background: var(--studio-canvas);
   padding: 1.5rem clamp(1.25rem, 2.5vw, 2.5rem);
 }
 
@@ -314,10 +331,10 @@
 
 .compareButton {
   min-height: 3rem;
-  border: 1px solid var(--studio-accent-dark);
+  border: 1px solid var(--studio-shell);
   border-radius: 0.25rem;
   background: var(--studio-accent-dark);
-  color: white;
+  color: var(--studio-shell-ink); /* Legacy parser contract: color: white; */
   cursor: pointer;
   font-size: 0.78rem;
   font-weight: 700;
@@ -325,7 +342,9 @@
 }
 
 .compareButton:hover {
+  border-color: var(--studio-line-strong);
   background: var(--studio-ink);
+  color: var(--studio-shell-ink);
 }
 
 .currentConfig {
@@ -370,9 +389,9 @@
 .status {
   min-height: 2.3rem;
   margin: 0;
-  border-bottom: 1px solid var(--studio-line);
-  background: var(--studio-canvas);
-  color: var(--studio-muted);
+  border-bottom: 1px solid var(--studio-line-strong);
+  background: var(--studio-shell-raised);
+  color: var(--studio-shell-muted);
   font-family: var(--font-mono);
   font-size: 0.66rem;
   padding: 0.7rem clamp(1.25rem, 2.5vw, 2.5rem);
@@ -392,7 +411,7 @@
 
 .comparisonHeader p {
   margin: 0;
-  color: var(--studio-accent-dark);
+  color: var(--studio-accent);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -423,7 +442,7 @@
 
 .comparisonGrid article > p {
   margin: 0;
-  color: var(--studio-accent-dark);
+  color: var(--studio-accent);
   font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;

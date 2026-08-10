@@ -38,6 +38,18 @@
   --color-signal: #39D98A;
   --color-signal-rgb: 57 217 138;
 
+  /* Architectural role aliases shared by the public shell and Studio. */
+  --color-shell: var(--color-forest-deep-surface);
+  --color-shell-raised: var(--color-forest);
+  --color-shell-text: var(--color-ink-inverse);
+  --color-shell-text-muted: var(--color-ink-inverse-muted);
+  --color-boundary: var(--color-line);
+  --color-boundary-strong: var(--color-line-strong);
+  --color-selection: var(--color-gold-deep);
+  --color-selection-soft: var(--color-gold-soft);
+  --color-selection-contrast: var(--color-ink-inverse);
+  --color-focus-ring: var(--color-focus);
+
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-source-serif), serif;
   --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
@@ -1388,6 +1400,16 @@
     --color-focus-contrast: #F7F3EB;
     --color-signal: #39D98A;
     --color-signal-rgb: 57 217 138;
+    --color-shell: var(--color-forest-deep-surface);
+    --color-shell-raised: var(--color-forest);
+    --color-shell-text: var(--color-ink-inverse);
+    --color-shell-text-muted: var(--color-ink-inverse-muted);
+    --color-boundary: var(--color-line);
+    --color-boundary-strong: var(--color-line-strong);
+    --color-selection: var(--color-gold-deep);
+    --color-selection-soft: var(--color-gold-soft);
+    --color-selection-contrast: var(--color-forest-deep-surface);
+    --color-focus-ring: var(--color-focus);
     --shadow-card: 0 0.75rem 2.5rem rgb(0 0 0 / 0.22);
     --shadow-card-hover: 0 1.25rem 3.25rem rgb(0 0 0 / 0.34);
     --shadow-panel: 0 1.5rem 4.5rem rgb(0 0 0 / 0.4);
@@ -1427,7 +1449,7 @@ a {
 }
 
 :where(a, button, summary):focus-visible {
-  outline: var(--focus-outline-width) solid var(--color-focus);
+  outline: var(--focus-outline-width) solid var(--color-focus-ring);
   outline-offset: var(--focus-outline-offset);
 }
 
@@ -2942,10 +2964,45 @@ a {
   gap: var(--space-3);
 }
 
+.site-header {
+  border-color: var(--color-boundary-strong);
+  background: color-mix(in srgb, var(--color-shell) 94%, transparent);
+  color: var(--color-shell-text);
+}
+
+.brand__name,
+.site-nav__link {
+  color: var(--color-shell-text);
+}
+
+.brand__tagline {
+  color: var(--color-shell-text-muted);
+}
+
+.site-nav__link:hover {
+  color: var(--color-gold);
+}
+
+.site-nav-mobile summary {
+  color: var(--color-shell-text);
+}
+
+@media (max-width: 47.5rem) {
+  .site-nav-mobile__panel {
+    border-color: var(--color-boundary-strong);
+    background: var(--color-shell-raised);
+  }
+
+  .site-nav-mobile__link {
+    border-color: var(--color-boundary-strong);
+    color: var(--color-shell-text);
+  }
+}
+
 .site-footer {
   border-top: 0;
-  background: var(--color-forest-deep-surface);
-  color: var(--color-ink-inverse);
+  background: var(--color-shell);
+  color: var(--color-shell-text);
 }
 
 .site-footer__inner {
@@ -2955,9 +3012,9 @@ a {
 /* WORK-ORDER-005: development-preview release notice. Token-only styling;
  * subordinate to the primary navigation and never styled as an alert. */
 .development-notice {
-  border-bottom: var(--line-width) solid var(--color-line);
-  background: var(--color-surface-muted);
-  color: var(--color-ink-muted);
+  border-bottom: var(--line-width) solid var(--color-boundary-strong);
+  background: var(--color-shell-raised);
+  color: var(--color-shell-text-muted);
 }
 
 .development-notice__inner {
@@ -2973,7 +3030,7 @@ a {
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-forest-deep);
+  color: var(--color-shell-text);
   white-space: nowrap;
 }
 
@@ -2984,7 +3041,7 @@ a {
 }
 
 .development-notice__supporting {
-  color: var(--color-ink-muted);
+  color: var(--color-shell-text-muted);
 }
 
 /* DESIGN-003: compose the focus ring after component shadows. The focused
@@ -3013,9 +3070,9 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 
 .site-nav__link--cta,
 .site-nav-mobile__link--cta {
-  border: var(--line-width) solid var(--color-forest-deep-surface);
-  background: var(--color-forest-deep-surface);
-  color: var(--color-ink-inverse);
+  border: var(--line-width) solid var(--color-selection);
+  background: var(--color-selection);
+  color: var(--color-selection-contrast);
 }
 
 .site-nav__link--cta {
@@ -3026,8 +3083,8 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 }
 
 .site-nav__link--cta:hover {
-  background: var(--color-forest);
-  color: var(--color-ink-inverse);
+  background: var(--color-gold);
+  color: var(--color-shell);
 }
 
 .site-nav-mobile__link--cta {

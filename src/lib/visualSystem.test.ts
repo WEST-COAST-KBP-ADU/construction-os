@@ -45,6 +45,15 @@ function token(block: string, name: string): string {
   return value;
 }
 
+function variableAlias(block: string, name: string): string {
+  const value = block.match(
+    new RegExp(`${name}:\\s*var\\((--[a-z0-9-]+)\\)`),
+  )?.[1];
+
+  if (!value) throw new Error(`Missing alias ${name}`);
+  return value;
+}
+
 const LIGHT_PALETTE = {
   "--color-canvas": "#F3EFE7",
   "--color-surface": "#FCFBF8",
@@ -99,6 +108,45 @@ const DARK_PALETTE = {
   "--color-signal": "#39D98A",
 } as const;
 
+const SHARED_ARCHITECTURAL_ALIASES = {
+  "--color-shell": "--color-forest-deep-surface",
+  "--color-shell-raised": "--color-forest",
+  "--color-shell-text": "--color-ink-inverse",
+  "--color-shell-text-muted": "--color-ink-inverse-muted",
+  "--color-boundary": "--color-line",
+  "--color-boundary-strong": "--color-line-strong",
+  "--color-selection": "--color-gold-deep",
+  "--color-selection-soft": "--color-gold-soft",
+  "--color-focus-ring": "--color-focus",
+} as const;
+
+const STUDIO_STRUCTURAL_ALIASES = {
+  "--studio-canvas": "--color-canvas",
+  "--studio-paper": "--color-surface-raised",
+  "--studio-panel": "--color-surface",
+  "--studio-panel-muted": "--color-surface-muted",
+  "--studio-ink": "--color-ink",
+  "--studio-muted": "--color-ink-muted",
+  "--studio-subtle": "--color-ink-subtle",
+  "--studio-line": "--color-boundary",
+  "--studio-line-strong": "--color-boundary-strong",
+  "--studio-accent": "--color-selection",
+  "--studio-accent-soft": "--color-selection-soft",
+  "--studio-accent-dark": "--color-shell",
+  "--studio-shell": "--color-shell",
+  "--studio-shell-raised": "--color-shell-raised",
+  "--studio-shell-ink": "--color-shell-text",
+  "--studio-shell-muted": "--color-shell-text-muted",
+} as const;
+
+const TEMPORARY_STUDIO_SWATCHES = [
+  "#f1eee4",
+  "#d6c8b3",
+  "#bda48d",
+  "#7d8778",
+  "#50524e",
+] as const;
+
 describe("portal visual-system regressions", () => {
   it("pins the exact California Material Modernism token contract", () => {
     const lightTokens = stylesheet.match(/:root \{([\s\S]*?)\n\}/)?.[1];
@@ -119,6 +167,57 @@ describe("portal visual-system regressions", () => {
 
     expect(lightTokens).toContain("--color-signal-rgb: 57 217 138;");
     expect(darkTokens).toContain("--color-signal-rgb: 57 217 138;");
+  });
+
+  it("maps architectural roles onto the pinned light and dark palette", () => {
+    const lightTokens = stylesheet.match(/:root \{([\s\S]*?)\n\}/)?.[1];
+    const darkTokens = stylesheet.match(
+      /@media \(prefers-color-scheme: dark\) \{\s*:root \{([\s\S]*?)\n\s*\}/,
+    )?.[1];
+
+    expect(lightTokens).toBeDefined();
+    expect(darkTokens).toBeDefined();
+
+    for (const tokens of [lightTokens!, darkTokens!]) {
+      for (const [role, source] of Object.entries(
+        SHARED_ARCHITECTURAL_ALIASES,
+      )) {
+        expect(variableAlias(tokens, role)).toBe(source);
+      }
+    }
+
+    expect(variableAlias(lightTokens!, "--color-selection-contrast")).toBe(
+      "--color-ink-inverse",
+    );
+    expect(variableAlias(darkTokens!, "--color-selection-contrast")).toBe(
+      "--color-forest-deep-surface",
+    );
+  });
+
+  it("makes Studio structural roles global aliases and refuses raw-color drift", () => {
+    const studioTokens = studioStylesheet.match(/\.page \{([\s\S]*?)\n\}/)?.[1];
+
+    expect(studioTokens).toBeDefined();
+
+    for (const [role, source] of Object.entries(STUDIO_STRUCTURAL_ALIASES)) {
+      expect(variableAlias(studioTokens!, role)).toBe(source);
+    }
+
+    const executableStudioStyles = studioStylesheet.replace(
+      /\/\*[\s\S]*?\*\//g,
+      "",
+    );
+    const rawHexValues = [
+      ...executableStudioStyles.matchAll(/#[0-9a-fA-F]{6}/g),
+    ].map(([value]) => value.toLowerCase());
+
+    expect(rawHexValues).toEqual(TEMPORARY_STUDIO_SWATCHES);
+    expect(studioStylesheet).toContain(
+      "Temporary product-option placeholders; not material or texture claims.",
+    );
+    expect(executableStudioStyles).not.toMatch(
+      /:\s*(?:white|black)\s*(?:;|!important)/i,
+    );
   });
 
   it("contains the emerald signal in the brand mark without hard-coded drift", () => {
@@ -205,14 +304,18 @@ describe("portal visual-system regressions", () => {
       expect(contrastRatio(bronze, darkSurface)).toBeGreaterThanOrEqual(4.5);
     }
 
-    expect(stylesheet).toMatch(
-      /\.brand__tagline\s*\{[\s\S]*?color:\s*var\(--color-ink-muted\)/,
+    const finalShell = stylesheet.slice(
+      stylesheet.indexOf("/* Final shell overrides live after the legacy route system by design. */"),
+    );
+
+    expect(finalShell).toMatch(
+      /\.brand__tagline\s*\{[\s\S]*?color:\s*var\(--color-shell-text-muted\)/,
     );
     expect(stylesheet).toMatch(
-      /\.development-notice__label\s*\{[\s\S]*?color:\s*var\(--color-forest-deep\)/,
+      /\.development-notice__label\s*\{[\s\S]*?color:\s*var\(--color-shell-text\)/,
     );
     expect(stylesheet).toMatch(
-      /\.development-notice__supporting\s*\{[\s\S]*?color:\s*var\(--color-ink-muted\)/,
+      /\.development-notice__supporting\s*\{[\s\S]*?color:\s*var\(--color-shell-text-muted\)/,
     );
     expect(stylesheet).toContain(
       ".breadcrumb {\n  display: flex;\n  align-items: center;\n  gap: var(--space-2);\n  color: var(--color-ink-muted);",
@@ -220,6 +323,38 @@ describe("portal visual-system regressions", () => {
     expect(stylesheet).toMatch(
       /\.content-section--dark \.content-section__intro\s*\{[\s\S]*?color:\s*var\(--color-ink-inverse-muted\)/,
     );
+  });
+
+  it("meets AA for every text pair used by the shell and Studio", () => {
+    for (const [scheme, palette] of [
+      ["light", LIGHT_PALETTE],
+      ["dark", DARK_PALETTE],
+    ] as const) {
+      const selectionContrast =
+        scheme === "light"
+          ? palette["--color-ink-inverse"]
+          : palette["--color-forest-deep-surface"];
+      const textPairs = [
+        ["body on canvas", palette["--color-ink"], palette["--color-canvas"]],
+        ["muted on canvas", palette["--color-ink-muted"], palette["--color-canvas"]],
+        ["muted on paper", palette["--color-ink-muted"], palette["--color-surface-raised"]],
+        ["disabled on muted", palette["--color-ink-subtle"], palette["--color-surface-muted"]],
+        ["shell text", palette["--color-ink-inverse"], palette["--color-forest-deep-surface"]],
+        ["shell muted", palette["--color-ink-inverse-muted"], palette["--color-forest-deep-surface"]],
+        ["raised shell muted", palette["--color-ink-inverse-muted"], palette["--color-forest"]],
+        ["selected control", selectionContrast, palette["--color-gold-deep"]],
+        ["success status", palette["--color-success"], palette["--color-surface"]],
+        ["warning status", palette["--color-warning"], palette["--color-surface"]],
+        ["danger status", palette["--color-danger"], palette["--color-surface"]],
+      ] as const;
+
+      for (const [name, foreground, background] of textPairs) {
+        expect(
+          contrastRatio(foreground, background),
+          `${scheme} ${name}`,
+        ).toBeGreaterThanOrEqual(4.5);
+      }
+    }
   });
 
   it("separates semantic colors and keeps boundaries and focus visible", () => {
@@ -291,6 +426,9 @@ describe("portal visual-system regressions", () => {
       /\.optionSelected\s*\{[\s\S]*?box-shadow:\s*inset 0 0 0 1px var\(--studio-accent\)/,
     );
     expect(studioStylesheet).toMatch(
+      /\.optionSelected\s*\{[\s\S]*?background:\s*var\(--studio-accent-soft\)/,
+    );
+    expect(studioStylesheet).toMatch(
       /\.swatch\.optionSelected\s*\{[\s\S]*?box-shadow:\s*0 0 0 2px var\(--studio-paper\), 0 0 0 3px var\(--studio-accent\)/,
     );
     expect(
@@ -298,5 +436,17 @@ describe("portal visual-system regressions", () => {
         ":is(a, button, summary):focus-visible:not([disabled])",
       ),
     ).toBeGreaterThan(stylesheet.indexOf(".development-notice__supporting"));
+  });
+
+  it("keeps Studio focus, selection, and reduced-motion composition explicit", () => {
+    expect(stylesheet).toContain(
+      "outline: var(--focus-outline-width) solid var(--color-focus-ring);",
+    );
+    expect(studioStylesheet).toContain(".optionButton:hover:not(:disabled)");
+    expect(studioStylesheet).toContain(".optionButton:disabled,");
+    expect(studioStylesheet).toContain("border-style: dashed;");
+    expect(studioStylesheet).toMatch(
+      /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.stageImage,[\s\S]*?\.optionButton,[\s\S]*?\.optionSelected \{\s*transition: none;/,
+    );
   });
 });
