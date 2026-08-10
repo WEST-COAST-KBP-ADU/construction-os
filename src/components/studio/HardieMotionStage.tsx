@@ -50,20 +50,30 @@ function isConceptColor(value: string): value is ConceptColor {
   return value === "sage" || value === "charcoal";
 }
 
+export function resolveA600ConceptAsset(
+  modelId: string,
+  exterior: string,
+  palette: string,
+): string | null {
+  if (
+    modelId !== "one-bed-600" ||
+    !isConceptFacade(exterior) ||
+    !isConceptColor(palette)
+  ) {
+    return null;
+  }
+
+  return PREVIEW_ASSETS[exterior][palette];
+}
+
 export default function HardieMotionStage({
   modelId,
   modelLabel,
   exterior,
   palette,
 }: HardieMotionStageProps) {
-  const previewAvailable =
-    modelId === "one-bed-600" &&
-    isConceptFacade(exterior) &&
-    isConceptColor(palette);
-
-  const resolvedAsset = previewAvailable
-    ? PREVIEW_ASSETS[exterior as ConceptFacade][palette as ConceptColor]
-    : null;
+  const resolvedAsset = resolveA600ConceptAsset(modelId, exterior, palette);
+  const previewAvailable = resolvedAsset !== null;
 
   const [renderState, setRenderState] = useState<RenderState>({
     current: resolvedAsset,

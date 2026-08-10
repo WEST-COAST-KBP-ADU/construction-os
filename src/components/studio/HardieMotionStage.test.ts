@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
+import { resolveA600ConceptAsset } from "./HardieMotionStage";
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const COMPONENT_PATH = path.join(ROOT, "src/components/studio/HardieMotionStage.tsx");
 const STYLES_PATH = path.join(ROOT, "src/components/studio/HardieMotionStage.module.css");
@@ -20,6 +22,33 @@ const ASSETS = [
 ] as const;
 
 describe("A600 exterior concept motion preview", () => {
+  it.each([
+    ["lap-siding", "sage", "/images/adu-600-hardie-plank-evening-blue-concept-v1.webp"],
+    ["lap-siding", "charcoal", "/images/adu-600-hardie-plank-iron-gray-concept-v1.webp"],
+    ["dark-siding", "sage", "/images/adu-600-hardie-panel-evening-blue-concept-v1.webp"],
+    ["dark-siding", "charcoal", "/images/adu-600-hardie-panel-iron-gray-concept-v1.webp"],
+  ])("maps the A600 %s / %s state to its exact concept asset", (exterior, palette, asset) => {
+    expect(resolveA600ConceptAsset("one-bed-600", exterior, palette)).toBe(asset);
+  });
+
+  it("returns null for unsupported selections and non-A600 models", () => {
+    expect(resolveA600ConceptAsset("one-bed-600", "stucco-smooth", "sage")).toBeNull();
+    expect(resolveA600ConceptAsset("one-bed-600", "lap-siding", "warm-white")).toBeNull();
+    expect(resolveA600ConceptAsset("studio-450", "lap-siding", "sage")).toBeNull();
+    expect(resolveA600ConceptAsset("two-bed-800", "dark-siding", "charcoal")).toBeNull();
+  });
+
+  it("shares the exact resolver between the main stage and comparison thumbnails", () => {
+    expect(component).toContain(
+      "resolveA600ConceptAsset(modelId, exterior, palette)",
+    );
+    expect(workbench).toMatch(
+      /resolveA600ConceptAsset\(\s*item\.archetype,\s*item\.selections\.exterior,\s*item\.selections\.palette,\s*\)/,
+    );
+    expect(workbench).not.toContain("resolveStudioAsset");
+    expect(workbench).not.toContain("geometry_ref");
+  });
+
   it("binds four repository-controlled matched-material assets", () => {
     for (const asset of ASSETS) {
       const assetPath = path.join(ROOT, "public/images", asset);
@@ -67,13 +96,11 @@ describe("A600 exterior concept motion preview", () => {
   });
 
   it("B-3 fails closed without an image for unmatched model previews", () => {
-    expect(component).toContain(": null;");
+    expect(component).toContain("return null;");
     expect(component).toContain("This model stays image-free until a matched new-construction render exists.");
     expect(component).not.toContain("fallbackImage");
     expect(workbench).not.toContain("fallbackImage=");
-    expect(workbench).toMatch(
-      /item\.archetype === "one-bed-600"[\s\S]*?\? resolveStudioAsset\([\s\S]*?: null;/,
-    );
+    expect(workbench).toContain("resolveA600ConceptAsset(");
     expect(workbench).toContain("<span>Preview pending</span>");
   });
 

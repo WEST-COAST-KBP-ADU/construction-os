@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 import catalogData from "@/src/data/studio/catalog/releases/2026.08.0.json";
-import { resolveStudioAsset } from "@/src/lib/studio/assetManifest";
 import {
   assertValidCandidate,
   buildConfigurationCandidate,
@@ -18,7 +17,7 @@ import type {
   StudioSelections,
 } from "@/src/lib/studio/types";
 
-import HardieMotionStage from "./HardieMotionStage";
+import HardieMotionStage, { resolveA600ConceptAsset } from "./HardieMotionStage";
 import styles from "./StudioWorkbench.module.css";
 
 const catalog = catalogData as StudioCatalog;
@@ -307,11 +306,11 @@ export default function StudioWorkbench() {
 
         <div className={styles.conceptList}>
           {comparisonInputs.map((item, index) => {
-            const itemArchetype = catalog.archetypes.find((entry) => entry.id === item.archetype);
-            const image =
-              item.archetype === "one-bed-600"
-                ? resolveStudioAsset(itemArchetype?.geometry_ref)
-                : null;
+            const image = resolveA600ConceptAsset(
+              item.archetype,
+              item.selections.exterior,
+              item.selections.palette,
+            );
             return (
               <button
                 key={`${item.archetype}-${index}`}
