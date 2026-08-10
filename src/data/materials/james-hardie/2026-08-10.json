@@ -1,0 +1,250 @@
+{
+  "schema": "material-registry/1",
+  "registry_id": "james-hardie-2026-08-10",
+  "manufacturer": {
+    "id": "james-hardie",
+    "display_name": "James Hardie",
+    "source_id": "hardie-plank-product"
+  },
+  "verified_on": "2026-08-10",
+  "market_context": {
+    "region": "Sacramento area",
+    "local_availability": "unverified",
+    "purpose": "manufacturer_reference_only"
+  },
+  "non_affiliation_notice": "Manufacturer reference data only. No affiliation is claimed; partnership, certification, endorsement, authorized-installer status, local availability, West Coast KBP adoption, and media rights are not claimed.",
+  "sources": [
+    {
+      "id": "hardie-plank-product",
+      "url": "https://www.jameshardie.com/product-catalog/exterior-siding-products/hardie-plank-lap-siding/",
+      "page_title": "Hardie® Plank Lap Siding",
+      "verified_on": "2026-08-10",
+      "facts": [
+        "Hardie® Plank product name",
+        "Hardie® Plank profile and texture names",
+        "Iron Gray color name example with ColorPlus® Technology"
+      ]
+    },
+    {
+      "id": "hardie-panel-product",
+      "url": "https://www.jameshardie.com/product-catalog/exterior-siding-products/hardie-panel-siding/select-cedarmill/statement-collection-colors/",
+      "page_title": "Hardie® Panel Siding",
+      "verified_on": "2026-08-10",
+      "facts": [
+        "Hardie® Panel product name",
+        "Hardie® Panel profile and texture names"
+      ]
+    },
+    {
+      "id": "statement-collection-colors",
+      "url": "https://www.jameshardie.com/statement-collection-colors/",
+      "page_title": "Statement Collection® Colors",
+      "verified_on": "2026-08-10",
+      "facts": [
+        "Screen display can vary",
+        "Samples are provided in Select Cedarmill® texture",
+        "Local availability must be checked with a contractor or dealer"
+      ]
+    },
+    {
+      "id": "hardie-artisan-design",
+      "url": "https://www.jameshardie.com/design-with-artisan/",
+      "page_title": "Design with Hardie® Artisan® Siding",
+      "verified_on": "2026-08-10",
+      "facts": [
+        "Hardie® Artisan® product name",
+        "Hardie® Artisan® profile names"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "id": "hardie-plank",
+      "display_name": "Hardie® Plank",
+      "source_id": "hardie-plank-product",
+      "profiles": [
+        {
+          "id": "select-cedarmill",
+          "display_name": "Select Cedarmill®",
+          "product_id": "hardie-plank",
+          "source_id": "hardie-plank-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "smooth",
+          "display_name": "Smooth",
+          "product_id": "hardie-plank",
+          "source_id": "hardie-plank-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "beaded-select-cedarmill",
+          "display_name": "Beaded Select Cedarmill®",
+          "product_id": "hardie-plank",
+          "source_id": "hardie-plank-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "beaded-smooth",
+          "display_name": "Beaded Smooth",
+          "product_id": "hardie-plank",
+          "source_id": "hardie-plank-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "custom-colonial-roughsawn",
+          "display_name": "Custom Colonial Roughsawn",
+          "product_id": "hardie-plank",
+          "source_id": "hardie-plank-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "custom-colonial-smooth",
+          "display_name": "Custom Colonial Smooth",
+          "product_id": "hardie-plank",
+          "source_id": "hardie-plank-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        }
+      ]
+    },
+    {
+      "id": "hardie-panel",
+      "display_name": "Hardie® Panel",
+      "source_id": "hardie-panel-product",
+      "profiles": [
+        {
+          "id": "select-cedarmill",
+          "display_name": "Select Cedarmill®",
+          "product_id": "hardie-panel",
+          "source_id": "hardie-panel-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "smooth",
+          "display_name": "Smooth",
+          "product_id": "hardie-panel",
+          "source_id": "hardie-panel-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "stucco",
+          "display_name": "Stucco",
+          "product_id": "hardie-panel",
+          "source_id": "hardie-panel-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "sierra-8",
+          "display_name": "Sierra 8",
+          "product_id": "hardie-panel",
+          "source_id": "hardie-panel-product",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        }
+      ]
+    },
+    {
+      "id": "hardie-artisan",
+      "display_name": "Hardie® Artisan®",
+      "source_id": "hardie-artisan-design",
+      "profiles": [
+        {
+          "id": "hardie-artisan-lap",
+          "display_name": "Hardie® Artisan® Lap",
+          "product_id": "hardie-artisan",
+          "source_id": "hardie-artisan-design",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "v-groove",
+          "display_name": "V-Groove",
+          "product_id": "hardie-artisan",
+          "source_id": "hardie-artisan-design",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "shiplap",
+          "display_name": "Shiplap",
+          "product_id": "hardie-artisan",
+          "source_id": "hardie-artisan-design",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        },
+        {
+          "id": "square-channel",
+          "display_name": "Square Channel",
+          "product_id": "hardie-artisan",
+          "source_id": "hardie-artisan-design",
+          "local_availability": "unverified",
+          "west_coast_kbp_offering": "not_adopted",
+          "texture_asset": null,
+          "texture_rights": "absent",
+          "ui_eligible": false
+        }
+      ]
+    }
+  ],
+  "colors": [
+    {
+      "id": "iron-gray",
+      "display_name": "Iron Gray",
+      "finish_technology": "ColorPlus® Technology",
+      "source_id": "hardie-plank-product",
+      "local_availability": "unverified",
+      "display_color": null,
+      "texture_asset": null,
+      "texture_rights": "absent",
+      "ui_eligible": false
+    }
+  ]
+}
