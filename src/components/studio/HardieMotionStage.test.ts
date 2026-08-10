@@ -93,6 +93,7 @@ describe("A600 exterior concept motion preview", () => {
     );
     expect(component).toContain("previous: resolvedAsset ? current.current : null");
     expect(component).toContain("previewAvailable && renderState.current");
+    expect(component).toContain("previous: resolvedAsset ? current.current : null");
   });
 
   it("B-3 fails closed without an image for unmatched model previews", () => {
@@ -104,22 +105,41 @@ describe("A600 exterior concept motion preview", () => {
     expect(workbench).toContain("<span>Preview pending</span>");
   });
 
-  it("B-4 removes the unverified material lens", () => {
-    expect(component).not.toContain("materialLens");
-    expect(component).not.toContain("lensImage");
-    expect(styles).not.toContain(".materialLens");
-    expect(styles).not.toContain(".lensImage");
+  it("B-4 removes decorative transition layers and unverified material lenses", () => {
+    for (const forbidden of ["materialLens", "lensImage", "materialSweep"]) {
+      expect(component).not.toContain(forbidden);
+      expect(styles).not.toContain(forbidden);
+    }
+    expect(styles).not.toContain("linear-gradient");
   });
 
   it("keeps same-model motion bounded and honors reduced-motion preferences", () => {
     expect(component).toContain("1150");
-    expect(component).toContain("Replay transition");
+    expect(component).toContain(">\n            Replay\n");
+    expect(styles).toContain("animation: materialResolve 1100ms");
+    expect(styles).toContain("animation: previousFade 1100ms");
+    expect(styles).toContain("clip-path: inset(0 100% 0 0)");
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain("animation: none;");
+    expect(styles).toContain("display: none;");
   });
 
   it("labels conceptual status and physical-sample boundary", () => {
     expect(component).toContain("Concept render · physical sample");
     expect(component).toContain("Conceptual — not a completed West Coast KBP project.");
+  });
+
+  it("preserves the frozen public component and resolver API", () => {
+    for (const prop of ["modelId: string", "modelLabel: string", "exterior: string", "palette: string"]) {
+      expect(component).toContain(prop);
+    }
+    expect(component).toMatch(/export function resolveA600ConceptAsset\(\s*modelId: string,\s*exterior: string,\s*palette: string,\s*\): string \| null/);
+  });
+
+  it("uses blue for focus and green only for render status", () => {
+    expect(styles).toContain("var(--studio-accent, #5d8bf4)");
+    expect(styles).toContain(".statusDot");
+    expect(styles).toContain("var(--studio-status, #37d880)");
+    expect(component).toContain('className={styles.statusDot}');
   });
 });

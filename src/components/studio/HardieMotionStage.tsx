@@ -42,6 +42,12 @@ const COLOR_LABELS: Record<ConceptColor, string> = {
   charcoal: "Charcoal concept",
 };
 
+const MODEL_METADATA: Record<string, { code: string; size: string }> = {
+  "studio-450": { code: "A450", size: "450 sq ft" },
+  "one-bed-600": { code: "A600", size: "600 sq ft" },
+  "two-bed-800": { code: "A800", size: "800 sq ft" },
+};
+
 function isConceptFacade(value: string): value is ConceptFacade {
   return value === "lap-siding" || value === "dark-siding";
 }
@@ -112,6 +118,10 @@ export default function HardieMotionStage({
   const selectionLabel = previewAvailable
     ? `${modelLabel} · ${facadeLabel} · ${colorLabel} · White trim concept`
     : `${modelLabel} · matched new-construction concept preview pending`;
+  const modelMetadata = MODEL_METADATA[modelId] ?? {
+    code: modelId.toUpperCase(),
+    size: "Size unavailable",
+  };
 
   function replayTransition() {
     if (!previewAvailable) return;
@@ -150,27 +160,38 @@ export default function HardieMotionStage({
             sizes="(max-width: 960px) 100vw, 69vw"
             className={styles.currentImage}
           />
-          <div className={styles.materialSweep} aria-hidden="true" />
-          <div className={styles.selection} aria-live="polite">
-            <span>{selectionLabel}</span>
-            <small>
-              Concept render · physical sample and local availability verification required
-            </small>
+          <div className={styles.metadataPlate} aria-live="polite">
+            <div className={styles.modelMetadata}>
+              <strong>{modelMetadata.code}</strong>
+              <span aria-hidden="true">·</span>
+              <span>{modelLabel}</span>
+              <span aria-hidden="true">·</span>
+              <span>{modelMetadata.size}</span>
+            </div>
+            <span className={styles.renderStatus}>
+              <span>Concept render</span>
+              <span className={styles.statusDot} aria-hidden="true" />
+            </span>
           </div>
           <button
             type="button"
             className={styles.replayButton}
             onClick={replayTransition}
           >
-            Replay transition
+            Replay
           </button>
-          <div className={styles.materialCaption}>
+          <div className={styles.truthPlate}>
             <span>{materialLabel}</span>
-            <small>1.1 s material resolve</small>
+            <small>
+              Concept render · physical sample and local availability verification required
+            </small>
           </div>
         </>
       ) : (
         <div className={styles.previewPending}>
+          <span className={styles.pendingModel}>
+            {modelMetadata.code} · {modelLabel} · {modelMetadata.size}
+          </span>
           <strong>Matched exterior concept preview pending</strong>
           <span>
             This model stays image-free until a matched new-construction render exists.
