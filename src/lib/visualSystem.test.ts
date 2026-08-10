@@ -446,6 +446,9 @@ describe("portal visual-system regressions", () => {
     expect(studioStylesheet).toContain(".optionButton:disabled,");
     expect(studioStylesheet).toContain("border-style: dashed;");
     expect(studioStylesheet).toMatch(
+      /@media \(max-width: 42rem\) \{[\s\S]*?\.conceptList \{[\s\S]*?display: grid;[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);[\s\S]*?overflow: visible;/,
+    );
+    expect(studioStylesheet).toMatch(
       /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.stageImage,[\s\S]*?\.optionButton,[\s\S]*?\.optionSelected \{\s*transition: none;/,
     );
   });

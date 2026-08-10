@@ -617,9 +617,19 @@
   }
 
   .conceptList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
     margin-top: 1.2rem;
-    overflow-x: auto;
+    overflow: visible;
     padding-bottom: 0.4rem;
+  }
+
+  .conceptCard,
+  .addConcept,
+  .conceptImage {
+    width: 100%;
+    min-width: 0;
   }
 
   .compareButton {
