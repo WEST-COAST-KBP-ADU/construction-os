@@ -1,21 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./HardieMotionStage.module.css";
 
-type HardieFacade = "lap-siding" | "dark-siding";
-type HardieColor = "sage" | "charcoal";
+type ConceptFacade = "lap-siding" | "dark-siding";
+type ConceptColor = "sage" | "charcoal";
 
 type RenderState = {
-  current: string;
+  current: string | null;
   previous: string | null;
   nonce: number;
 };
 
 type HardieMotionStageProps = {
-  fallbackImage: string;
   modelId: string;
   modelLabel: string;
   exterior: string;
@@ -31,43 +30,40 @@ const PREVIEW_ASSETS = {
     sage: "/images/adu-600-hardie-panel-evening-blue-concept-v1.webp",
     charcoal: "/images/adu-600-hardie-panel-iron-gray-concept-v1.webp",
   },
-} as const satisfies Record<HardieFacade, Record<HardieColor, string>>;
+} as const satisfies Record<ConceptFacade, Record<ConceptColor, string>>;
 
-const FACADE_LABELS: Record<HardieFacade, string> = {
-  "lap-siding": "Hardie Plank",
-  "dark-siding": "Hardie Panel",
+const FACADE_LABELS: Record<ConceptFacade, string> = {
+  "lap-siding": "Horizontal lap concept",
+  "dark-siding": "Vertical panel concept",
 };
 
-const COLOR_LABELS: Record<HardieColor, string> = {
-  sage: "Evening Blue",
-  charcoal: "Iron Gray",
+const COLOR_LABELS: Record<ConceptColor, string> = {
+  sage: "Blue concept",
+  charcoal: "Charcoal concept",
 };
 
-function isHardieFacade(value: string): value is HardieFacade {
+function isConceptFacade(value: string): value is ConceptFacade {
   return value === "lap-siding" || value === "dark-siding";
 }
 
-function isHardieColor(value: string): value is HardieColor {
+function isConceptColor(value: string): value is ConceptColor {
   return value === "sage" || value === "charcoal";
 }
 
 export default function HardieMotionStage({
-  fallbackImage,
   modelId,
   modelLabel,
   exterior,
   palette,
 }: HardieMotionStageProps) {
   const previewAvailable =
-    modelId === "one-bed-600" && isHardieFacade(exterior) && isHardieColor(palette);
+    modelId === "one-bed-600" &&
+    isConceptFacade(exterior) &&
+    isConceptColor(palette);
 
-  const resolvedAsset = useMemo(
-    () =>
-      previewAvailable
-        ? PREVIEW_ASSETS[exterior as HardieFacade][palette as HardieColor]
-        : fallbackImage,
-    [exterior, fallbackImage, palette, previewAvailable],
-  );
+  const resolvedAsset = previewAvailable
+    ? PREVIEW_ASSETS[exterior as ConceptFacade][palette as ConceptColor]
+    : null;
 
   const [renderState, setRenderState] = useState<RenderState>({
     current: resolvedAsset,
@@ -76,11 +72,13 @@ export default function HardieMotionStage({
   });
 
   if (renderState.current !== resolvedAsset) {
-    setRenderState((current) => ({
-      current: resolvedAsset,
-      previous: current.current,
-      nonce: current.nonce + 1,
-    }));
+    setRenderState((current) => {
+      return {
+        current: resolvedAsset,
+        previous: resolvedAsset ? current.current : null,
+        nonce: current.nonce + 1,
+      };
+    });
   }
 
   useEffect(() => {
@@ -91,12 +89,19 @@ export default function HardieMotionStage({
     return () => window.clearTimeout(timer);
   }, [renderState.nonce, renderState.previous]);
 
-  const facadeLabel = previewAvailable ? FACADE_LABELS[exterior as HardieFacade] : "Concept exterior";
-  const colorLabel = previewAvailable ? COLOR_LABELS[palette as HardieColor] : "Preview pending";
-  const materialLabel = exterior === "dark-siding" ? "Vertical smooth panel" : "Horizontal lap siding";
+  const facadeLabel = previewAvailable
+    ? FACADE_LABELS[exterior as ConceptFacade]
+    : "Concept exterior";
+  const colorLabel = previewAvailable
+    ? COLOR_LABELS[palette as ConceptColor]
+    : "Preview pending";
+  const materialLabel =
+    exterior === "dark-siding"
+      ? "Vertical panel concept"
+      : "Horizontal lap concept";
   const selectionLabel = previewAvailable
-    ? `${modelLabel} · ${facadeLabel} · ${colorLabel} · Arctic White trim`
-    : `${modelLabel} · matched Hardie render pending`;
+    ? `${modelLabel} · ${facadeLabel} · ${colorLabel} · White trim concept`
+    : `${modelLabel} · matched new-construction concept preview pending`;
 
   function replayTransition() {
     if (!previewAvailable) return;
@@ -115,41 +120,32 @@ export default function HardieMotionStage({
       ].join(" ")}
       aria-label={selectionLabel}
     >
-      {renderState.previous ? (
-        <Image
-          src={renderState.previous}
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 960px) 100vw, 69vw"
-          className={styles.previousImage}
-        />
-      ) : null}
-      <Image
-        key={`${renderState.current}-${renderState.nonce}`}
-        src={renderState.current}
-        alt={`Conceptual exterior view for ${modelLabel}`}
-        fill
-        priority
-        sizes="(max-width: 960px) 100vw, 69vw"
-        className={styles.currentImage}
-      />
-
-      {previewAvailable ? (
+      {previewAvailable && renderState.current ? (
         <>
-          <div className={styles.materialSweep} aria-hidden="true" />
-          <div className={styles.materialLens} aria-hidden="true">
+          {renderState.previous ? (
             <Image
-              src={renderState.current}
+              src={renderState.previous}
               alt=""
               fill
-              sizes="10rem"
-              className={styles.lensImage}
+              sizes="(max-width: 960px) 100vw, 69vw"
+              className={styles.previousImage}
             />
-          </div>
+          ) : null}
+          <Image
+            key={`${renderState.current}-${renderState.nonce}`}
+            src={renderState.current}
+            alt={`Conceptual exterior view for ${modelLabel}`}
+            fill
+            preload
+            sizes="(max-width: 960px) 100vw, 69vw"
+            className={styles.currentImage}
+          />
+          <div className={styles.materialSweep} aria-hidden="true" />
           <div className={styles.selection} aria-live="polite">
             <span>{selectionLabel}</span>
-            <small>Concept render · physical sample required</small>
+            <small>
+              Concept render · physical sample and local availability verification required
+            </small>
           </div>
           <button
             type="button"
@@ -165,7 +161,10 @@ export default function HardieMotionStage({
         </>
       ) : (
         <div className={styles.previewPending}>
-          Matched Hardie visualization is live for the 600 model first.
+          <strong>Matched exterior concept preview pending</strong>
+          <span>
+            This model stays image-free until a matched new-construction render exists.
+          </span>
         </div>
       )}
 

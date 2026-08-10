@@ -1,38 +1,46 @@
-# Design QA — Studio Hardie Motion
+# Design QA — Studio Exterior Concept Motion Remediation
 
 ## Visual truth
 
-- Source: the four exact-state A600 new-construction renders in `public/images/adu-600-hardie-*-concept-v1.webp`.
+- Source: four repository-controlled, exact-state A600 new-construction concept renders. Their existing provenance record remains authoritative; no generated WebP bytes changed in this remediation.
 - Implementation capture: `docs/evidence/studio-hardie-motion-preview-20260810.jpg` at 1348 × 926.
-- Verified route: the Vercel Preview `/studio` deployment for `agent/studio-hardie-motion-001`.
+- Verification target: the exact-head Vercel Preview for the existing `agent/studio-hardie-motion-001` branch and Draft PR #146. The deployment ID, URL, and commit are recorded in Issue #147's `REMEDIATION_RESULT`.
 
-## Side-by-side review
+## Remediation review
 
-- The live stage preserves the source A600 geometry, roofline, openings, landscaping, trim, and lighting.
-- The 16:9 source is intentionally cropped inside the stage; the facade remains the primary focal point and the controls remain visible without hiding the material change.
-- The material label, sample disclaimer, lens detail, replay control, and 1.1 s resolve are legible over all four states.
-- Hardie controls are enabled only when a matched A600 render exists. The 450 and 800 models remain selectable and explain the bounded preview instead of showing a mismatched facade.
+- B-1: public controls, stage copy, selection summaries, and configuration-facing labels use `Horizontal lap concept`, `Vertical panel concept`, `Blue concept`, and `Charcoal concept`. The conceptual-render, physical-sample, and local-availability boundaries remain visible.
+- B-2: a model selection remounts the stage, so A600 media cannot persist or animate underneath A450 or A800.
+- B-3: A450 and A800 use a neutral, image-free pending state. Their comparison entries are image-free as well; no unrelated retrofit/addition media is rendered.
+- B-4: the unverified circular material lens was removed. The four A600 facade/color states remain visibly distinct through the full-stage render.
+- The A600 stage preserves the source geometry, roofline, openings, landscaping, trim, lighting, replay control, and 1.1-second same-model resolve.
+- The mobile replay control and conceptual disclaimer remain separated at the narrow verification viewport.
 
 ## Interaction verification
 
 | Flow | Result |
 | --- | --- |
-| Plank / Evening Blue | Pass — image and deterministic ID update |
-| Panel / Evening Blue | Pass — image and deterministic ID update |
-| Panel / Iron Gray | Pass — image and deterministic ID update |
-| Plank / Iron Gray | Pass — image and deterministic ID update |
-| Replay transition | Pass |
-| 450 and 800 model selection | Pass — Hardie controls disabled with visible explanation |
-| Add current / compare / close | Pass — three concepts rendered in memory |
-| Copy configuration ID | Pass |
-| Browser application warnings or errors | Pass — none from the Preview origin |
+| Horizontal lap concept / Blue concept | Pass — distinct image and deterministic ID update |
+| Horizontal lap concept / Charcoal concept | Pass — distinct image and deterministic ID update |
+| Vertical panel concept / Blue concept | Pass — distinct image and deterministic ID update |
+| Vertical panel concept / Charcoal concept | Pass — distinct image and deterministic ID update |
+| Replay same-model transition | Pass — two-layer resolve starts and settles to one image |
+| A600 → A450 | Pass — immediate image-free pending stage; no cross-model transition |
+| A600 → A800 | Pass — immediate image-free pending stage; no retrofit/addition image |
+| Add current / compare / close | Pass — three in-memory concepts; unmatched thumbnails remain image-free |
+| Copy configuration ID | Pass — browser reports the copy outcome without sending data |
+| Desktop 1440 × 1200 | Pass — no horizontal overflow or application warnings/errors |
+| iPad 768 × 1024 | Pass — no horizontal overflow or application warnings/errors |
+| Mobile 390 × 844 | Pass — no horizontal overflow, overlap, or application warnings/errors |
 
-## Issues and disposition
+## Repository verification
 
-- Resolved: the previous motion concept referenced PNG files that were not deployed, producing broken-image question marks.
-- Resolved: facade and color controls now map to repository-contained WebP assets and visibly change the rendered material.
-- Accepted for this bounded release: matched material motion is available on A600 first; A450 and A800 receive dedicated renders in a later pass.
+- Focused B-1 through B-4 regression coverage: pass.
+- Full Vitest suite: pass.
+- ESLint: pass.
+- TypeScript (`tsc --noEmit`): pass.
+- Next.js production build: pass.
+- Allowlist and generated WebP byte checks: pass.
 
 ## Decision
 
-Pass. The deployed Preview is visually coherent, uses real repository assets, and the core Studio journey is functional.
+Pass. The exact-head Preview is visually coherent, fails closed for unmatched models and ineligible material claims, preserves the bounded A600 motion interaction, and leaves PR #146 Draft.

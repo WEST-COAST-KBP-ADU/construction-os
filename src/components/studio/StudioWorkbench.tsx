@@ -26,15 +26,15 @@ const catalog = catalogData as StudioCatalog;
 const optionLabels: Record<StudioOptionKey, Record<string, string>> = {
   exterior: {
     "stucco-smooth": "Smooth stucco",
-    "lap-siding": "Hardie Plank",
-    "dark-siding": "Hardie Panel",
+    "lap-siding": "Horizontal lap concept",
+    "dark-siding": "Vertical panel concept",
   },
   palette: {
     "warm-white": "Warm white",
     "sand-dune": "Sand dune",
     "soft-clay": "Soft clay",
-    sage: "Evening Blue",
-    charcoal: "Iron Gray",
+    sage: "Blue concept",
+    charcoal: "Charcoal concept",
   },
   roof: {
     gable: "Gable",
@@ -196,8 +196,7 @@ export default function StudioWorkbench() {
     }
   }
 
-  const mainImage = resolveStudioAsset(activeArchetype.geometry_ref);
-  const hardiePreviewAvailable = archetype === "one-bed-600";
+  const conceptPreviewAvailable = archetype === "one-bed-600";
   const hashLabel = candidate ? candidate.config_hash.slice(0, 12).toUpperCase() : "PENDING";
 
   return (
@@ -212,7 +211,7 @@ export default function StudioWorkbench() {
 
       <div className={styles.workbench}>
         <HardieMotionStage
-          fallbackImage={mainImage}
+          key={archetype}
           modelId={archetype}
           modelLabel={activeArchetype.label}
           exterior={selections.exterior}
@@ -251,7 +250,7 @@ export default function StudioWorkbench() {
             );
             const disabledOptions = visibleOptions.filter(
               (value) =>
-                !hardiePreviewAvailable ||
+                !conceptPreviewAvailable ||
                 !evaluateOption(catalog, archetype, selections, key, value).allowed,
             );
 
@@ -262,8 +261,8 @@ export default function StudioWorkbench() {
                   {visibleOptions.map((value) => {
                     const decision = evaluateOption(catalog, archetype, selections, key, value);
                     const isSelected = selections[key] === value;
-                    const reason = !hardiePreviewAvailable
-                      ? "Matched Hardie visualization is available on the 600 model first."
+                    const reason = !conceptPreviewAvailable
+                      ? "Matched exterior concept preview is available on the 600 model first."
                       : decision.allowed
                         ? undefined
                         : reasonLabels[decision.reasonCode];
@@ -278,7 +277,7 @@ export default function StudioWorkbench() {
                         ].join(" ")}
                         aria-label={`${rowLabels[key]}: ${optionLabels[key][value]}${reason ? `. Unavailable: ${reason}` : ""}`}
                         aria-pressed={isSelected}
-                        disabled={!hardiePreviewAvailable || !decision.allowed}
+                        disabled={!conceptPreviewAvailable || !decision.allowed}
                         title={reason}
                         onClick={() => selectOption(key, value)}
                       >
@@ -289,9 +288,9 @@ export default function StudioWorkbench() {
                 </div>
                 {disabledOptions.length > 0 ? (
                   <p className={styles.compatibilityNote}>
-                    {hardiePreviewAvailable
+                    {conceptPreviewAvailable
                       ? "Some choices are unavailable for this configuration."
-                      : "Matched Hardie choices are active on the 600 model first."}
+                      : "Matched exterior concept choices are active on the 600 model first."}
                   </p>
                 ) : null}
               </fieldset>
@@ -309,7 +308,10 @@ export default function StudioWorkbench() {
         <div className={styles.conceptList}>
           {comparisonInputs.map((item, index) => {
             const itemArchetype = catalog.archetypes.find((entry) => entry.id === item.archetype);
-            const image = resolveStudioAsset(itemArchetype?.geometry_ref);
+            const image =
+              item.archetype === "one-bed-600"
+                ? resolveStudioAsset(itemArchetype?.geometry_ref)
+                : null;
             return (
               <button
                 key={`${item.archetype}-${index}`}
@@ -323,7 +325,11 @@ export default function StudioWorkbench() {
               >
                 <span>Concept {String.fromCharCode(65 + index)}</span>
                 <span className={styles.conceptImage}>
-                  <Image src={image} alt="" fill sizes="10rem" />
+                  {image ? (
+                    <Image src={image} alt="" fill sizes="10rem" />
+                  ) : (
+                    <span>Preview pending</span>
+                  )}
                 </span>
               </button>
             );
