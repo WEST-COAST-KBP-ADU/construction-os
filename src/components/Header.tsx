@@ -2,16 +2,41 @@ import Link from "next/link";
 
 import { siteConfig } from "@/src/lib/siteConfig";
 
+const primaryNavigation = [
+  { label: "Models", href: "/models" },
+  { label: "Concept Studio", href: "/studio" },
+  { label: "ADU Process", href: "/process" },
+  { label: "Service Areas", href: "/service-areas" },
+  { label: "About", href: "/about" },
+  { label: "Explore models", href: "/models", cta: true },
+] as const;
+
 function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
   return (
     <ul className={mobile ? "site-nav-mobile__list" : "site-nav__list"}>
-      {siteConfig.nav.map((item) => (
-        <li key={item.href}>
-          <Link href={item.href} className={mobile ? "site-nav-mobile__link" : "site-nav__link"}>
-            {item.label}
-          </Link>
-        </li>
-      ))}
+      {primaryNavigation.map((item) => {
+        const isCta = "cta" in item && item.cta;
+
+        return (
+          <li key={item.label}>
+            <Link
+              href={item.href}
+              className={[
+                mobile ? "site-nav-mobile__link" : "site-nav__link",
+                isCta
+                  ? mobile
+                    ? "site-nav-mobile__link--cta"
+                    : "site-nav__link--cta"
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              {item.label}
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 }

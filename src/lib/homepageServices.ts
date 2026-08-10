@@ -19,6 +19,7 @@ type HomepageServiceSlug = (typeof homepageServiceSlugs)[number];
 type LinkedHomepageServiceDefinition = {
   slug: HomepageServiceSlug;
   description: string;
+  ctaLabel: string;
   icon: HomepageServiceIcon;
 };
 
@@ -27,6 +28,7 @@ export type LinkedHomepageService = {
   slug: HomepageServiceSlug;
   title: string;
   description: string;
+  ctaLabel: string;
   href: `/services/${HomepageServiceSlug}`;
   icon: HomepageServiceIcon;
 };
@@ -47,24 +49,28 @@ const linkedHomepageServiceDefinitions = [
     slug: "detached-adu",
     description:
       "Private, independent living space for family, guests, or multi-generational use.",
+    ctaLabel: "Explore detached ADUs",
     icon: "detached",
   },
   {
     slug: "garage-conversion",
     description:
       "Transform underused space into comfortable, code-conscious living space.",
+    ctaLabel: "Explore garage conversions",
     icon: "garage",
   },
   {
     slug: "attached-adu",
     description:
       "Connected space planned to work with the home's architecture and everyday flow.",
+    ctaLabel: "Explore attached ADUs",
     icon: "attached",
   },
   {
     slug: "jadu",
     description:
       "A compact way to make more useful space within the home you already have.",
+    ctaLabel: "Explore JADUs",
     icon: "jadu",
   },
 ] as const satisfies readonly LinkedHomepageServiceDefinition[];
@@ -77,6 +83,7 @@ const linkedHomepageServices = linkedHomepageServiceDefinitions.map((definition)
     slug: definition.slug,
     title: page.shortTitle,
     description: definition.description,
+    ctaLabel: definition.ctaLabel,
     href: `/services/${definition.slug}`,
     icon: definition.icon,
   } satisfies LinkedHomepageService;

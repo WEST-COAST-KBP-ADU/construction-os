@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import sitemap from "../../app/sitemap";
 import { getServicePage } from "./contentPages";
 import { homepageServices, homepageServiceSlugs } from "./homepageServices";
+import { PUBLIC_MODEL_IDS } from "./publicModelCatalog";
 import { siteConfig } from "./siteConfig";
 
 const page = readFileSync(resolve(process.cwd(), "app/page.tsx"), "utf8");
@@ -23,7 +24,7 @@ const imagePaths = [
   "public/images/balanced-interior-concept-v2.webp",
 ];
 
-describe("TASK-0010 residential homepage", () => {
+describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
   it("uses optimized local images and labels all four as conceptual", () => {
     for (const imagePath of imagePaths) {
       const absolutePath = resolve(process.cwd(), imagePath);
@@ -35,15 +36,35 @@ describe("TASK-0010 residential homepage", () => {
     expect(page).toContain("next/image");
   });
 
-  it("keeps every homepage destination on an existing public route", () => {
-    const hrefs = [...page.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
-    const allowed = new Set(["/services/detached-adu", "/process", "/about"]);
+  it("keeps the required product narrative in the exact decision order", () => {
+    const sectionMarkers = [
+      'aria-labelledby="home-hero-title"',
+      'aria-labelledby="product-planes-title"',
+      'aria-labelledby="owned-models-title"',
+      'aria-labelledby="concept-studio-title"',
+      'aria-labelledby="service-paths-title"',
+      'aria-labelledby="process-title"',
+      'aria-labelledby="service-context-title"',
+      'aria-labelledby="truth-boundary-title"',
+      'aria-labelledby="final-exits-title"',
+    ];
+    const positions = sectionMarkers.map((marker) => page.indexOf(marker));
 
-    expect(hrefs.length).toBeGreaterThan(0);
-    expect(hrefs.every((href) => allowed.has(href))).toBe(true);
+    expect(positions.every((position) => position >= 0)).toBe(true);
+    expect(positions).toEqual([...positions].sort((left, right) => left - right));
   });
 
-  it("binds homepage service cards to the canonical service registry", () => {
+  it("pairs hero controls with their live, named destinations", () => {
+    expect(page).toMatch(
+      /<Link href="\/models" className="button button--light">\s*Explore models/,
+    );
+    expect(page).toMatch(
+      /<Link href="\/studio" className="button button--outline-light">\s*Open Concept Studio/,
+    );
+    expect(page).not.toContain('href="/start"');
+  });
+
+  it("binds homepage service cards to the canonical service registry with specific CTAs", () => {
     const linkedServices = homepageServices.filter((service) => service.kind === "linked");
 
     expect(homepageServiceSlugs).toEqual([
@@ -56,8 +77,14 @@ describe("TASK-0010 residential homepage", () => {
     expect(linkedServices).toHaveLength(4);
     expect(linkedServices.map((service) => service.slug)).toEqual(homepageServiceSlugs);
     expect(linkedServices.map((service) => service.href)).toEqual(
-      homepageServiceSlugs.map((slug) => `/services/${slug}`),
+      homepageServiceSlugs.map((slug) => "/services/" + slug),
     );
+    expect(linkedServices.map((service) => service.ctaLabel)).toEqual([
+      "Explore detached ADUs",
+      "Explore garage conversions",
+      "Explore attached ADUs",
+      "Explore JADUs",
+    ]);
 
     for (const service of linkedServices) {
       expect(service.title).toBe(getServicePage(service.slug).shortTitle);
@@ -87,18 +114,24 @@ describe("TASK-0010 residential homepage", () => {
     expect(residentialAddition.description).toContain("not yet published");
     expect(residentialAddition.description).toContain("pending owner review");
     expect("href" in residentialAddition).toBe(false);
+    expect("ctaLabel" in residentialAddition).toBe(false);
     expect(page).toContain("homepageServices.map");
-
-    const linkedCardRenderings = page.match(
-      /\{service\.kind === "linked" \? \(\s*<Link href=\{service\.href\} className="balanced-link">[\s\S]*?<\/Link>\s*\) : null\}/g,
-    );
-
-    expect(linkedCardRenderings).toHaveLength(1);
+    expect(page).toContain("service.ctaLabel");
+    expect(page).not.toContain("Learn more");
   });
 
   it("keeps service breadcrumbs connected to one homepage anchor", () => {
     expect(page.match(/id="services"/g)).toHaveLength(1);
     expect(servicePageView).toContain('parentHref="/#services"');
+  });
+
+  it("projects the Home model preview from the same validated catalog contract", () => {
+    expect(PUBLIC_MODEL_IDS).toEqual(["adu-s-450", "adu-a-600", "adu-b-800"]);
+    expect(page).toContain("getPublicModelCatalog");
+    expect(page).toContain('<ModelCatalog catalog={catalog} surface="home" />');
+    expect(page).not.toContain("Compact Studio");
+    expect(page).not.toContain("One Bedroom");
+    expect(page).not.toContain("Two Bedroom");
   });
 
   it("publishes the existing Studio route exactly once in the sitemap", () => {
@@ -112,21 +145,27 @@ describe("TASK-0010 residential homepage", () => {
     });
   });
 
-  it("introduces no intake, pricing, schedule, credential, or luxury claim", () => {
+  it("introduces no intake, credential, or luxury claim", () => {
     expect(page).not.toMatch(/<(?:form|input|textarea|select)\b/i);
     expect(page).not.toMatch(/\$\s?\d|\b\d+\s*(?:day|week|month|year)s?\b/i);
     expect(page).not.toMatch(/licensed|insured|award-winning|luxury|resort|mansion/i);
   });
 
-  it("provides a semantic mobile navigation without adding client JavaScript", () => {
-    expect(header).toContain("<details className=\"site-nav-mobile\">");
-    expect(header).toContain("<summary aria-label=\"Open navigation\">");
+  it("uses the pre-release global navigation without adding client JavaScript", () => {
+    expect(header).toContain('{ label: "Models", href: "/models" }');
+    expect(header).toContain('{ label: "Concept Studio", href: "/studio" }');
+    expect(header).toContain('{ label: "ADU Process", href: "/process" }');
+    expect(header).toContain('{ label: "Service Areas", href: "/service-areas" }');
+    expect(header).toContain('{ label: "About", href: "/about" }');
+    expect(header).toContain('{ label: "Explore models", href: "/models", cta: true }');
+    expect(header).toContain('<details className="site-nav-mobile">');
+    expect(header).toContain('<summary aria-label="Open navigation">');
     expect(header).not.toContain('"use client"');
   });
 
-  it("keeps the architectural motion bounded and reduced-motion safe", () => {
-    expect(stylesheet).toContain("@keyframes hero-settle");
+  it("keeps Home motion bounded and reduced-motion safe", () => {
+    expect(stylesheet).toContain(".spine-hero__image");
     expect(stylesheet).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(stylesheet).toMatch(/\.residential-hero__image\s*\{[\s\S]*?animation:\s*none/);
+    expect(stylesheet).toMatch(/\.spine-hero__image\s*\{[\s\S]*?animation:\s*none/);
   });
 });

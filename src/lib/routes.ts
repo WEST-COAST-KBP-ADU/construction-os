@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { servicePages } from "@/src/lib/contentPages";
 import { jurisdictionPages } from "@/src/lib/jurisdictionPages";
+import { PUBLIC_MODEL_IDS } from "@/src/lib/publicModelCatalog";
 
 export const publicRouteJobs = [
   "Acquisition",
@@ -28,8 +29,11 @@ export type PublicRoutePath =
   | "/adu-builder/[jurisdiction]"
   | "/compare"
   | "/faq"
+  | "/models"
+  | "/models/[model]"
   | "/process"
   | "/services/[slug]"
+  | "/service-areas"
   | "/studio";
 
 export type DynamicSegment =
@@ -43,6 +47,10 @@ export type DynamicSegment =
   | {
       readonly source: "jurisdictionPages";
       readonly parameter: "jurisdiction";
+    }
+  | {
+      readonly source: "publicModelCatalog";
+      readonly parameter: "model";
     };
 
 export type PublicRoute = {
@@ -62,7 +70,28 @@ export const publicRouteRegistry = [
     sitemap: { changeFrequency: "weekly", priority: 1 },
   },
   {
+    path: "/models",
+    primaryJob: "Acquisition",
+    publicationState: "published",
+    dynamicSegment: { source: "none" },
+    sitemap: { changeFrequency: "weekly", priority: 0.9 },
+  },
+  {
+    path: "/models/[model]",
+    primaryJob: "Qualification",
+    publicationState: "published",
+    dynamicSegment: { source: "publicModelCatalog", parameter: "model" },
+    sitemap: { changeFrequency: "monthly", priority: 0.8 },
+  },
+  {
     path: "/studio",
+    primaryJob: "Qualification",
+    publicationState: "published",
+    dynamicSegment: { source: "none" },
+    sitemap: { changeFrequency: "monthly", priority: 0.8 },
+  },
+  {
+    path: "/service-areas",
     primaryJob: "Qualification",
     publicationState: "published",
     dynamicSegment: { source: "none" },
@@ -122,6 +151,7 @@ type DynamicRouteData = {
 const dynamicRouteData = {
   servicePages,
   jurisdictionPages,
+  publicModelCatalog: PUBLIC_MODEL_IDS.map((slug) => ({ slug })),
 } as const satisfies Record<
   Exclude<DynamicSegment["source"], "none">,
   readonly DynamicRouteData[]
