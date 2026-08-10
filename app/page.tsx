@@ -18,38 +18,37 @@ export default async function Home() {
       />
 
       <section className="spine-hero" aria-labelledby="home-hero-title">
-        <Image
-          src="/images/balanced-adu-hero-concept-v2.webp"
-          alt="Conceptual image of a detached ADU beside an established California home"
-          fill
-          priority
-          sizes="100vw"
-          className="spine-hero__image"
-        />
-        <div className="spine-hero__shade" aria-hidden="true" />
-        <div className="portal-container spine-hero__inner">
-          <div className="spine-hero__copy">
-            <p className="spine-kicker spine-kicker--light">Pre-release product preview</p>
-            <h1 id="home-hero-title">
-              Start with an owned ADU model—not an assumption about a property.
-            </h1>
-            <p className="spine-hero__lede">
-              Explore a coherent concept family, keep property context separate, and reserve
-              consequential decisions for human review.
-            </p>
-            <div className="spine-actions">
-              <Link href="/models" className="button button--light">
-                Explore models
-              </Link>
-              <Link href="/studio" className="button button--outline-light">
-                Open Concept Studio
-              </Link>
-            </div>
-          </div>
-          <p className="spine-hero__caption">
-            Conceptual imagery—not a completed West Coast KBP project, property, or approved plan.
+        <div className="spine-hero__copy">
+          <p className="spine-kicker">Pre-release product preview</p>
+          <h1 id="home-hero-title">Your ADU, designed around real choices.</h1>
+          <p className="spine-hero__lede">
+            Explore proven models, materials, and site constraints before the first estimate.
           </p>
+          <div className="spine-actions">
+            <Link href="/models" className="button button--primary">
+              Explore models
+            </Link>
+            <Link href="/studio" className="button button--secondary">
+              Open Concept Studio
+            </Link>
+          </div>
         </div>
+        <figure className="spine-hero__media">
+          <div className="spine-hero__picture">
+            <Image
+              src="/images/homepage-gabled-adu-concept-v1.webp"
+              alt="Concept visualization of a one-story offset double-gable ADU with a covered wood entry and new landscaping at sunset"
+              fill
+              preload
+              sizes="(max-width: 63.99rem) 100vw, 60vw"
+              className="spine-hero__image"
+            />
+          </div>
+          <figcaption className="spine-hero__caption">
+            Concept visualization—not a completed West Coast KBP project, catalog-model-matched
+            rendering, property, or approved plan.
+          </figcaption>
+        </figure>
       </section>
 
       <section className="spine-section" aria-labelledby="product-planes-title">

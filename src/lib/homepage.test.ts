@@ -18,11 +18,17 @@ const servicePageView = readFileSync(
 );
 
 const imagePaths = [
-  "public/images/balanced-adu-hero-concept-v2.webp",
+  "public/images/homepage-gabled-adu-concept-v1.webp",
   "public/images/balanced-residential-addition-concept-v2.webp",
   "public/images/balanced-process-materials-concept-v2.webp",
   "public/images/balanced-interior-concept-v2.webp",
 ];
+
+const hero = page.slice(
+  page.indexOf('<section className="spine-hero"'),
+  page.indexOf('<section className="spine-section"'),
+);
+const normalizedHero = hero.replace(/\s+/g, " ");
 
 describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
   it("uses optimized local images and labels all four as conceptual", () => {
@@ -32,8 +38,40 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
       expect(statSync(absolutePath).size).toBeLessThan(400_000);
     }
 
-    expect(page.match(/Conceptual imagery/g)).toHaveLength(4);
+    expect(page.match(/<figcaption/g)).toHaveLength(4);
     expect(page).toContain("next/image");
+  });
+
+  it("pins the selected gabled hero asset and exact concept-safe public copy", () => {
+    expect(hero).toContain('src="/images/homepage-gabled-adu-concept-v1.webp"');
+    expect(hero).not.toContain("balanced-adu-hero-concept-v2.webp");
+    expect(page).not.toContain('src="/images/balanced-adu-hero-concept-v2.webp"');
+    expect(hero).toContain("Pre-release product preview");
+    expect(hero).toContain("Your ADU, designed around real choices.");
+    expect(hero).toContain(
+      "Explore proven models, materials, and site constraints before the first estimate.",
+    );
+    expect(normalizedHero).toContain(
+      "Concept visualization—not a completed West Coast KBP project, catalog-model-matched rendering, property, or approved plan.",
+    );
+    expect(hero).not.toMatch(
+      /James Hardie|\bHardie\b|A450|A600|A800|completed project|customer property/i,
+    );
+  });
+
+  it("keeps the hero an unoverlaid editorial split that recomposes image-first", () => {
+    expect(hero).toContain('className="spine-hero__copy"');
+    expect(hero).toContain('className="spine-hero__media"');
+    expect(hero).not.toContain("spine-hero__shade");
+    expect(hero).not.toMatch(/scrim|gradient|overlay/i);
+    expect(stylesheet).toMatch(
+      /\.spine-hero\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 2fr\) minmax\(0, 3fr\)/,
+    );
+    expect(stylesheet).toMatch(
+      /@media \(max-width: 63\.99rem\)[\s\S]*?\.spine-hero__media\s*\{[\s\S]*?grid-row:\s*1/,
+    );
+    expect(hero).toContain("preload");
+    expect(hero).not.toContain("priority");
   });
 
   it("keeps the required product narrative in the exact decision order", () => {
@@ -56,10 +94,10 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
 
   it("pairs hero controls with their live, named destinations", () => {
     expect(page).toMatch(
-      /<Link href="\/models" className="button button--light">\s*Explore models/,
+      /<Link href="\/models" className="button button--primary">\s*Explore models/,
     );
     expect(page).toMatch(
-      /<Link href="\/studio" className="button button--outline-light">\s*Open Concept Studio/,
+      /<Link href="\/studio" className="button button--secondary">\s*Open Concept Studio/,
     );
     expect(page).not.toContain('href="/start"');
   });
@@ -165,7 +203,12 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
 
   it("keeps Home motion bounded and reduced-motion safe", () => {
     expect(stylesheet).toContain(".spine-hero__image");
+    expect(stylesheet).toMatch(
+      /\.spine-hero__image\s*\{[\s\S]*?animation:\s*spine-image-settle 1\.4s[^;]*both/,
+    );
     expect(stylesheet).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(stylesheet).toMatch(/\.spine-hero__image\s*\{[\s\S]*?animation:\s*none/);
+    expect(stylesheet).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.spine-hero__image\s*\{\s*animation:\s*none/,
+    );
   });
 });
