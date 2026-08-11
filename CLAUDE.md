@@ -26,9 +26,17 @@ Product 1 boundary, the truth ranking — by pointing at the records that govern
 each, and it carries no current packet, SHA, queue position, or board occupancy.
 Everything mutable is rehydrated from live GitHub into a deterministic
 `COLD_START_RESULT/v1`: the exact current `mainSha`, the live queue, the Owner
-gate, the latest exact-head review, the `M1`/`M2`/`R1` board, the discrepancies
-against the committed index, exactly one next executable action, and every named
-gap. See `governance/memory/README.md` for the rebuild command.
+gate, the latest exact-head review, the `P1`/`P2`/`W1` lane board, the
+discrepancies against the committed index, exactly one next executable action,
+and every named gap. See `governance/memory/README.md` for the rebuild command.
+
+That board carries exactly three permanent lanes — `P1` Product 2, `P2`
+Product 2, and `W1` workflow, graph memory, cold start, and orchestration.
+Lane is permanent; mutation versus independent read-only review is the lane's
+current `activityMode`, not a lane identity, so a review of a product head
+occupies `P1` or `P2` and a review of a workflow head occupies `W1`. A released
+lane is refilled from eligible work in that same lane. Which work sits in which
+lane is live GitHub state, rehydrated on every cold start, never recorded here.
 
 The read order below is what that entry routes you through. Follow it after the
 cold start, not instead of it.

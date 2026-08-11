@@ -11,10 +11,16 @@ Before anything else in this repository, read
 
 It is the one canonical cold start. It tells a session with no chat history who
 holds authority, what Product 2 is and where the Product 1 boundary lies, how to
-rebuild the live queue and the `M1`/`M2`/`R1` board from GitHub rather than from
-memory, and which single control-plane action is executable next. It routes on
-to `governance/BOUNDARIES.md`, the operating model, the program plan, and the
+rebuild the live queue and the `P1`/`P2`/`W1` lane board from GitHub rather than
+from memory, and which single control-plane action is executable next. It routes
+on to `governance/BOUNDARIES.md`, the operating model, the program plan, and the
 control plane in the order a fresh session needs them.
+
+The board's three lanes are permanent: `P1` and `P2` each advance Product 2, and
+`W1` advances the engineering workflow, graph memory, cold start, and
+orchestration. Mutation versus independent read-only review is a lane's current
+`activityMode`, never a lane identity — a review of a product head occupies `P1`
+or `P2`, and a review of a workflow head occupies `W1`.
 
 Chat, terminal scrollback, and model memory are not durable state. Neither is
 the committed queue index — re-read live GitHub before dispatching, reviewing,
