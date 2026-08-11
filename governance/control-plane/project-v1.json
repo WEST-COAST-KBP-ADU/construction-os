@@ -1,0 +1,137 @@
+{
+  "schema": "kbp.control-plane.project/v1",
+  "version": 1,
+  "packet": "GITHUB-NATIVE-CONTROL-PLANE-001",
+  "organization": "WEST-COAST-KBP-ADU",
+  "repository": "WEST-COAST-KBP-ADU/construction-os",
+  "target": {
+    "preferredExistingProjectNumber": 7,
+    "fallbackTitle": "KBP ADU Product Program",
+    "linkedRepositories": ["WEST-COAST-KBP-ADU/construction-os"],
+    "resolution": [
+      {
+        "condition": "project number 7 exists, is owned by WEST-COAST-KBP-ADU, and is linked to WEST-COAST-KBP-ADU/construction-os",
+        "action": "reconcile only the declared fields and options; create nothing"
+      },
+      {
+        "condition": "project number 7 does not exist",
+        "action": "create exactly one organization project titled 'KBP ADU Product Program', link only WEST-COAST-KBP-ADU/construction-os, and record its number and URL"
+      },
+      {
+        "condition": "project number 7 exists but is unrelated, ambiguous, or inaccessible",
+        "action": "stop BLOCKED — PROJECT TARGET OR AUTHORIZATION; create no duplicate project"
+      }
+    ]
+  },
+  "authority": {
+    "role": "derived dispatch and control view",
+    "evidenceTruth": [
+      "merged repository bytes on main",
+      "GitHub Issue and pull request data",
+      "exact commit SHAs",
+      "check runs and workflow run artifacts",
+      "submitted reviews pinned to an exact head"
+    ],
+    "acceptance": "No project field expresses or implies Owner acceptance. Owner Decision records only what the Owner has already stated on the Issue.",
+    "reconciliationMode": "create-or-update-declared-only",
+    "unmanagedFields": "leave-untouched",
+    "deletion": "never",
+    "archiveOrCloseHistoricalItems": "prohibited",
+    "automation": "none. No workflow, action, or integration writes to this project."
+  },
+  "builtInFields": {
+    "retained": ["Title", "Assignees"],
+    "note": "Retained as GitHub provides them. Not redefined by this manifest."
+  },
+  "fields": [
+    {
+      "name": "Workflow State",
+      "type": "single-select",
+      "options": [
+        "Ready",
+        "Dispatched",
+        "Active",
+        "Result",
+        "Review",
+        "Owner gate",
+        "Blocked",
+        "Done",
+        "Superseded"
+      ],
+      "derivedFrom": "state: label category",
+      "description": "Lifecycle position mirrored from the Issue state label. Never a substitute for it."
+    },
+    {
+      "name": "Gate",
+      "type": "single-select",
+      "options": [
+        "Control plane",
+        "G0",
+        "G1",
+        "G2A",
+        "G2B",
+        "G2C",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "Later"
+      ],
+      "derivedFrom": "gate: label category",
+      "description": "Program stage gate per PROGRAM-PLAN-v1.md."
+    },
+    {
+      "name": "Worker",
+      "type": "single-select",
+      "options": ["Opus", "Codex", "None"],
+      "derivedFrom": "worker: label category",
+      "description": "Named executor engagement lane. Setting it launches nothing."
+    },
+    {
+      "name": "Mode",
+      "type": "single-select",
+      "options": ["Mutation", "Read-only"],
+      "derivedFrom": "mode: label category",
+      "description": "Whether the packet may author repository bytes."
+    },
+    {
+      "name": "Domain",
+      "type": "text",
+      "derivedFrom": "domain: label category",
+      "description": "Exact primary domain label name, for example domain:github-control-plane."
+    },
+    {
+      "name": "Base SHA",
+      "type": "text",
+      "format": "^[0-9a-f]{40}$",
+      "description": "Full 40-hex pinned base commit. Never a branch name."
+    },
+    {
+      "name": "Head SHA",
+      "type": "text",
+      "format": "^([0-9a-f]{40})?$",
+      "description": "Full 40-hex exact head, or blank before RESULT. A new head invalidates any earlier review."
+    },
+    {
+      "name": "Evidence URL",
+      "type": "text",
+      "description": "One durable Issue, pull request, check run, or workflow run URL. Not a chat or terminal transcript."
+    },
+    {
+      "name": "Owner Decision",
+      "type": "single-select",
+      "options": ["Not required", "Pending", "Accepted", "Rejected"],
+      "description": "Records an Owner statement already made on the Issue. Never set by a worker, a reviewer, an action, or an integration."
+    }
+  ],
+  "itemsAddedByThisPacket": [
+    {
+      "issue": 168,
+      "justification": "closed replacement exact-head review of PR #163; fields set only from live Issue evidence"
+    },
+    {
+      "issue": 169,
+      "justification": "this control-plane packet; fields set only from live Issue evidence"
+    }
+  ]
+}

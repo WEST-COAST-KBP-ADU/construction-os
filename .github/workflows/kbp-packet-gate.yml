@@ -1,0 +1,66 @@
+name: KBP Packet Gate
+
+# Validation only. This workflow reads state and reports a verdict.
+#
+# It never comments, labels, assigns, closes, merges, approves, deploys,
+# mutates a project field, reads a secret, calls a model or any external API,
+# triggers another workflow, or launches an AI worker. Every permission below is
+# read. Every third-party action is pinned to a full immutable commit SHA whose
+# provenance is recorded in governance/control-plane/README.md.
+#
+# Worker launch is a manual act by the Owner in a fresh visible session.
+
+on:
+  issues:
+    types: [opened, edited, reopened, labeled, unlabeled]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - ready_for_review
+      - converted_to_draft
+      - labeled
+      - unlabeled
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: >-
+    kbp-packet-gate-${{ github.event.issue.number
+    || github.event.pull_request.number
+    || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  packet-gate:
+    name: KBP Packet Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      # actions/checkout v5.0.0
+      - name: Check out the control-plane sources
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          persist-credentials: false
+
+      # actions/setup-node v4.4.0
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+
+      - name: Validate the control plane
+        env:
+          KBP_EVENT_NAME: ${{ github.event_name }}
+          KBP_EVENT_PATH: ${{ github.event_path }}
+        run: node tools/control-plane/packet-gate.mjs --event-name "$KBP_EVENT_NAME" --event "$KBP_EVENT_PATH" --repo-root .

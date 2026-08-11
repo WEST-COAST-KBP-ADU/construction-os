@@ -1,0 +1,334 @@
+{
+  "schema": "kbp.control-plane.labels/v1",
+  "version": 1,
+  "packet": "GITHUB-NATIVE-CONTROL-PLANE-001",
+  "repository": "WEST-COAST-KBP-ADU/construction-os",
+  "authority": {
+    "sourceOfTruth": "This manifest declares the exact managed label set. Live GitHub labels are reconciled to it, never the reverse.",
+    "reconciliationMode": "create-or-update-declared-only",
+    "unmanagedLabels": "leave-untouched",
+    "deletion": "never",
+    "renaming": "never",
+    "bulkRelabelOfHistoricalIssues": "prohibited",
+    "acceptance": "A label records an observable transition. No label expresses Owner acceptance."
+  },
+  "categories": [
+    {
+      "id": "state",
+      "prefix": "state:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every-active-issue",
+      "description": "Lifecycle position of the packet. Exactly one per active Issue.",
+      "setBy": "coordinator",
+      "activeStates": [
+        "state:dispatched",
+        "state:active",
+        "state:result",
+        "state:review",
+        "state:owner-gate",
+        "state:blocked"
+      ],
+      "terminalStates": ["state:done", "state:superseded"]
+    },
+    {
+      "id": "worker",
+      "prefix": "worker:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every-active-issue",
+      "description": "Named executor engagement lane. Exactly one per active Issue.",
+      "setBy": "coordinator"
+    },
+    {
+      "id": "mode",
+      "prefix": "mode:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every-active-issue",
+      "description": "Whether the packet may author repository bytes. Exactly one per active Issue.",
+      "setBy": "coordinator"
+    },
+    {
+      "id": "kind",
+      "prefix": "kind:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every-active-issue",
+      "description": "Category of bounded outcome. Exactly one per active Issue.",
+      "setBy": "coordinator"
+    },
+    {
+      "id": "gate",
+      "prefix": "gate:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every-active-issue",
+      "description": "Program stage gate the packet belongs to, per PROGRAM-PLAN-v1.md. Exactly one per active Issue.",
+      "setBy": "coordinator"
+    },
+    {
+      "id": "domain",
+      "prefix": "domain:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every-active-issue",
+      "description": "Primary exclusive lease domain held for the life of the packet. Exactly one per active Issue.",
+      "setBy": "coordinator"
+    }
+  ],
+  "labels": [
+    {
+      "name": "state:ready",
+      "color": "0e8a16",
+      "description": "Definition of Ready satisfied. Not dispatched. No worker running.",
+      "category": "state"
+    },
+    {
+      "name": "state:dispatched",
+      "color": "1d76db",
+      "description": "Packet published. Dispatch alone changes no repository byte and starts no worker.",
+      "category": "state"
+    },
+    {
+      "name": "state:active",
+      "color": "0052cc",
+      "description": "A worker posted STARTED evidence: real session, clone, branch, exact base.",
+      "category": "state"
+    },
+    {
+      "name": "state:result",
+      "color": "5319e7",
+      "description": "Worker posted RESULT at an exact head with commands, changed paths, Draft PR, residual risk.",
+      "category": "state"
+    },
+    {
+      "name": "state:review",
+      "color": "a2eeef",
+      "description": "Non-author independent review requested or in progress at one exact head SHA.",
+      "category": "state"
+    },
+    {
+      "name": "state:owner-gate",
+      "color": "d93f0b",
+      "description": "Evidence assembled and pinned. Awaiting the Owner decision. Not an approval.",
+      "category": "state"
+    },
+    {
+      "name": "state:blocked",
+      "color": "b60205",
+      "description": "Fail-closed stop at an exact failed precondition. Completed work preserved.",
+      "category": "state"
+    },
+    {
+      "name": "state:done",
+      "color": "2ea043",
+      "description": "Terminal. Merge or adoption verified from the authoritative surface and recorded.",
+      "category": "state"
+    },
+    {
+      "name": "state:superseded",
+      "color": "6a737d",
+      "description": "Terminal. Replaced by a later packet, with the successor named in the closing comment.",
+      "category": "state"
+    },
+    {
+      "name": "worker:opus",
+      "color": "c5def5",
+      "description": "Executor lane: one bounded Claude Code / Opus 5 terminal engagement.",
+      "category": "worker"
+    },
+    {
+      "name": "worker:codex",
+      "color": "bfd4f2",
+      "description": "Executor lane: one bounded Codex terminal engagement.",
+      "category": "worker"
+    },
+    {
+      "name": "worker:none",
+      "color": "d4d4d4",
+      "description": "No executor engagement. Coordination, decision preparation, or Owner-only work.",
+      "category": "worker"
+    },
+    {
+      "name": "mode:mutation",
+      "color": "e99695",
+      "description": "Authors repository bytes. Requires exactly one branch and one Draft PR.",
+      "category": "mode"
+    },
+    {
+      "name": "mode:read-only",
+      "color": "c2e0c6",
+      "description": "Authors no repository byte. Holds no file or domain lease.",
+      "category": "mode"
+    },
+    {
+      "name": "kind:implementation",
+      "color": "fbca04",
+      "description": "Bounded product, platform, or pipeline implementation.",
+      "category": "kind"
+    },
+    {
+      "name": "kind:decision",
+      "color": "f9d0c4",
+      "description": "Decision preparation. Implements nothing and adopts nothing.",
+      "category": "kind"
+    },
+    {
+      "name": "kind:review",
+      "color": "d4c5f9",
+      "description": "Read-only non-author review pinned to one exact head SHA.",
+      "category": "kind"
+    },
+    {
+      "name": "kind:remediation",
+      "color": "f7c6c7",
+      "description": "Bounded closure of named blocking findings from a prior exact-head review.",
+      "category": "kind"
+    },
+    {
+      "name": "kind:infrastructure",
+      "color": "fef2c0",
+      "description": "Governance, control-plane, or repository infrastructure. No product surface.",
+      "category": "kind"
+    },
+    {
+      "name": "kind:research",
+      "color": "e4e669",
+      "description": "Research Gate output. Zero authority until adopted in a decision record.",
+      "category": "kind"
+    },
+    {
+      "name": "gate:control-plane",
+      "color": "006b75",
+      "description": "Coordination and control-plane infrastructure. Outside the numbered program stages.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g0",
+      "color": "0a7d84",
+      "description": "Stage 0 — PROGRAM RESET.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g1",
+      "color": "108b91",
+      "description": "Stage 1 — PRODUCT / EXPERIENCE DEFINITION.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g2a",
+      "color": "16999e",
+      "description": "Stage 2A — VISUAL TARGET.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g2b",
+      "color": "1ca7ab",
+      "description": "Stage 2B — A600 MODEL / ASSET READINESS.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g2c",
+      "color": "22b5b8",
+      "description": "Stage 2C — PLATFORM / QUALITY ARCHITECTURE.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g3",
+      "color": "2cc3c5",
+      "description": "Stage 3 — SHARED ENGINEERING FOUNDATION.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g4",
+      "color": "44cdcf",
+      "description": "Stage 4 — DETERMINISTIC A600 ASSET PIPELINE.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g5",
+      "color": "5cd7d9",
+      "description": "Stage 5 — PRODUCT VERTICALS.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:g6",
+      "color": "74e1e3",
+      "description": "Stage 6 — RELEASE 1.",
+      "category": "gate"
+    },
+    {
+      "name": "gate:later",
+      "color": "bfdadc",
+      "description": "Stage 7 or later. Not open. Not dispatchable at the current stage.",
+      "category": "gate"
+    },
+    {
+      "name": "domain:governance",
+      "color": "5319e7",
+      "description": "Primary lease: governance records outside governance/control-plane.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:github-control-plane",
+      "color": "1d76db",
+      "description": "Primary lease: .github, governance/control-plane, tools/control-plane.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:product-definition",
+      "color": "0e8a16",
+      "description": "Primary lease: product and experience definition records.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:visual-target",
+      "color": "d93f0b",
+      "description": "Primary lease: visual target contract and reference surfaces.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:asset-readiness",
+      "color": "e99695",
+      "description": "Primary lease: A600 model and asset readiness surfaces.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:platform-quality",
+      "color": "fbca04",
+      "description": "Primary lease: platform and quality architecture surfaces.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:engineering-foundation",
+      "color": "006b75",
+      "description": "Primary lease: shared engineering foundation, tokens, layout, and navigation.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:a600-pipeline",
+      "color": "b60205",
+      "description": "Primary lease: deterministic A600 asset pipeline surfaces.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:product-vertical",
+      "color": "c5def5",
+      "description": "Primary lease: one product vertical surface.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:release",
+      "color": "2ea043",
+      "description": "Primary lease: Release 1 integration and release surfaces.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:reception",
+      "color": "f9d0c4",
+      "description": "Primary lease: reception and memory surfaces.",
+      "category": "domain"
+    },
+    {
+      "name": "domain:catalog",
+      "color": "bfd4f2",
+      "description": "Primary lease: catalog expansion surfaces.",
+      "category": "domain"
+    }
+  ]
+}
