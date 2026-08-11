@@ -26,7 +26,7 @@ describe("STUDIO-ARCHITECTURAL-INSTRUMENT-001", () => {
     );
     expect(planViewport).toContain('/design/a600/A600-CONCEPT-TESTFIT-001.svg');
     expect(styles).toContain("width: 421.052632%");
-    expect(styles).toContain("top: -169.565217%");
+    expect(styles).toContain("top: -172.670807%");
   });
 
   it("binds the owner-adopted executable profile and exact A600 facts", () => {

@@ -26,6 +26,8 @@ const PREVIEW_ASSETS = {
   },
 } as const satisfies Record<ConceptFacade, Record<ConceptColor, string>>;
 
+const PRELOAD_ASSETS = Object.values(PREVIEW_ASSETS).flatMap((facade) => Object.values(facade));
+
 const FACADE_LABELS: Record<ConceptFacade, string> = {
   "lap-siding": "Horizontal lap",
   "dark-siding": "Vertical panel",
@@ -76,6 +78,11 @@ export default function HardieMotionStage({
 
   return (
     <figure className={styles.stage} aria-label={`${modelLabel} · ${facadeLabel} · ${colorLabel}`}>
+      <span className={styles.assetPreloader} aria-hidden="true">
+        {PRELOAD_ASSETS.filter((asset) => asset !== resolvedAsset).map((asset) => (
+          <Image key={asset} src={asset} alt="" width={1} height={1} loading="eager" unoptimized />
+        ))}
+      </span>
       <div className={styles.imageSurface}>
         <div className={styles.imageViewport}>
           <AnimatePresence initial={false} mode="sync">

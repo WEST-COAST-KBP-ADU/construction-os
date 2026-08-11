@@ -1,7 +1,17 @@
 .stage {
+  position: relative;
   margin: 0;
   color: var(--studio-ink);
   background: var(--studio-black);
+}
+
+.assetPreloader {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  pointer-events: none;
 }
 
 .imageSurface {

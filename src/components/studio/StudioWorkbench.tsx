@@ -317,8 +317,8 @@ export default function StudioWorkbench() {
               <aside className={styles.controls} aria-labelledby="controls-title">
                 <div className={styles.controlsHeader}>
                   <p>MODEL / A600</p>
-                  <h2 id="controls-title">Exterior study</h2>
-                  <span>Two facade diagrams × two color studies. Render source remains unchanged.</span>
+                  <h2 id="controls-title">A600 study controls</h2>
+                  <span>Facade state persists across all three working views. Render source remains unchanged.</span>
                 </div>
 
                 {optionKeys.map((key) => (

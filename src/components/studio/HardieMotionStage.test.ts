@@ -36,6 +36,8 @@ describe("A600 source render viewport", () => {
     expect(styles).toContain("aspect-ratio: 1672 / 941");
     expect(styles).toContain("object-fit: contain");
     expect(styles).not.toContain("object-fit: cover");
+    expect(component).toContain("PRELOAD_ASSETS");
+    expect(component).toContain('loading="eager"');
   });
 
   it("uses bounded Motion primitives and honors reduced motion", () => {
