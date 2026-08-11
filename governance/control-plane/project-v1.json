@@ -1,0 +1,144 @@
+{
+  "schema": "kbp.control-plane.project/v1",
+  "organization": "WEST-COAST-KBP-ADU",
+  "repository": "WEST-COAST-KBP-ADU/construction-os",
+  "preferredExistingProjectNumber": 7,
+  "fallbackTitle": "KBP ADU Product Program",
+  "linkedRepositories": [
+    "WEST-COAST-KBP-ADU/construction-os"
+  ],
+  "builtInFieldsRetained": [
+    "Title",
+    "Assignees"
+  ],
+  "reconciliation": {
+    "mode": "reconcile-declared-fields-only",
+    "ifPreferredNumberExistsAndMatches": "reconcile only the declared fields and options",
+    "ifPreferredNumberAbsent": "create exactly one organization Project titled KBP ADU Product Program, link only the declared repository, record its number and URL",
+    "ifPreferredNumberUnrelatedAmbiguousOrInaccessible": "stop BLOCKED — PROJECT TARGET OR AUTHORIZATION; do not create a duplicate",
+    "undeclaredFields": "leave-untouched",
+    "destructiveOperations": "prohibited"
+  },
+  "authority": {
+    "derivedView": true,
+    "evidenceTruth": [
+      "merged repository bytes",
+      "Issue and pull request data",
+      "exact commit SHAs",
+      "check runs",
+      "submitted reviews",
+      "workflow run artifacts"
+    ],
+    "statement": "This Project is a derived dispatch and control view. No Project field value constitutes Owner acceptance, engineering approval, certification, or merge authority. When a Project field and the underlying evidence disagree, the evidence wins and the divergence is reported, not silently resolved."
+  },
+  "fields": [
+    {
+      "name": "Workflow State",
+      "type": "single-select",
+      "options": [
+        "Ready",
+        "Dispatched",
+        "Active",
+        "Result",
+        "Review",
+        "Owner gate",
+        "Blocked",
+        "Done",
+        "Superseded"
+      ],
+      "derivedFrom": "the single state: label on the Issue",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Gate",
+      "type": "single-select",
+      "options": [
+        "Control plane",
+        "G0",
+        "G1",
+        "G2A",
+        "G2B",
+        "G2C",
+        "G3",
+        "G4",
+        "G5",
+        "G6",
+        "Later"
+      ],
+      "derivedFrom": "the single gate: label on the Issue",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Worker",
+      "type": "single-select",
+      "options": [
+        "Opus",
+        "Codex",
+        "None"
+      ],
+      "derivedFrom": "the single worker: label on the Issue",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Mode",
+      "type": "single-select",
+      "options": [
+        "Mutation",
+        "Read-only"
+      ],
+      "derivedFrom": "the single mode: label on the Issue",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Domain",
+      "type": "text",
+      "contentRule": "the exact primary domain label, for example domain:github-control-plane",
+      "derivedFrom": "the single domain: label on the Issue",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Base SHA",
+      "type": "text",
+      "contentRule": "full 40-character lowercase hexadecimal commit SHA",
+      "derivedFrom": "the packet pinned base",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Head SHA",
+      "type": "text",
+      "contentRule": "full 40-character lowercase hexadecimal commit SHA, or blank before RESULT",
+      "derivedFrom": "the exact head published in RESULT",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Evidence URL",
+      "type": "text",
+      "contentRule": "one durable Issue, pull request, check run, or workflow run URL",
+      "derivedFrom": "the durable artifact that proves the current state",
+      "impliesAcceptance": false
+    },
+    {
+      "name": "Owner Decision",
+      "type": "single-select",
+      "options": [
+        "Not required",
+        "Pending",
+        "Accepted",
+        "Rejected"
+      ],
+      "derivedFrom": "an explicit persisted Owner comment",
+      "impliesAcceptance": false,
+      "note": "Accepted records that an Owner decision exists and points to it. It is an index of that comment, never a substitute for it, and no session may set it on the Owner's behalf."
+    }
+  ],
+  "itemPolicy": {
+    "addedItems": "Issues governed by this control plane",
+    "fieldValues": "set only from live evidence",
+    "prohibited": [
+      "deleting, renaming, archiving, or closing historical Issues or pull requests",
+      "bulk relabelling",
+      "setting Owner Decision without a persisted Owner comment",
+      "any Project field mutation performed by a GitHub Action"
+    ]
+  }
+}
