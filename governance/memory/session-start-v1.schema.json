@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/WEST-COAST-KBP-ADU/construction-os/governance/memory/session-start-v1.schema.json",
+  "title": "Construction OS deterministic cold-start projection v1",
+  "description": "Normalized COLD_START_RESULT/v1. Derived from authoritative GitHub evidence and the graph-source-truth/v1 projection. Carries no approval, acceptance, merge, dispatch, or worker-launch authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "repository",
+    "watermark",
+    "sources",
+    "productBoundary",
+    "program",
+    "workItems",
+    "reviews",
+    "ownerGate",
+    "integration",
+    "board",
+    "laneAllocation",
+    "graph",
+    "discrepancies",
+    "namedGaps",
+    "nextAction",
+    "refillLoop"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "cold-start-result/v1" },
+    "repository": { "$ref": "#/$defs/repository" },
+    "watermark": { "$ref": "#/$defs/watermark" },
+    "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } },
+    "productBoundary": { "$ref": "#/$defs/productBoundary" },
+    "program": { "$ref": "#/$defs/program" },
+    "workItems": { "type": "array", "items": { "$ref": "#/$defs/workItem" } },
+    "reviews": { "type": "array", "items": { "$ref": "#/$defs/review" } },
+    "ownerGate": { "$ref": "#/$defs/ownerGate" },
+    "integration": { "$ref": "#/$defs/integration" },
+    "board": { "$ref": "#/$defs/board" },
+    "laneAllocation": { "$ref": "#/$defs/laneAllocation" },
+    "graph": { "$ref": "#/$defs/graphFacts" },
+    "discrepancies": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "namedGaps": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "nextAction": { "$ref": "#/$defs/nextAction" },
+    "refillLoop": { "type": "array", "minItems": 12, "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "lane": {
+      "description": "The permanent lane of a slot or a WorkItem. Product 2 advancement, or workflow/graph-memory/orchestration/control-plane/engineering-workflow advancement.",
+      "enum": ["product", "workflow"]
+    },
+    "worker": {
+      "description": "Canonical engagement identity. Worker-N always equals Issue #N. A slot label, branch, pull request, session, or retry number is never a worker identifier.",
+      "type": "string",
+      "pattern": "^Worker-[1-9][0-9]*$"
+    },
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._:/#-]*$" },
+    "githubUrl": { "type": "string", "pattern": "^https://github\\.com/" },
+    "lifecycleState": {
+      "description": "OPERATING-MODEL-v5 §9 lifecycle, indexed by the state: label manifest in governance/control-plane/labels-v1.json.",
+      "enum": ["ready", "dispatched", "active", "result", "review", "owner-gate", "blocked", "done", "superseded"]
+    },
+    "watermark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observedAt", "sequence"],
+      "properties": {
+        "observedAt": { "type": "string", "format": "date-time" },
+        "sequence": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "name", "mainSha"],
+      "properties": {
+        "owner": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "mainSha": { "$ref": "#/$defs/sha" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url", "sha", "observedAt", "complete", "namedGaps"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "url": { "$ref": "#/$defs/githubUrl" },
+        "sha": { "$ref": "#/$defs/sha" },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "complete": { "type": "boolean" },
+        "namedGaps": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "productBoundary": {
+      "description": "Stable boundary facts only. Every mutable current value is carried by a source link, never copied prose.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["product2Repository", "product1Boundary", "deferredPublicClaims", "sourceRefs"],
+      "properties": {
+        "product2Repository": { "type": "string", "minLength": 1 },
+        "product1Boundary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "relationship", "crossRepositoryBinding"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "relationship": { "type": "string", "minLength": 1 },
+            "crossRepositoryBinding": { "const": "deferred-pending-owner-adopted-decision" }
+          }
+        },
+        "deferredPublicClaims": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "program": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "gate", "sourceRefs"],
+      "properties": {
+        "stage": { "type": "string", "minLength": 1 },
+        "gate": { "type": "string", "minLength": 1 },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "workItem": {
+      "description": "Every WorkItem that can be allocated to a lane carries a deterministic lane classification backed by source evidence, and an Issue-bound worker identity. Missing or contradictory classification fails closed.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "issueNumber", "issueUrl", "title", "lifecycleState", "domainLease", "allowlist", "blockers", "sourceRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "issueNumber": { "type": "integer", "minimum": 1 },
+        "issueUrl": { "$ref": "#/$defs/githubUrl" },
+        "title": { "type": "string", "minLength": 1 },
+        "lifecycleState": { "$ref": "#/$defs/lifecycleState" },
+        "labelState": { "$ref": "#/$defs/lifecycleState" },
+        "lane": { "$ref": "#/$defs/lane" },
+        "laneSourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } },
+        "mode": { "enum": ["mutation", "read-only"] },
+        "worker": { "$ref": "#/$defs/worker" },
+        "session": { "type": "string", "minLength": 1 },
+        "branch": { "type": "string", "minLength": 1 },
+        "prNumber": { "type": "integer", "minimum": 1 },
+        "prUrl": { "$ref": "#/$defs/githubUrl" },
+        "headSha": { "$ref": "#/$defs/sha" },
+        "domainLease": { "type": "string", "pattern": "^domain:[a-z0-9-]+$" },
+        "allowlist": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "startedEvidenceUrl": { "$ref": "#/$defs/githubUrl" },
+        "blockers": { "type": "array", "items": { "$ref": "#/$defs/blocker" } },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reasonCode", "requiredClearingEvidence"],
+      "properties": {
+        "reasonCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" },
+        "requiredClearingEvidence": { "type": "string", "minLength": 1 },
+        "clearedByEvidenceUrl": { "$ref": "#/$defs/githubUrl" }
+      }
+    },
+    "review": {
+      "description": "An independent read-only review engagement. It is carried while it is dispatched and while it is running, not only once it concludes, so a review already bound to an exact head is never requested twice. A verdict exists only in state complete.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "issueNumber", "issueUrl", "workItemId", "reviewedHeadSha", "currentHeadSha", "state", "worker", "reviewerSession", "authorSession", "sourceRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "issueNumber": { "type": "integer", "minimum": 1 },
+        "issueUrl": { "$ref": "#/$defs/githubUrl" },
+        "workItemId": { "$ref": "#/$defs/id" },
+        "reviewedHeadSha": { "$ref": "#/$defs/sha" },
+        "currentHeadSha": { "$ref": "#/$defs/sha" },
+        "state": { "enum": ["dispatched", "active", "complete"] },
+        "verdict": { "enum": ["retained", "blocked-for-revision", "invalid"] },
+        "worker": { "$ref": "#/$defs/worker" },
+        "reviewerSession": { "type": "string", "minLength": 1 },
+        "authorSession": { "type": "string", "minLength": 1 },
+        "startedEvidenceUrl": { "$ref": "#/$defs/githubUrl" },
+        "exactHeadValid": { "type": "boolean" },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "complete" } }, "required": ["state"] },
+          "then": { "required": ["verdict"] },
+          "else": { "not": { "required": ["verdict"] } }
+        }
+      ]
+    },
+    "ownerGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["open", "sourceRefs"],
+      "properties": {
+        "open": { "type": "boolean" },
+        "workItemId": { "$ref": "#/$defs/id" },
+        "reviewRef": { "$ref": "#/$defs/id" },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "integration": {
+      "description": "Merge and production-verification state. Recorded as observation only; it authorizes nothing.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["productionVerified", "sourceRefs"],
+      "properties": {
+        "lastMergedPrNumber": { "type": "integer", "minimum": 1 },
+        "lastMergeSha": { "$ref": "#/$defs/sha" },
+        "productionVerified": { "type": "boolean" },
+        "productionEvidenceUrl": { "type": "string", "minLength": 1 },
+        "productionVerificationGap": { "type": "string", "minLength": 1 },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "board": {
+      "description": "The canonical three-lane board: exactly two permanent Product 2 lanes and exactly one permanent workflow lane. Exactly these three keys, always present, free lanes explicit. Any other key set fails closed on COLD005_SLOT_CARDINALITY.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P1", "P2", "W1"],
+      "properties": {
+        "P1": { "$ref": "#/$defs/productLane" },
+        "P2": { "$ref": "#/$defs/productLane" },
+        "W1": { "$ref": "#/$defs/workflowLane" }
+      }
+    },
+    "laneAllocation": {
+      "description": "The permanent allocation the board enforces. Two lanes are reserved for Product 2 advancement and one for workflow/graph advancement; the split is not reallocated by any session.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["product", "workflow"],
+      "properties": {
+        "product": { "const": 2 },
+        "workflow": { "const": 1 }
+      }
+    },
+    "laneSlot": {
+      "description": "One permanent lane. Mutation versus independent read-only review is the lane's current activityMode, never its identity: a review of a product head occupies P1 or P2, and a review of a workflow head occupies W1. An occupied lane binds one WorkItem, one Worker-N, one Issue URL, one session, persisted STARTED evidence, a domain lease, and the exact reviewed head when the activity is review. A free lane states its reason, and may name a dispatched worker the Owner has not launched yet.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot", "lane", "occupancy"],
+      "properties": {
+        "slot": { "enum": ["P1", "P2", "W1"] },
+        "lane": { "$ref": "#/$defs/lane" },
+        "occupancy": { "enum": ["occupied", "free"] },
+        "activityMode": { "enum": ["mutation", "read-only-review"] },
+        "workItemId": { "$ref": "#/$defs/id" },
+        "issueUrl": { "$ref": "#/$defs/githubUrl" },
+        "worker": { "$ref": "#/$defs/worker" },
+        "sessionLabel": { "type": "string", "minLength": 1 },
+        "startedEvidenceUrl": { "$ref": "#/$defs/githubUrl" },
+        "domainLease": { "type": "string", "pattern": "^domain:[a-z0-9-]+$" },
+        "allowlist": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "reviewId": { "$ref": "#/$defs/id" },
+        "reviewedHeadSha": { "$ref": "#/$defs/sha" },
+        "reviewState": { "enum": ["active", "complete"] },
+        "freeReason": { "type": "string", "minLength": 1 },
+        "dispatchedWorker": { "$ref": "#/$defs/worker" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "occupancy": { "const": "occupied" } }, "required": ["occupancy"] },
+          "then": { "required": ["activityMode", "workItemId", "worker", "issueUrl", "sessionLabel", "startedEvidenceUrl", "domainLease"] },
+          "else": { "required": ["freeReason"] }
+        }
+      ]
+    },
+    "productLane": {
+      "allOf": [
+        { "$ref": "#/$defs/laneSlot" },
+        { "properties": { "slot": { "enum": ["P1", "P2"] }, "lane": { "const": "product" } } }
+      ]
+    },
+    "workflowLane": {
+      "allOf": [
+        { "$ref": "#/$defs/laneSlot" },
+        { "properties": { "slot": { "const": "W1" }, "lane": { "const": "workflow" } } }
+      ]
+    },
+    "graphFacts": {
+      "description": "Facts consumed from the graph-source-truth/v1 projection. The cold start validates and reuses them; it never creates a second authority hierarchy.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "watermark", "canonicalHeads", "invalidReviews", "unresolvedBlockers", "runnableWork", "namedGaps", "splitBrain"],
+      "properties": {
+        "schemaVersion": { "const": "graph-source-truth/v1" },
+        "watermark": { "$ref": "#/$defs/watermark" },
+        "canonicalHeads": { "type": "object", "additionalProperties": { "$ref": "#/$defs/sha" } },
+        "invalidReviews": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "unresolvedBlockers": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "runnableWork": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "namedGaps": { "type": "array", "items": { "type": "string" } },
+        "splitBrain": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "nextAction": {
+      "description": "Exactly one control-plane action. Every action is a preparation step for a human; none launches a worker, approves, accepts, or merges.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "rationale", "launchesWorker", "impliesApproval"],
+      "properties": {
+        "code": {
+          "enum": [
+            "RECONCILE_UNSEATED_ENGAGEMENT",
+            "ASSEMBLE_OWNER_GATE",
+            "REQUEST_INDEPENDENT_REVIEW",
+            "PUBLISH_DISPATCH_FOR_MANUAL_OWNER_LAUNCH",
+            "AWAIT_ACTIVE_SLOT_RESULT",
+            "RECONCILE_STALE_STATE_INDEX",
+            "NAMED_GAP_BLOCKS_ACTION"
+          ]
+        },
+        "workItemId": { "$ref": "#/$defs/id" },
+        "issueUrl": { "$ref": "#/$defs/githubUrl" },
+        "lane": { "$ref": "#/$defs/lane" },
+        "slot": { "enum": ["P1", "P2", "W1"] },
+        "rationale": { "type": "string", "minLength": 1 },
+        "launchesWorker": { "const": false },
+        "impliesApproval": { "const": false }
+      }
+    }
+  }
+}
