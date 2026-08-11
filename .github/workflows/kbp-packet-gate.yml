@@ -1,0 +1,58 @@
+name: KBP Packet Gate
+
+# Validation only. This workflow reads the event payload and the checked-out
+# control-plane files, and reports whether the observable transition is
+# self-consistent.
+#
+# It never comments, labels, assigns, closes, merges, approves, dispatches,
+# calls a model or API, triggers another workflow, deploys, reads a secret, or
+# mutates a Project field. It launches no AI worker. Worker launch is a manual
+# act by the Owner alone.
+#
+# A passing run means the observable transition is consistent. It is not Owner
+# acceptance, engineering approval, or certification.
+
+on:
+  issues:
+    types: [opened, edited, labeled, unlabeled, reopened]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review, converted_to_draft]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+  workflow_dispatch:
+
+# Minimal explicit read-only permissions. No write scope at any level.
+permissions:
+  contents: read
+
+# Serialize validation for the same Issue or pull request only.
+concurrency:
+  group: kbp-packet-gate-${{ github.event.issue.number || github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  packet-gate:
+    name: KBP Packet Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Job-level permissions restated read-only so the audit needs no inheritance
+    # assumption.
+    permissions:
+      contents: read
+
+    steps:
+      # actions/checkout v4.2.2, pinned to a full immutable commit SHA.
+      # Provenance: https://github.com/actions/checkout/commit/11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check out the pinned commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Run the packet gate controller
+        run: node tools/control-plane/packet-gate.mjs --event-name "$GITHUB_EVENT_NAME" --event-path "$GITHUB_EVENT_PATH"
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}

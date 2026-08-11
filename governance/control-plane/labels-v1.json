@@ -1,0 +1,316 @@
+{
+  "schema": "kbp.control-plane.labels/v1",
+  "repository": "WEST-COAST-KBP-ADU/construction-os",
+  "authority": "governance/office/OPERATING-MODEL-v5.md",
+  "description": "Canonical label manifest for the GitHub-native control plane. Labels expose machine-readable queue state. A label is a derived index of Issue, PR, commit, check, and review evidence; it is never itself acceptance, approval, or Owner adoption.",
+  "reconciliation": {
+    "mode": "create-or-update-declared-only",
+    "undeclaredLabels": "leave-untouched",
+    "destructiveOperations": "prohibited",
+    "note": "Existing labels whose names appear below may be updated to match this manifest exactly. Labels not named below must not be renamed, recoloured, re-described, or deleted."
+  },
+  "categories": [
+    {
+      "id": "state",
+      "prefix": "state:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every active Issue",
+      "description": "Lifecycle position under OPERATING-MODEL-v5.md section 9. Zero or more than one state label is a fail-closed condition."
+    },
+    {
+      "id": "worker",
+      "prefix": "worker:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every active Issue",
+      "description": "The engagement family authorized to execute the packet. Applying it launches nothing."
+    },
+    {
+      "id": "mode",
+      "prefix": "mode:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every active Issue",
+      "description": "Whether the packet may author repository bytes."
+    },
+    {
+      "id": "kind",
+      "prefix": "kind:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every active Issue",
+      "description": "The nature of the bounded outcome."
+    },
+    {
+      "id": "gate",
+      "prefix": "gate:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every active Issue",
+      "description": "The PROGRAM-PLAN-v1.md stage gate the packet belongs to."
+    },
+    {
+      "id": "domain",
+      "prefix": "domain:",
+      "exclusivity": "exactly-one",
+      "appliesTo": "every active Issue",
+      "description": "The single primary lease domain claimed for the life of the packet. Two concurrently active mutation packets may not share a domain."
+    }
+  ],
+  "labels": [
+    {
+      "name": "state:ready",
+      "color": "c2e0c6",
+      "category": "state",
+      "description": "Definition of Ready satisfied. Not dispatched, not running."
+    },
+    {
+      "name": "state:dispatched",
+      "color": "bfd4f2",
+      "category": "state",
+      "description": "Packet published for manual launch. DISPATCH is not STARTED and starts no worker."
+    },
+    {
+      "name": "state:active",
+      "color": "1d76db",
+      "category": "state",
+      "description": "A worker has published STARTED evidence. Domain lease is held."
+    },
+    {
+      "name": "state:result",
+      "color": "5319e7",
+      "category": "state",
+      "description": "Worker published RESULT with exact head, changed paths, gate output, and Draft PR."
+    },
+    {
+      "name": "state:review",
+      "color": "fbca04",
+      "category": "state",
+      "description": "Non-author independent review requested or in progress at an exact head."
+    },
+    {
+      "name": "state:owner-gate",
+      "color": "d93f0b",
+      "category": "state",
+      "description": "Evidence assembled and awaiting the Owner decision. Only the Owner leaves this state."
+    },
+    {
+      "name": "state:blocked",
+      "color": "b60205",
+      "category": "state",
+      "description": "Fail-closed stop recorded with a named BLOCKED code and preserved evidence."
+    },
+    {
+      "name": "state:done",
+      "color": "0e8a16",
+      "category": "state",
+      "description": "Owner-merged or Owner-adopted, verified, and cleaned up."
+    },
+    {
+      "name": "state:superseded",
+      "color": "d4d4d4",
+      "category": "state",
+      "description": "Replaced by a later packet. Retained unmodified as historical evidence."
+    },
+    {
+      "name": "worker:opus",
+      "color": "8a63d2",
+      "category": "worker",
+      "description": "Claude Code / Opus bounded terminal executor. Launched manually by the Owner only."
+    },
+    {
+      "name": "worker:codex",
+      "color": "006b75",
+      "category": "worker",
+      "description": "Codex bounded terminal executor or independent reviewer. Launched manually by the Owner only."
+    },
+    {
+      "name": "worker:none",
+      "color": "e4e669",
+      "category": "worker",
+      "description": "No worker engagement is authorized for this Issue."
+    },
+    {
+      "name": "mode:mutation",
+      "color": "d4c5f9",
+      "category": "mode",
+      "description": "Packet may author repository bytes under an exact allowlist, on one branch, in one Draft PR."
+    },
+    {
+      "name": "mode:read-only",
+      "color": "c5def5",
+      "category": "mode",
+      "description": "Packet authors no repository byte and holds no file domain lease."
+    },
+    {
+      "name": "kind:implementation",
+      "color": "0366d6",
+      "category": "kind",
+      "description": "Product or platform implementation against an adopted decision."
+    },
+    {
+      "name": "kind:decision",
+      "color": "6f42c1",
+      "category": "kind",
+      "description": "Decision preparation. Implements nothing by itself."
+    },
+    {
+      "name": "kind:review",
+      "color": "f9d0c4",
+      "category": "kind",
+      "description": "Independent non-author review pinned to one exact head SHA."
+    },
+    {
+      "name": "kind:remediation",
+      "color": "e99695",
+      "category": "kind",
+      "description": "Bounded repair of findings from a prior review or blocked packet."
+    },
+    {
+      "name": "kind:infrastructure",
+      "color": "5def5c",
+      "category": "kind",
+      "description": "Governance, control-plane, or engineering infrastructure. Not product surface."
+    },
+    {
+      "name": "kind:research",
+      "color": "fef2c0",
+      "category": "kind",
+      "description": "Research Gate output. Zero authority until synthesized into an adopted decision record."
+    },
+    {
+      "name": "gate:control-plane",
+      "color": "1d3557",
+      "category": "gate",
+      "description": "Control-plane infrastructure ahead of the stage graph."
+    },
+    {
+      "name": "gate:g0",
+      "color": "2a4d69",
+      "category": "gate",
+      "description": "Stage gate G0."
+    },
+    {
+      "name": "gate:g1",
+      "color": "35637f",
+      "category": "gate",
+      "description": "Stage gate G1."
+    },
+    {
+      "name": "gate:g2a",
+      "color": "417995",
+      "category": "gate",
+      "description": "Stage gate G2A."
+    },
+    {
+      "name": "gate:g2b",
+      "color": "4d8fab",
+      "category": "gate",
+      "description": "Stage gate G2B."
+    },
+    {
+      "name": "gate:g2c",
+      "color": "59a5c1",
+      "category": "gate",
+      "description": "Stage gate G2C."
+    },
+    {
+      "name": "gate:g3",
+      "color": "65bbd7",
+      "category": "gate",
+      "description": "Stage gate G3."
+    },
+    {
+      "name": "gate:g4",
+      "color": "71d1ed",
+      "category": "gate",
+      "description": "Stage gate G4."
+    },
+    {
+      "name": "gate:g5",
+      "color": "8ad9f0",
+      "category": "gate",
+      "description": "Stage gate G5."
+    },
+    {
+      "name": "gate:g6",
+      "color": "a3e1f3",
+      "category": "gate",
+      "description": "Stage gate G6."
+    },
+    {
+      "name": "gate:later",
+      "color": "bcbcbc",
+      "category": "gate",
+      "description": "Beyond the currently planned stage graph. Not dispatchable."
+    },
+    {
+      "name": "domain:governance",
+      "color": "3f2b96",
+      "category": "domain",
+      "description": "Lease over governance records under governance/, excluding governance/control-plane/."
+    },
+    {
+      "name": "domain:github-control-plane",
+      "color": "4834a8",
+      "category": "domain",
+      "description": "Lease over .github/, governance/control-plane/, and tools/control-plane/."
+    },
+    {
+      "name": "domain:product-definition",
+      "color": "513eb9",
+      "category": "domain",
+      "description": "Lease over product definition, catalog contracts, and schemas."
+    },
+    {
+      "name": "domain:visual-target",
+      "color": "5a48cb",
+      "category": "domain",
+      "description": "Lease over the physically coherent professional visual target and its recipes."
+    },
+    {
+      "name": "domain:asset-readiness",
+      "color": "6352dc",
+      "category": "domain",
+      "description": "Lease over media intake, rights, provenance, and asset derivatives."
+    },
+    {
+      "name": "domain:platform-quality",
+      "color": "6c5cee",
+      "category": "domain",
+      "description": "Lease over accessibility, performance, and cross-surface quality gates."
+    },
+    {
+      "name": "domain:engineering-foundation",
+      "color": "7566ff",
+      "category": "domain",
+      "description": "Lease over dependencies, lockfile, build, and toolchain foundations."
+    },
+    {
+      "name": "domain:a600-pipeline",
+      "color": "8578ff",
+      "category": "domain",
+      "description": "Lease over the deterministic A600 asset pipeline."
+    },
+    {
+      "name": "domain:product-vertical",
+      "color": "958aff",
+      "category": "domain",
+      "description": "Lease over one end-to-end product vertical surface."
+    },
+    {
+      "name": "domain:release",
+      "color": "a59cff",
+      "category": "domain",
+      "description": "Lease over release integration, Preview evidence, and production verification."
+    },
+    {
+      "name": "domain:reception",
+      "color": "b5aeff",
+      "category": "domain",
+      "description": "Lease over the reception and graph-memory foundation."
+    },
+    {
+      "name": "domain:catalog",
+      "color": "c5c0ff",
+      "category": "domain",
+      "description": "Lease over the model catalog and its executable geometry bindings."
+    }
+  ]
+}

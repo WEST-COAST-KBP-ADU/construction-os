@@ -1,0 +1,247 @@
+name: Worker packet
+description: Dispatch exactly one bounded worker packet under OPERATING-MODEL-v5.md. Creating this Issue launches no worker.
+title: "[PACKET-ID] "
+labels:
+  - "state:ready"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One Issue = one bounded outcome = one branch = one Draft PR = one declared file allowlist.
+
+        Creating, editing, or labelling this Issue **starts nothing**. The Owner alone manually launches
+        exactly one fresh worker engagement. No Action, form, comment, mention, or integration is
+        authorized to launch an AI worker.
+
+        Every field below is required. A packet missing any field is not dispatchable
+        (`OPERATING-MODEL-v5.md` §5, §6). Do not write open delegation such as
+        `relevant docs`, `make it premium`, `use the best asset`, or `smallest suitable module`.
+
+        Only the static `state:ready` label is applied by this form. The coordinator sets
+        `worker:`, `mode:`, `kind:`, `gate:`, and `domain:` from the data below — exactly one of each.
+
+  - type: input
+    id: packet_id
+    attributes:
+      label: Packet ID
+      description: Exact uppercase packet identifier. Must match the title prefix.
+      placeholder: GITHUB-NATIVE-CONTROL-PLANE-001
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Single outcome
+      description: Exactly one bounded, verifiable outcome stated as a single sentence. Not a list of unrelated objectives.
+    validations:
+      required: true
+
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      placeholder: WEST-COAST-KBP-ADU/construction-os
+    validations:
+      required: true
+
+  - type: input
+    id: base_sha
+    attributes:
+      label: Exact base SHA
+      description: Full 40-character lowercase commit SHA that currently exists on the remote. A moving branch name, a short SHA, or HEAD is rejected fail-closed.
+      placeholder: c201836eee31ff55472cb4731e11745e3094849d
+    validations:
+      required: true
+
+  - type: dropdown
+    id: worker
+    attributes:
+      label: Worker
+      description: The engagement family authorized to execute this packet. Selecting it launches nothing.
+      options:
+        - Opus
+        - Codex
+        - None
+    validations:
+      required: true
+
+  - type: input
+    id: model_id
+    attributes:
+      label: Exact model ID
+      description: The exact model identifier the engagement must run, recorded so the published STARTED record can be checked against it.
+      placeholder: claude-opus-5
+    validations:
+      required: true
+
+  - type: input
+    id: clone
+    attributes:
+      label: Clone
+      description: Exact isolated checkout path the engagement will run in.
+      placeholder: /home/user/construction-os
+    validations:
+      required: true
+
+  - type: input
+    id: session
+    attributes:
+      label: Session label
+      description: Exact session label. Two engagements are never collapsed into one record.
+      placeholder: packet-id-worker-1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      description: Whether this packet may author repository bytes.
+      options:
+        - Mutation
+        - Read-only
+    validations:
+      required: true
+
+  - type: input
+    id: branch_or_target
+    attributes:
+      label: Branch or read-only target
+      description: For Mutation, exactly one branch name. For Read-only, the exact read-only target such as a PR number and exact head SHA.
+      placeholder: agent/packet-id
+    validations:
+      required: true
+
+  - type: textarea
+    id: read_order
+    attributes:
+      label: Authoritative read order
+      description: Complete enumerated list of every input the engagement must read, in order. Every entry is an exact path, Issue, PR, comment ID, or URL. Open delegation such as "relevant docs" is rejected fail-closed.
+      value: |
+        1. governance/BOUNDARIES.md
+        2. governance/office/OPERATING-MODEL-v5.md
+        3. governance/office/PROGRAM-PLAN-v1.md
+        4. governance/control-plane/README.md
+        5.
+    validations:
+      required: true
+
+  - type: textarea
+    id: allowlist
+    attributes:
+      label: Exact allowlist
+      description: One concrete file path per line, each prefixed create, modify, or delete. Globs, wildcards, trailing slashes, and directory-only entries are rejected fail-closed. For a Read-only packet write exactly "none".
+      value: |
+        create path/to/new-file.ext
+        modify path/to/existing-file.ext
+        delete path/to/removed-file.ext
+    validations:
+      required: true
+
+  - type: textarea
+    id: domain_lease
+    attributes:
+      label: Domain lease
+      description: The exclusive file or domain ownership claimed for the life of this packet, and the exact primary domain label. A Read-only packet holds no file lease and states so.
+      placeholder: "domain:github-control-plane — .github/**, governance/control-plane/**, tools/control-plane/**"
+    validations:
+      required: true
+
+  - type: textarea
+    id: prohibitions
+    attributes:
+      label: Prohibitions
+      description: Explicit out-of-scope surfaces for this packet.
+      value: |
+        - No scope widening; new work becomes a new packet.
+        - No merge, approval, Ready transition, deployment, or Issue closure.
+        - No nested agent, subagent, background execution, or second worker.
+        - No AI worker launch through any Action, comment, mention, or integration.
+        - No dependency, lockfile, secret, access, ruleset, branch-protection, or Production change.
+    validations:
+      required: true
+
+  - type: textarea
+    id: quality_target
+    attributes:
+      label: Measurable quality target
+      description: Exact and measurable. Adjectival targets are rejected fail-closed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: gates
+    attributes:
+      label: Deterministic gates
+      description: Exact commands and their expected outcomes.
+      value: |
+        - `npm test` — exits 0
+        - `npm run lint` — exits 0
+        - `npx tsc --noEmit` — exits 0
+        - `npm run build` — exits 0
+    validations:
+      required: true
+
+  - type: input
+    id: reviewer
+    attributes:
+      label: Non-author reviewer
+      description: The named independent engagement that will review the exact result head. It must not be the authoring engagement.
+      placeholder: one fresh non-author Codex Pro engagement
+    validations:
+      required: true
+
+  - type: textarea
+    id: integration_order
+    attributes:
+      label: Integration order and dependencies
+      description: 'Position relative to predecessors and dependents. Record each predecessor as "depends-on: #NNN" on its own line. Zero dependent packets may sit on an unmerged predecessor. Write "depends-on: none" when there is no predecessor.'
+      value: |
+        depends-on: none
+    validations:
+      required: true
+
+  - type: textarea
+    id: stop_conditions
+    attributes:
+      label: Fail-closed stop conditions
+      description: Named BLOCKED codes this packet may terminate on.
+      value: |
+        - `BLOCKED — BASE DRIFT`
+        - `BLOCKED — PATH OR DOMAIN CONFLICT`
+        - `BLOCKED — EXECUTION SURFACE OR PATH STATE`
+        - `BLOCKED — MISSING PRODUCT DECISION`
+        - `BLOCKED — GATE FAILURE`
+        - `BLOCKED — LIVE STATE DIVERGENCE`
+    validations:
+      required: true
+
+  - type: textarea
+    id: result_contract
+    attributes:
+      label: RESULT and cleanup contract
+      description: The exact required RESULT comment shape and how the domain lease is released.
+      value: |
+        Publish one comment beginning `RESULT — <PACKET-ID>` containing the exact head SHA,
+        every changed path, each gate command with its observed output, the Draft PR URL,
+        residual risk, and one terminal disposition. The domain lease is released at CLEANUP,
+        after Owner merge or after the packet is explicitly closed.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: One Issue, one session, one branch, and one Draft PR carry this packet.
+          required: true
+        - label: The authoring engagement will not review, accept, or certify its own result; the named reviewer is a different non-author engagement.
+          required: true
+        - label: Tony alone adopts this outcome and merges the pull request. A green check is evidence, not approval.
+          required: true
+        - label: The worker is launched manually by the Owner. Creating or editing this Issue launches no worker, and no Action or integration may launch one.
+          required: true
+        - label: This packet is closed-world authorization. The executor will not reinterpret intent, invent a missing decision or source, substitute a surrogate, or widen the allowlist; any missing precondition produces a fail-closed BLOCKED result before implementation proceeds.
+          required: true
