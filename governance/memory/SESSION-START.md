@@ -97,18 +97,23 @@ node tools/memory/build-session-start.mjs --input <frozen-observation.json> --ou
 It contains the repository and exact current `mainSha`; the observation
 watermark and complete source list; the product boundary and current program
 stage and gate; every active and ready WorkItem with its Issue URL, lifecycle
-state, worker and session, branch, pull request and head where present, domain
-lease, blockers and required clearing evidence; the Owner gate; the latest
-exact-head review; merge and production-verification state; the discrepancies
-between `STATE.md`, labels and Project fields, Issues and pull requests, and
-live `main`; the three-slot board; exactly one next executable control-plane
-action; and every named gap.
+state, permanent lane, `Worker-N` identity and session, branch, pull request and
+head where present, domain lease, blockers and required clearing evidence; the
+Owner gate; every review bound to an exact head, dispatched, running, or
+concluded; merge and production-verification state; the discrepancies between
+`STATE.md`, labels and Project fields, Issues and pull requests, and live `main`;
+the three-lane board; exactly one next executable control-plane action; and every
+named gap.
 
 The builder consumes the engineering graph rather than duplicating it: it runs
 [`../../tools/memory/build-graph.mjs`](../../tools/memory/build-graph.mjs) over the
 same frozen observation and carries that projection's canonical heads, invalid
 reviews, unresolved blockers, runnable work, named gaps, and split-brain report
-into its own output. There is one engineering-fact hierarchy, not two.
+into its own output. There is one engineering-fact hierarchy, not two, and the
+graph binds the **decision** as well as the output: no work is proposed for
+dispatch unless the graph lists it in `runnableWork`, and work the graph calls
+runnable while the observation carries an unresolved blocker for it stops the
+cold start on `COLD016_GRAPH_CONTRADICTION` rather than being averaged out.
 
 Output is derived, deterministic, rebuildable, source-watermarked, and
 correction- and retraction-preserving. Identical frozen inputs produce
@@ -125,55 +130,101 @@ These stop the cold start with a stable reason code:
 
 | Condition | Code |
 | :--- | :--- |
-| Incomplete GitHub data under an occupied slot or an open gate | `COLD004_INCOMPLETE_SOURCE` |
-| More or fewer than the three logical slots | `COLD005_SLOT_CARDINALITY` |
-| An occupied mutation slot with no persisted `STARTED` evidence | `COLD006_SLOT_WITHOUT_STARTED` |
-| Two mutation slots sharing a domain lease or an allowlisted path | `COLD007_DOMAIN_LEASE_CONFLICT` |
+| Incomplete GitHub data under an occupied lane or an open gate | `COLD004_INCOMPLETE_SOURCE` |
+| A board whose keys are not exactly the three permanent lanes, or an allocation other than two product lanes and one workflow lane | `COLD005_SLOT_CARDINALITY` |
+| An occupied lane with no persisted `STARTED` evidence | `COLD006_SLOT_WITHOUT_STARTED` |
+| Two mutation activities sharing a domain lease or an allowlisted path | `COLD007_DOMAIN_LEASE_CONFLICT` |
 | A reviewer engagement that authored the head it reviews | `COLD008_REVIEWER_AUTHORED_HEAD` |
-| A verdict bound to anything other than the current exact head | `COLD009_STALE_EXACT_HEAD_REVIEW` |
+| A review bound to anything other than the current exact head | `COLD009_STALE_EXACT_HEAD_REVIEW` |
 | Two live records claiming one WorkItem at different heads | `COLD010_CONFLICTING_ACTIVE_HEADS` |
 | A source watermark that regresses | `COLD011_WATERMARK_REGRESSION` |
 | Output that would read as approval, acceptance, or a worker launch | `COLD012_AUTHORITY_BEARING_OUTPUT` |
+| A board-eligible WorkItem with a missing, unbacked, or contradictory lane classification | `COLD013_LANE_CLASSIFICATION` |
+| Workflow work seated in a product lane, or product work seated in the workflow lane | `COLD014_LANE_SLOT_MISMATCH` |
+| Any executable worker identity that is not `Worker-N` for its own Issue number | `COLD015_WORKER_IDENTITY` |
+| A dispatch decision that contradicts the graph's `runnableWork` or `unresolvedBlockers` | `COLD016_GRAPH_CONTRADICTION` |
+| Two lanes holding a review of the same WorkItem | `COLD017_DUPLICATE_REVIEW` |
 
 Missing evidence is named, never inferred. A missing fact is reported as a gap
 with the exact record that would close it.
 
-## 4. The canonical three-slot board
+## 4. The canonical three-lane board
 
-The result always carries exactly these three logical slots:
+The result always carries exactly these three permanent lanes:
 
-| Slot | Kind | Holds |
+| Slot | Permanent lane | Required allocation |
 | :--- | :--- | :--- |
-| `M1` | mutation worker 1 | one bounded packet, one branch, one Draft PR, one allowlist |
-| `M2` | mutation worker 2 | the same, under a **disjoint** allowlist and domain lease |
-| `R1` | independent reviewer | one read-only adversarial review at one exact head |
+| `P1` | Product 2 | one Product 2 WorkItem, or an explicit free state |
+| `P2` | Product 2 | one Product 2 WorkItem, or an explicit free state |
+| `W1` | Workflow | one graph-memory, cold-start, orchestration, control-plane, or engineering-workflow WorkItem, or an explicit free state |
+
+Exactly two lanes are reserved for Product 2 advancement and exactly one for
+workflow and graph advancement. That split is permanent and is not reallocated
+by any session.
+
+### Lane is not activity
+
+Mutation versus independent read-only review is an **activity mode inside** a
+lane, never a permanent slot identity. A review of a product head occupies `P1`
+or `P2`; a review of a workflow head occupies `W1`. A lane therefore carries
+both a permanent `lane` and a current `activityMode`.
+
+### Worker identity
+
+`Worker-N = Issue #N` is the engagement identity, everywhere. Slot label,
+activity mode, retry number, session, branch, pull request, and head never
+replace it, and any other string used as a worker identifier fails closed on
+`COLD015_WORKER_IDENTITY` — in the board, in the WorkItem record, in a review
+record, and in the graph's `Worker` nodes alike.
 
 Rules, all enforced by the builder:
 
-- Normal mode permits at most **two** mutation engagements and exactly **one**
-  read-only reviewer. There is no third mutation slot.
-- An occupied mutation slot requires persisted `STARTED` evidence and a session
-  identity. `DISPATCH` is not `STARTED`; a closed window is not a result.
-- Two occupied mutation slots require disjoint allowlists **and** disjoint
-  domain leases.
-- `R1` may review only an exact head it did not author, and only while that head
-  is current. A new commit invalidates every earlier verdict immediately.
-- A free slot is **explicit**, carries a stated reason, and is never silently
-  filled.
+- Every WorkItem that can be allocated to a lane carries a deterministic `lane`
+  classification backed by source evidence. Missing, unbacked, or contradictory
+  classification fails closed; it is never guessed from a title.
+- An occupied lane binds one WorkItem, one `Worker-N`, one Issue URL, one
+  session, persisted `STARTED` evidence, a domain lease, and — when the activity
+  is review — the exact current head under review.
+- `DISPATCH` is not `STARTED`; a closed window is not a result.
+- Two mutation activities require disjoint allowlists **and** disjoint domain
+  leases. A read-only review takes no write lease.
+- A review may hold only an exact head it did not author, and only while that
+  head is current. A new commit invalidates every earlier verdict immediately.
+- A review already bound to an exact head — dispatched, running, or concluded —
+  suppresses any request for a second review of that same head, and two lanes
+  reviewing one WorkItem fail closed.
+- Every live `active` mutation or review engagement is seated in exactly one
+  lane, or it is reported as a named blocking discrepancy. Live work is never
+  silently dropped because no lane was assigned to it.
+- A free lane is **explicit**, carries a stated reason, and is never silently
+  filled. It may also name the `Worker-N` that has been dispatched into it.
 - Nothing in this repository launches a worker. Comments, labels, the Issue
   Form, the Project, and Actions all launch nothing. Tony manually opens each
   engagement. See [`../control-plane/README.md`](../control-plane/README.md) §3.
 
+### Occupancy target versus authoritative state
+
+The operating target is continuous occupancy of all three lanes. That target is
+an aim, never a claim: **live GitHub state is authoritative**. A lane may stand
+`free` after a dispatch has been published and before Tony has manually opened
+that engagement, and the projection reports it as free with its reason — and,
+when known, the dispatched `Worker-N` — rather than reporting the lane as filled.
+No repository artifact launches a worker, so no repository artifact can move a
+lane from dispatched to occupied.
+
 ### Refill loop
 
 ```text
-hydrate -> reconcile -> allocate M1/M2 -> collect RESULT -> allocate R1
--> exact-head verdict -> Owner gate -> Owner merge -> verify -> cleanup -> refill
+hydrate -> reconcile -> classify lane -> allocate P1/P2 product and W1 workflow
+-> collect RESULT -> allocate same-lane read-only review -> exact-head verdict
+-> Owner gate -> Owner merge -> verify -> cleanup -> refill the same lane
 ```
 
-The loop is continuous: a slot released by a merge, a blocker, or a terminal
-`RESULT` is refilled only from a re-hydrated board, never from memory of what was
-running before.
+The loop is continuous and **lane-local**: a lane released by a merge, a blocker,
+or a terminal `RESULT` is refilled from eligible work in that same permanent
+lane, and only from a re-hydrated board, never from memory of what was running
+before. A product review consumes a product lane and never `W1`; a workflow
+review consumes `W1` and never `P1` or `P2`.
 
 ### The one next action
 
@@ -181,12 +232,13 @@ The result names exactly one next executable control-plane action, chosen by a
 fixed precedence and tie-broken by lowest Issue number, so two sessions reading
 the same evidence choose the same step:
 
-1. `ASSEMBLE_OWNER_GATE` — a non-author verdict is bound to the current exact head.
-2. `REQUEST_INDEPENDENT_REVIEW` — a `RESULT` exists with no current non-author verdict and `R1` is free.
-3. `PUBLISH_DISPATCH_FOR_MANUAL_OWNER_LAUNCH` — a mutation slot is free and a ready packet holds a disjoint lease.
-4. `AWAIT_ACTIVE_SLOT_RESULT` — no slot can be refilled until an occupied one reports.
-5. `RECONCILE_STALE_STATE_INDEX` — nothing else is executable and the committed index has drifted.
-6. `NAMED_GAP_BLOCKS_ACTION` — nothing is executable; the blocking gaps are named.
+1. `RECONCILE_UNSEATED_ENGAGEMENT` — a live engagement is running in no lane; nothing else is executable until the board represents it.
+2. `ASSEMBLE_OWNER_GATE` — a non-author verdict is bound to the current exact head.
+3. `REQUEST_INDEPENDENT_REVIEW` — a `RESULT` exists with no review bound to its current exact head and that item's own lane is free.
+4. `PUBLISH_DISPATCH_FOR_MANUAL_OWNER_LAUNCH` — a lane is free and a ready packet in that same lane is runnable in the graph under a disjoint lease.
+5. `AWAIT_ACTIVE_SLOT_RESULT` — no lane can be refilled until an occupied one reports.
+6. `RECONCILE_STALE_STATE_INDEX` — nothing else is executable and the committed index has drifted.
+7. `NAMED_GAP_BLOCKS_ACTION` — nothing is executable; the blocking gaps are named.
 
 Every action is a preparation step for a human. None approves, accepts, merges,
 or launches anything.
@@ -199,7 +251,15 @@ node --test tools/memory/build-graph.test.mjs tools/memory/build-session-start.t
 
 The suite builds every fixture in-process and covers a fresh board, a stale
 committed index, a missing source, incomplete comments, split brain, a stale
-review, overlapping leases, a repeated failed precondition, a free slot, a full
-board, and watermark regression. It also audits that both root instruction files
-route here, that this folder hard-codes no mutable current truth, and that the
-output carries no authority-bearing token.
+review, overlapping leases, a repeated failed precondition, a free lane, a full
+board, and watermark regression. Its adversarial fixtures cover a wrong lane key
+set, a wrong two-product-one-workflow allocation, lane inversion in both
+directions, a missing or unbacked lane source, an occupied lane without
+`STARTED`, an author-reviewer collision, a stale reviewed head, a `Worker-N`
+that disagrees with its Issue number in the board, the WorkItem, a review, and
+the graph, blocked work offered in a candidate queue, a runnable/blocked
+contradiction, an active unseated mutation, an active unseated reviewer, an
+already-dispatched exact-head reviewer, duplicate-review suppression, and zero
+silent omission of a live engagement. It also audits that both root instruction
+files route here, that this folder hard-codes no mutable current truth, and that
+the output carries no authority-bearing token.

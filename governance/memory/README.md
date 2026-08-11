@@ -86,26 +86,45 @@ node tools/memory/build-session-start.mjs --input /tmp/frozen-observation.json -
 
 The result carries the exact current `mainSha`, the observation watermark and
 complete source list, the product boundary and program stage, active and ready
-WorkItems with their leases, blockers and required clearing evidence, the Owner
-gate, the latest exact-head review, merge and production-verification state, the
-discrepancies between the committed index and live evidence, the canonical
-`M1`/`M2`/`R1` board, exactly one next executable control-plane action, and every
-named gap.
+WorkItems with their permanent lane, `Worker-N` identity, leases, blockers and
+required clearing evidence, the Owner gate, every review bound to an exact head
+whether dispatched, running, or concluded, merge and production-verification
+state, the discrepancies between the committed index and live evidence, the
+canonical `P1`/`P2`/`W1` board, exactly one next executable control-plane action,
+and every named gap.
+
+The board carries exactly two permanent Product 2 lanes and exactly one
+permanent workflow lane. Lane is permanent; mutation versus independent
+read-only review is the lane's current activity mode, so a review of a product
+head occupies `P1` or `P2` and a review of a workflow head occupies `W1`. A
+released lane is refilled from eligible work in that same lane. `Worker-N =
+Issue #N` is the engagement identity everywhere, and a slot label, branch, pull
+request, or session is never accepted in its place. The operating target is
+continuous occupancy, but live GitHub state is authoritative: a lane stands free
+until Tony manually launches the dispatched worker, and no repository artifact
+launches anything.
 
 The cold start **consumes** the graph rather than duplicating it. It runs
 `build-graph.mjs` over the same frozen observation and carries that projection's
 canonical heads, invalid reviews, unresolved blockers, runnable work, named gaps,
 and split-brain report into its own output, so there is one engineering-fact
-hierarchy and one set of graph reason codes.
+hierarchy and one set of graph reason codes. The graph binds the decision too:
+work absent from `runnableWork` is never proposed for dispatch, and a
+graph/observation contradiction about runnability fails closed.
 
 A stale committed queue index is reported as a discrepancy and then ignored for
-live dispatch. Incomplete evidence under an occupied slot or an open gate,
-wrong slot cardinality, an occupied mutation slot without persisted `STARTED`
-evidence, overlapping leases or allowlists, a reviewer that authored the head it
-reviews, a verdict bound to a superseded head, two live records claiming one
-WorkItem at different heads, a watermark regression, and any authority-bearing
-output all fail closed with a stable `COLD0NN` code. Missing evidence is a named
-gap, never an inference.
+live dispatch. Incomplete evidence under an occupied lane or an open gate, a
+board whose key set or two-to-one lane allocation is wrong, an occupied lane
+without persisted `STARTED` evidence, overlapping leases or allowlists, a
+reviewer that authored the head it reviews, a review bound to a superseded head,
+two live records claiming one WorkItem at different heads, a watermark
+regression, any authority-bearing output, a missing or contradictory lane
+classification, work seated in the wrong lane, a worker identity that is not
+`Worker-N` for its own Issue, a dispatch that contradicts the graph, and two
+lanes reviewing one WorkItem all fail closed with a stable `COLD0NN` code. A live
+`active` engagement seated in no lane is reported as a named blocking
+discrepancy and blocks every allocation step. Missing evidence is a named gap,
+never an inference.
 
 Like the graph, the result is derived, deterministic, rebuildable, and never
 committed, and it cannot approve, accept, merge, dispatch, or launch a worker.

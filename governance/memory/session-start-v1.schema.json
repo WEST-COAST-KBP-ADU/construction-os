@@ -17,6 +17,7 @@
     "ownerGate",
     "integration",
     "board",
+    "laneAllocation",
     "graph",
     "discrepancies",
     "namedGaps",
@@ -35,14 +36,24 @@
     "ownerGate": { "$ref": "#/$defs/ownerGate" },
     "integration": { "$ref": "#/$defs/integration" },
     "board": { "$ref": "#/$defs/board" },
+    "laneAllocation": { "$ref": "#/$defs/laneAllocation" },
     "graph": { "$ref": "#/$defs/graphFacts" },
     "discrepancies": { "type": "array", "items": { "type": "string", "minLength": 1 } },
     "namedGaps": { "type": "array", "items": { "type": "string", "minLength": 1 } },
     "nextAction": { "$ref": "#/$defs/nextAction" },
-    "refillLoop": { "type": "array", "minItems": 11, "items": { "type": "string", "minLength": 1 } }
+    "refillLoop": { "type": "array", "minItems": 12, "items": { "type": "string", "minLength": 1 } }
   },
   "$defs": {
     "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "lane": {
+      "description": "The permanent lane of a slot or a WorkItem. Product 2 advancement, or workflow/graph-memory/orchestration/control-plane/engineering-workflow advancement.",
+      "enum": ["product", "workflow"]
+    },
+    "worker": {
+      "description": "Canonical engagement identity. Worker-N always equals Issue #N. A slot label, branch, pull request, session, or retry number is never a worker identifier.",
+      "type": "string",
+      "pattern": "^Worker-[1-9][0-9]*$"
+    },
     "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._:/#-]*$" },
     "githubUrl": { "type": "string", "pattern": "^https://github\\.com/" },
     "lifecycleState": {
@@ -113,6 +124,7 @@
       }
     },
     "workItem": {
+      "description": "Every WorkItem that can be allocated to a lane carries a deterministic lane classification backed by source evidence, and an Issue-bound worker identity. Missing or contradictory classification fails closed.",
       "type": "object",
       "additionalProperties": false,
       "required": ["id", "issueNumber", "issueUrl", "title", "lifecycleState", "domainLease", "allowlist", "blockers", "sourceRefs"],
@@ -123,8 +135,10 @@
         "title": { "type": "string", "minLength": 1 },
         "lifecycleState": { "$ref": "#/$defs/lifecycleState" },
         "labelState": { "$ref": "#/$defs/lifecycleState" },
+        "lane": { "$ref": "#/$defs/lane" },
+        "laneSourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } },
         "mode": { "enum": ["mutation", "read-only"] },
-        "worker": { "type": "string", "minLength": 1 },
+        "worker": { "$ref": "#/$defs/worker" },
         "session": { "type": "string", "minLength": 1 },
         "branch": { "type": "string", "minLength": 1 },
         "prNumber": { "type": "integer", "minimum": 1 },
@@ -148,20 +162,33 @@
       }
     },
     "review": {
+      "description": "An independent read-only review engagement. It is carried while it is dispatched and while it is running, not only once it concludes, so a review already bound to an exact head is never requested twice. A verdict exists only in state complete.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "workItemId", "reviewedHeadSha", "currentHeadSha", "verdict", "reviewerSession", "authorSession", "sourceRefs"],
+      "required": ["id", "issueNumber", "issueUrl", "workItemId", "reviewedHeadSha", "currentHeadSha", "state", "worker", "reviewerSession", "authorSession", "sourceRefs"],
       "properties": {
         "id": { "$ref": "#/$defs/id" },
+        "issueNumber": { "type": "integer", "minimum": 1 },
+        "issueUrl": { "$ref": "#/$defs/githubUrl" },
         "workItemId": { "$ref": "#/$defs/id" },
         "reviewedHeadSha": { "$ref": "#/$defs/sha" },
         "currentHeadSha": { "$ref": "#/$defs/sha" },
+        "state": { "enum": ["dispatched", "active", "complete"] },
         "verdict": { "enum": ["retained", "blocked-for-revision", "invalid"] },
+        "worker": { "$ref": "#/$defs/worker" },
         "reviewerSession": { "type": "string", "minLength": 1 },
         "authorSession": { "type": "string", "minLength": 1 },
+        "startedEvidenceUrl": { "$ref": "#/$defs/githubUrl" },
         "exactHeadValid": { "type": "boolean" },
         "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "complete" } }, "required": ["state"] },
+          "then": { "required": ["verdict"] },
+          "else": { "not": { "required": ["verdict"] } }
+        }
+      ]
     },
     "ownerGate": {
       "type": "object",
@@ -189,47 +216,68 @@
       }
     },
     "board": {
-      "description": "The canonical three-slot board. Exactly these three keys, always present, free slots explicit.",
+      "description": "The canonical three-lane board: exactly two permanent Product 2 lanes and exactly one permanent workflow lane. Exactly these three keys, always present, free lanes explicit. Any other key set fails closed on COLD005_SLOT_CARDINALITY.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["M1", "M2", "R1"],
+      "required": ["P1", "P2", "W1"],
       "properties": {
-        "M1": { "$ref": "#/$defs/mutationSlot" },
-        "M2": { "$ref": "#/$defs/mutationSlot" },
-        "R1": { "$ref": "#/$defs/reviewSlot" }
+        "P1": { "$ref": "#/$defs/productLane" },
+        "P2": { "$ref": "#/$defs/productLane" },
+        "W1": { "$ref": "#/$defs/workflowLane" }
       }
     },
-    "mutationSlot": {
+    "laneAllocation": {
+      "description": "The permanent allocation the board enforces. Two lanes are reserved for Product 2 advancement and one for workflow/graph advancement; the split is not reallocated by any session.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["slot", "kind", "occupancy"],
+      "required": ["product", "workflow"],
       "properties": {
-        "slot": { "enum": ["M1", "M2"] },
-        "kind": { "const": "mutation" },
+        "product": { "const": 2 },
+        "workflow": { "const": 1 }
+      }
+    },
+    "laneSlot": {
+      "description": "One permanent lane. Mutation versus independent read-only review is the lane's current activityMode, never its identity: a review of a product head occupies P1 or P2, and a review of a workflow head occupies W1. An occupied lane binds one WorkItem, one Worker-N, one Issue URL, one session, persisted STARTED evidence, a domain lease, and the exact reviewed head when the activity is review. A free lane states its reason, and may name a dispatched worker the Owner has not launched yet.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot", "lane", "occupancy"],
+      "properties": {
+        "slot": { "enum": ["P1", "P2", "W1"] },
+        "lane": { "$ref": "#/$defs/lane" },
         "occupancy": { "enum": ["occupied", "free"] },
+        "activityMode": { "enum": ["mutation", "read-only-review"] },
         "workItemId": { "$ref": "#/$defs/id" },
         "issueUrl": { "$ref": "#/$defs/githubUrl" },
+        "worker": { "$ref": "#/$defs/worker" },
         "sessionLabel": { "type": "string", "minLength": 1 },
         "startedEvidenceUrl": { "$ref": "#/$defs/githubUrl" },
         "domainLease": { "type": "string", "pattern": "^domain:[a-z0-9-]+$" },
         "allowlist": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "freeReason": { "type": "string", "minLength": 1 }
-      }
-    },
-    "reviewSlot": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["slot", "kind", "occupancy"],
-      "properties": {
-        "slot": { "const": "R1" },
-        "kind": { "const": "read-only-review" },
-        "occupancy": { "enum": ["occupied", "free"] },
         "reviewId": { "$ref": "#/$defs/id" },
-        "workItemId": { "$ref": "#/$defs/id" },
         "reviewedHeadSha": { "$ref": "#/$defs/sha" },
-        "sessionLabel": { "type": "string", "minLength": 1 },
-        "freeReason": { "type": "string", "minLength": 1 }
-      }
+        "reviewState": { "enum": ["active", "complete"] },
+        "freeReason": { "type": "string", "minLength": 1 },
+        "dispatchedWorker": { "$ref": "#/$defs/worker" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "occupancy": { "const": "occupied" } }, "required": ["occupancy"] },
+          "then": { "required": ["activityMode", "workItemId", "worker", "issueUrl", "sessionLabel", "startedEvidenceUrl", "domainLease"] },
+          "else": { "required": ["freeReason"] }
+        }
+      ]
+    },
+    "productLane": {
+      "allOf": [
+        { "$ref": "#/$defs/laneSlot" },
+        { "properties": { "slot": { "enum": ["P1", "P2"] }, "lane": { "const": "product" } } }
+      ]
+    },
+    "workflowLane": {
+      "allOf": [
+        { "$ref": "#/$defs/laneSlot" },
+        { "properties": { "slot": { "const": "W1" }, "lane": { "const": "workflow" } } }
+      ]
     },
     "graphFacts": {
       "description": "Facts consumed from the graph-source-truth/v1 projection. The cold start validates and reuses them; it never creates a second authority hierarchy.",
@@ -255,6 +303,7 @@
       "properties": {
         "code": {
           "enum": [
+            "RECONCILE_UNSEATED_ENGAGEMENT",
             "ASSEMBLE_OWNER_GATE",
             "REQUEST_INDEPENDENT_REVIEW",
             "PUBLISH_DISPATCH_FOR_MANUAL_OWNER_LAUNCH",
@@ -265,7 +314,8 @@
         },
         "workItemId": { "$ref": "#/$defs/id" },
         "issueUrl": { "$ref": "#/$defs/githubUrl" },
-        "slot": { "enum": ["M1", "M2", "R1"] },
+        "lane": { "$ref": "#/$defs/lane" },
+        "slot": { "enum": ["P1", "P2", "W1"] },
         "rationale": { "type": "string", "minLength": 1 },
         "launchesWorker": { "const": false },
         "impliesApproval": { "const": false }
