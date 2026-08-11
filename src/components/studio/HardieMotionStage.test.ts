@@ -56,6 +56,9 @@ describe("A600 exterior concept motion preview", () => {
       expect(statSync(assetPath).size).toBeGreaterThan(100_000);
       expect(bytes.subarray(0, 4).toString("ascii")).toBe("RIFF");
       expect(bytes.subarray(8, 12).toString("ascii")).toBe("WEBP");
+      expect(bytes.subarray(12, 16).toString("ascii")).toBe("VP8 ");
+      expect(bytes.readUInt16LE(26) & 0x3fff).toBe(1672);
+      expect(bytes.readUInt16LE(28) & 0x3fff).toBe(941);
       expect(component).toContain(`/images/${asset}`);
     }
   });
@@ -101,7 +104,7 @@ describe("A600 exterior concept motion preview", () => {
     expect(component).not.toContain("fallbackImage");
     expect(workbench).not.toContain("fallbackImage=");
     expect(workbench).toContain("resolveA600ConceptAsset(");
-    expect(workbench).toContain("<span>Preview pending</span>");
+    expect(workbench).toContain("<span>Configuration preview unavailable</span>");
   });
 
   it("B-4 removes the unverified material lens", () => {
@@ -111,9 +114,20 @@ describe("A600 exterior concept motion preview", () => {
     expect(styles).not.toContain(".lensImage");
   });
 
-  it("keeps same-model motion bounded and honors reduced-motion preferences", () => {
-    expect(component).toContain("1150");
-    expect(component).toContain("Replay transition");
+  it("delivers exact source bytes at the full stage width", () => {
+    expect(component.match(/sizes="100vw"/g)).toHaveLength(2);
+    expect(component.match(/unoptimized/g)).toHaveLength(2);
+    expect(component).not.toContain("69vw");
+  });
+
+  it("keeps same-model motion fast and sharp and honors reduced motion", () => {
+    expect(component).toContain("320");
+    expect(component).not.toContain("Replay transition");
+    expect(component).not.toContain("materialSweep");
+    expect(styles).toContain("materialResolve 280ms");
+    const resolveKeyframes = styles.slice(styles.indexOf("@keyframes materialResolve"));
+    expect(resolveKeyframes).not.toContain("filter:");
+    expect(resolveKeyframes).not.toContain("scale(");
     expect(styles).toContain("@media (prefers-reduced-motion: reduce)");
     expect(styles).toContain("animation: none;");
   });

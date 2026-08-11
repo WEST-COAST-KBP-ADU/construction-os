@@ -95,7 +95,7 @@ export default function HardieMotionStage({
     if (!renderState.previous) return;
     const timer = window.setTimeout(() => {
       setRenderState((current) => ({ ...current, previous: null }));
-    }, 1150);
+    }, 320);
     return () => window.clearTimeout(timer);
   }, [renderState.nonce, renderState.previous]);
 
@@ -113,15 +113,6 @@ export default function HardieMotionStage({
     ? `${modelLabel} · ${facadeLabel} · ${colorLabel} · White trim concept`
     : `${modelLabel} · matched new-construction concept preview pending`;
 
-  function replayTransition() {
-    if (!previewAvailable) return;
-    setRenderState((current) => ({
-      current: current.current,
-      previous: current.current,
-      nonce: current.nonce + 1,
-    }));
-  }
-
   return (
     <figure
       className={[
@@ -137,7 +128,8 @@ export default function HardieMotionStage({
               src={renderState.previous}
               alt=""
               fill
-              sizes="(max-width: 960px) 100vw, 69vw"
+              sizes="100vw"
+              unoptimized
               className={styles.previousImage}
             />
           ) : null}
@@ -147,26 +139,19 @@ export default function HardieMotionStage({
             alt={`Conceptual exterior view for ${modelLabel}`}
             fill
             preload
-            sizes="(max-width: 960px) 100vw, 69vw"
+            sizes="100vw"
+            unoptimized
             className={styles.currentImage}
           />
-          <div className={styles.materialSweep} aria-hidden="true" />
           <div className={styles.selection} aria-live="polite">
             <span>{selectionLabel}</span>
             <small>
               Concept render · physical sample and local availability verification required
             </small>
           </div>
-          <button
-            type="button"
-            className={styles.replayButton}
-            onClick={replayTransition}
-          >
-            Replay transition
-          </button>
           <div className={styles.materialCaption}>
             <span>{materialLabel}</span>
-            <small>1.1 s material resolve</small>
+            <small>Exact matched concept render</small>
           </div>
         </>
       ) : (

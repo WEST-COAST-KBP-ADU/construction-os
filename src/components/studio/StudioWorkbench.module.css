@@ -98,7 +98,32 @@
 .modelChoices span { font-size: .9rem; }
 .modelChoices small { color: var(--precision-muted); font-size: .58rem; }
 .materialChoices button { display: grid; min-width: 0; gap: .45rem; padding: .35rem; text-align: left; }
-.materialChoices img { width: 100%; height: 2.7rem; object-fit: cover; }
+.renderDetail {
+  position: relative;
+  display: block;
+  height: 3.7rem;
+  overflow: hidden;
+  border: 1px solid var(--precision-boundary);
+  background: var(--precision-shell);
+}
+.renderDetail img {
+  image-rendering: auto;
+  object-fit: cover;
+  object-position: 52.6% 69%;
+  transform: scale(8.5);
+  transform-origin: 52.6% 69%;
+}
+.unavailableDetail {
+  display: grid;
+  min-height: 3.7rem;
+  place-items: center;
+  border: 1px dashed var(--precision-boundary);
+  color: var(--precision-muted);
+  font-size: .58rem;
+  line-height: 1.3;
+  padding: .4rem;
+  text-align: center;
+}
 .materialChoices span { overflow-wrap: anywhere; font-size: .62rem; line-height: 1.25; }
 .modelChoices .selected,
 .materialChoices .selected { border-color: var(--precision-selection); box-shadow: inset 0 0 0 1px var(--precision-selection); }
@@ -107,7 +132,6 @@
 .materialChoices button:disabled { border-style: dashed; cursor: not-allowed; opacity: .45; }
 
 .trimInfo { display: grid; align-content: start; }
-.trimInfo img { width: 100%; height: 2.7rem; border: 1px solid var(--precision-boundary); object-fit: cover; }
 .trimInfo p { color: var(--precision-text); }
 .compareActions { display: grid; align-content: start; gap: .45rem; }
 .compareActions h2 { margin-bottom: 0; }
@@ -176,8 +200,8 @@
   .dockGroup { border-right: 0; border-bottom: 1px solid var(--precision-boundary); padding: 1rem; }
   .dockGroup:last-child { border-bottom: 0; }
   .modelChoices button { min-height: 3.7rem; }
-  .materialChoices img,
-  .trimInfo img { height: 3.4rem; }
+  .renderDetail,
+  .unavailableDetail { height: 4.4rem; }
   .truthBar { display: block; }
   .truthBar > * + * { margin-top: 1rem; }
   .hashRow { grid-template-columns: 1fr auto; }

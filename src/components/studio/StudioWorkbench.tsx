@@ -57,17 +57,6 @@ const reasonLabels: Record<string, string> = {
 
 const optionKeys: StudioOptionKey[] = ["exterior", "palette"];
 
-const swatches: Record<"exterior" | "palette", Record<string, string>> = {
-  exterior: {
-    "lap-siding": "/images/studio-swatch-lap-blue-concept-v1.webp",
-    "dark-siding": "/images/studio-swatch-panel-blue-concept-v1.webp",
-  },
-  palette: {
-    sage: "/images/studio-swatch-lap-blue-concept-v1.webp",
-    charcoal: "/images/studio-swatch-lap-charcoal-concept-v1.webp",
-  },
-};
-
 function defaultsFor(archetype: string): StudioSelections {
   if (archetype !== A600_ARCHETYPE_ID) throw new Error(PUBLIC_LAUNCH_MODEL_REFUSED);
   return {
@@ -120,6 +109,9 @@ export default function StudioWorkbench() {
 
   const activeArchetype = catalog.archetypes.find((item) => item.id === archetype) ?? catalog.archetypes[0];
   const candidateInput = useMemo(() => inputFor(archetype, selections), [archetype, selections]);
+  const currentAlreadyCompared = comparisonInputs.some(
+    (item) => JSON.stringify(item) === JSON.stringify(candidateInput),
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -162,6 +154,10 @@ export default function StudioWorkbench() {
   }
 
   function addCurrentConcept() {
+    if (currentAlreadyCompared) {
+      setStatus("Current concept is already in the in-memory comparison.");
+      return;
+    }
     setComparisonInputs((current) => {
       const withoutCurrent = current.filter((item) => JSON.stringify(item) !== JSON.stringify(candidateInput));
       return [candidateInput, ...withoutCurrent].slice(0, 3);
@@ -223,16 +219,16 @@ export default function StudioWorkbench() {
                 <div className={styles.materialChoices}>
                   {visibleOptions.map((value) => {
                     const decision = evaluateOption(catalog, archetype, selections, key, value);
-                    const disabled = !decision.allowed;
                     const selected = selections[key] === value;
-                    const reason = decision.allowed ? undefined : reasonLabels[decision.reasonCode];
-                    const swatch = key === "exterior"
-                      ? swatches.exterior[value]
-                      : value === "sage" && selections.exterior === "dark-siding"
-                        ? "/images/studio-swatch-panel-blue-concept-v1.webp"
-                        : value === "charcoal" && selections.exterior === "dark-siding"
-                          ? "/images/studio-swatch-panel-charcoal-concept-v1.webp"
-                          : swatches.palette[value];
+                    const preview = resolveA600ConceptAsset(
+                      archetype,
+                      key === "exterior" ? value : selections.exterior,
+                      key === "palette" ? value : selections.palette,
+                    );
+                    const reason = !decision.allowed
+                      ? reasonLabels[decision.reasonCode] ?? decision.reasonCode
+                      : preview ? undefined : "Verified facade-system detail unavailable.";
+                    const disabled = Boolean(reason);
                     return (
                       <button
                         key={value}
@@ -244,26 +240,39 @@ export default function StudioWorkbench() {
                         title={reason}
                         onClick={() => selectOption(key, value)}
                       >
-                        <Image src={swatch} alt="" width={160} height={80} />
+                        {preview ? (
+                          <span className={styles.renderDetail} aria-hidden="true">
+                            <Image src={preview} alt="" fill sizes="20vw" unoptimized />
+                          </span>
+                        ) : (
+                          <span className={styles.unavailableDetail}>Preview unavailable</span>
+                        )}
                         <span>{optionLabels[key][value]}</span>
                       </button>
                     );
                   })}
                 </div>
+                <p>Zoomed facade-system detail — no physical texture available.</p>
               </fieldset>
             );
           })}
 
           <section className={`${styles.dockGroup} ${styles.trimInfo}`} aria-label="Fixed trim information">
             <h2>Trim</h2>
-            <Image src="/images/studio-swatch-white-trim-concept-v1.webp" alt="" width={160} height={80} />
-            <p>White trim concept — fixed in this preview</p>
+            <div className={styles.unavailableDetail}>No verified close-up</div>
+            <p>White trim concept in the render — texture and physical sample unavailable</p>
           </section>
 
           <section className={`${styles.dockGroup} ${styles.compareActions}`} aria-labelledby="compare-title">
             <h2 id="compare-title">Compare</h2>
             <p>{comparisonInputs.length} of 3 in memory</p>
-            <button type="button" onClick={addCurrentConcept} disabled={comparisonInputs.length >= 3}>Add current</button>
+            <button
+              type="button"
+              onClick={addCurrentConcept}
+              disabled={comparisonInputs.length >= 3 || currentAlreadyCompared}
+            >
+              {currentAlreadyCompared ? "Current added" : "Add current"}
+            </button>
             <button
               type="button"
               className={styles.compareButton}
@@ -306,7 +315,7 @@ export default function StudioWorkbench() {
               return (
                 <article key={`${item.archetype}-comparison-${index}`}>
                   <div className={styles.comparisonImage}>
-                    {preview ? <Image src={preview} alt="" fill sizes="(max-width: 42rem) 100vw, 33vw" /> : <span>Configuration preview unavailable</span>}
+                    {preview ? <Image src={preview} alt="" fill sizes="(max-width: 42rem) 100vw, 33vw" unoptimized /> : <span>Configuration preview unavailable</span>}
                   </div>
                   <p>Concept {String.fromCharCode(65 + index)}</p>
                   <h3>{candidateLabel(item)}</h3>

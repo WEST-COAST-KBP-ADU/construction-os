@@ -1,35 +1,65 @@
-# Studio precision shell design QA
+# A600 Studio owner-rejection remediation
 
-## Evidence basis
+## Disposition
 
-- Product base: `main@e32be9ea7cb265f6c6c0a65002a59bfe1419916c`
-- Selected design input: `design/studio-precision-configurator-selected-v1@38b57662b064c2d1ae40a7c7b3d7a7aac2b95e02`
-- Exact reference: `docs/design/studio-precision-configurator-selected-v1.jpg` at that commit
-- Reference SHA-256: `c854b5a2ee0ba29288688e43cf37198ba11afcc150bf23a83714c9590ca9d661`
-- Same-state implementation: `docs/evidence/studio-precision-shell-preview-20260810.jpg`, 1487 × 1058 viewport, A600 / horizontal lap / blue concept
+The prior `READY FOR OWNER REVIEW` disposition is superseded. The owner rejected the
+screen as incomplete, non-responsive, soft, and unable to show a readable material
+surface. The rejected screenshot and five low-resolution swatch derivatives are not
+acceptance evidence.
 
-## Reference comparison
+## Exact source audit
 
-The implementation adopts the selected reference's dominant full-stage house, compact upper-left editorial title and precision descriptor, secondary upper-right model status, and one graphite decision dock. The dock preserves the selected order: model size, facade system, facade color, fixed trim information, then comparison. The public implementation intentionally differs from the illustrative reference by retaining generic concept labels and the existing global header, truth caption, deterministic configuration status, and in-memory-only disclosures.
+The four repository-controlled A600 concept renders are lossy VP8 WebP files at
+1672 × 941 pixels. Their byte sizes range from 146,928 to 161,686 bytes. Their existing
+concept-only provenance remains authoritative.
 
-At tablet and mobile widths the dock moves below the image instead of obscuring the conceptual caption or house. At desktop it floats over the stage. The stage component itself and its frozen four-prop interface remain unchanged for clean integration with the parallel stage lane.
+The five retired swatch derivatives were lossy VP8 WebP files at 160 × 80 pixels and
+only 252 to 410 bytes. They were too small and too compressed to support a readable
+surface-detail presentation. They are removed from the UI and from this branch.
 
-## Findings and fixes
+No verified standalone trim close-up or physical-material texture exists in the
+repository. Trim therefore remains informational and fails closed with an explicit
+`No verified close-up` state.
 
-- P0: none observed.
-- P1, fixed: the former separate right-side configurator competed with the house. It was replaced with the single ordered lower dock.
-- P1, fixed: A450 and A800 could imply selectable facade media. Both pending models now keep facade and color controls disabled, with no carried-over image.
-- P1, fixed: fixed trim could be mistaken for configuration state. It is now a non-interactive information region and remains absent from candidate/hash inputs.
-- P1, fixed: mobile floating controls risked obscuring media and truth copy. The dock now recomposes below the stage at 820 px and below.
-- P2, fixed: material choices used plain controls. Five dedicated render-derived WebP crops now appear through `next/image` beside generic labels.
-- P2, fixed: keyboard focus needed to remain visible on the dark dock. A three-pixel blue outline is present and browser-verified.
-- P2, fixed: comparison, copy-ID, restore, live status, and in-memory truth were visually dominant or separated from the decisions. They are now subordinate but remain operational and explicit.
-- P3 polish: the parallel stage lane may refine internal stage framing without requiring a workbench API change.
+The authoritative James Hardie reference registry cannot supply a texture: all
+fourteen profile records and the one color record have `texture_asset: null`,
+`texture_rights: "absent"`, and `ui_eligible: false`; regional availability is also
+unverified. The Studio therefore does not import or bypass that registry and does not
+display manufacturer names or manufacturer texture claims.
 
-## Rendered gate
+## Root causes and remediation
 
-Chromium production-build checks ran at 390 × 844, 820 × 1180, 1440 × 1000, and 1487 × 1058. All four reported zero horizontal overflow, no application console/page errors, complete non-broken images, visible focus, and active reduced-motion preference. The exercised flows covered A600 horizontal/blue, A600 vertical/charcoal, A450 pending, A800 pending, add current, comparison open/close, exact restore, and Configuration ID copy. Both pending models kept facade controls disabled. Lazy comparison media loaded when opened.
+- The full-width stage retained the former two-column `69vw` responsive-image size.
+  Next.js could select an undersized derivative and then stretch it across the new
+  full-width stage. The stage now serves the exact repository WebP bytes with
+  `sizes="100vw"` and `unoptimized`.
+- The 1.1-second filtered/swept resolve delayed visible feedback and softened the
+  image during interaction. The matched render now changes through a sharp 280 ms
+  clip transition with no filter, scale, or wash layer.
+- Facade controls always displayed blue low-resolution swatches, even when the
+  prospective selection was charcoal. Each facade and color option now resolves the
+  exact full-resolution A600 render that clicking it will activate and shows a zoomed
+  render detail.
+- An unsupported render detail disables its control and exposes an unavailable reason.
+  No fallback image is substituted.
+- `Add current` previously remained actionable when the exact current state was already
+  stored, producing no visible list change. It now reports `Current added` and is
+  disabled until the current selection is distinct.
+- The replay control could replay an identical frame and appear inert. It is removed;
+  every remaining Studio action has an observable state effect or an explicit
+  unavailable state.
 
-The viewport captures used for inspection were `/tmp/studio-390x844.png`, `/tmp/studio-820x1180.png`, and `/tmp/studio-1440x1000.png`; the committed same-state 1487 × 1058 evidence is the file listed above.
+## Verification contract
 
-final result: passed
+- Four resolver mappings must remain exact and all unsupported mappings must return
+  `null`.
+- Every source render must remain lossy VP8 WebP at 1672 × 941 and larger than 100 KB.
+- Main-stage images must use exact-source delivery at `100vw`.
+- The public UI must not display the retired `studio-swatch-*` files.
+- Trim must not claim a texture or physical sample.
+- Focused Vitest, ESLint, TypeScript, production build, and exact-head Preview
+  interaction checks are required before owner review.
+
+Pre-publish focused verification passed with 23/23 tests, targeted ESLint exit 0,
+and TypeScript `tsc --noEmit` exit 0. The repository-wide suite, production build,
+and exact-head Preview remain authoritative post-publish gates.
