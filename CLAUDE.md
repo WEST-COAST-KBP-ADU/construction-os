@@ -12,6 +12,27 @@ Chat, terminal output, and model memory are not durable state.
 - No session approves, certifies, or merges its own work.
 - Connector, credential, or write access grants no authority.
 
+## Cold start — read this first
+
+**[`governance/memory/SESSION-START.md`](governance/memory/SESSION-START.md) is
+the first repository-specific document you read.** It is the one canonical entry
+point, and it works from any repository-attached checkout — a cloud session with
+this repository attached, or a lead engagement with the GitHub repository
+connected. It never requires a particular machine, a named local clone, or a
+manual worktree.
+
+It carries the stable system understanding — Owner, roles, the Product 2 /
+Product 1 boundary, the truth ranking — by pointing at the records that govern
+each, and it carries no current packet, SHA, queue position, or board occupancy.
+Everything mutable is rehydrated from live GitHub into a deterministic
+`COLD_START_RESULT/v1`: the exact current `mainSha`, the live queue, the Owner
+gate, the latest exact-head review, the `M1`/`M2`/`R1` board, the discrepancies
+against the committed index, exactly one next executable action, and every named
+gap. See `governance/memory/README.md` for the rebuild command.
+
+The read order below is what that entry routes you through. Follow it after the
+cold start, not instead of it.
+
 ## Read order for a fresh session
 
 1. `governance/BOUNDARIES.md` — hard limits. Binding, non-negotiable.

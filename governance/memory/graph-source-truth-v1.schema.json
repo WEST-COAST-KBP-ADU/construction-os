@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/WEST-COAST-KBP-ADU/construction-os/governance/memory/graph-source-truth-v1.schema.json",
+  "title": "Construction OS deterministic engineering graph projection v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "watermark", "sources", "nodes", "edges", "derived"],
+  "properties": {
+    "schemaVersion": { "const": "graph-source-truth/v1" },
+    "watermark": { "$ref": "#/$defs/watermark" },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge" }
+    },
+    "derived": { "$ref": "#/$defs/derived" }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9._:/#-]*$" },
+    "watermark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observedAt", "sequence"],
+      "properties": {
+        "observedAt": { "type": "string", "format": "date-time" },
+        "sequence": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "url", "sha", "observedAt", "complete", "namedGaps"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "url": { "type": "string", "pattern": "^https://github\\.com/" },
+        "sha": { "$ref": "#/$defs/sha" },
+        "observedAt": { "type": "string", "format": "date-time" },
+        "complete": { "type": "boolean" },
+        "namedGaps": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "label", "status", "sourceRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": {
+          "enum": ["Objective", "WorkItem", "Attempt", "Dispatch", "Worker", "Branch", "PullRequest", "Review", "OwnerDecision", "Merge", "Deployment", "Evidence", "Blocker", "Refusal", "Correction", "Retraction", "NamedGap"]
+        },
+        "label": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["active", "blocked", "superseded", "audit-only", "retained", "invalid", "resolved", "merged", "deployed", "missing", "complete", "failed", "not-runnable"] },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } },
+        "workItemId": { "$ref": "#/$defs/id" },
+        "headSha": { "$ref": "#/$defs/sha" },
+        "reviewedHeadSha": { "$ref": "#/$defs/sha" },
+        "currentHeadSha": { "$ref": "#/$defs/sha" },
+        "canonicalDisposition": { "enum": ["retain", "reject", "supersede", "audit-only"] },
+        "preconditionFingerprint": { "type": "string", "minLength": 1 },
+        "evidenceRef": { "$ref": "#/$defs/id" },
+        "reasonCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]+$" },
+        "requiredClearingEvidence": { "type": "string", "minLength": 1 },
+        "runnable": { "type": "boolean" },
+        "session": { "type": "string", "minLength": 1 },
+        "branch": { "type": "string", "minLength": 1 },
+        "prNumber": { "type": "integer", "minimum": 1 },
+        "details": { "type": "string", "minLength": 1 }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "from", "to", "sourceRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "enum": ["contains", "depends_on", "supersedes", "attempts", "produced", "dispatched_to", "uses_branch", "opened_as", "reviews_exact_head", "decides", "blocks", "resolves", "merged_as", "deployed_as", "evidenced_by", "corrects", "retracts"] },
+        "from": { "$ref": "#/$defs/id" },
+        "to": { "$ref": "#/$defs/id" },
+        "sourceRefs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/id" } }
+      }
+    },
+    "derived": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonicalHeads", "invalidReviews", "unresolvedBlockers", "runnableWork", "namedGaps", "splitBrain"],
+      "properties": {
+        "canonicalHeads": { "type": "object", "additionalProperties": { "$ref": "#/$defs/sha" } },
+        "invalidReviews": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "unresolvedBlockers": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "runnableWork": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "namedGaps": { "type": "array", "items": { "type": "string" } },
+        "splitBrain": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}
