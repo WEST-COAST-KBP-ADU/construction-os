@@ -1,217 +1,155 @@
 .stage {
-  position: relative;
-  min-height: 42.5rem;
-  overflow: hidden;
   margin: 0;
-  background: var(--studio-panel-muted);
+  color: var(--studio-ink);
+  background: var(--studio-black);
 }
 
-.currentImage,
-.previousImage {
-  object-fit: cover;
-  object-position: center;
+.imageSurface {
+  display: grid;
+  min-height: 31.5rem;
+  place-items: center;
+  border-bottom: 1px solid var(--studio-line);
+  background: #0b0e10;
+  padding: clamp(1rem, 3vw, 2.4rem);
 }
 
-.previousImage {
-  z-index: 0;
+.imageViewport {
+  position: relative;
+  width: min(100%, 836px);
+  aspect-ratio: 1672 / 941;
+  overflow: hidden;
+  border: 1px solid #30373d;
+  background: #111518;
+}
+
+.imageLayer {
+  position: absolute;
+  inset: 0;
 }
 
 .currentImage {
-  z-index: 1;
+  object-fit: contain;
+  object-position: center;
 }
 
-.stageTransitioning .currentImage {
-  animation: materialResolve 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-.materialSweep {
+.cornerIndex {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateX(-115%);
-  background: linear-gradient(
-    90deg,
-    transparent 28%,
-    color-mix(in srgb, var(--studio-accent) 28%, transparent) 50%,
-    transparent 72%
-  );
+  border-right: 1px solid #30373d;
+  border-bottom: 1px solid #30373d;
+  background: #0b0e10;
+  color: #c7cdd1;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  padding: 0.48rem 0.62rem;
 }
 
-.stageTransitioning .materialSweep {
-  animation: materialSweep 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+.renderReadout {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.7fr) minmax(20rem, 1.2fr);
+  gap: 1.3rem 2rem;
+  background: #111518;
+  padding: 1rem clamp(1rem, 3vw, 1.6rem) 1.1rem;
 }
 
-.selection,
-.materialCaption {
-  position: absolute;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--studio-shell-ink);
-  background: color-mix(in srgb, var(--studio-shell) 78%, transparent);
-  backdrop-filter: blur(16px);
+.renderReadout > div {
+  display: grid;
+  gap: 0.32rem;
 }
 
-.selection {
-  top: clamp(1rem, 2vw, 1.75rem);
-  left: clamp(1rem, 2vw, 1.75rem);
-  max-width: calc(100% - 14rem);
-  flex-wrap: wrap;
-  padding: 0.72rem 0.9rem;
-  font-size: 0.76rem;
+.renderReadout span {
+  color: var(--studio-blue);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+}
+
+.renderReadout strong {
+  color: var(--studio-ink);
+  font-size: 0.84rem;
   font-weight: 600;
 }
 
-.selection small,
-.materialCaption small {
-  color: var(--studio-shell-muted);
-  font-size: 0.66rem;
+.renderReadout dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: var(--studio-line);
 }
 
-.materialCaption {
-  right: clamp(1rem, 2vw, 1.75rem);
-  bottom: clamp(1rem, 2vw, 1.75rem);
-  padding: 0.62rem 0.8rem;
-  font-size: 0.72rem;
+.renderReadout dl div {
+  display: grid;
+  gap: 0.22rem;
+  background: #111518;
+  padding: 0 0.75rem;
 }
 
-.replayButton {
-  position: absolute;
-  right: clamp(1rem, 2vw, 1.75rem);
-  bottom: clamp(4.65rem, 7vw, 5.35rem);
-  z-index: 4;
-  min-height: 2.6rem;
-  border: 1px solid color-mix(in srgb, var(--studio-shell-ink) 40%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--studio-shell) 82%, transparent);
-  color: var(--studio-shell-ink);
-  cursor: pointer;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.65rem 0.95rem;
-  backdrop-filter: blur(16px);
+.renderReadout dt {
+  color: var(--studio-muted);
+  font-size: 0.61rem;
 }
 
-.replayButton:hover {
-  border-color: var(--studio-shell-ink);
+.renderReadout dd {
+  margin: 0;
+  color: #d7dcdf;
+  font-family: var(--font-mono);
+  font-size: 0.69rem;
 }
 
-.replayButton:focus-visible {
-  outline: var(--focus-outline-width) solid var(--color-focus-ring);
-  outline-offset: var(--focus-outline-offset);
+.renderReadout p {
+  grid-column: 1 / -1;
+  margin: 0;
+  border-top: 1px solid var(--studio-line);
+  color: var(--studio-muted);
+  font-size: 0.65rem;
+  line-height: 1.5;
+  padding-top: 0.75rem;
 }
 
 .previewPending {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 3;
   display: grid;
-  width: min(28rem, calc(100% - 3rem));
+  min-height: 31.5rem;
+  place-content: center;
   gap: 0.45rem;
-  transform: translate(-50%, -50%);
-  color: var(--studio-shell-ink);
-  border: 1px solid color-mix(in srgb, var(--studio-shell-ink) 24%, transparent);
-  background: color-mix(in srgb, var(--studio-shell) 88%, transparent);
-  padding: 1.15rem 1.25rem;
-  font-size: 0.72rem;
-  line-height: 1.4;
+  background: #0b0e10;
+  color: var(--studio-ink);
+  padding: 2rem;
   text-align: center;
-  backdrop-filter: blur(16px);
 }
 
 .previewPending strong {
-  font-size: 0.82rem;
+  font-size: 1rem;
 }
 
 .previewPending span {
-  color: var(--studio-shell-muted);
-}
-
-.stage figcaption {
-  position: absolute;
-  bottom: clamp(1rem, 2vw, 1.75rem);
-  left: clamp(1rem, 2vw, 1.75rem);
-  z-index: 4;
-  margin: 0;
-  color: var(--studio-shell-ink);
-  font-size: 0.68rem;
-  text-shadow: 0 1px 3px color-mix(in srgb, var(--studio-shell) 70%, transparent);
-}
-
-@keyframes materialResolve {
-  0% {
-    clip-path: inset(0 100% 0 0);
-    filter: saturate(0.82) contrast(0.96);
-    transform: scale(1.012);
-  }
-  58% {
-    filter: saturate(0.94) contrast(0.99);
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-    filter: none;
-    transform: scale(1);
-  }
-}
-
-@keyframes materialSweep {
-  0% {
-    opacity: 0;
-    transform: translateX(-115%);
-  }
-  18%,
-  82% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(115%);
-  }
-}
-
-@media (max-width: 60rem) {
-  .stage {
-    min-height: min(66vw, 36rem);
-  }
+  color: var(--studio-muted);
+  font-size: 0.72rem;
 }
 
 @media (max-width: 42rem) {
-  .stage {
-    min-height: 72vw;
+  .imageSurface {
+    min-height: 0;
+    padding: 0.7rem;
   }
 
-  .selection {
-    right: 1rem;
-    max-width: none;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding: 0.58rem 0.68rem;
+  .renderReadout {
+    grid-template-columns: 1fr;
   }
 
-  .materialCaption {
-    display: none;
+  .renderReadout dl {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    background: transparent;
   }
 
-  .replayButton {
-    right: 1rem;
-    bottom: 3.15rem;
-  }
-
-  .stage figcaption {
-    right: 1rem;
-    bottom: 0.8rem;
-    left: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .stageTransitioning .currentImage,
-  .stageTransitioning .materialSweep {
-    animation: none;
+  .renderReadout dl div {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--studio-line);
+    padding: 0.45rem 0 0;
   }
 }

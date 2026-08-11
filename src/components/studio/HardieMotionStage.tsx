@@ -1,18 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
 
 import styles from "./HardieMotionStage.module.css";
 
 type ConceptFacade = "lap-siding" | "dark-siding";
 type ConceptColor = "sage" | "charcoal";
-
-type RenderState = {
-  current: string | null;
-  previous: string | null;
-  nonce: number;
-};
 
 type HardieMotionStageProps = {
   modelId: string;
@@ -33,13 +27,13 @@ const PREVIEW_ASSETS = {
 } as const satisfies Record<ConceptFacade, Record<ConceptColor, string>>;
 
 const FACADE_LABELS: Record<ConceptFacade, string> = {
-  "lap-siding": "Horizontal lap concept",
-  "dark-siding": "Vertical panel concept",
+  "lap-siding": "Horizontal lap",
+  "dark-siding": "Vertical panel",
 };
 
 const COLOR_LABELS: Record<ConceptColor, string> = {
-  sage: "Blue concept",
-  charcoal: "Charcoal concept",
+  sage: "Blue study",
+  charcoal: "Charcoal study",
 };
 
 function isConceptFacade(value: string): value is ConceptFacade {
@@ -50,19 +44,8 @@ function isConceptColor(value: string): value is ConceptColor {
   return value === "sage" || value === "charcoal";
 }
 
-export function resolveA600ConceptAsset(
-  modelId: string,
-  exterior: string,
-  palette: string,
-): string | null {
-  if (
-    modelId !== "one-bed-600" ||
-    !isConceptFacade(exterior) ||
-    !isConceptColor(palette)
-  ) {
-    return null;
-  }
-
+export function resolveA600ConceptAsset(modelId: string, exterior: string, palette: string): string | null {
+  if (modelId !== "one-bed-600" || !isConceptFacade(exterior) || !isConceptColor(palette)) return null;
   return PREVIEW_ASSETS[exterior][palette];
 }
 
@@ -72,113 +55,66 @@ export default function HardieMotionStage({
   exterior,
   palette,
 }: HardieMotionStageProps) {
+  const reduceMotion = useReducedMotion();
   const resolvedAsset = resolveA600ConceptAsset(modelId, exterior, palette);
-  const previewAvailable = resolvedAsset !== null;
 
-  const [renderState, setRenderState] = useState<RenderState>({
-    current: resolvedAsset,
-    previous: null,
-    nonce: 0,
-  });
-
-  if (renderState.current !== resolvedAsset) {
-    setRenderState((current) => {
-      return {
-        current: resolvedAsset,
-        previous: resolvedAsset ? current.current : null,
-        nonce: current.nonce + 1,
-      };
-    });
+  if (!resolvedAsset || !isConceptFacade(exterior) || !isConceptColor(palette)) {
+    return (
+      <div className={styles.previewPending}>
+        <strong>Source render unavailable</strong>
+        <span>The viewport fails closed when an exact A600 render is not mapped.</span>
+      </div>
+    );
   }
 
-  useEffect(() => {
-    if (!renderState.previous) return;
-    const timer = window.setTimeout(() => {
-      setRenderState((current) => ({ ...current, previous: null }));
-    }, 1150);
-    return () => window.clearTimeout(timer);
-  }, [renderState.nonce, renderState.previous]);
-
-  const facadeLabel = previewAvailable
-    ? FACADE_LABELS[exterior as ConceptFacade]
-    : "Concept exterior";
-  const colorLabel = previewAvailable
-    ? COLOR_LABELS[palette as ConceptColor]
-    : "Preview pending";
-  const materialLabel =
-    exterior === "dark-siding"
-      ? "Vertical panel concept"
-      : "Horizontal lap concept";
-  const selectionLabel = previewAvailable
-    ? `${modelLabel} · ${facadeLabel} · ${colorLabel} · White trim concept`
-    : `${modelLabel} · matched new-construction concept preview pending`;
-
-  function replayTransition() {
-    if (!previewAvailable) return;
-    setRenderState((current) => ({
-      current: current.current,
-      previous: current.current,
-      nonce: current.nonce + 1,
-    }));
-  }
+  const facadeLabel = FACADE_LABELS[exterior];
+  const colorLabel = COLOR_LABELS[palette];
+  const transition = {
+    duration: reduceMotion ? 0 : 0.22,
+    ease: [0.22, 1, 0.36, 1] as const,
+  };
 
   return (
-    <figure
-      className={[
-        styles.stage,
-        renderState.previous ? styles.stageTransitioning : "",
-      ].join(" ")}
-      aria-label={selectionLabel}
-    >
-      {previewAvailable && renderState.current ? (
-        <>
-          {renderState.previous ? (
-            <Image
-              src={renderState.previous}
-              alt=""
-              fill
-              sizes="(max-width: 960px) 100vw, 69vw"
-              className={styles.previousImage}
-            />
-          ) : null}
-          <Image
-            key={`${renderState.current}-${renderState.nonce}`}
-            src={renderState.current}
-            alt={`Conceptual exterior view for ${modelLabel}`}
-            fill
-            preload
-            sizes="(max-width: 960px) 100vw, 69vw"
-            className={styles.currentImage}
-          />
-          <div className={styles.materialSweep} aria-hidden="true" />
-          <div className={styles.selection} aria-live="polite">
-            <span>{selectionLabel}</span>
-            <small>
-              Concept render · physical sample and local availability verification required
-            </small>
-          </div>
-          <button
-            type="button"
-            className={styles.replayButton}
-            onClick={replayTransition}
-          >
-            Replay transition
-          </button>
-          <div className={styles.materialCaption}>
-            <span>{materialLabel}</span>
-            <small>1.1 s material resolve</small>
-          </div>
-        </>
-      ) : (
-        <div className={styles.previewPending}>
-          <strong>Matched exterior concept preview pending</strong>
-          <span>
-            This model stays image-free until a matched new-construction render exists.
-          </span>
+    <figure className={styles.stage} aria-label={`${modelLabel} · ${facadeLabel} · ${colorLabel}`}>
+      <div className={styles.imageSurface}>
+        <div className={styles.imageViewport}>
+          <AnimatePresence initial={false} mode="sync">
+            <m.div
+              key={resolvedAsset}
+              className={styles.imageLayer}
+              initial={reduceMotion ? false : { opacity: 0, clipPath: "inset(0 2% 0 0)" }}
+              animate={{ opacity: 1, clipPath: "inset(0 0 0 0)" }}
+              exit={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+              transition={transition}
+            >
+              <Image
+                src={resolvedAsset}
+                alt={`Conceptual exterior view for ${modelLabel}`}
+                fill
+                preload
+                unoptimized
+                draggable={false}
+                sizes="(max-width: 836px) 100vw, 836px"
+                className={styles.currentImage}
+              />
+            </m.div>
+          </AnimatePresence>
+          <div className={styles.cornerIndex} aria-hidden="true">A600 / EXT</div>
         </div>
-      )}
+      </div>
 
-      <figcaption>Conceptual — not a completed West Coast KBP project.</figcaption>
+      <figcaption className={styles.renderReadout}>
+        <div>
+          <span>SOURCE RENDER</span>
+          <strong>{facadeLabel} / {colorLabel}</strong>
+        </div>
+        <dl>
+          <div><dt>Native</dt><dd>1672 × 941</dd></div>
+          <div><dt>Display ceiling</dt><dd>836 px</dd></div>
+          <div><dt>Motion</dt><dd>220 ms</dd></div>
+        </dl>
+        <p>Concept render · physical sample and local availability verification required. Not a completed West Coast KBP project.</p>
+      </figcaption>
     </figure>
   );
 }
