@@ -22,6 +22,31 @@ repository-byte authority at all.
 The ad-hoc visual execution model is terminated. Work is dispatched only as
 exact repository-backed packets against pinned bases.
 
+### 1.1 Scope of supersession over `DR-0017`
+
+`governance/decisions/DR-0017-claude-lead-parallel-codex-execution.md` is
+superseded by this record **only** with respect to:
+
+1. its assignment of the Claude lane as operational lead; and
+2. any execution topology incompatible with this record, including its
+   designation of Codex as the primary execution lane operating under a
+   model-lane lead.
+
+From this record's merge commit those provisions are terminated. They are not
+binding on any session and are not re-activated by any other clause of this
+record, including §13.
+
+`DR-0017` is **retained unmodified as historical evidence** of the shape adopted
+at `main@9de3fbc`. This reset does not edit it. Its provisions that this record
+does not supersede remain binding and are restated here: bounded packets, one
+packet to one branch to one Draft PR, one writer per file domain, an author never
+reviews or certifies its own work, evidence by artifact rather than assertion,
+Owner-only adoption and Owner-only merge, and engagement-scoped role identity
+that never collapses two engagements into one.
+
+Where `DR-0017` and this record disagree on lead assignment or execution
+topology, this record governs from its merge commit.
+
 ## 2. Roles
 
 | Role | Holds | Cannot |
@@ -237,10 +262,18 @@ cleanup.
 
 ## 13. Standing boundaries
 
-`governance/BOUNDARIES.md` and adopted decision records remain binding and are
-unchanged by this record. This operating model opens no product, architecture,
-production, credential, access-control, or spending decision. It changes
-execution coordination and authority only.
+`governance/BOUNDARIES.md` remains binding and is unchanged by this record.
+
+Adopted decision records remain binding **except where this record supersedes
+them**. The single exception is `DR-0017`, superseded per §1.1 with respect to
+its assignment of the Claude lane as operational lead and any execution topology
+incompatible with this record. This section does not restore those provisions.
+No other adopted decision record is superseded, and no decision record is edited
+by this reset.
+
+This operating model opens no product, architecture, production, credential,
+access-control, or spending decision. It changes execution coordination and
+authority only.
 
 Product 1, `kbp-core`, `kbp-dev-office`, and Deedseal remain outside these
 packets unless the Owner explicitly opens that boundary.

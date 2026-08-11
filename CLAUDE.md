@@ -15,10 +15,16 @@ Chat, terminal output, and model memory are not durable state.
 ## Read order for a fresh session
 
 1. `governance/BOUNDARIES.md` — hard limits. Binding, non-negotiable.
-2. `governance/office/OPERATING-MODEL-v4.md` — current roles, lanes, and loop.
-3. `governance/office/STATE.md` — queue index.
-4. `governance/sops/SOP-0001-dual-lane-github-coordination.md` — Issue state protocol.
-5. Open GitHub Issues and Draft PRs — live dispatch state.
+2. `governance/office/OPERATING-MODEL-v5.md` — current roles, lanes, and loop.
+3. `governance/office/PROGRAM-PLAN-v1.md` — current stages, gates, and the
+   physically coherent professional visual production contract.
+4. `governance/office/STATE.md` — queue index.
+5. `governance/sops/SOP-0001-dual-lane-github-coordination.md` — Issue state protocol.
+6. Open GitHub Issues and Draft PRs — live dispatch state.
+
+`governance/office/OPERATING-MODEL-v4.md` and every earlier version are
+**historical only**. v4's assignment of operational lead to the Claude lane is
+terminated by v5 §1 and must not be adopted as current by any session.
 
 Merged `main`, verified GitHub state, and verified execution output are truth.
 `STATE.md` is an index of that truth, never a substitute for it. When a
