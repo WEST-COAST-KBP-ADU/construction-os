@@ -106,6 +106,45 @@ export function resolveBlueprintKeyCommand(key: string, current: HomeBlueprintPh
 
 export type BlueprintMotionMode = "static" | "live";
 
+export type MotionModeConditions = {
+  /** False on the server and on the first client render. */
+  mounted: boolean;
+  reducedMotion: boolean;
+  /** Mobile-width viewport: no auto progression and no transport. */
+  compact: boolean;
+  /** Mounted as the first fold's instrument rather than as a standalone chapter. */
+  slotted: boolean;
+};
+
+/**
+ * Progressive reveal is only honest where a reader can wait for it.
+ *
+ * It is refused in four states, and each for its own reason:
+ *
+ * - on the server and on the first client render, so hydration is stable and a
+ *   reader without JavaScript keeps the complete sheet;
+ * - under reduced motion, which is what the preference asks for;
+ * - at compact widths, where auto progression is suppressed and the transport
+ *   is disabled with it, so a partial drawing would be stranded on its first
+ *   layer for good;
+ * - in the first fold, where the drawing is the dominant visual a visitor is
+ *   given seconds to read. A cumulative draft takes the length of a full pass
+ *   to put a building on the sheet, and for most of that pass the fold's
+ *   dominant surface says nothing about construction. The fold therefore opens
+ *   on the finished instrument and lets the phase travel across it as emphasis.
+ *
+ * The standalone chapter keeps the draft: it has a rail and a transport, and a
+ * reader who reached it chose to watch the drawing being made.
+ */
+export function resolveMotionMode(conditions: MotionModeConditions): BlueprintMotionMode {
+  return conditions.mounted &&
+    !conditions.reducedMotion &&
+    !conditions.compact &&
+    !conditions.slotted
+    ? "live"
+    : "static";
+}
+
 /**
  * Reveal is cumulative, so the sheet reads as a drawing being drafted rather
  * than as slides. In static mode every layer is present, which is what a
@@ -233,7 +272,12 @@ export default function LiveBlueprintSequence({
 
   // Server and first client render agree on `static`, so hydration is stable
   // and a reader without JavaScript keeps the complete sheet.
-  const motion: BlueprintMotionMode = mounted && !reducedMotion ? "live" : "static";
+  const motion: BlueprintMotionMode = resolveMotionMode({
+    mounted,
+    reducedMotion,
+    compact,
+    slotted,
+  });
   const activeIndex = homeBlueprintPhaseIndex(activePhase);
   const activeDescriptor = drawing.phases[activeIndex];
 

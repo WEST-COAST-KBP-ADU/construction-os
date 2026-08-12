@@ -1,30 +1,38 @@
 /**
- * PREMIUM-HERO-SCENE-001 · Option 2 hero integration contract.
+ * LIVING-PROJECT-HERO-0001 · the first fold's integration contract.
  *
- * This module is the stable surface between the Option 2 hero composition
- * shell (Worker-227) and the later blueprint motion mechanism (Worker-228).
- * It is intentionally free of React, DOM, and CSS so both sides can assert
- * against it without importing each other.
+ * This module is the stable surface between the first-fold composition shell
+ * and the mounted A600-derived instrument. It is intentionally free of React,
+ * DOM, and CSS so both sides can assert against it without importing each
+ * other. Nothing here draws, animates, or schedules anything.
  *
- * Nothing here draws, animates, or schedules anything. The hero owns the
- * static composition and reserves the region; the mounted component owns the
- * drawing.
+ * Version 2.0.0 removed the workbench bitmap. The first fold no longer carries
+ * a photographic layer of any kind: there is no image, no image slot, no
+ * fallback frame, and no imagery disclosure, because there is no imagery to
+ * disclose. The instrument is the visual surface, and the only claim boundary
+ * the fold publishes is the one the instrument itself states.
  */
 
 /**
- * Bumped whenever a consumer-visible guarantee below changes. Worker-228 may
- * pin this exact value in its own tests.
+ * Bumped whenever a consumer-visible guarantee below changes. 2.0.0 is a
+ * breaking bump: `PREMIUM_WORKBENCH_HERO_MEDIA`, its aspect constant, and the
+ * three media custom properties the slot used to publish are gone, and the
+ * public rail is now the four-stage business progression rather than the three
+ * drafting chapters.
  */
-export const PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION = "1.1.0";
+export const PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION = "2.0.0";
 
 /* -------------------------------------------------------------------------
  * Motion phases
  * ---------------------------------------------------------------------- */
 
 /**
- * The stable phase vocabulary of the blueprint mechanism, in narrative order.
- * The hero implements none of these visuals; it publishes the vocabulary so a
- * later component can mount against a fixed contract.
+ * The stable phase vocabulary of the mounted instrument, in narrative order.
+ * The hero implements none of these visuals; it publishes the vocabulary so the
+ * mounted component and the composition agree on a fixed contract.
+ *
+ * These are internal drafting states. They are deliberately more granular than
+ * the public rail below, and they are never rendered as public labels.
  */
 export const BLUEPRINT_MOTION_PHASES = [
   "lead",
@@ -36,7 +44,7 @@ export const BLUEPRINT_MOTION_PHASES = [
 
 export type BlueprintMotionPhase = (typeof BLUEPRINT_MOTION_PHASES)[number];
 
-/** The phase this Issue owns. The hero renders its `lead` state and no other. */
+/** The phase the composition presents before anything advances it. */
 export const BLUEPRINT_MOTION_DEFAULT_PHASE: BlueprintMotionPhase = "lead";
 
 export function isBlueprintMotionPhase(value: unknown): value is BlueprintMotionPhase {
@@ -47,29 +55,63 @@ export function isBlueprintMotionPhase(value: unknown): value is BlueprintMotion
 }
 
 /* -------------------------------------------------------------------------
- * Chapter rail
+ * Public rail
  * ---------------------------------------------------------------------- */
 
 /**
- * The three chapters the hero rail renders, as labels only. They are a subset
- * of {@link BLUEPRINT_MOTION_PHASES}; `plan` and `build` exist in the motion
- * vocabulary but are not surfaced in the first fold.
+ * The public progression, in order. This is the business journey a visitor
+ * reads in the first fold, and it is the only progression the fold publishes.
+ *
+ * It is not the phase vocabulary and does not share its identifiers. The
+ * instrument runs five drafting phases; the visitor reads four business
+ * stations. The mapping between them is owned by `HeroBlueprintStage`, is
+ * total, and is asserted there.
  */
-export const HERO_CHAPTERS = ["lead", "project", "record"] as const;
+export const HERO_CHAPTERS = [
+  "lead",
+  "bounded-work",
+  "verified-record",
+  "business-memory",
+] as const;
 
 export type HeroChapter = (typeof HERO_CHAPTERS)[number];
 
+/** The exact public labels. Reproduced verbatim from the approved copy. */
 export const HERO_CHAPTER_LABELS: Readonly<Record<HeroChapter, string>> = Object.freeze({
   lead: "Lead",
-  project: "Project",
-  record: "Record",
+  "bounded-work": "Bounded work",
+  "verified-record": "Verified record",
+  "business-memory": "Business memory",
 });
+
+/**
+ * The stations a motion phase can put under the visitor's eye.
+ *
+ * `business-memory` is deliberately absent. It is not a state one project
+ * passes through: it is where verified records accumulate once a project has
+ * closed. The instrument draws one project, so claiming it animates the
+ * accumulation would be a claim the drawing cannot support. The station is
+ * published, labelled, and legible; it is never phase-derived.
+ */
+export const HERO_PHASE_DERIVED_CHAPTERS = [
+  "lead",
+  "bounded-work",
+  "verified-record",
+] as const;
+
+export type HeroPhaseDerivedChapter = (typeof HERO_PHASE_DERIVED_CHAPTERS)[number];
+
+/** The standing station: the destination of every verified record. */
+export const HERO_STANDING_CHAPTER: HeroChapter = "business-memory";
 
 export function isHeroChapter(value: unknown): value is HeroChapter {
   return typeof value === "string" && (HERO_CHAPTERS as readonly string[]).includes(value);
 }
 
-/** Stable element id for a rail chapter, so a mounted component can bind to it. */
+/** Accessible name of the public rail. Construction first, never a product term. */
+export const HERO_RAIL_LABEL = "Project progression";
+
+/** Stable element id for a rail station, so a mounted component can bind to it. */
 export function heroChapterElementId(chapter: HeroChapter): string {
   return `premium-workbench-hero-chapter-${chapter}`;
 }
@@ -106,7 +148,7 @@ export const BLUEPRINT_MOTION_SLOT_CONTRACT = Object.freeze({
   slotId: BLUEPRINT_MOTION_SLOT_ID,
   phases: BLUEPRINT_MOTION_PHASES,
   defaultPhase: BLUEPRINT_MOTION_DEFAULT_PHASE,
-  /** Chapters rendered in the rail, each addressable by {@link heroChapterElementId}. */
+  /** Public stations rendered in the rail, each addressable by {@link heroChapterElementId}. */
   chapters: HERO_CHAPTERS,
   /** Attributes the hero writes onto the reserved element. */
   dataAttributes: Object.freeze({
@@ -121,16 +163,16 @@ export const BLUEPRINT_MOTION_SLOT_CONTRACT = Object.freeze({
   }),
   /**
    * Layout guarantees of the reserved element:
-   * - it is absolutely positioned over the full workbench surface (`inset: 0`);
+   * - it is absolutely positioned over the full instrument column (`inset: 0`);
    * - it establishes a size container named `blueprint-motion-slot`;
    * - it sets `pointer-events: none` on itself and `auto` on direct children,
    *   so an empty slot intercepts nothing;
-   * - it draws no border, radius, shadow, or background of its own;
+   * - it draws no border, radius, shadow, or background of its own — the column
+   *   behind it is a flat daylight field, never an image and never a card;
    * - it is a stacking context — `container-type: size` applies layout
    *   containment, and `z-index: 0` states that explicitly — pinned beneath the
    *   disclosure strip, so no `z-index` set inside the mounted subtree can
-   *   paint over the public claim. Version 1.0.0 documented the opposite; the
-   *   containment was always there and the guarantee is now the stated one.
+   *   paint over the public claim.
    */
   layout: Object.freeze({
     positioning: "absolute-inset-0",
@@ -141,17 +183,15 @@ export const BLUEPRINT_MOTION_SLOT_CONTRACT = Object.freeze({
     stacking: "isolated-below-disclosure",
   }),
   /**
-   * CSS custom properties the hero sets on the reserved element so a mounted
-   * drawing can register itself against the underlying surface without
-   * re-deriving the crop.
+   * CSS custom properties the hero sets on the reserved element.
+   *
+   * Version 1.1.0 published three more — source aspect, object fit, and object
+   * position — so a mounted drawing could register itself against the crop of
+   * the workbench photograph. There is no photograph and no crop, so there is
+   * nothing to register against and the three are gone rather than kept at
+   * inert values.
    */
   customProperties: Object.freeze({
-    /** Intrinsic aspect ratio of the workbench source, as a unitless number. */
-    sourceAspect: "--blueprint-motion-source-aspect",
-    /** `object-fit` applied to the workbench surface. */
-    objectFit: "--blueprint-motion-object-fit",
-    /** `object-position` applied to the workbench surface. */
-    objectPosition: "--blueprint-motion-object-position",
     /** `1` normally, `0` under `prefers-reduced-motion: reduce`. */
     motionEnabled: "--blueprint-motion-enabled",
   }),
@@ -162,16 +202,20 @@ export const BLUEPRINT_MOTION_SLOT_CONTRACT = Object.freeze({
  * ---------------------------------------------------------------------- */
 
 /**
- * The exact Owner-approved Option 2 first-fold copy. Reproduced verbatim,
- * including the typographic apostrophe and em dash.
+ * The exact Owner-approved first-fold copy, reproduced verbatim including the
+ * middle dot and the em dash.
+ *
+ * Construction reads first: the business, then the journey, then who decides.
+ * The platform is named once, as the thing that keeps the record; it is never
+ * the subject of the fold and its infrastructure is never its vocabulary.
  */
 export const PREMIUM_WORKBENCH_HERO_COPY = Object.freeze({
-  kicker: "KBP OS · ADU + General Construction",
-  heading: "From the first lead to a managed construction process.",
+  kicker: "WEST COAST KBP · ADU + GENERAL CONSTRUCTION",
+  heading: "A construction project, kept legible from first lead to verified record.",
   lede:
-    "KBP OS is a lead-generation and process-management platform for ADU and " +
-    "general construction—residential and commercial. We’re open to GC " +
-    "projects beyond ADUs.",
+    "KBP OS is designed to keep project facts, decisions, documents, and " +
+    "completed work in one living record—organized by the system, controlled " +
+    "by people.",
 } as const);
 
 export type PremiumWorkbenchHeroActionEmphasis = "primary" | "secondary";
@@ -184,53 +228,21 @@ export type PremiumWorkbenchHeroAction = {
 };
 
 /**
- * The calls to action carried forward unchanged from the published homepage at
- * the packet's exact base `main@bd3f336140a320ea81008cf415a05861fb034de2`
- * (`app/page.tsx`). Labels and destinations are reported, never invented.
+ * The two published calls to action. Both destinations are live routes on this
+ * site; neither label nor href is invented here.
  */
 export const PREMIUM_WORKBENCH_HERO_ACTIONS: readonly PremiumWorkbenchHeroAction[] =
   Object.freeze([
     Object.freeze({
-      id: "explore-models",
-      href: "/models",
-      label: "Explore models",
-      emphasis: "primary",
-    }),
-    Object.freeze({
       id: "open-concept-studio",
       href: "/studio",
       label: "Open Concept Studio",
+      emphasis: "primary",
+    }),
+    Object.freeze({
+      id: "see-how-a-project-runs",
+      href: "/process",
+      label: "See how a project runs",
       emphasis: "secondary",
     }),
   ] as const);
-
-/* -------------------------------------------------------------------------
- * Workbench surface
- * ---------------------------------------------------------------------- */
-
-/**
- * The workbench surface, taken from an asset already present and already
- * published at the exact base. Nothing is added, generated, upscaled, or
- * retouched here.
- *
- * The description and disclosure state only what is visible in the frame. They
- * make no claim about a West Coast KBP project, an approved plan, a permit, a
- * parcel, or a material specification.
- */
-export const PREMIUM_WORKBENCH_HERO_MEDIA = Object.freeze({
-  src: "/images/balanced-process-materials-concept-v2.webp",
-  width: 1500,
-  height: 1000,
-  objectFit: "cover",
-  objectPosition: "50% 50%",
-  alt:
-    "Plan and material studies on a wood workbench in daylight: an architectural " +
-    "floor plan drawing, material sample tiles, a graphite pencil, and a metal ruler.",
-  disclosure:
-    "Conceptual imagery—plan and material studies under review. Not a West Coast " +
-    "KBP project, an approved plan, a permit, a parcel, or a material specification.",
-} as const);
-
-/** Convenience: the intrinsic aspect ratio of the workbench source. */
-export const PREMIUM_WORKBENCH_HERO_MEDIA_ASPECT =
-  PREMIUM_WORKBENCH_HERO_MEDIA.width / PREMIUM_WORKBENCH_HERO_MEDIA.height;

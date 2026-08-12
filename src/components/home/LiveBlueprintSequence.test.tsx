@@ -19,6 +19,7 @@ import LiveBlueprintSequence, {
   nextBlueprintPhase,
   previousBlueprintPhase,
   resolveBlueprintKeyCommand,
+  resolveMotionMode,
   shouldAutoAdvance,
 } from "./LiveBlueprintSequence";
 
@@ -168,6 +169,60 @@ describe("auto progression", () => {
 
   it("never runs on a mobile-width viewport", () => {
     expect(shouldAutoAdvance({ ...running, compact: true })).toBe(false);
+  });
+
+  it("draws progressively only where a reader can wait for the drawing", () => {
+    const live = { mounted: true, reducedMotion: false, compact: false, slotted: false };
+
+    expect(resolveMotionMode(live)).toBe("live");
+    // The server render and the first client render.
+    expect(resolveMotionMode({ ...live, mounted: false })).toBe("static");
+    expect(resolveMotionMode({ ...live, reducedMotion: true })).toBe("static");
+    // Mobile suppresses auto progression and the transport with it, so a
+    // progressive reveal there would strand the sheet on its first layer.
+    expect(resolveMotionMode({ ...live, compact: true })).toBe("static");
+    // The first fold opens on the finished instrument: a cumulative draft
+    // would leave the fold's dominant surface blank for most of a pass.
+    expect(resolveMotionMode({ ...live, slotted: true })).toBe("static");
+
+    // Every state that refuses auto progression on width or preference also
+    // refuses a partial drawing.
+    for (const conditions of [
+      { ...live, compact: true },
+      { ...live, reducedMotion: true },
+      { ...live, compact: true, reducedMotion: true },
+    ]) {
+      expect(
+        shouldAutoAdvance({
+          ...conditions,
+          enabled: true,
+          playing: true,
+          interacting: false,
+          documentHidden: false,
+        }),
+      ).toBe(false);
+      expect(resolveMotionMode(conditions)).toBe("static");
+    }
+  });
+
+  it("keeps the fold's instrument complete at every phase it can reach", () => {
+    // Emphasis travels; nothing is ever withheld from the fold.
+    for (const layer of HOME_BLUEPRINT_PHASE_ORDER) {
+      for (const active of HOME_BLUEPRINT_PHASE_ORDER) {
+        expect(
+          isLayerRevealed(
+            layer,
+            active,
+            resolveMotionMode({
+              mounted: true,
+              reducedMotion: false,
+              compact: false,
+              slotted: true,
+            }),
+          ),
+        ).toBe(true);
+      }
+    }
   });
 
   it("watches the media queries it claims to watch", () => {

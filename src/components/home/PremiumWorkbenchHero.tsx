@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -8,63 +7,86 @@ import {
   BLUEPRINT_MOTION_SLOT_ID,
   HERO_CHAPTERS,
   HERO_CHAPTER_LABELS,
+  HERO_RAIL_LABEL,
+  HERO_STANDING_CHAPTER,
   PREMIUM_WORKBENCH_HERO_ACTIONS,
   PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION,
   PREMIUM_WORKBENCH_HERO_COPY,
-  PREMIUM_WORKBENCH_HERO_MEDIA,
   heroChapterElementId,
   type BlueprintMotionPhase,
   type HeroChapter,
+  type HeroPhaseDerivedChapter,
 } from "./premiumWorkbenchHero.contract";
 
 const TITLE_ID = "premium-workbench-hero-title";
 
 export type PremiumWorkbenchHeroProps = {
   /**
-   * The blueprint mechanism owned by a later packet. When omitted the region
-   * stays reserved and renders nothing — no skeleton, no placeholder frame.
+   * The instrument mounted into the composition's dominant column. When omitted
+   * the region stays reserved and renders nothing — no skeleton, no placeholder
+   * frame, and in particular no image and no image substitute.
    */
   blueprintMotionSlot?: ReactNode;
   /**
-   * The chapter the composition presents. Static by design: this module is the
-   * composition and interaction shell, not the mechanism that advances it.
+   * The public station the composition presents. Static by design: this module
+   * is the composition and interaction shell, not the mechanism that advances
+   * it. `business-memory` is not accepted here — it is the standing station and
+   * is never phase-derived.
    */
-  activeChapter?: HeroChapter;
-  /** The phase published to the reserved region. Defaults to `activeChapter`. */
+  activeChapter?: HeroPhaseDerivedChapter;
+  /** The phase published to the reserved region. Defaults to `lead`. */
   motionPhase?: BlueprintMotionPhase;
   /**
-   * A second claim boundary appended to the disclosure strip, owned by whatever
-   * is mounted into the reserved region. The strip states what the surface is;
-   * a mounted mechanism that makes its own visual claim states it here rather
-   * than painting a disclaimer of its own over the composition.
+   * The claim boundary of whatever is mounted into the region, published as the
+   * fold's disclosure strip. The composition itself makes no visual claim — it
+   * carries no photograph — so it states nothing of its own here. With no
+   * mounted instrument there is nothing to disclose and no strip is rendered.
    */
-  supplementalDisclosure?: ReactNode;
+  instrumentDisclosure?: ReactNode;
   /** Optional hook for the integrating surface. Composition is unaffected. */
   className?: string;
 };
 
+/** Rail state of one public station, given the station the fold is presenting. */
+function chapterState(
+  chapter: HeroChapter,
+  activeChapter: HeroPhaseDerivedChapter,
+): "complete" | "active" | "upcoming" | "standing" {
+  if (chapter === HERO_STANDING_CHAPTER) {
+    return "standing";
+  }
+  if (chapter === activeChapter) {
+    return "active";
+  }
+
+  return HERO_CHAPTERS.indexOf(chapter) < HERO_CHAPTERS.indexOf(activeChapter)
+    ? "complete"
+    : "upcoming";
+}
+
 /**
- * PREMIUM-HERO-SCENE-001 · the Owner-selected Option 2 first fold.
+ * LIVING-PROJECT-HERO-0001 · the first fold as a living project instrument.
  *
- * Left: a warm paper editorial field carrying the approved kicker, heading,
- * lede, and the published calls to action. Right: a continuous daylight
- * workbench surface running to the edges of the composition — no card, no
- * radius, no floating panel. Below: the chapter rail.
+ * Left: a paper editorial field carrying the approved kicker, heading, lede,
+ * and the two published calls to action. Right, and dominant: the instrument
+ * itself, mounted onto a flat daylight field that runs to the edges of the
+ * composition — no photograph, no card, no radius, no floating panel. Beneath
+ * both: the public progression the visitor reads the project by.
  *
- * This module implements no blueprint drawing and no motion. It reserves the
- * region described by `premiumWorkbenchHero.contract.ts` and stops there.
- *
- * It is deliberately not mounted on any route; integration is a later packet.
+ * This module implements no drawing and no motion. It composes the fold,
+ * reserves the region described by `premiumWorkbenchHero.contract.ts`, and
+ * stops there.
  */
 export default function PremiumWorkbenchHero({
   blueprintMotionSlot,
   activeChapter = "lead",
   motionPhase,
-  supplementalDisclosure,
+  instrumentDisclosure,
   className,
 }: PremiumWorkbenchHeroProps) {
-  const phase: BlueprintMotionPhase = motionPhase ?? activeChapter;
+  const phase: BlueprintMotionPhase = motionPhase ?? "lead";
   const slotFilled = blueprintMotionSlot !== undefined && blueprintMotionSlot !== null;
+  const discloses = instrumentDisclosure !== undefined && instrumentDisclosure !== null;
 
   return (
     <section
@@ -100,15 +122,7 @@ export default function PremiumWorkbenchHero({
           </div>
         </div>
 
-        <figure className={styles.surface}>
-          <Image
-            alt={PREMIUM_WORKBENCH_HERO_MEDIA.alt}
-            className={styles.surfaceImage}
-            fill
-            preload
-            sizes="(max-width: 63.99rem) 100vw, 54vw"
-            src={PREMIUM_WORKBENCH_HERO_MEDIA.src}
-          />
+        <figure className={styles.instrument}>
           <div
             aria-hidden={slotFilled ? undefined : "true"}
             className={styles.motionSlot}
@@ -121,31 +135,34 @@ export default function PremiumWorkbenchHero({
           >
             {blueprintMotionSlot}
           </div>
-          <figcaption className={styles.disclosure} data-disclosure="public-claim">
-            {PREMIUM_WORKBENCH_HERO_MEDIA.disclosure}
-            {supplementalDisclosure === undefined || supplementalDisclosure === null ? null : (
-              <> {supplementalDisclosure}</>
-            )}
-          </figcaption>
+          {discloses ? (
+            <figcaption className={styles.disclosure} data-disclosure="public-claim">
+              {instrumentDisclosure}
+            </figcaption>
+          ) : null}
         </figure>
       </div>
 
-      <ol aria-label="Product chapters" className={styles.rail}>
-        {HERO_CHAPTERS.map((chapter, index) => (
-          <li
-            aria-current={chapter === activeChapter ? "step" : undefined}
-            className={styles.chapter}
-            data-hero-chapter={chapter}
-            data-state={chapter === activeChapter ? "active" : "upcoming"}
-            id={heroChapterElementId(chapter)}
-            key={chapter}
-          >
-            <span aria-hidden="true" className={styles.chapterIndex}>
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <span className={styles.chapterLabel}>{HERO_CHAPTER_LABELS[chapter]}</span>
-          </li>
-        ))}
+      <ol aria-label={HERO_RAIL_LABEL} className={styles.rail}>
+        {HERO_CHAPTERS.map((chapter, index) => {
+          const state = chapterState(chapter, activeChapter);
+
+          return (
+            <li
+              aria-current={state === "active" ? "step" : undefined}
+              className={styles.chapter}
+              data-hero-chapter={chapter}
+              data-state={state}
+              id={heroChapterElementId(chapter)}
+              key={chapter}
+            >
+              <span aria-hidden="true" className={styles.chapterIndex}>
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <span className={styles.chapterLabel}>{HERO_CHAPTER_LABELS[chapter]}</span>
+            </li>
+          );
+        })}
       </ol>
     </section>
   );
