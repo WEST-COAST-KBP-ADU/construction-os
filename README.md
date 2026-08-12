@@ -12,6 +12,11 @@ That directory is the business source of truth and contains no runtime code;
 see [`governance/BOUNDARIES.md`](governance/BOUNDARIES.md) for the rules that
 bind all AI-assisted work in this repository.
 
+## First user of Deedseal
+
+KBP OS is the first user of Deedseal. The public integration record is not yet
+available; view [Deedseal’s current public proof](https://github.com/deedseal/deedseal/blob/ae60603a001387fcdbb9f25628b3bfbc015e2311/docs/proof/2026-08-12-neural-memory.md).
+
 ## Getting Started
 
 Install dependencies and run the development server:
