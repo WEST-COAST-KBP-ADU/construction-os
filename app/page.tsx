@@ -283,7 +283,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <aside className="spine-crosslink" aria-label="Deedseal reference">
+      <aside className="spine-crosslink" aria-label="Deedseal reference" data-o2-premium>
         <div className="portal-container spine-crosslink__inner">
           <p className="spine-crosslink__statement">
             {DEEDSEAL_CROSS_REFERENCE_LEAD}
