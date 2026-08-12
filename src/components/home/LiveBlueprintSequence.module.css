@@ -1,0 +1,474 @@
+/*
+ * Paint and timing for the Project blueprint sequence.
+ *
+ * Tokens come from the app shell when this is mounted inside it, and every
+ * token carries a literal fallback so the module stays independently
+ * cherry-pickable and renders correctly on its own.
+ *
+ * Motion is limited to stroke reveal, layer registration, annotation fade,
+ * elevation alignment, and a restrained record fade. No spin, bounce, particle,
+ * parallax, or house morph.
+ */
+
+.figure {
+  --blueprint-paper: var(--color-canvas, #f3efe7);
+  --blueprint-paper-light: var(--color-surface, #fcfbf8);
+  --blueprint-paper-deep: var(--color-surface-muted, #e6ded2);
+  --blueprint-ink: var(--color-forest-deep, #121a17);
+  --blueprint-line: var(--color-forest, #2a3e36);
+  --blueprint-graphite: var(--color-ink-muted, #59615d);
+  --blueprint-annotation: var(--color-ink-subtle, #5d6560);
+  --blueprint-copper: var(--color-gold-deep, #74451f);
+  --blueprint-copper-light: var(--color-gold, #c58a52);
+  --blueprint-rule: var(--color-line, #d3cabc);
+  --blueprint-focus: var(--color-focus, #117990);
+
+  --blueprint-hair: 11;
+  --blueprint-thin: 15;
+  --blueprint-medium: 22;
+  --blueprint-heavy: 30;
+
+  --blueprint-draw-duration: 900ms;
+  --blueprint-fade-duration: 520ms;
+  --blueprint-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0;
+  max-inline-size: 100%;
+}
+
+/* ------------------------------------------------------------- the sheet */
+
+.sheet {
+  position: relative;
+  inline-size: 100%;
+  overflow: hidden;
+  border: var(--line-width, 0.0625rem) solid var(--blueprint-rule);
+  border-radius: var(--radius-md, 0.75rem);
+  background-color: var(--blueprint-paper);
+  /* Directional daylight, as if from a window above and to the left. */
+  background-image:
+    radial-gradient(
+      120% 90% at 12% 4%,
+      color-mix(in srgb, var(--blueprint-paper-light) 92%, transparent) 0%,
+      transparent 58%
+    ),
+    linear-gradient(148deg, color-mix(in srgb, var(--blueprint-paper-light) 70%, transparent) 0%, transparent 46%),
+    linear-gradient(160deg, transparent 52%, color-mix(in srgb, var(--blueprint-paper-deep) 78%, transparent) 100%);
+  box-shadow: inset 0 0 4rem -1.5rem color-mix(in srgb, var(--blueprint-ink) 34%, transparent);
+}
+
+.drawing {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* ---------------------------------------------------------------- linework */
+
+.line {
+  stroke: var(--blueprint-line);
+  stroke-width: var(--blueprint-thin);
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.line[data-kind="envelope"] {
+  stroke: var(--blueprint-ink);
+  stroke-width: var(--blueprint-medium);
+}
+
+.line[data-kind="wall-exterior"] {
+  stroke: var(--blueprint-ink);
+  stroke-width: var(--blueprint-heavy);
+}
+
+.line[data-kind="wall-partition"] {
+  stroke: var(--blueprint-graphite);
+  stroke-width: var(--blueprint-thin);
+}
+
+.line[data-kind="roof"] {
+  stroke: var(--blueprint-line);
+  stroke-width: var(--blueprint-medium);
+}
+
+.line[data-kind="opening"] {
+  stroke: var(--blueprint-copper);
+  stroke-width: var(--blueprint-medium);
+}
+
+.line[data-kind="opening"][data-opening="window"] {
+  stroke: var(--blueprint-copper-light);
+}
+
+.line[data-kind="opening"][data-opening="cased_opening"] {
+  stroke: var(--blueprint-copper-light);
+  stroke-dasharray: 96 64;
+}
+
+.line[data-kind="datum"] {
+  stroke: var(--blueprint-annotation);
+  stroke-width: var(--blueprint-hair);
+}
+
+/* The lead mark: the authored coordinate origin, struck in copper. */
+.line[data-kind="origin"] {
+  stroke: var(--blueprint-copper);
+  stroke-width: var(--blueprint-medium);
+  stroke-linecap: butt;
+}
+
+.line[data-kind="frame"] {
+  stroke: var(--blueprint-rule);
+  stroke-width: var(--blueprint-thin);
+}
+
+.line[data-kind="sequence"] {
+  stroke: var(--blueprint-rule);
+  stroke-width: var(--blueprint-hair);
+}
+
+/*
+ * Once the plan layer arrives the registered envelope steps back and reads as
+ * an underlay, so the openings cut into the wall runs stay legible.
+ */
+.figure[data-phase="plan"] .line[data-kind="envelope"],
+.figure[data-phase="build"] .line[data-kind="envelope"],
+.figure[data-phase="record"] .line[data-kind="envelope"] {
+  opacity: 0.3;
+}
+
+/* --------------------------------------------------------- annotation type */
+
+.dimensionLine {
+  stroke: var(--blueprint-annotation);
+  stroke-width: var(--blueprint-hair);
+  stroke-linecap: butt;
+}
+
+.dimensionLabel,
+.spaceName,
+.spaceArea,
+.recordTitle,
+.recordSubtitle,
+.recordTerm,
+.recordValue {
+  fill: var(--blueprint-annotation);
+  font-family: var(--font-sans, system-ui, sans-serif);
+  text-anchor: middle;
+}
+
+.dimensionLabel {
+  font-size: 192px;
+  letter-spacing: 0.02em;
+}
+
+/* Sizes arrive per label, already fitted to the room the label sits in. */
+.spaceName {
+  fill: var(--blueprint-line);
+  font-size: var(--blueprint-space-size, 200px);
+  font-weight: var(--font-weight-semibold, 600);
+  letter-spacing: 0.04em;
+}
+
+.spaceArea {
+  font-size: var(--blueprint-area-size, 168px);
+  font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+}
+
+.recordTitle,
+.recordSubtitle,
+.recordTerm {
+  text-anchor: start;
+}
+
+.recordTitle {
+  fill: var(--blueprint-ink);
+  font-size: 320px;
+  font-weight: var(--font-weight-semibold, 600);
+  letter-spacing: 0.04em;
+}
+
+.recordSubtitle {
+  fill: var(--blueprint-copper);
+  font-size: 200px;
+  font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+}
+
+.recordTerm {
+  font-size: 184px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.recordValue {
+  fill: var(--blueprint-line);
+  font-size: 184px;
+  font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+}
+
+/* ------------------------------------------------------------ reveal model */
+
+/*
+ * Static is the server-rendered state and the reduced-motion state: every
+ * layer present, nothing animating, the whole sheet readable at a glance.
+ */
+.figure[data-motion="static"] .line,
+.figure[data-motion="static"] .dimension,
+.figure[data-motion="static"] .spaceLabel,
+.figure[data-motion="static"] .record {
+  opacity: 1;
+  transition: none;
+  transform: none;
+}
+
+/*
+ * Reduced motion still answers a selection: the chosen layer thickens slightly.
+ * Nothing is hidden, so the whole sheet stays readable at every selection.
+ */
+.figure[data-motion="static"] .line[data-focus="true"] {
+  stroke-width: calc(var(--blueprint-medium) * 1.35);
+}
+
+.figure[data-motion="static"] [data-focus="true"] .dimensionLine {
+  stroke-width: calc(var(--blueprint-hair) * 1.6);
+}
+
+.figure[data-motion="live"] .line {
+  stroke-dasharray: calc(var(--blueprint-length, 1000) * 1.02);
+  stroke-dashoffset: 0;
+  transition:
+    stroke-dashoffset var(--blueprint-draw-duration) var(--blueprint-ease) var(--blueprint-delay, 0ms),
+    opacity var(--blueprint-fade-duration) var(--blueprint-ease),
+    transform var(--blueprint-draw-duration) var(--blueprint-ease) var(--blueprint-delay, 0ms);
+}
+
+.figure[data-motion="live"] .line[data-revealed="false"] {
+  stroke-dashoffset: calc(var(--blueprint-length, 1000) * 1.02);
+}
+
+/* The cased-opening dash pattern is a drawing convention, not a reveal. */
+.figure[data-motion="live"] .line[data-opening="cased_opening"] {
+  stroke-dasharray: 96 64;
+  transition:
+    opacity var(--blueprint-fade-duration) var(--blueprint-ease) var(--blueprint-delay, 0ms),
+    transform var(--blueprint-draw-duration) var(--blueprint-ease) var(--blueprint-delay, 0ms);
+}
+
+.figure[data-motion="live"] .line[data-opening="cased_opening"][data-revealed="false"] {
+  opacity: 0;
+}
+
+/* Sheet alignment: the elevation registers in from the gutter side. */
+.figure[data-motion="live"] .line[data-space="elevation"][data-revealed="false"] {
+  transform: translateX(-96px);
+}
+
+.figure[data-motion="live"] .dimension,
+.figure[data-motion="live"] .spaceLabel,
+.figure[data-motion="live"] .record {
+  opacity: 1;
+  transition: opacity var(--blueprint-fade-duration) var(--blueprint-ease) 220ms;
+}
+
+.figure[data-motion="live"] .dimension[data-revealed="false"],
+.figure[data-motion="live"] .spaceLabel[data-revealed="false"],
+.figure[data-motion="live"] .record[data-revealed="false"] {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+
+/* ------------------------------------------------------------------ caption */
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin: 0;
+}
+
+.rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.railItem {
+  display: flex;
+  flex: 1 1 7.5rem;
+  min-inline-size: 0;
+}
+
+.step {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-block-size: 2.75rem;
+  min-inline-size: 2.75rem;
+  padding: 0.625rem 0.75rem;
+  border: var(--line-width, 0.0625rem) solid var(--blueprint-rule);
+  border-radius: var(--radius-sm, 0.375rem);
+  background: transparent;
+  color: var(--blueprint-graphite);
+  font-family: inherit;
+  font-size: var(--font-size-label, 0.75rem);
+  letter-spacing: var(--tracking-label, 0.12em);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color var(--duration-standard, 220ms) var(--blueprint-ease),
+    border-color var(--duration-standard, 220ms) var(--blueprint-ease),
+    background-color var(--duration-standard, 220ms) var(--blueprint-ease);
+}
+
+.step:hover {
+  color: var(--blueprint-ink);
+  border-color: var(--blueprint-line);
+}
+
+.step:focus-visible {
+  outline: var(--focus-outline-width, 0.1875rem) solid var(--blueprint-focus);
+  outline-offset: var(--focus-outline-offset, 0.25rem);
+}
+
+.step[data-reached="true"] {
+  color: var(--blueprint-line);
+  border-color: var(--blueprint-line);
+}
+
+.step[data-active="true"] {
+  color: var(--blueprint-copper);
+  border-color: var(--blueprint-copper);
+  background-color: color-mix(in srgb, var(--blueprint-copper) 8%, transparent);
+}
+
+.stepIndex {
+  font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+  font-size: 0.6875rem;
+  opacity: 0.7;
+}
+
+.stepLabel {
+  font-weight: var(--font-weight-semibold, 600);
+  white-space: nowrap;
+}
+
+.phaseCaption {
+  margin: 0;
+  color: var(--blueprint-ink);
+  font-size: var(--font-size-body-sm, 0.875rem);
+  line-height: var(--line-height-body, 1.6);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.transport {
+  min-block-size: 2.75rem;
+  min-inline-size: 2.75rem;
+  padding: 0.625rem 1rem;
+  border: var(--line-width, 0.0625rem) solid var(--blueprint-line);
+  border-radius: var(--radius-sm, 0.375rem);
+  background: transparent;
+  color: var(--blueprint-line);
+  font-family: inherit;
+  font-size: var(--font-size-label, 0.75rem);
+  letter-spacing: var(--tracking-label, 0.12em);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.transport:focus-visible {
+  outline: var(--focus-outline-width, 0.1875rem) solid var(--blueprint-focus);
+  outline-offset: var(--focus-outline-offset, 0.25rem);
+}
+
+.transport:disabled {
+  color: var(--blueprint-annotation);
+  border-color: var(--blueprint-rule);
+  cursor: default;
+}
+
+.provenance,
+.metrics,
+.disclaimer {
+  margin: 0;
+  color: var(--blueprint-annotation);
+  font-size: var(--font-size-label, 0.75rem);
+  line-height: var(--line-height-body, 1.6);
+  overflow-wrap: anywhere;
+}
+
+.provenance,
+.metrics {
+  font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+  letter-spacing: 0;
+}
+
+/* -------------------------------------------------------------- responsive */
+
+@media (max-width: 47.999rem) {
+  .figure {
+    --blueprint-hair: 18;
+    --blueprint-thin: 24;
+    --blueprint-medium: 34;
+    --blueprint-heavy: 46;
+  }
+
+  /*
+   * At phone width a 20 by 30 foot plan draws about a finger wide, so the
+   * on-sheet annotation is thinned the way a drafter thins it at small scale.
+   * Nothing is lost: every measured value stays in the metrics line, the record
+   * facts stay in the provenance line, and both sit below the sheet at full
+   * reading size.
+   */
+  .dimensionLabel,
+  .spaceArea,
+  .recordTerm,
+  .recordValue {
+    display: none;
+  }
+
+  .spaceName {
+    font-size: calc(var(--blueprint-space-size, 200px) * 1.2);
+  }
+
+  .recordTitle {
+    font-size: 420px;
+  }
+
+  .recordSubtitle {
+    font-size: 250px;
+  }
+
+  .railItem {
+    flex: 1 1 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .line,
+  .dimension,
+  .spaceLabel,
+  .record {
+    opacity: 1;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
+}
