@@ -1,0 +1,340 @@
+/*
+ * Option 2 — premium light, color, and typography tokens
+ *
+ * Record chapter of the Option 2 visual system (Issue #229). This file is a
+ * declaration, not an adoption: nothing imports it, so cherry-picking it
+ * changes no rendered byte until a later integration packet opts a subtree in
+ * with `data-o2-premium`.
+ *
+ * Every value here is bound by `option2-premium.contract.ts` and proved by
+ * `option2-premium.contract.test.ts`. The contract parses this file directly,
+ * so an edit made here without a matching contract entry fails the suite.
+ *
+ * Two rules govern the file:
+ *
+ *   1. Semantic naming only. A color literal may appear as the whole value of
+ *      a registered `color` token and nowhere else. Every other token
+ *      references color through `var(--o2-*)`.
+ *   2. Physical coherence. One daylight direction, one exposure envelope, and
+ *      one shadow pigment drive every elevation, wash, and rule.
+ *
+ * Recipe and rationale: docs/design/option2-premium-visual-recipe.md
+ */
+
+[data-o2-premium] {
+  /* ---------------------------------------------------------------------
+   * Light model — one directional daylight source, single-sourced so every
+   * shadow, wash, and gradient below resolves from the same physical setup.
+   * Azimuth is screen-space: 135deg is the direction light travels, from the
+   * upper-left window toward the lower-right of the sheet.
+   * ------------------------------------------------------------------ */
+  --o2-light-azimuth: 135deg;
+  --o2-light-elevation: 35deg;
+  --o2-light-temperature: 5200K;
+  --o2-light-offset-ratio: 0.7;
+
+  /* Exposure envelope, in CIE L*. No token may sit outside this band, which
+   * is what keeps highlights off pure white and shadows off pure black. */
+  --o2-exposure-shadow-floor: 10;
+  --o2-exposure-highlight-ceiling: 97;
+
+  /* Material response. Paper is near-fully diffuse; copper is the only
+   * semi-specular surface, and its specular term stays under the cap so a
+   * hairline reads as metal without reading as glass. */
+  --o2-roughness-paper: 0.86;
+  --o2-roughness-graphite: 0.7;
+  --o2-roughness-copper: 0.34;
+  --o2-specular-max: 0.12;
+  --o2-grain-opacity: 0.028;
+  --o2-grain-scale: 1.5px;
+
+  /* ---------------------------------------------------------------------
+   * Paper — the drafting sheet. Three exposure steps across one sheet under
+   * the light above, plus the cut edge.
+   * ------------------------------------------------------------------ */
+  --o2-paper-lit: #F4EDE1;
+  --o2-paper-base: #EBE2D3;
+  --o2-paper-shade: #DFD5C3;
+  --o2-paper-edge: #D0C2AC;
+
+  /* ---------------------------------------------------------------------
+   * Canvas — the ground the sheet lies on. `canvas-base` is the workbench
+   * top; the deep pair is the Record proof tone the integration rail ends on.
+   * ------------------------------------------------------------------ */
+  --o2-canvas-base: #C2B49A;
+  --o2-canvas-deep: #16211C;
+  --o2-canvas-deep-lit: #24322B;
+
+  /* ---------------------------------------------------------------------
+   * Surface — panels resting on or cut into the sheet.
+   * ------------------------------------------------------------------ */
+  --o2-surface-raised: #F9F4EC;
+  --o2-surface-recessed: #E5DBC9;
+  --o2-surface-inverse: #1B2822;
+
+  /* ---------------------------------------------------------------------
+   * Forest ink — editorial typography hierarchy. Green-dominant across the
+   * whole ramp, so body copy never drifts to neutral gray.
+   * ------------------------------------------------------------------ */
+  --o2-ink-primary: #10201A;
+  --o2-ink-secondary: #23382F;
+  --o2-ink-body: #2E463C;
+  --o2-ink-muted: #4A5C53;
+  --o2-ink-inverse: #F4EEE3;
+  --o2-ink-inverse-muted: #C3CFC6;
+
+  /* ---------------------------------------------------------------------
+   * Graphite — blueprint line and annotation hierarchy. Deliberately
+   * desaturated so drawing weight, not drawing hue, carries the hierarchy.
+   * ------------------------------------------------------------------ */
+  --o2-graphite-primary: #33403C;
+  --o2-graphite-secondary: #566761;
+  --o2-graphite-tertiary: #74847E;
+  --o2-graphite-annotation: #3B4A45;
+
+  /* ---------------------------------------------------------------------
+   * Copper — oxidized, restrained. `copper-text` is the only step cleared
+   * for type, and only for eyebrows and labels. The brighter steps are
+   * hairlines and marks; using them for body copy is a contract violation.
+   * ------------------------------------------------------------------ */
+  --o2-copper-text: #6B3A15;
+  --o2-copper-mark: #8A4F22;
+  --o2-copper-line: #A9682F;
+  --o2-copper-wash: #EDD9BF;
+
+  /* ---------------------------------------------------------------------
+   * Lines — grid and hairline are decorative rulings; standard and strong
+   * are boundaries and clear 3:1 against every paper and surface step.
+   * ------------------------------------------------------------------ */
+  --o2-line-grid: #D3C7B2;
+  --o2-line-hairline: #C7B9A3;
+  --o2-line-standard: #82735B;
+  --o2-line-strong: #63594A;
+
+  /* ---------------------------------------------------------------------
+   * Focus — one ring per ground. Copper is never a focus color; the ring is
+   * deliberately outside the palette's warm axis so it cannot be mistaken
+   * for decoration.
+   * ------------------------------------------------------------------ */
+  --o2-focus-ring: #0E5C6E;
+  --o2-focus-ring-inverse: #6FD3E4;
+  --o2-focus-halo: #F8F2E8;
+  --o2-focus-width: 2px;
+  --o2-focus-offset: 2px;
+
+  /* ---------------------------------------------------------------------
+   * Success signal — the only status hue in this packet. Product status
+   * beyond "verified" belongs to a later packet, not to the Record recipe.
+   * ------------------------------------------------------------------ */
+  --o2-signal-success: #1B6B49;
+  --o2-signal-success-wash: #DCE9DE;
+  --o2-signal-success-inverse: #7FD8A6;
+
+  /* ---------------------------------------------------------------------
+   * Shadow — one warm pigment, never black. Every elevation is a multi-layer
+   * cast whose first layer is offset down and to the right, matching the
+   * light model above (x = 0.7y). Density is capped so no elevation reads as
+   * a pasted-on drop shadow.
+   * ------------------------------------------------------------------ */
+  --o2-shadow-cast: #2A211A;
+
+  --o2-shadow-contact:
+    1px 2px 2px color-mix(in srgb, var(--o2-shadow-cast) 24%, transparent),
+    0 1px 1px color-mix(in srgb, var(--o2-shadow-cast) 14%, transparent);
+
+  --o2-shadow-sheet:
+    2px 3px 4px color-mix(in srgb, var(--o2-shadow-cast) 20%, transparent),
+    4px 8px 16px color-mix(in srgb, var(--o2-shadow-cast) 12%, transparent),
+    0 1px 1px color-mix(in srgb, var(--o2-shadow-cast) 8%, transparent);
+
+  --o2-shadow-panel:
+    3px 5px 8px color-mix(in srgb, var(--o2-shadow-cast) 18%, transparent),
+    6px 14px 28px color-mix(in srgb, var(--o2-shadow-cast) 12%, transparent),
+    0 1px 2px color-mix(in srgb, var(--o2-shadow-cast) 8%, transparent);
+
+  --o2-shadow-lifted:
+    4px 7px 12px color-mix(in srgb, var(--o2-shadow-cast) 18%, transparent),
+    10px 22px 44px color-mix(in srgb, var(--o2-shadow-cast) 14%, transparent),
+    0 2px 4px color-mix(in srgb, var(--o2-shadow-cast) 8%, transparent);
+
+  --o2-shadow-trough:
+    inset 2px 3px 6px color-mix(in srgb, var(--o2-shadow-cast) 16%, transparent),
+    inset 0 1px 1px color-mix(in srgb, var(--o2-shadow-cast) 8%, transparent);
+
+  /* ---------------------------------------------------------------------
+   * Blur — bounded. There is no glass in this system: no backdrop filter,
+   * and no blur may exceed the ceiling.
+   * ------------------------------------------------------------------ */
+  --o2-blur-veil: 2px;
+  --o2-blur-edge: 4px;
+  --o2-blur-max: 6px;
+
+  /* ---------------------------------------------------------------------
+   * Washes and veils. A wash is opaque material — the sheet's own falloff
+   * under the light. A veil is a scrim, capped low so it can shade a plate
+   * edge without ever obscuring the drawing underneath.
+   * ------------------------------------------------------------------ */
+  --o2-veil-opacity-max: 0.32;
+
+  --o2-wash-daylight: linear-gradient(
+    var(--o2-light-azimuth),
+    var(--o2-paper-lit) 0%,
+    var(--o2-paper-base) 46%,
+    var(--o2-paper-shade) 100%
+  );
+
+  --o2-wash-table: linear-gradient(
+    var(--o2-light-azimuth),
+    var(--o2-paper-edge) 0%,
+    var(--o2-canvas-base) 100%
+  );
+
+  --o2-wash-record: linear-gradient(
+    var(--o2-light-azimuth),
+    var(--o2-canvas-deep-lit) 0%,
+    var(--o2-canvas-deep) 100%
+  );
+
+  --o2-veil-plate-edge: linear-gradient(
+    var(--o2-light-azimuth),
+    color-mix(in srgb, var(--o2-shadow-cast) 0%, transparent) 62%,
+    color-mix(in srgb, var(--o2-shadow-cast) 22%, transparent) 100%
+  );
+
+  /* ---------------------------------------------------------------------
+   * Stroke weights — the blueprint's line hierarchy. Section cut is heaviest,
+   * construction lines lightest.
+   * ------------------------------------------------------------------ */
+  --o2-stroke-hairline: 0.5px;
+  --o2-stroke-thin: 1px;
+  --o2-stroke-medium: 1.5px;
+  --o2-stroke-heavy: 2px;
+  --o2-stroke-section: 3px;
+
+  /* ---------------------------------------------------------------------
+   * Radii — architectural, not consumer-soft. `marker` is for status dots
+   * and seals only.
+   * ------------------------------------------------------------------ */
+  --o2-radius-sheet: 2px;
+  --o2-radius-panel: 4px;
+  --o2-radius-plate: 6px;
+  --o2-radius-marker: 999px;
+
+  /* ---------------------------------------------------------------------
+   * Plate geometry — the drafting-table region. Never 1:1: a square photo
+   * card is the failure mode this packet exists to prevent.
+   * ------------------------------------------------------------------ */
+  --o2-plate-aspect-desktop: 16 / 10;
+  --o2-plate-aspect-tablet: 4 / 3;
+  --o2-plate-aspect-mobile: 4 / 3;
+
+  /* ---------------------------------------------------------------------
+   * Typography — Source Serif 4 and Inter are already loaded by app/layout.tsx
+   * through next/font; the mono stack is system. No font is added here.
+   * ------------------------------------------------------------------ */
+  --o2-font-editorial: var(--font-source-serif, "Source Serif 4"), Georgia, serif;
+  --o2-font-interface: var(--font-inter, "Inter"), system-ui, sans-serif;
+  --o2-font-annotation: var(--font-mono, "SFMono-Regular"), Consolas, monospace;
+
+  --o2-type-display: clamp(2.5rem, 1.664rem + 3.429vw, 4.75rem);
+  --o2-type-headline: clamp(1.75rem, 1.317rem + 1.778vw, 3rem);
+  --o2-type-title: clamp(1.375rem, 1.196rem + 0.733vw, 1.875rem);
+  --o2-type-lede: clamp(1.0625rem, 0.973rem + 0.367vw, 1.3125rem);
+  --o2-type-body: clamp(1rem, 0.955rem + 0.183vw, 1.125rem);
+  --o2-type-body-sm: 0.9375rem;
+  --o2-type-label: 0.75rem;
+  --o2-type-annotation: 0.8125rem;
+
+  --o2-leading-display: 1.04;
+  --o2-leading-headline: 1.12;
+  --o2-leading-title: 1.2;
+  --o2-leading-lede: 1.55;
+  --o2-leading-body: 1.65;
+  --o2-leading-annotation: 1.4;
+
+  --o2-tracking-display: -0.022em;
+  --o2-tracking-headline: -0.018em;
+  --o2-tracking-title: -0.01em;
+  --o2-tracking-body: 0em;
+  --o2-tracking-label: 0.14em;
+  --o2-tracking-annotation: 0.04em;
+
+  --o2-weight-regular: 400;
+  --o2-weight-medium: 500;
+  --o2-weight-semibold: 600;
+  --o2-weight-bold: 700;
+
+  --o2-measure-display: 16ch;
+  --o2-measure-lede: 34ch;
+  --o2-measure-body: 62ch;
+
+  /* ---------------------------------------------------------------------
+   * Space and shell.
+   * ------------------------------------------------------------------ */
+  --o2-space-hairline: 2px;
+  --o2-space-1: 4px;
+  --o2-space-2: 8px;
+  --o2-space-3: 12px;
+  --o2-space-4: 16px;
+  --o2-space-5: 24px;
+  --o2-space-6: 32px;
+  --o2-space-7: 48px;
+  --o2-space-8: 64px;
+  --o2-space-9: 96px;
+
+  --o2-space-hero-block: clamp(3.5rem, 2.1rem + 5.714vw, 7.5rem);
+  --o2-gutter: clamp(1.25rem, 0.652rem + 2.457vw, 3rem);
+  --o2-column-gap: clamp(2rem, 0.8rem + 4.914vw, 5rem);
+  --o2-shell-max: 82.5rem;
+  --o2-grid-module: 2.75rem;
+
+  /* ---------------------------------------------------------------------
+   * Motion — four durations, three curves, three distances. Shared verbatim
+   * with Workers 227 and 228 so the Hero, the drawing stage, and the Record
+   * rail move as one system.
+   * ------------------------------------------------------------------ */
+  --o2-duration-instant: 90ms;
+  --o2-duration-fast: 160ms;
+  --o2-duration-standard: 240ms;
+  --o2-duration-deliberate: 420ms;
+
+  --o2-easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --o2-easing-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --o2-easing-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  --o2-motion-lift: -2px;
+  --o2-motion-reveal-shift: 12px;
+  --o2-motion-parallax-depth: 8px;
+  --o2-motion-daylight-sweep: 1400ms;
+  --o2-motion-reveal-fade: 1;
+}
+
+/*
+ * Reduced-motion substitution.
+ *
+ * Every distance collapses to zero and every duration collapses to 1ms, which
+ * leaves `--o2-motion-reveal-fade` as the only surviving channel: what was a
+ * lift-and-settle becomes a plain opacity change. 1ms rather than 0ms keeps
+ * `transitionend` firing, so a consumer that sequences on it still completes.
+ *
+ * Every motion token declared above is re-bound here. The contract fails if
+ * one is missing.
+ */
+@media (prefers-reduced-motion: reduce) {
+  [data-o2-premium] {
+    --o2-duration-instant: 1ms;
+    --o2-duration-fast: 1ms;
+    --o2-duration-standard: 1ms;
+    --o2-duration-deliberate: 1ms;
+
+    --o2-easing-standard: linear;
+    --o2-easing-entrance: linear;
+    --o2-easing-exit: linear;
+
+    --o2-motion-lift: 0px;
+    --o2-motion-reveal-shift: 0px;
+    --o2-motion-parallax-depth: 0px;
+    --o2-motion-daylight-sweep: 1ms;
+    --o2-motion-reveal-fade: 1;
+  }
+}
