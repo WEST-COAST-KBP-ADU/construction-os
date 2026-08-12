@@ -3,6 +3,14 @@ import Link from "next/link";
 
 import ModelCatalog from "@/src/components/content/ModelCatalog";
 import HeroBlueprintStage from "@/src/components/home/HeroBlueprintStage";
+import {
+  DEEDSEAL_CROSS_REFERENCE_LEAD,
+  DEEDSEAL_CROSS_REFERENCE_LINK_TEXT,
+  DEEDSEAL_CROSS_REFERENCE_TAIL,
+  DEEDSEAL_PROOF_RECORD_LABEL,
+  DEEDSEAL_PROOF_RECORD_URL,
+  DEEDSEAL_PUBLIC_URL,
+} from "@/src/lib/deedsealCrossReference";
 import { homepageServices } from "@/src/lib/homepageServices";
 import { jurisdictionPages } from "@/src/lib/jurisdictionPages";
 import { getPublicModelCatalog } from "@/src/lib/publicModelCatalog";
@@ -274,6 +282,23 @@ export default async function Home() {
           </nav>
         </div>
       </section>
+
+      <aside className="spine-crosslink" aria-label="Deedseal reference">
+        <div className="portal-container spine-crosslink__inner">
+          <p className="spine-crosslink__statement">
+            {DEEDSEAL_CROSS_REFERENCE_LEAD}
+            <a href={DEEDSEAL_PUBLIC_URL} className="text-link" rel="noreferrer">
+              {DEEDSEAL_CROSS_REFERENCE_LINK_TEXT}
+            </a>
+            {DEEDSEAL_CROSS_REFERENCE_TAIL}
+          </p>
+          <p className="spine-crosslink__record">
+            <a href={DEEDSEAL_PROOF_RECORD_URL} className="text-link" rel="noreferrer">
+              {DEEDSEAL_PROOF_RECORD_LABEL} <span aria-hidden="true">→</span>
+            </a>
+          </p>
+        </div>
+      </aside>
     </main>
   );
 }
