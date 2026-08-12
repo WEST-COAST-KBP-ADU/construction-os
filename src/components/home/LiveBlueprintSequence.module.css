@@ -208,6 +208,7 @@
   fill: var(--blueprint-line);
   font-size: 184px;
   font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+  text-anchor: end;
 }
 
 /* ------------------------------------------------------------ reveal model */
@@ -445,11 +446,11 @@
   }
 
   .recordTitle {
-    font-size: 420px;
+    font-size: 360px;
   }
 
   .recordSubtitle {
-    font-size: 250px;
+    font-size: 200px;
   }
 
   .railItem {
