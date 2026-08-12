@@ -14,6 +14,7 @@ and rules only — never runtime code.
 | :--- | :------- |
 | `charter.md` | Platform identity, vision, and authority model |
 | `BOUNDARIES.md` | Hard prohibitions, AI authority limits, data/retention rules |
+| `product/` | Owner-adopted product boundaries and canonical product definitions |
 | `architecture/` | Component map, voice lab architecture, Core compatibility, risk register |
 | `context/` | External context packages — pinned projections, zero authority |
 | `decisions/` | Decision records (DR-NNNN) — owner-adopted decisions only |
