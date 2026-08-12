@@ -3532,17 +3532,64 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   line-height: var(--line-height-body);
 }
 
+/*
+ * The seam between the two products.
+ *
+ * This strip is where Product 2 hands the reader to Product 1, so it is the one
+ * band on the page that belongs to neither and has to read as a deliberate
+ * crossing rather than a leftover row above the footer. It is opted into the
+ * Option 2 recipe with `data-o2-premium` in `app/page.tsx` and bridged here the
+ * same way `HeroBlueprintStage.module.css` bridges the first fold: inside this
+ * subtree, and nowhere else, the base tokens its children already read are
+ * re-pointed at Option 2 steps. No `--o2-*` value is redefined, nothing is
+ * written at `:root`, and no descendant is restyled — `.text-link` renders from
+ * its own unchanged rule and simply resolves different steps here. Remove the
+ * attribute and every declaration below falls back to the shell palette.
+ *
+ * Physical reading, from the recipe's own light model: the section above is the
+ * dark Record ground, and this band is the drafting sheet that ground hands off
+ * to, lit by the same 135deg daylight. `--o2-wash-daylight` is that sheet's own
+ * falloff, so the strip is one lit surface rather than a flat fill, and the
+ * copper hairline is the cut where the two products meet — a mark, never type,
+ * which is the only role the recipe clears `copper-line` for.
+ *
+ * Scheme: the recipe declares one daylight scheme and no dark variant, so this
+ * band does not invert. That is the same consequence the first fold already
+ * accepted in OPTION2-HERO-INTEGRATION-001, and it is deliberate: the seam and
+ * the hero are the two Option 2 surfaces on this page and they stay lit
+ * together.
+ *
+ * Contrast at the wash's darkest step (`--o2-paper-shade`), which is the worst
+ * case any word here can sit over: statement 4.90:1, link text 11.61:1, link
+ * underline 4.72:1, copper hairline 3.07:1.
+ */
 .spine-crosslink {
-  border-top: var(--line-width) solid var(--color-line);
-  background: var(--color-canvas);
+  /* Ground and rules. */
+  --color-canvas: var(--o2-paper-base);
+  --color-line: var(--o2-line-hairline);
+  --color-line-strong: var(--o2-line-strong);
+
+  /* Ink. The statement is annotation weight; the links carry the primary ink
+   * `.text-link` reads through `--color-forest-deep`. */
+  --color-ink-muted: var(--o2-ink-muted);
+  --color-forest-deep: var(--o2-ink-primary);
+
+  --color-focus: var(--o2-focus-ring);
+  --color-focus-contrast: var(--o2-focus-halo);
+
+  --duration-standard: var(--o2-duration-standard);
+  --easing-standard: var(--o2-easing-standard);
+
+  border-top: var(--o2-stroke-thin) solid var(--o2-copper-line);
+  background: var(--o2-wash-daylight);
 }
 
 .spine-crosslink__inner {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--space-2) var(--space-6);
-  padding-block: var(--space-6);
+  gap: var(--o2-space-2) var(--o2-space-6);
+  padding-block: var(--o2-space-6);
 }
 
 .spine-crosslink__statement,
@@ -3550,8 +3597,9 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   margin: 0;
   min-width: 0;
   color: var(--color-ink-muted);
-  font-size: var(--font-size-body-sm);
-  line-height: var(--line-height-body);
+  font-family: var(--o2-font-interface);
+  font-size: var(--o2-type-body-sm);
+  line-height: var(--o2-leading-body);
 }
 
 .spine-crosslink__record {
