@@ -1,4 +1,9 @@
 @import "tailwindcss";
+/* Option 2 premium light, color, and type recipe. Declares only `--o2-*`
+ * properties under `[data-o2-premium]`; it defines nothing at `:root` and
+ * changes nothing until a subtree opts in. `@import` must precede every rule,
+ * so this stays on line 2. */
+@import "../src/styles/option2-premium.tokens.css";
 
 /* TASK-0010 homepage concept: California room to grow. */
 
@@ -3098,62 +3103,6 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   background: var(--color-canvas);
 }
 
-.spine-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-  min-height: min(44rem, calc(100svh - 4.75rem));
-  overflow: hidden;
-  border-bottom: var(--line-width) solid var(--color-line);
-  background: var(--color-canvas);
-  color: var(--color-ink);
-}
-
-.spine-hero__copy {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding:
-    clamp(3rem, 7vh, 5.5rem)
-    clamp(2rem, 4vw, 4.5rem)
-    clamp(3rem, 7vh, 5.5rem)
-    max(var(--content-gutter), calc((100vw - var(--content-max)) / 2));
-}
-
-.spine-hero__media {
-  display: grid;
-  min-width: 0;
-  min-height: 0;
-  grid-template-rows: minmax(0, 1fr) auto;
-  margin: 0;
-  background: var(--color-forest-deep-surface);
-}
-
-.spine-hero__picture {
-  position: relative;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.spine-hero__image {
-  object-fit: cover;
-  object-position: 78% center;
-  animation: spine-image-settle 1.4s var(--easing-standard) both;
-}
-
-@keyframes spine-image-settle {
-  from {
-    opacity: 0.88;
-    scale: 1.018;
-  }
-
-  to {
-    opacity: 1;
-    scale: 1;
-  }
-}
-
 .spine-kicker {
   margin: 0;
   color: var(--color-gold-deep);
@@ -3182,40 +3131,12 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   text-wrap: balance;
 }
 
-.spine-hero h1 {
-  max-width: 14ch;
-  margin: var(--space-5) 0 0;
-  color: var(--color-forest-deep);
-  font-family: var(--font-serif);
-  font-size: clamp(2.75rem, 4.2vw, 4.6rem);
-  font-weight: var(--font-weight-regular);
-  letter-spacing: -0.05em;
-  line-height: 0.98;
-  text-wrap: balance;
-}
-
-.spine-hero__lede {
-  max-width: 31rem;
-  margin: var(--space-6) 0 0;
-  color: var(--color-ink-muted);
-  font-size: var(--font-size-body-lg);
-  line-height: var(--line-height-copy);
-}
-
 .spine-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
   margin-top: var(--space-8);
-}
-
-.spine-hero__caption {
-  margin: 0;
-  padding: var(--space-3) var(--content-gutter);
-  color: var(--color-ink-inverse-muted);
-  font-size: var(--font-size-label);
-  line-height: var(--line-height-body);
 }
 
 .spine-section {
@@ -3831,38 +3752,6 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   }
 }
 
-@media (max-width: 63.99rem) {
-  .spine-hero {
-    grid-template-columns: minmax(0, 1fr);
-    min-height: auto;
-  }
-
-  .spine-hero__copy {
-    grid-row: 2;
-    padding: clamp(2.5rem, 7vw, 4rem) var(--content-gutter);
-  }
-
-  .spine-hero__media {
-    grid-row: 1;
-  }
-
-  .spine-hero__picture {
-    aspect-ratio: 16 / 9;
-  }
-
-  .spine-hero__image {
-    object-position: center;
-  }
-
-  .spine-hero h1 {
-    font-size: clamp(2.6rem, 9.5vw, 4.4rem);
-  }
-
-  .spine-hero__lede {
-    font-size: var(--font-size-body);
-  }
-}
-
 @media (max-width: 47.99rem) {
   .model-page-hero__inner > p:not(.spine-kicker):not(.model-page-hero__signal),
   .model-detail__boundary {
@@ -3874,21 +3763,7 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   }
 }
 
-@media (max-width: 30rem) {
-  .spine-hero__copy {
-    padding-block: var(--space-6);
-  }
-
-  .spine-hero .spine-actions {
-    margin-top: var(--space-5);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .spine-hero__image {
-    animation: none;
-  }
-
   .spine-exits a,
   .site-nav__link--cta {
     transition: none;

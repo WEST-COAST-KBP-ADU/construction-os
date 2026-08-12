@@ -1,0 +1,359 @@
+/*
+ * PREMIUM-HERO-SCENE-001 · Option 2 first fold.
+ *
+ * Warm paper editorial field on the left, a continuous daylight workbench
+ * surface running to the edge on the right, a chapter rail beneath. The
+ * surface is never a card: it carries no radius, border, shadow, inset, or
+ * background of its own.
+ *
+ * Every value resolves from the repository tokens in `app/globals.css`, with a
+ * literal fallback so the module also composes in isolation. No token is
+ * redefined and no global selector is written.
+ */
+
+.hero {
+  --pwh-paper: var(--color-canvas, #f3efe7);
+  --pwh-ivory: var(--color-surface, #fcfbf8);
+  --pwh-forest: var(--color-forest, #2a3e36);
+  --pwh-forest-deep: var(--color-forest-deep, #121a17);
+  --pwh-ink: var(--color-ink, #202522);
+  --pwh-ink-muted: var(--color-ink-muted, #59615d);
+  --pwh-ink-inverse: var(--color-ink-inverse, #f7f3eb);
+  --pwh-copper: var(--color-gold-deep, #74451f);
+  --pwh-copper-bright: var(--color-gold, #c58a52);
+  --pwh-line: var(--color-line, #d3cabc);
+  --pwh-line-strong: var(--color-line-strong, #81756a);
+  --pwh-focus: var(--color-focus, #117990);
+  --pwh-focus-contrast: var(--color-focus-contrast, #fcfbf8);
+  --pwh-hairline: 0.0625rem;
+  --pwh-duration: var(--duration-standard, 220ms);
+  --pwh-easing: var(--easing-standard, cubic-bezier(0.2, 0.8, 0.2, 1));
+  /*
+   * Outer gutter of the editorial field. Sized so the heading clears the
+   * 15.7em of measured advance its two-line break needs at 1440; a container-
+   * aligned gutter starves the 46% column and forces a third line.
+   */
+  --pwh-gutter: clamp(1.5rem, 3.4vw, 3.25rem);
+
+  position: relative;
+  /* Guards the packet's no-horizontal-overflow requirement without creating a
+   * scroll container or clipping the composition vertically. */
+  overflow-x: clip;
+  overflow-y: visible;
+  background: var(--pwh-ivory);
+  color: var(--pwh-ink);
+}
+
+/* --------------------------------------------------------------------------
+ * Composition
+ * ----------------------------------------------------------------------- */
+
+.composition {
+  display: grid;
+  min-height: clamp(28rem, 41vw, 37rem);
+  grid-template-columns: 46fr 54fr;
+}
+
+/* --------------------------------------------------------------------------
+ * Left · warm paper editorial field
+ * ----------------------------------------------------------------------- */
+
+.editorial {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  border-inline-end: var(--pwh-hairline) solid var(--pwh-line);
+  background: var(--pwh-paper);
+  padding-block: clamp(3rem, 5.5vw, 5rem);
+  padding-inline: var(--pwh-gutter) clamp(1.5rem, 2.8vw, 2.5rem);
+}
+
+.editorialInner {
+  min-width: 0;
+  max-width: 38rem;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--pwh-copper);
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--font-size-label, 0.75rem);
+  font-weight: var(--font-weight-semibold, 600);
+  letter-spacing: var(--tracking-kicker, 0.16em);
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* The only decorative mark in the field, and the only copper rule. */
+.rule {
+  display: block;
+  width: 3.25rem;
+  height: var(--pwh-hairline);
+  margin-block: clamp(1rem, 1.6vw, 1.35rem) clamp(1.1rem, 1.8vw, 1.5rem);
+  background: var(--pwh-copper-bright);
+}
+
+.title {
+  margin: 0;
+  color: var(--pwh-forest-deep);
+  font-family: var(--font-serif, Georgia, "Times New Roman", serif);
+  font-size: clamp(1.95rem, 2.45vw, 2.25rem);
+  font-weight: var(--font-weight-semibold, 600);
+  letter-spacing: -0.021em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 30rem;
+  margin: clamp(1.1rem, 1.8vw, 1.6rem) 0 0;
+  color: var(--pwh-ink);
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size: clamp(1rem, 1.05vw, 1.125rem);
+  line-height: var(--line-height-body, 1.6);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: clamp(1.6rem, 2.6vw, 2.25rem);
+}
+
+.action {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border: var(--pwh-hairline) solid transparent;
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size: var(--font-size-body-sm, 0.875rem);
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  padding-inline: 1.5rem;
+  text-decoration: none;
+  transition:
+    background-color var(--pwh-duration) var(--pwh-easing),
+    border-color var(--pwh-duration) var(--pwh-easing),
+    color var(--pwh-duration) var(--pwh-easing);
+}
+
+/* Forest primary. Ivory on forest measures 10.2:1. */
+.actionPrimary {
+  background: var(--pwh-forest);
+  color: var(--pwh-ink-inverse);
+}
+
+.actionPrimary:hover {
+  background: var(--color-forest-deep-surface, #121a17);
+}
+
+/*
+ * Deep forest on warm paper: 15.4:1 light, 16.1:1 dark; the copper stays a
+ * hairline. The label must read as ink, so it takes the heading token, which
+ * inverts with the scheme. `--pwh-forest` is a surface token in this system
+ * (`--color-shell-raised` aliases it) and stays 1.8:1 against the dark canvas.
+ */
+.actionSecondary {
+  border-color: var(--pwh-line-strong);
+  background: transparent;
+  color: var(--pwh-forest-deep);
+}
+
+.actionSecondary:hover {
+  border-color: var(--pwh-copper);
+  color: var(--pwh-forest-deep);
+}
+
+.action:focus-visible {
+  outline: var(--focus-outline-width, 0.1875rem) solid var(--pwh-focus);
+  outline-offset: var(--focus-outline-offset, 0.25rem);
+  box-shadow: 0 0 0 0.125rem var(--pwh-focus-contrast);
+}
+
+/* --------------------------------------------------------------------------
+ * Right · continuous daylight workbench surface
+ * ----------------------------------------------------------------------- */
+
+.surface {
+  position: relative;
+  min-width: 0;
+  margin: 0;
+  background: var(--pwh-paper);
+}
+
+.surfaceImage {
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/*
+ * The reserved region for the later blueprint mechanism. It draws nothing and
+ * intercepts nothing while empty; direct children opt back into pointer
+ * events. See `premiumWorkbenchHero.contract.ts`.
+ */
+.motionSlot {
+  --blueprint-motion-source-aspect: 1.5;
+  --blueprint-motion-object-fit: cover;
+  --blueprint-motion-object-position: 50% 50%;
+  --blueprint-motion-enabled: 1;
+
+  position: absolute;
+  container: blueprint-motion-slot / size;
+  inset: 0;
+  /*
+   * `container-type: size` already applies layout containment, which makes this
+   * element a stacking context; the explicit `z-index: 0` states that rather
+   * than leaving it as a side effect, and pins the whole mounted subtree below
+   * the disclosure. No `z-index` a mounted child sets can escape it.
+   */
+  z-index: 0;
+  pointer-events: none;
+}
+
+.motionSlot > * {
+  pointer-events: auto;
+}
+
+/*
+ * Edge-anchored caption strip; it is part of the surface, not a card over it.
+ *
+ * The background is the brand *surface* token, which stays dark in both
+ * schemes (`#121A17` light, `#0C110F` dark) and holds the disclosure at
+ * 16.0:1 / 17.2:1. `--pwh-forest-deep` is the heading *ink* token and inverts
+ * to `#F3EFE7` in dark, which would deliver the imagery with an unreadable
+ * disclaimer. The two tokens are deliberately distinct — see
+ * `src/lib/visualSystem.test.ts`.
+ */
+.disclosure {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* Above the reserved region in every regime. The public claim is never
+   * occluded by whatever is mounted into the slot. */
+  z-index: 1;
+  background: var(--color-forest-deep-surface, #121a17);
+  color: var(--pwh-ink-inverse);
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-size: 0.6875rem;
+  letter-spacing: 0.015em;
+  line-height: 1.45;
+  padding: 0.6rem clamp(1rem, 2vw, 1.75rem);
+}
+
+/* --------------------------------------------------------------------------
+ * Chapter rail
+ * ----------------------------------------------------------------------- */
+
+.rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin: 0;
+  border-top: var(--pwh-hairline) solid var(--pwh-line);
+  background: var(--pwh-ivory);
+  padding-block: clamp(1.1rem, 1.7vw, 1.5rem);
+  padding-inline: var(--pwh-gutter);
+  list-style: none;
+}
+
+.chapter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  color: var(--pwh-ink-muted);
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+}
+
+.chapterIndex {
+  font-family: var(--font-mono, "SFMono-Regular", Consolas, monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+}
+
+.chapterLabel {
+  font-size: var(--font-size-body-sm, 0.875rem);
+  font-weight: var(--font-weight-semibold, 600);
+  letter-spacing: 0.02em;
+}
+
+.chapter[data-state="active"] {
+  color: var(--pwh-forest-deep);
+}
+
+.chapter[data-state="active"] .chapterIndex {
+  color: var(--pwh-copper);
+}
+
+/* --------------------------------------------------------------------------
+ * Reflow · 820×1180 and 390×844 both resolve here
+ * ----------------------------------------------------------------------- */
+
+@media (max-width: 63.99rem) {
+  .composition {
+    min-height: 0;
+    grid-template-columns: 1fr;
+  }
+
+  .editorial {
+    border-inline-end: 0;
+    border-block-end: var(--pwh-hairline) solid var(--pwh-line);
+    padding-block: clamp(2.5rem, 6vw, 3.5rem);
+    padding-inline: var(--pwh-gutter);
+  }
+
+  .editorialInner {
+    max-width: 40rem;
+  }
+
+  .title {
+    font-size: clamp(2.05rem, 4.9vw, 2.75rem);
+  }
+
+  /* Held near the 3:2 source ratio so the plan, samples, and tools all survive
+   * the `cover` crop once the composition stacks. */
+  .surface {
+    min-height: clamp(19rem, 56vw, 30rem);
+  }
+}
+
+@media (max-width: 30rem) {
+  .title {
+    font-size: clamp(1.85rem, 8.4vw, 2.2rem);
+  }
+
+  .lede {
+    font-size: 1rem;
+  }
+
+  .action {
+    flex: 1 1 100%;
+  }
+
+  .surface {
+    min-height: clamp(15rem, 66vw, 18rem);
+  }
+
+  .rail {
+    gap: 0.75rem 1.5rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Reduced motion · the composition is already static; this removes the only
+ * state transitions it owns and publishes the flag the reserved region reads.
+ * ----------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .action {
+    transition: none;
+  }
+
+  .motionSlot {
+    --blueprint-motion-enabled: 0;
+  }
+}
