@@ -150,11 +150,16 @@
   background: var(--pwh-forest-deep);
 }
 
-/* Forest on warm paper measures 9.9:1; the copper stays a hairline. */
+/*
+ * Deep forest on warm paper: 15.4:1 light, 16.1:1 dark; the copper stays a
+ * hairline. The label must read as ink, so it takes the heading token, which
+ * inverts with the scheme. `--pwh-forest` is a surface token in this system
+ * (`--color-shell-raised` aliases it) and stays 1.8:1 against the dark canvas.
+ */
 .actionSecondary {
   border-color: var(--pwh-line-strong);
   background: transparent;
-  color: var(--pwh-forest);
+  color: var(--pwh-forest-deep);
 }
 
 .actionSecondary:hover {
@@ -205,13 +210,22 @@
   pointer-events: auto;
 }
 
-/* Edge-anchored caption strip; it is part of the surface, not a card over it. */
+/*
+ * Edge-anchored caption strip; it is part of the surface, not a card over it.
+ *
+ * The background is the brand *surface* token, which stays dark in both
+ * schemes (`#121A17` light, `#0C110F` dark) and holds the disclosure at
+ * 16.0:1 / 17.2:1. `--pwh-forest-deep` is the heading *ink* token and inverts
+ * to `#F3EFE7` in dark, which would deliver the imagery with an unreadable
+ * disclaimer. The two tokens are deliberately distinct — see
+ * `src/lib/visualSystem.test.ts`.
+ */
 .disclosure {
   position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
-  background: var(--pwh-forest-deep);
+  background: var(--color-forest-deep-surface, #121a17);
   color: var(--pwh-ink-inverse);
   font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
   font-size: 0.6875rem;
