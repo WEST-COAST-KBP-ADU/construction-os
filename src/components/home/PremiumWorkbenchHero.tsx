@@ -32,6 +32,13 @@ export type PremiumWorkbenchHeroProps = {
   activeChapter?: HeroChapter;
   /** The phase published to the reserved region. Defaults to `activeChapter`. */
   motionPhase?: BlueprintMotionPhase;
+  /**
+   * A second claim boundary appended to the disclosure strip, owned by whatever
+   * is mounted into the reserved region. The strip states what the surface is;
+   * a mounted mechanism that makes its own visual claim states it here rather
+   * than painting a disclaimer of its own over the composition.
+   */
+  supplementalDisclosure?: ReactNode;
   /** Optional hook for the integrating surface. Composition is unaffected. */
   className?: string;
 };
@@ -53,6 +60,7 @@ export default function PremiumWorkbenchHero({
   blueprintMotionSlot,
   activeChapter = "lead",
   motionPhase,
+  supplementalDisclosure,
   className,
 }: PremiumWorkbenchHeroProps) {
   const phase: BlueprintMotionPhase = motionPhase ?? activeChapter;
@@ -113,8 +121,11 @@ export default function PremiumWorkbenchHero({
           >
             {blueprintMotionSlot}
           </div>
-          <figcaption className={styles.disclosure}>
+          <figcaption className={styles.disclosure} data-disclosure="public-claim">
             {PREMIUM_WORKBENCH_HERO_MEDIA.disclosure}
+            {supplementalDisclosure === undefined || supplementalDisclosure === null ? null : (
+              <> {supplementalDisclosure}</>
+            )}
           </figcaption>
         </figure>
       </div>

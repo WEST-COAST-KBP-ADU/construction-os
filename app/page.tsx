@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import ModelCatalog from "@/src/components/content/ModelCatalog";
+import HeroBlueprintStage from "@/src/components/home/HeroBlueprintStage";
 import { homepageServices } from "@/src/lib/homepageServices";
 import { jurisdictionPages } from "@/src/lib/jurisdictionPages";
 import { getPublicModelCatalog } from "@/src/lib/publicModelCatalog";
@@ -17,39 +18,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildBusinessJsonLd()) }}
       />
 
-      <section className="spine-hero" aria-labelledby="home-hero-title">
-        <div className="spine-hero__copy">
-          <p className="spine-kicker">Pre-release product preview</p>
-          <h1 id="home-hero-title">Your ADU, designed around real choices.</h1>
-          <p className="spine-hero__lede">
-            Explore proven models, materials, and site constraints before the first estimate.
-          </p>
-          <div className="spine-actions">
-            <Link href="/models" className="button button--primary">
-              Explore models
-            </Link>
-            <Link href="/studio" className="button button--secondary">
-              Open Concept Studio
-            </Link>
-          </div>
-        </div>
-        <figure className="spine-hero__media">
-          <div className="spine-hero__picture">
-            <Image
-              src="/images/homepage-gabled-adu-concept-v1.webp"
-              alt="Concept visualization of a one-story offset double-gable ADU with a covered wood entry and new landscaping at sunset"
-              fill
-              preload
-              sizes="(max-width: 63.99rem) 100vw, 60vw"
-              className="spine-hero__image"
-            />
-          </div>
-          <figcaption className="spine-hero__caption">
-            Concept visualization—not a completed West Coast KBP project, catalog-model-matched
-            rendering, property, or approved plan.
-          </figcaption>
-        </figure>
-      </section>
+      <HeroBlueprintStage />
 
       <section className="spine-section" aria-labelledby="product-planes-title">
         <div className="portal-container spine-section__inner">

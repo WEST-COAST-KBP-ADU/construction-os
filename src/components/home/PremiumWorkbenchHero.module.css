@@ -203,6 +203,13 @@
   position: absolute;
   container: blueprint-motion-slot / size;
   inset: 0;
+  /*
+   * `container-type: size` already applies layout containment, which makes this
+   * element a stacking context; the explicit `z-index: 0` states that rather
+   * than leaving it as a side effect, and pins the whole mounted subtree below
+   * the disclosure. No `z-index` a mounted child sets can escape it.
+   */
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -225,6 +232,9 @@
   right: 0;
   bottom: 0;
   left: 0;
+  /* Above the reserved region in every regime. The public claim is never
+   * occluded by whatever is mounted into the slot. */
+  z-index: 1;
   background: var(--color-forest-deep-surface, #121a17);
   color: var(--pwh-ink-inverse);
   font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);

@@ -4,6 +4,11 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import sitemap from "../../app/sitemap";
+import {
+  PREMIUM_WORKBENCH_HERO_ACTIONS,
+  PREMIUM_WORKBENCH_HERO_COPY,
+  PREMIUM_WORKBENCH_HERO_MEDIA,
+} from "../components/home/premiumWorkbenchHero.contract";
 import { getServicePage } from "./contentPages";
 import { homepageServices, homepageServiceSlugs } from "./homepageServices";
 import { PUBLIC_MODEL_IDS } from "./publicModelCatalog";
@@ -17,66 +22,88 @@ const servicePageView = readFileSync(
   "utf8",
 );
 
+const homeComponentSource = (name: string) =>
+  readFileSync(resolve(process.cwd(), `src/components/home/${name}`), "utf8");
+
+const heroComponent = homeComponentSource("PremiumWorkbenchHero.tsx");
+const heroStyles = homeComponentSource("PremiumWorkbenchHero.module.css");
+const stage = homeComponentSource("HeroBlueprintStage.tsx");
+const stageStyles = homeComponentSource("HeroBlueprintStage.module.css");
+const sequence = homeComponentSource("LiveBlueprintSequence.tsx");
+const sequenceStyles = homeComponentSource("LiveBlueprintSequence.module.css");
+
+/*
+ * The hero moved out of `app/page.tsx` into the Option 2 modules at
+ * OPTION2-HERO-INTEGRATION-001, so the first-fold boundaries are asserted
+ * against the component and its contract. Asserting them against `page.tsx`
+ * alone would keep passing while testing nothing.
+ */
+const heroSurfaces = [heroComponent, stage, sequence].join("\n");
+
 const imagePaths = [
-  "public/images/homepage-gabled-adu-concept-v1.webp",
   "public/images/balanced-residential-addition-concept-v2.webp",
   "public/images/balanced-process-materials-concept-v2.webp",
   "public/images/balanced-interior-concept-v2.webp",
 ];
 
-const hero = page.slice(
-  page.indexOf('<section className="spine-hero"'),
-  page.indexOf('<section className="spine-section"'),
-);
-const normalizedHero = hero.replace(/\s+/g, " ");
-
 describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
-  it("uses optimized local images and labels all four as conceptual", () => {
-    for (const imagePath of imagePaths) {
+  it("uses optimized local images and labels every one as conceptual", () => {
+    for (const imagePath of [...imagePaths, `public${PREMIUM_WORKBENCH_HERO_MEDIA.src}`]) {
       const absolutePath = resolve(process.cwd(), imagePath);
       expect(existsSync(absolutePath)).toBe(true);
       expect(statSync(absolutePath).size).toBeLessThan(400_000);
     }
 
-    expect(page.match(/<figcaption/g)).toHaveLength(4);
+    // Three conceptual figures remain in the page; the fourth is the hero's own
+    // disclosure, which now travels with the component that owns the imagery.
+    expect(page.match(/<figcaption/g)).toHaveLength(3);
+    expect(heroComponent.match(/<figcaption/g)).toHaveLength(1);
     expect(page).toContain("next/image");
   });
 
-  it("pins the selected gabled hero asset and exact concept-safe public copy", () => {
-    expect(hero).toContain('src="/images/homepage-gabled-adu-concept-v1.webp"');
-    expect(hero).not.toContain("balanced-adu-hero-concept-v2.webp");
-    expect(page).not.toContain('src="/images/balanced-adu-hero-concept-v2.webp"');
-    expect(hero).toContain("Pre-release product preview");
-    expect(hero).toContain("Your ADU, designed around real choices.");
-    expect(hero).toContain(
-      "Explore proven models, materials, and site constraints before the first estimate.",
+  it("pins the Option 2 workbench surface and exact concept-safe public copy", () => {
+    expect(PREMIUM_WORKBENCH_HERO_MEDIA.src).toBe(
+      "/images/balanced-process-materials-concept-v2.webp",
     );
-    expect(normalizedHero).toContain(
-      "Concept visualization—not a completed West Coast KBP project, catalog-model-matched rendering, property, or approved plan.",
+    expect(page).not.toContain("balanced-adu-hero-concept-v2.webp");
+    expect(page).not.toContain("homepage-gabled-adu-concept-v1.webp");
+    expect(PREMIUM_WORKBENCH_HERO_COPY.kicker).toBe("KBP OS · ADU + General Construction");
+    expect(PREMIUM_WORKBENCH_HERO_COPY.heading).toBe(
+      "From the first lead to a managed construction process.",
     );
-    expect(hero).not.toMatch(
+    expect(PREMIUM_WORKBENCH_HERO_COPY.lede).toContain(
+      "lead-generation and process-management platform",
+    );
+    expect(PREMIUM_WORKBENCH_HERO_MEDIA.disclosure).toContain("Conceptual imagery");
+    expect(PREMIUM_WORKBENCH_HERO_MEDIA.disclosure).toContain(
+      "Not a West Coast KBP project, an approved plan, a permit, a parcel, or a material specification.",
+    );
+
+    const copy = Object.values(PREMIUM_WORKBENCH_HERO_COPY).join(" ");
+
+    expect(copy).not.toMatch(
       /James Hardie|\bHardie\b|A450|A600|A800|completed project|customer property/i,
     );
   });
 
-  it("keeps the hero an unoverlaid editorial split that recomposes image-first", () => {
-    expect(hero).toContain('className="spine-hero__copy"');
-    expect(hero).toContain('className="spine-hero__media"');
-    expect(hero).not.toContain("spine-hero__shade");
-    expect(hero).not.toMatch(/scrim|gradient|overlay/i);
-    expect(stylesheet).toMatch(
-      /\.spine-hero\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 2fr\) minmax\(0, 3fr\)/,
+  it("keeps the first fold an unoverlaid editorial split that recomposes image-first", () => {
+    expect(heroStyles).toMatch(/\.composition\s*\{[\s\S]*?grid-template-columns:\s*46fr 54fr/);
+    expect(heroStyles).toMatch(
+      /@media \(max-width: 63\.99rem\)[\s\S]*?\.composition\s*\{[\s\S]*?grid-template-columns:\s*1fr/,
     );
-    expect(stylesheet).toMatch(
-      /@media \(max-width: 63\.99rem\)[\s\S]*?\.spine-hero__media\s*\{[\s\S]*?grid-row:\s*1/,
-    );
-    expect(hero).toContain("preload");
-    expect(hero).not.toContain("priority");
+    // No scrim, gradient, or overlay is painted across the photograph itself.
+    expect(heroStyles).not.toMatch(/\.surfaceImage[^}]*(?:scrim|gradient|opacity)/i);
+    expect(heroComponent).toContain("preload");
+    expect(heroComponent).not.toContain("priority");
+    // The superseded homepage-only hero is gone from both files, not just one.
+    expect(page).not.toContain("spine-hero");
+    expect(stylesheet).not.toContain("spine-hero");
+    expect(stylesheet).not.toContain("spine-image-settle");
   });
 
   it("keeps the required product narrative in the exact decision order", () => {
     const sectionMarkers = [
-      'aria-labelledby="home-hero-title"',
+      "<HeroBlueprintStage />",
       'aria-labelledby="product-planes-title"',
       'aria-labelledby="owned-models-title"',
       'aria-labelledby="concept-studio-title"',
@@ -93,12 +120,15 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
   });
 
   it("pairs hero controls with their live, named destinations", () => {
-    expect(page).toMatch(
-      /<Link href="\/models" className="button button--primary">\s*Explore models/,
-    );
-    expect(page).toMatch(
-      /<Link href="\/studio" className="button button--secondary">\s*Open Concept Studio/,
-    );
+    expect(PREMIUM_WORKBENCH_HERO_ACTIONS.map((action) => [action.href, action.label])).toEqual([
+      ["/models", "Explore models"],
+      ["/studio", "Open Concept Studio"],
+    ]);
+    expect(PREMIUM_WORKBENCH_HERO_ACTIONS.map((action) => action.emphasis)).toEqual([
+      "primary",
+      "secondary",
+    ]);
+    expect(heroSurfaces).not.toContain('href="/start"');
     expect(page).not.toContain('href="/start"');
   });
 
@@ -184,9 +214,21 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
   });
 
   it("introduces no intake, credential, or luxury claim", () => {
-    expect(page).not.toMatch(/<(?:form|input|textarea|select)\b/i);
+    for (const source of [page, heroSurfaces]) {
+      expect(source).not.toMatch(/<(?:form|input|textarea|select)\b/i);
+      expect(source).not.toMatch(/licensed|insured|award-winning|luxury|resort|mansion/i);
+    }
+
     expect(page).not.toMatch(/\$\s?\d|\b\d+\s*(?:day|week|month|year)s?\b/i);
-    expect(page).not.toMatch(/licensed|insured|award-winning|luxury|resort|mansion/i);
+    // The hero surfaces carry motion durations in milliseconds, so the money and
+    // calendar-duration guard is applied to the copy they publish, not to timing.
+    const heroCopy = [
+      ...Object.values(PREMIUM_WORKBENCH_HERO_COPY),
+      PREMIUM_WORKBENCH_HERO_MEDIA.disclosure,
+      ...PREMIUM_WORKBENCH_HERO_ACTIONS.map((action) => action.label),
+    ].join(" ");
+
+    expect(heroCopy).not.toMatch(/\$\s?\d|\b\d+\s*(?:day|week|month|year)s?\b/i);
   });
 
   it("uses the pre-release global navigation without adding client JavaScript", () => {
@@ -202,13 +244,110 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
   });
 
   it("keeps Home motion bounded and reduced-motion safe", () => {
-    expect(stylesheet).toContain(".spine-hero__image");
-    expect(stylesheet).toMatch(
-      /\.spine-hero__image\s*\{[\s\S]*?animation:\s*spine-image-settle 1\.4s[^;]*both/,
-    );
     expect(stylesheet).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(stylesheet).toMatch(
-      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.spine-hero__image\s*\{\s*animation:\s*none/,
+
+    // Every module that moves in the first fold answers reduced motion itself.
+    expect(heroStyles).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.action\s*\{\s*transition:\s*none/,
     );
+    expect(heroStyles).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?--blueprint-motion-enabled:\s*0/,
+    );
+    expect(sequenceStyles).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?animation:\s*none\s*!important/,
+    );
+
+    // The drawing's static frame is complete: reduced motion reveals every
+    // layer rather than freezing a partial one.
+    expect(sequence).toContain('motion === "static"');
+    expect(sequenceStyles).toMatch(
+      /\.figure\[data-motion="static"\][\s\S]*?opacity:\s*1;\s*transition:\s*none/,
+    );
+  });
+
+  it("mounts the Option 2 stage as the only first fold, with one public rail", () => {
+    // The stage is the single homepage mount; nothing else composes the hero.
+    expect(page.match(/<HeroBlueprintStage \/>/g)).toHaveLength(1);
+    expect(page).toContain('import HeroBlueprintStage from "@/src/components/home/HeroBlueprintStage"');
+
+    // The Project chapter mounts slot-only, so its five-phase rail and caption
+    // apparatus never reach the first fold.
+    expect(stage).toContain('surface="slot"');
+    expect(stage).not.toContain('surface="chapter"');
+    expect(sequence).toContain('const slotted = surface === "slot"');
+    expect(sequence).toMatch(/\{slotted \? null : \(\s*<ol className=\{styles\.rail\}/);
+    expect(sequence).toMatch(/\{slotted \? null : <p className=\{styles\.phaseCaption\}/);
+
+    // `plan` and `build` stay internal motion states, never public chapters.
+    expect(stage).toContain("heroChapterForPhase");
+    expect(heroComponent).toContain("HERO_CHAPTERS.map");
+  });
+
+  it("keeps the Record recipe opted in, scoped, and free of global token leaks", () => {
+    // The import has to precede every rule or CSS silently drops it.
+    const importLines = stylesheet
+      .split("\n")
+      .filter((line) => line.trimStart().startsWith("@import"));
+
+    expect(importLines[1]).toContain("option2-premium.tokens.css");
+    expect(stylesheet.indexOf("@import \"../src/styles/option2-premium.tokens.css\";")).toBeLessThan(
+      stylesheet.indexOf(":root {"),
+    );
+
+    // Opt-in is a single subtree attribute, and the recipe defines nothing globally.
+    expect(stage).toContain("data-o2-premium");
+    // The shell declares no `--o2-*` property of its own; it only imports them.
+    expect(stylesheet).not.toMatch(/--o2-[a-z-]+\s*:/);
+
+    const tokens = readFileSync(
+      resolve(process.cwd(), "src/styles/option2-premium.tokens.css"),
+      "utf8",
+    );
+
+    expect(tokens).not.toMatch(/^:root\s*\{/m);
+
+    // The bridge re-points base tokens inside the subtree only; it never
+    // redefines an `--o2-*` value and never writes a global selector.
+    const stageRules = stageStyles.replaceAll(/\/\*[\s\S]*?\*\//g, "");
+
+    expect(stageRules).not.toMatch(/^\s*--o2-[a-z-]+:/m);
+    expect((stageRules.match(/^[^\s@}][^{]*(?=\{)/gm) ?? []).map((s) => s.trim())).toEqual([
+      ".stage",
+    ]);
+  });
+
+  it("holds the public disclosure above whatever is mounted into the slot", () => {
+    // Geometric and paint-order containment, both stated, so the public claim
+    // cannot be occluded by the drawing in any regime.
+    expect(heroStyles).toMatch(/\.motionSlot\s*\{[\s\S]*?z-index:\s*0/);
+    expect(heroStyles).toMatch(/\.disclosure\s*\{[\s\S]*?z-index:\s*1/);
+    expect(sequenceStyles).toMatch(
+      /\.figure\[data-surface="slot"\]\s*\{[\s\S]*?overflow:\s*hidden/,
+    );
+    expect(sequenceStyles).toMatch(
+      /\.figure\[data-surface="slot"\]\s*\{[\s\S]*?grid-template-rows:\s*minmax\(0, 1fr\) min\(38cqb, 7rem\)/,
+    );
+    // The mounted variant sets no `z-index` of its own to escape with.
+    const slotRules = sequenceStyles.slice(
+      sequenceStyles.indexOf('.figure[data-surface="slot"]'),
+      sequenceStyles.indexOf("/* ------------------------------------------------------------------ caption */"),
+    );
+
+    expect(slotRules).not.toContain("z-index");
+
+    // The drawing's own claim boundary rides the disclosure strip.
+    expect(stage).toContain("supplementalDisclosure");
+    expect(heroComponent).toContain("supplementalDisclosure");
+  });
+
+  it("drops the card treatment where the sheet lies on the workbench", () => {
+    const slotRules = sequenceStyles.slice(
+      sequenceStyles.indexOf('.figure[data-surface="slot"] .sheet'),
+      sequenceStyles.indexOf(".slotCaption"),
+    );
+
+    expect(slotRules).toMatch(/border:\s*0/);
+    expect(slotRules).toMatch(/border-radius:\s*0/);
+    expect(slotRules).not.toMatch(/box-shadow:\s*inset/);
   });
 });

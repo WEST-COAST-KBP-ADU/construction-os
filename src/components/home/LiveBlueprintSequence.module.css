@@ -282,6 +282,60 @@
   transition-delay: 0ms;
 }
 
+/* ------------------------------------------------- slot surface · Option 2 */
+
+/*
+ * The hero's reserved region. The sheet is the whole visible figure: it lies on
+ * the workbench, so it keeps its paper and its daylight falloff but drops the
+ * card treatment — no border, no radius, no inset trough. Its only elevation is
+ * the contact shadow a real sheet casts on the bench.
+ *
+ * Containment is geometric, not advisory. The figure is clipped to the slot and
+ * reserves a trailing row for the hero's disclosure strip, so the drawing cannot
+ * reach the public claim in any regime, at any viewport, in either scheme. It
+ * also opts out of pointer events entirely: the sheet is not a control here.
+ */
+.figure[data-surface="slot"] {
+  position: absolute;
+  display: grid;
+  gap: 0;
+  /* Row two is the reserved disclosure gutter — never drawn into. */
+  grid-template-rows: minmax(0, 1fr) min(38cqb, 7rem);
+  inset: 0;
+  overflow: hidden;
+  padding: clamp(0.85rem, 4cqi, 2.5rem) clamp(0.85rem, 4cqi, 2.5rem) 0;
+  pointer-events: none;
+}
+
+.figure[data-surface="slot"] .sheet {
+  place-self: center;
+  max-block-size: 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(
+    --o2-shadow-sheet,
+    2px 3px 4px rgb(42 33 26 / 20%),
+    4px 8px 16px rgb(42 33 26 / 12%)
+  );
+}
+
+/*
+ * Suppressed apparatus. The rail, phase caption, and transport are not rendered
+ * at all in slot mode; the factual lines that remain are taken out of the visual
+ * flow and left in the document, so a screen reader and a reader without CSS or
+ * JavaScript still get the provenance, the measured facts, and the disclaimer.
+ * The visitor-visible claim boundary is carried by the hero disclosure strip.
+ */
+.slotCaption {
+  position: absolute;
+  clip-path: inset(50%);
+  margin: 0;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 /* ------------------------------------------------------------------ caption */
 
 .caption {

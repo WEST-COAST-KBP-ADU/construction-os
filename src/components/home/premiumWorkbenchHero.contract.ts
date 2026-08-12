@@ -15,7 +15,7 @@
  * Bumped whenever a consumer-visible guarantee below changes. Worker-228 may
  * pin this exact value in its own tests.
  */
-export const PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION = "1.0.0";
+export const PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION = "1.1.0";
 
 /* -------------------------------------------------------------------------
  * Motion phases
@@ -125,13 +125,20 @@ export const BLUEPRINT_MOTION_SLOT_CONTRACT = Object.freeze({
    * - it establishes a size container named `blueprint-motion-slot`;
    * - it sets `pointer-events: none` on itself and `auto` on direct children,
    *   so an empty slot intercepts nothing;
-   * - it creates no stacking, border, radius, shadow, or background of its own.
+   * - it draws no border, radius, shadow, or background of its own;
+   * - it is a stacking context — `container-type: size` applies layout
+   *   containment, and `z-index: 0` states that explicitly — pinned beneath the
+   *   disclosure strip, so no `z-index` set inside the mounted subtree can
+   *   paint over the public claim. Version 1.0.0 documented the opposite; the
+   *   containment was always there and the guarantee is now the stated one.
    */
   layout: Object.freeze({
     positioning: "absolute-inset-0",
     containerName: BLUEPRINT_MOTION_SLOT_ID,
     containerType: "size",
     pointerEvents: "none-with-auto-children",
+    /** Stacking context pinned below the disclosure strip. */
+    stacking: "isolated-below-disclosure",
   }),
   /**
    * CSS custom properties the hero sets on the reserved element so a mounted

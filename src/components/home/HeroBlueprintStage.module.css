@@ -1,0 +1,67 @@
+/*
+ * OPTION2-HERO-INTEGRATION-001 · the recipe bridge.
+ *
+ * Worker-229's recipe is declared entirely under `[data-o2-premium]` and every
+ * one of its 131 custom properties is `--o2-` prefixed, so it collides with
+ * nothing and — left alone — changes nothing. Worker-227's hero and Worker-228's
+ * drawing both resolve the repository's `--color-*` and `--duration-*` tokens.
+ *
+ * This file is the one place the two are reconciled: inside the hero subtree,
+ * and nowhere else, the base tokens the two modules read are re-pointed at the
+ * Option 2 steps. Neither precursor is restyled, no `--o2-*` value is redefined,
+ * and no token is written at `:root`. Remove this class and both modules fall
+ * back to the shell palette unchanged.
+ *
+ * Scheme: the recipe declares one daylight scheme and no dark variant. The first
+ * fold is a lit workbench and does not invert — see the RESULT for the reasoning
+ * and the Owner-visible consequence.
+ */
+
+.stage {
+  /* Paper and surface — the editorial field, the shell, the drafting sheet. */
+  --color-canvas: var(--o2-paper-base);
+  --color-surface: var(--o2-surface-raised);
+  --color-surface-muted: var(--o2-paper-shade);
+
+  /* Forest ink hierarchy. `forest-deep-surface` stays a surface, not an ink:
+   * it is the disclosure ground and the primary hover, and it must stay dark
+   * in both schemes — the exact distinction #233 blocked on. */
+  --color-forest: var(--o2-ink-secondary);
+  --color-forest-deep: var(--o2-ink-primary);
+  --color-forest-deep-surface: var(--o2-surface-inverse);
+
+  --color-ink: var(--o2-ink-body);
+  --color-ink-muted: var(--o2-graphite-secondary);
+  --color-ink-subtle: var(--o2-graphite-annotation);
+  --color-ink-inverse: var(--o2-ink-inverse);
+  --color-ink-inverse-muted: var(--o2-ink-inverse-muted);
+
+  /*
+   * Copper discipline. `copper-text` is the only step the recipe clears for
+   * type, so it is the only step the type tokens are pointed at: the hero
+   * kicker, the active chapter index, and the drawing's record subtitle are the
+   * complete set of copper type in the composition. `copper-line` carries the
+   * hairline rule and the window openings — marks, never type.
+   */
+  --color-gold-deep: var(--o2-copper-text);
+  --color-gold: var(--o2-copper-line);
+
+  --color-line: var(--o2-line-hairline);
+  --color-line-strong: var(--o2-line-strong);
+
+  --color-focus: var(--o2-focus-ring);
+  --color-focus-contrast: var(--o2-focus-halo);
+
+  /*
+   * Duration reconciliation. The subtree runs on the recipe's own scale, which
+   * is the single system the Record packet specifies. The drawing's stroke draw
+   * and annotation fade are deliberately left at Worker-228's authored values:
+   * they are the mechanism's motion, not a shell transition, and retiming them
+   * would be editing a precursor's motion.
+   */
+  --duration-fast: var(--o2-duration-fast);
+  --duration-standard: var(--o2-duration-standard);
+  --easing-standard: var(--o2-easing-standard);
+
+  display: block;
+}

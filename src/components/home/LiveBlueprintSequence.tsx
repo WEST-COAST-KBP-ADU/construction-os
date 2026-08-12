@@ -30,6 +30,22 @@ import styles from "./LiveBlueprintSequence.module.css";
 export const COMPACT_VIEWPORT_QUERY = "(max-width: 47.999rem)";
 export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
+/**
+ * Where this figure is mounted.
+ *
+ * `chapter` is the standalone block this module was authored as: sheet plus the
+ * full caption apparatus — phase rail, phase caption, transport, provenance,
+ * metrics, disclaimer — laid out as its own section.
+ *
+ * `slot` is the reserved region of the Option 2 hero. The sheet is the whole
+ * visible figure there: the caption apparatus is suppressed so the first fold
+ * carries exactly one public rail, and the five-phase rail never surfaces
+ * `plan` or `build` as public chapters. The factual lines are still rendered,
+ * still in the accessibility tree, and still present without JavaScript — they
+ * are removed from the visual flow, not from the document.
+ */
+export type BlueprintSurface = "chapter" | "slot";
+
 export type LiveBlueprintSequenceProps = {
   /** Defaults to the drawing bound to the adopted profile on `main`. */
   drawing?: HomeBlueprintDrawing;
@@ -38,6 +54,14 @@ export type LiveBlueprintSequenceProps = {
   autoAdvance?: boolean;
   /** Id of the heading this figure belongs to, supplied by the integrator. */
   headingId?: string;
+  /** Standalone chapter block, or the hero's reserved slot. Defaults to `chapter`. */
+  surface?: BlueprintSurface;
+  /**
+   * Notified whenever the sequence advances. The sequence stays uncontrolled —
+   * this reports its phase so a host composition can mirror it without taking
+   * ownership of the motion.
+   */
+  onPhaseChange?: (phase: HomeBlueprintPhase) => void;
   className?: string;
 };
 
@@ -179,6 +203,8 @@ export default function LiveBlueprintSequence({
   initialPhase = "lead",
   autoAdvance = true,
   headingId,
+  surface = "chapter",
+  onPhaseChange,
   className,
 }: LiveBlueprintSequenceProps) {
   const reactId = useId();
@@ -196,6 +222,14 @@ export default function LiveBlueprintSequence({
   const documentHidden = useDocumentHidden();
 
   const stepRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  // Slot mode suppresses the standalone caption apparatus. Auto progression is
+  // a property of the sequence, not of the caption, so it is unaffected.
+  const slotted = surface === "slot";
+
+  useEffect(() => {
+    onPhaseChange?.(activePhase);
+  }, [activePhase, onPhaseChange]);
 
   // Server and first client render agree on `static`, so hydration is stable
   // and a reader without JavaScript keeps the complete sheet.
@@ -276,6 +310,7 @@ export default function LiveBlueprintSequence({
   return (
     <figure
       className={className === undefined ? styles.figure : `${styles.figure} ${className}`}
+      data-surface={surface}
       data-motion={motion}
       data-phase={activePhase}
       data-chapter={drawing.chapter}
@@ -391,7 +426,8 @@ export default function LiveBlueprintSequence({
         </svg>
       </div>
 
-      <figcaption className={styles.caption}>
+      <figcaption className={slotted ? styles.slotCaption : styles.caption}>
+        {slotted ? null : (
         <ol className={styles.rail} id={railId} aria-label="Blueprint drafting phases" onKeyDown={handleRailKeyDown}>
           {drawing.phases.map((phase, index) => (
             <li key={phase.id} className={styles.railItem}>
@@ -414,23 +450,30 @@ export default function LiveBlueprintSequence({
             </li>
           ))}
         </ol>
+        )}
 
-        <p className={styles.phaseCaption}>{activeDescriptor.caption}</p>
+        {slotted ? null : <p className={styles.phaseCaption}>{activeDescriptor.caption}</p>}
 
-        <div className={styles.footer}>
-          <button
-            type="button"
-            className={styles.transport}
-            onClick={() => setPlaying((current) => !current)}
-            disabled={!transportAvailable}
-            aria-controls={railId}
-          >
-            {!transportAvailable ? "Auto-advance off" : playing ? "Pause sequence" : "Play sequence"}
-          </button>
+        {slotted ? (
           <p className={styles.provenance}>
             {`${drawing.provenance.modelId} · ${drawing.provenance.adoptionState} · ${drawing.provenance.maturity} · gates ${drawing.provenance.gatesReviewed} of ${drawing.provenance.gatesTotal} reviewed`}
           </p>
-        </div>
+        ) : (
+          <div className={styles.footer}>
+            <button
+              type="button"
+              className={styles.transport}
+              onClick={() => setPlaying((current) => !current)}
+              disabled={!transportAvailable}
+              aria-controls={railId}
+            >
+              {!transportAvailable ? "Auto-advance off" : playing ? "Pause sequence" : "Play sequence"}
+            </button>
+            <p className={styles.provenance}>
+              {`${drawing.provenance.modelId} · ${drawing.provenance.adoptionState} · ${drawing.provenance.maturity} · gates ${drawing.provenance.gatesReviewed} of ${drawing.provenance.gatesTotal} reviewed`}
+            </p>
+          </div>
+        )}
 
         {/* The measured facts stay readable as text at every viewport, including
             the widths at which the on-sheet annotation is intentionally thinned. */}
