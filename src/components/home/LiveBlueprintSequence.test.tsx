@@ -46,6 +46,30 @@ function renderedPathData(markup: string): string[] {
   return [...markup.matchAll(/ d="([^"]+)"/g)].map((match) => match[1]);
 }
 
+function cssClassPropertyValues(className: string, property: string): string[] {
+  const propertyPattern = new RegExp(`${property}:\\s*([^;]+);`, "g");
+
+  return [...STYLE_SOURCE.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+    .filter(([, selectors]) =>
+      selectors
+        .replaceAll(/\/\*[\s\S]*?\*\//g, "")
+        .split(",")
+        .map((selector) => selector.trim().split(/\s+/).at(-1))
+        .includes(`.${className}`),
+    )
+    .flatMap(([, , declarations]) =>
+      [...declarations.matchAll(propertyPattern)].map((match) => match[1].trim()),
+    );
+}
+
+function lastPixelPropertyValue(className: string, property: string): number {
+  const value = cssClassPropertyValues(className, property).at(-1);
+  if (value === undefined || !/^\d+px$/.test(value)) {
+    throw new Error(`Expected final .${className} ${property} to be a pixel value, received ${String(value)}`);
+  }
+  return Number.parseInt(value, 10);
+}
+
 /* ------------------------------------------------------------ phase model */
 
 describe("phase sequence", () => {
@@ -257,6 +281,29 @@ describe("layout guards", () => {
     expect(STATIC_MARKUP).toContain(
       `aspect-ratio:${DRAWING.viewBox.width} / ${DRAWING.viewBox.height}`,
     );
+  });
+
+  it("keeps record values effectively end-aligned after the CSS cascade", () => {
+    expect(COMPONENT_SOURCE).toContain('textAnchor="end"');
+    expect(cssClassPropertyValues("recordValue", "text-anchor")).toEqual(["middle", "end"]);
+  });
+
+  it("keeps the mobile record heading and subtitle inside the padded frame", () => {
+    const recordPad = 128;
+    const glyphAdvanceRatio = 0.62;
+    const contentWidth = DRAWING.recordBlock.width - recordPad * 2;
+    const mobileTitleSize = lastPixelPropertyValue("recordTitle", "font-size");
+    const mobileSubtitleSize = lastPixelPropertyValue("recordSubtitle", "font-size");
+
+    expect(COMPONENT_SOURCE).toContain(`const recordPad = ${recordPad};`);
+    expect(mobileSubtitleSize).toBeLessThanOrEqual(206);
+
+    for (const [text, fontSize] of [
+      [DRAWING.recordBlock.title, mobileTitleSize],
+      [DRAWING.recordBlock.subtitle, mobileSubtitleSize],
+    ] as const) {
+      expect(text.length * glyphAdvanceRatio * fontSize).toBeLessThanOrEqual(contentWidth);
+    }
   });
 
   it("declares no new runtime dependency and no image asset", () => {
