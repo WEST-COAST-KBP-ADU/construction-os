@@ -289,9 +289,9 @@
   --o2-grid-module: 2.75rem;
 
   /* ---------------------------------------------------------------------
-   * Motion — four durations, three curves, three distances. Shared verbatim
-   * with Workers 227 and 228 so the Hero, the drawing stage, and the Record
-   * rail move as one system.
+   * Motion — four durations, three curves, three distances. These are the
+   * Option 2 recipe's own durations; final reconciliation with Lead/Project
+   * belongs to Issue #230.
    * ------------------------------------------------------------------ */
   --o2-duration-instant: 90ms;
   --o2-duration-fast: 160ms;

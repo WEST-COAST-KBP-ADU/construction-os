@@ -283,8 +283,8 @@ no `backdrop-filter` token exists, and the contract fails if one appears.
 
 ## 6. Motion
 
-Shared verbatim with Workers 227 and 228 so the Hero, the drawing stage, and the
-Record rail move as one system.
+These are the Option 2 recipe's own durations. Final reconciliation with
+Lead/Project belongs to Issue #230.
 
 | Token | Default | Reduced motion |
 | --- | --- | --- |
