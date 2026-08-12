@@ -1,0 +1,301 @@
+.sheet {
+  border-top: 1px solid var(--color-line);
+  background: var(--color-canvas);
+  padding-block: var(--space-section);
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-10);
+}
+
+.header {
+  display: grid;
+  max-width: var(--content-wide);
+  gap: var(--space-4);
+}
+
+.header h2 {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: var(--font-size-heading-sm);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--line-height-heading);
+}
+
+.lede {
+  margin: 0;
+  max-width: var(--copy-max);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-copy);
+}
+
+.boundary {
+  margin: 0;
+  max-width: var(--copy-max);
+  border-left: 3px solid var(--color-gold-deep);
+  color: var(--color-ink);
+  background: var(--color-gold-soft);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+}
+
+.block {
+  display: grid;
+  gap: var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: clamp(1.15rem, 2.4vw, var(--space-8));
+}
+
+.blockTitle {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-body-lg);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+}
+
+.blockNote {
+  margin: 0;
+  max-width: var(--copy-max);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+}
+
+.facts {
+  display: grid;
+  margin: 0;
+  gap: var(--space-3) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.fact {
+  display: grid;
+  gap: var(--space-1);
+  border-top: 1px solid var(--color-line);
+  padding-top: var(--space-3);
+}
+
+.fact dt {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.fact dd {
+  display: grid;
+  margin: 0;
+  gap: var(--space-1);
+}
+
+.factValue {
+  color: var(--color-ink);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-body);
+  overflow-wrap: anywhere;
+}
+
+.pointer {
+  color: var(--color-ink-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.table {
+  min-width: 42rem;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: var(--font-size-body-sm);
+}
+
+.tableCaption {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  letter-spacing: var(--tracking-label);
+  padding-bottom: var(--space-2);
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.table th,
+.table td {
+  border-bottom: 1px solid var(--color-line);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table tbody th {
+  color: var(--color-ink);
+  font-weight: var(--font-weight-semibold);
+}
+
+.table tbody td {
+  color: var(--color-ink);
+}
+
+.unresolvedBlock {
+  border-color: var(--color-warning);
+  background: var(--color-warning-soft);
+}
+
+.unresolvedBlock .blockNote {
+  color: var(--color-ink);
+}
+
+.unresolvedList {
+  display: grid;
+  margin: 0;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  list-style: none;
+  padding: 0;
+}
+
+.unresolvedItem {
+  display: grid;
+  gap: var(--space-1);
+  border-top: 2px solid var(--color-warning);
+  padding-top: var(--space-3);
+}
+
+.unresolvedTitle {
+  margin: 0;
+  color: var(--color-warning);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.unresolvedDetail {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+}
+
+.unresolvedBasis {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.provenance {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  padding: var(--space-4) clamp(1.15rem, 2.4vw, var(--space-8));
+}
+
+.provenanceSummary {
+  color: var(--color-ink);
+  cursor: pointer;
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.provenanceSummary:focus-visible {
+  outline: var(--focus-outline-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.provenanceBody {
+  display: grid;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+}
+
+.provenanceHeading {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.provenanceList {
+  display: grid;
+  margin: 0;
+  gap: var(--space-3) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.provenanceEntry {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.provenanceEntry dt {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.provenanceEntry dd {
+  margin: 0;
+}
+
+.provenanceEntry code,
+.provenanceRefs code {
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  overflow-wrap: anywhere;
+}
+
+.provenanceRefs {
+  display: grid;
+  margin: 0;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+}
+
+.unavailable {
+  border-top-color: var(--color-danger);
+}
+
+.unavailable .boundary {
+  border-left-color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
+
+@media (max-width: 48rem) {
+  .facts,
+  .provenanceList,
+  .unresolvedList {
+    grid-template-columns: 1fr;
+  }
+}
