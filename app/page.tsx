@@ -19,10 +19,11 @@ export default async function Home() {
 
       <section className="spine-hero" aria-labelledby="home-hero-title">
         <div className="spine-hero__copy">
-          <p className="spine-kicker">Pre-release product preview</p>
-          <h1 id="home-hero-title">Your ADU, designed around real choices.</h1>
+          <p className="spine-kicker">KBP OS · ADU + General Construction</p>
+          <h1 id="home-hero-title">From the first lead to a managed construction process.</h1>
           <p className="spine-hero__lede">
-            Explore proven models, materials, and site constraints before the first estimate.
+            KBP OS is a lead-generation and process-management platform for ADU and general
+            construction—residential and commercial. We’re open to GC projects beyond ADUs.
           </p>
           <div className="spine-actions">
             <Link href="/models" className="button button--primary">
