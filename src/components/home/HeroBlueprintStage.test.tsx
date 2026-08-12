@@ -38,6 +38,7 @@ import {
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SEQUENCE_STYLE = readFileSync(path.join(HERE, "LiveBlueprintSequence.module.css"), "utf8");
 const HERO_STYLE = readFileSync(path.join(HERE, "PremiumWorkbenchHero.module.css"), "utf8");
+const sequenceSource = readFileSync(path.join(HERE, "LiveBlueprintSequence.tsx"), "utf8");
 const BRIDGE_STYLE = readFileSync(path.join(HERE, "HeroBlueprintStage.module.css"), "utf8");
 /** Declarations only, so prose in the file header cannot satisfy an assertion. */
 const BRIDGE_RULES = BRIDGE_STYLE.replaceAll(/\/\*[\s\S]*?\*\//g, "");
@@ -227,7 +228,10 @@ describe("HeroBlueprintStage · slot containment and recipe bridge", () => {
     expect(slotRules).toMatch(/overflow:\s*hidden/);
     expect(slotRules).toMatch(/inset:\s*0/);
     expect(slotRules).toMatch(/grid-template-rows:\s*minmax\(0, 1fr\) min\(38cqb, 7rem\)/);
-    expect(slotRules).toMatch(/pointer-events:\s*none/);
+    // Pointer events stay live so the sequence's hover pause still fires; the
+    // slot only ever covers the workbench column, never the calls to action.
+    expect(slotRules).not.toMatch(/pointer-events:\s*none/);
+    expect(sequenceSource).toContain("onPointerEnter");
     // Nothing in the slot variant can raise itself out of the stacking context.
     expect(slotRules).not.toContain("z-index");
   });

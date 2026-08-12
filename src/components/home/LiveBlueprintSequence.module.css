@@ -292,8 +292,13 @@
  *
  * Containment is geometric, not advisory. The figure is clipped to the slot and
  * reserves a trailing row for the hero's disclosure strip, so the drawing cannot
- * reach the public claim in any regime, at any viewport, in either scheme. It
- * also opts out of pointer events entirely: the sheet is not a control here.
+ * reach the public claim in any regime, at any viewport, in either scheme.
+ *
+ * Pointer events stay live — the hero's slot already hands them to direct
+ * children — because the sequence pauses on pointer enter, and that pause is the
+ * behaviour a reader needs when the drawing is running. The figure only ever
+ * covers the workbench column, never the editorial column that holds the calls
+ * to action, so nothing interactive sits underneath it.
  */
 .figure[data-surface="slot"] {
   position: absolute;
@@ -304,7 +309,6 @@
   inset: 0;
   overflow: hidden;
   padding: clamp(0.85rem, 4cqi, 2.5rem) clamp(0.85rem, 4cqi, 2.5rem) 0;
-  pointer-events: none;
 }
 
 .figure[data-surface="slot"] .sheet {
