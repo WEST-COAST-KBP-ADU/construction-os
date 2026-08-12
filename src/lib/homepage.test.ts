@@ -18,70 +18,86 @@ const servicePageView = readFileSync(
 );
 
 const imagePaths = [
-  "public/images/homepage-gabled-adu-concept-v1.webp",
   "public/images/balanced-residential-addition-concept-v2.webp",
   "public/images/balanced-process-materials-concept-v2.webp",
   "public/images/balanced-interior-concept-v2.webp",
 ];
 
-const hero = page.slice(
-  page.indexOf('<section className="spine-hero"'),
-  page.indexOf('<section className="spine-section"'),
+const heroComponent = readFileSync(
+  resolve(process.cwd(), "src/components/home/ProjectJourneyHero.tsx"),
+  "utf8",
 );
-const normalizedHero = hero.replace(/\s+/g, " ");
 
 describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
-  it("uses optimized local images and labels all four as conceptual", () => {
+  it("uses optimized local images and labels all three as conceptual", () => {
     for (const imagePath of imagePaths) {
       const absolutePath = resolve(process.cwd(), imagePath);
       expect(existsSync(absolutePath)).toBe(true);
       expect(statSync(absolutePath).size).toBeLessThan(400_000);
     }
 
-    expect(page.match(/<figcaption/g)).toHaveLength(4);
+    expect(page.match(/<figcaption/g)).toHaveLength(3);
     expect(page).toContain("next/image");
   });
 
-  it("pins the selected gabled hero asset and exact concept-safe public copy", () => {
-    expect(hero).toContain('src="/images/homepage-gabled-adu-concept-v1.webp"');
-    expect(hero).not.toContain("balanced-adu-hero-concept-v2.webp");
-    expect(page).not.toContain('src="/images/balanced-adu-hero-concept-v2.webp"');
-    expect(hero).toContain("Pre-release product preview");
-    expect(hero).toContain("Your ADU, designed around real choices.");
-    expect(hero).toContain(
-      "Explore proven models, materials, and site constraints before the first estimate.",
+  /*
+   * HERO-SCENARIO-IMPLEMENTATION-001 · the first fold is the construction-first
+   * hero adopted on #212, shipped in its `ASSET_FALLBACK` state. #215 proved the
+   * committed asset source cannot stand for the A600, so the page renders no
+   * house image, placeholder, or surrogate above the fold. The hero's own
+   * behavior is verified in `src/components/home/ProjectJourneyHero.test.tsx`;
+   * what is pinned here is how the page composes it.
+   */
+  it("mounts the project journey hero and no hero image", () => {
+    expect(page).toContain(
+      'import ProjectJourneyHero from "@/src/components/home/ProjectJourneyHero";',
     );
-    expect(normalizedHero).toContain(
-      "Concept visualization—not a completed West Coast KBP project, catalog-model-matched rendering, property, or approved plan.",
-    );
-    expect(hero).not.toMatch(
-      /James Hardie|\bHardie\b|A450|A600|A800|completed project|customer property/i,
-    );
+    expect(page).toContain("<ProjectJourneyHero />");
+    expect(page).not.toContain("spine-hero");
+    expect(page).not.toContain("homepage-gabled-adu-concept-v1.webp");
+    expect(page).not.toContain("balanced-adu-hero-concept-v2.webp");
+    expect(page).not.toContain("attainable-adu-hero-concept-v1.webp");
+    expect(page).not.toMatch(/adu-600-hardie-(?:panel|plank)/);
+
+    const heroPosition = page.indexOf("<ProjectJourneyHero />");
+    const firstImagePosition = page.indexOf("<Image");
+
+    expect(heroPosition).toBeGreaterThan(0);
+    expect(firstImagePosition).toBeGreaterThan(heroPosition);
   });
 
-  it("keeps the hero an unoverlaid editorial split that recomposes image-first", () => {
-    expect(hero).toContain('className="spine-hero__copy"');
-    expect(hero).toContain('className="spine-hero__media"');
-    expect(hero).not.toContain("spine-hero__shade");
-    expect(hero).not.toMatch(/scrim|gradient|overlay/i);
-    expect(stylesheet).toMatch(
-      /\.spine-hero\s*\{[\s\S]*?grid-template-columns:\s*minmax\(0, 2fr\) minmax\(0, 3fr\)/,
+  it("carries exactly one H1 and exactly two first-fold CTAs", () => {
+    expect(page).not.toContain("<h1");
+    expect(heroComponent.match(/<h1\b/g)).toHaveLength(1);
+    expect(heroComponent).toContain('id="home-hero-title"');
+    expect(heroComponent.match(/<Link\b/g)).toHaveLength(1);
+    expect(heroComponent).toContain('{ label: "Open Concept Studio", href: "/studio", tone: "primary" },');
+    expect(heroComponent).toContain(
+      '{ label: "See how a project runs", href: "/process", tone: "secondary" },',
     );
-    expect(stylesheet).toMatch(
-      /@media \(max-width: 63\.99rem\)[\s\S]*?\.spine-hero__media\s*\{[\s\S]*?grid-row:\s*1/,
+    expect(heroComponent).not.toContain('href="/start"');
+    expect(page).not.toContain('href="/start"');
+  });
+
+  it("opens the section after the hero on stages, not a second hero", () => {
+    const heroPosition = page.indexOf("<ProjectJourneyHero />");
+    const sectionPositions = [...page.matchAll(/aria-labelledby="([a-z-]+)"/g)]
+      .filter((match) => match.index > heroPosition)
+      .map((match) => match[1]);
+
+    expect(sectionPositions[0]).toBe("process-title");
+    expect(page).toContain(
+      "<h2 id=\"process-title\">Orient, explore, review context, then make a human decision.</h2>",
     );
-    expect(hero).toContain("preload");
-    expect(hero).not.toContain("priority");
   });
 
   it("keeps the required product narrative in the exact decision order", () => {
     const sectionMarkers = [
-      'aria-labelledby="home-hero-title"',
+      'aria-labelledby="process-title"',
       'aria-labelledby="product-planes-title"',
       'aria-labelledby="owned-models-title"',
       'aria-labelledby="concept-studio-title"',
       'aria-labelledby="service-paths-title"',
-      'aria-labelledby="process-title"',
       'aria-labelledby="service-context-title"',
       'aria-labelledby="truth-boundary-title"',
       'aria-labelledby="final-exits-title"',
@@ -90,16 +106,6 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
 
     expect(positions.every((position) => position >= 0)).toBe(true);
     expect(positions).toEqual([...positions].sort((left, right) => left - right));
-  });
-
-  it("pairs hero controls with their live, named destinations", () => {
-    expect(page).toMatch(
-      /<Link href="\/models" className="button button--primary">\s*Explore models/,
-    );
-    expect(page).toMatch(
-      /<Link href="\/studio" className="button button--secondary">\s*Open Concept Studio/,
-    );
-    expect(page).not.toContain('href="/start"');
   });
 
   it("binds homepage service cards to the canonical service registry with specific CTAs", () => {
@@ -202,13 +208,12 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
   });
 
   it("keeps Home motion bounded and reduced-motion safe", () => {
-    expect(stylesheet).toContain(".spine-hero__image");
-    expect(stylesheet).toMatch(
-      /\.spine-hero__image\s*\{[\s\S]*?animation:\s*spine-image-settle 1\.4s[^;]*both/,
-    );
+    // The hero no longer owns any global motion; its own bounded motion is
+    // scoped to `ProjectJourneyHero.module.css` and verified beside it.
+    expect(page).not.toContain("spine-image-settle");
     expect(stylesheet).toContain("@media (prefers-reduced-motion: reduce)");
-    expect(stylesheet).toMatch(
-      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.spine-hero__image\s*\{\s*animation:\s*none/,
+    expect(heroComponent).toContain(
+      'const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";',
     );
   });
 });

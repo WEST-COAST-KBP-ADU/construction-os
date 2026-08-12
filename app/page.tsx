@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import ModelCatalog from "@/src/components/content/ModelCatalog";
+import ProjectJourneyHero from "@/src/components/home/ProjectJourneyHero";
 import { homepageServices } from "@/src/lib/homepageServices";
 import { jurisdictionPages } from "@/src/lib/jurisdictionPages";
 import { getPublicModelCatalog } from "@/src/lib/publicModelCatalog";
@@ -17,38 +18,38 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildBusinessJsonLd()) }}
       />
 
-      <section className="spine-hero" aria-labelledby="home-hero-title">
-        <div className="spine-hero__copy">
-          <p className="spine-kicker">Pre-release product preview</p>
-          <h1 id="home-hero-title">Your ADU, designed around real choices.</h1>
-          <p className="spine-hero__lede">
-            Explore proven models, materials, and site constraints before the first estimate.
+      <ProjectJourneyHero />
+
+      <section className="spine-section spine-section--dark" aria-labelledby="process-title">
+        <div className="portal-container spine-section__inner">
+          <div className="spine-section__header">
+            <p className="spine-kicker">Process</p>
+            <h2 id="process-title">Orient, explore, review context, then make a human decision.</h2>
+            <p>
+              The order keeps early exploration useful without treating a model or a jurisdiction
+              context as a promise about a project.
+            </p>
+          </div>
+          <ol className="spine-process">
+            {[
+              ["01", "Orient", "State the desired direction without treating missing facts as answers."],
+              ["02", "Explore", "Inspect a concept family or anonymous Studio scenario."],
+              ["03", "Review context", "Use current official sources and appropriate review for the next question."],
+              ["04", "Human decision", "Decide whether a bounded next step is appropriate, paused, or declined."],
+            ].map(([sequence, title, description]) => (
+              <li key={sequence}>
+                <p>{sequence}</p>
+                <h3>{title}</h3>
+                <span>{description}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="spine-section__footer-link">
+            <Link href="/process" className="text-link text-link--inverse">
+              See the ADU process <span aria-hidden="true">→</span>
+            </Link>
           </p>
-          <div className="spine-actions">
-            <Link href="/models" className="button button--primary">
-              Explore models
-            </Link>
-            <Link href="/studio" className="button button--secondary">
-              Open Concept Studio
-            </Link>
-          </div>
         </div>
-        <figure className="spine-hero__media">
-          <div className="spine-hero__picture">
-            <Image
-              src="/images/homepage-gabled-adu-concept-v1.webp"
-              alt="Concept visualization of a one-story offset double-gable ADU with a covered wood entry and new landscaping at sunset"
-              fill
-              preload
-              sizes="(max-width: 63.99rem) 100vw, 60vw"
-              className="spine-hero__image"
-            />
-          </div>
-          <figcaption className="spine-hero__caption">
-            Concept visualization—not a completed West Coast KBP project, catalog-model-matched
-            rendering, property, or approved plan.
-          </figcaption>
-        </figure>
       </section>
 
       <section className="spine-section" aria-labelledby="product-planes-title">
@@ -174,38 +175,6 @@ export default async function Home() {
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      <section className="spine-section spine-section--dark" aria-labelledby="process-title">
-        <div className="portal-container spine-section__inner">
-          <div className="spine-section__header">
-            <p className="spine-kicker">Process</p>
-            <h2 id="process-title">Orient, explore, review context, then make a human decision.</h2>
-            <p>
-              The order keeps early exploration useful without treating a model or a jurisdiction
-              context as a promise about a project.
-            </p>
-          </div>
-          <ol className="spine-process">
-            {[
-              ["01", "Orient", "State the desired direction without treating missing facts as answers."],
-              ["02", "Explore", "Inspect a concept family or anonymous Studio scenario."],
-              ["03", "Review context", "Use current official sources and appropriate review for the next question."],
-              ["04", "Human decision", "Decide whether a bounded next step is appropriate, paused, or declined."],
-            ].map(([sequence, title, description]) => (
-              <li key={sequence}>
-                <p>{sequence}</p>
-                <h3>{title}</h3>
-                <span>{description}</span>
-              </li>
-            ))}
-          </ol>
-          <p className="spine-section__footer-link">
-            <Link href="/process" className="text-link text-link--inverse">
-              See the ADU process <span aria-hidden="true">→</span>
-            </Link>
-          </p>
         </div>
       </section>
 

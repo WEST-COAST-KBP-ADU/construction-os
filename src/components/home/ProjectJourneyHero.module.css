@@ -1,0 +1,361 @@
+/*
+ * HERO-SCENARIO-IMPLEMENTATION-001 · first-fold presentation.
+ *
+ * Motion is limited to a weight/marker change and a single 200ms opacity
+ * transition. There is no parallax, camera move, counter animation, glow, or
+ * scroll effect, and `prefers-reduced-motion: reduce` resolves the hero to its
+ * fully readable static state.
+ */
+
+.hero {
+  border-bottom: var(--line-width) solid var(--color-line);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.inner {
+  display: grid;
+  min-width: 0;
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 8fr) minmax(0, 5fr);
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: clamp(3rem, 6vh, 4.75rem) var(--content-gutter);
+}
+
+.copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/*
+ * The headline is budgeted, not merely styled: two lines at 1440 and three at
+ * 390. The grid column already bounds the measure, so the type scale is what
+ * holds the budget and the copy length is fixed against it in the tests.
+ */
+.headline {
+  max-width: 100%;
+  margin: var(--space-5) 0 0;
+  color: var(--color-forest-deep);
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 3.4vw, 3.05rem);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.045em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 40rem;
+  margin: var(--space-6) 0 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-copy);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+/* ---------------------------------------------------------------------------
+ * Journey rail
+ * ------------------------------------------------------------------------ */
+
+.journey {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: clamp(1.5rem, 2.5vw, 2rem);
+  border: var(--line-width) solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.journeyTitle {
+  margin: 0;
+  color: var(--color-gold-deep);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-kicker);
+  line-height: var(--line-height-tight);
+  text-transform: uppercase;
+}
+
+.beats {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-4);
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.beat {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-3);
+  grid-template-columns: auto minmax(0, 1fr);
+  padding-top: var(--space-4);
+  border-top: var(--line-width) solid var(--color-line);
+  color: var(--color-ink);
+}
+
+.beats > .beat:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.beatIndex {
+  color: var(--color-ink-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  line-height: 1.5;
+}
+
+.beatBody {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.beatLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-forest-deep);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.beatSentence {
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body);
+  text-wrap: pretty;
+}
+
+/*
+ * The decision beat is the only line that carries a marker glyph. It is the
+ * semantic centre of the journey: nothing moves until the person decides.
+ */
+.decisionMarker {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  border: 0.125rem solid var(--color-gold-deep);
+  rotate: 45deg;
+}
+
+/*
+ * `STATIC_ALL` — the state the hero renders in without scripting. Every beat is
+ * present at equal weight and the first is marked current, so the scenario
+ * reads with zero motion. Emphasis below is additive and script-gated.
+ */
+.hero[data-enhanced="true"] .beat {
+  opacity: 0.62;
+  transition: opacity 200ms var(--easing-standard);
+}
+
+.hero[data-enhanced="true"] .beat[data-state="current"] {
+  opacity: 1;
+}
+
+.hero[data-enhanced="true"] .beat[data-state="current"] .beatLabel {
+  font-weight: var(--font-weight-bold);
+}
+
+.hero[data-enhanced="true"] .beat[data-state="current"] .beatSentence {
+  color: var(--color-ink);
+}
+
+/* ---------------------------------------------------------------------------
+ * Controls
+ * ------------------------------------------------------------------------ */
+
+.controls {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: var(--line-width) solid var(--color-line);
+}
+
+.steps {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.step {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+}
+
+.stepDot {
+  display: block;
+  width: 1.5rem;
+  height: 0.1875rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-line-strong);
+  transition: background-color 200ms var(--easing-standard);
+}
+
+.step[data-state="current"] .stepDot {
+  background: var(--color-forest-deep);
+}
+
+.pager {
+  display: none;
+  min-width: 0;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pagerButton {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: var(--line-width) solid var(--color-line-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-forest-deep);
+  cursor: pointer;
+  font-size: var(--font-size-body);
+}
+
+.counter {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+}
+
+.stepLabel,
+.liveRegion {
+  position: absolute;
+  width: 0.0625rem;
+  height: 0.0625rem;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tablet — one column, all five beats still present and usable.
+ * ------------------------------------------------------------------------ */
+
+@media (max-width: 63.99rem) {
+  .inner {
+    gap: var(--space-10);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .headline {
+    max-width: 20ch;
+    font-size: clamp(2.35rem, 6.6vw, 3.4rem);
+  }
+
+  .lede {
+    font-size: var(--font-size-body);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Mobile — no auto-advance. With scripting the rail shows the current beat with
+ * previous/next controls; without scripting every beat stays readable.
+ * ------------------------------------------------------------------------ */
+
+@media (max-width: 47.99rem) {
+  .inner {
+    padding-block: var(--space-8) var(--space-10);
+  }
+
+  .headline {
+    max-width: 100%;
+    font-size: clamp(2.1rem, 8.4vw, 2.9rem);
+  }
+
+  .actions {
+    width: 100%;
+    margin-top: var(--space-6);
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions > a {
+    width: 100%;
+  }
+
+  .controls {
+    justify-content: center;
+  }
+
+  .steps {
+    display: none;
+  }
+
+  .pager {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/*
+ * The mobile collapse to a single beat is itself a motion affordance, so it is
+ * gated on the motion preference. Under `prefers-reduced-motion: reduce` the
+ * rail keeps all five beats on screen at every size.
+ */
+@media (max-width: 47.99rem) and (prefers-reduced-motion: no-preference) {
+  .hero[data-enhanced="true"] .beat {
+    display: none;
+  }
+
+  .hero[data-enhanced="true"] .beat[data-state="current"] {
+    display: grid;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Reduced motion resolves to `STATIC_ALL`: no transition, no auto-advance, no
+ * dimming, and every beat readable at every size. Emphasis remains a text
+ * weight and marker change, which is not motion.
+ * ------------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero[data-enhanced="true"] .beat,
+  .stepDot {
+    transition: none;
+  }
+
+  .hero[data-enhanced="true"] .beat {
+    opacity: 1;
+  }
+}
