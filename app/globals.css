@@ -3116,7 +3116,7 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   justify-content: center;
   padding:
     clamp(3rem, 7vh, 5.5rem)
-    clamp(2rem, 4vw, 4.5rem)
+    clamp(1.5rem, 2vw, 2.5rem)
     clamp(3rem, 7vh, 5.5rem)
     max(var(--content-gutter), calc((100vw - var(--content-max)) / 2));
 }
@@ -3183,11 +3183,11 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 }
 
 .spine-hero h1 {
-  max-width: 14ch;
+  max-width: 30ch;
   margin: var(--space-5) 0 0;
   color: var(--color-forest-deep);
   font-family: var(--font-serif);
-  font-size: clamp(2.75rem, 4.2vw, 4.6rem);
+  font-size: clamp(1.75rem, 2.1vw, 1.95rem);
   font-weight: var(--font-weight-regular);
   letter-spacing: -0.05em;
   line-height: 0.98;
@@ -3196,7 +3196,7 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 
 .spine-hero__lede {
   max-width: 31rem;
-  margin: var(--space-6) 0 0;
+  margin: var(--space-5) 0 0;
   color: var(--color-ink-muted);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height-copy);
@@ -3208,6 +3208,10 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   align-items: center;
   gap: var(--space-3);
   margin-top: var(--space-8);
+}
+
+.spine-hero .spine-actions {
+  margin-top: var(--space-6);
 }
 
 .spine-hero__caption {
@@ -3855,7 +3859,7 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   }
 
   .spine-hero h1 {
-    font-size: clamp(2.6rem, 9.5vw, 4.4rem);
+    font-size: clamp(2.1rem, 5.9vw, 3rem);
   }
 
   .spine-hero__lede {

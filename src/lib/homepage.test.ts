@@ -46,10 +46,10 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
     expect(hero).toContain('src="/images/homepage-gabled-adu-concept-v1.webp"');
     expect(hero).not.toContain("balanced-adu-hero-concept-v2.webp");
     expect(page).not.toContain('src="/images/balanced-adu-hero-concept-v2.webp"');
-    expect(hero).toContain("Pre-release product preview");
-    expect(hero).toContain("Your ADU, designed around real choices.");
-    expect(hero).toContain(
-      "Explore proven models, materials, and site constraints before the first estimate.",
+    expect(hero).toContain("KBP OS · ADU + General Construction");
+    expect(hero).toContain("From the first lead to a managed construction process.");
+    expect(normalizedHero).toContain(
+      "KBP OS is a lead-generation and process-management platform for ADU and general construction—residential and commercial. We’re open to GC projects beyond ADUs.",
     );
     expect(normalizedHero).toContain(
       "Concept visualization—not a completed West Coast KBP project, catalog-model-matched rendering, property, or approved plan.",
