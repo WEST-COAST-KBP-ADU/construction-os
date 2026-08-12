@@ -432,6 +432,14 @@ describe("PremiumWorkbenchHero colour scheme durability", () => {
     expect(body).toContain("background: transparent;");
   });
 
+  it("paints the primary call to action hover fill on the brand surface token, never the heading ink token", () => {
+    const body = ruleBody(css, ".actionPrimary:hover");
+    expect(body).toContain("background: var(--color-forest-deep-surface, #121a17);");
+    expect(body).not.toMatch(/background:\s*var\(\s*--(pwh-forest-deep|color-forest-deep)\s*[,)]/);
+    // The hover rule changes the fill only; the label keeps the rest colour.
+    expect(body).not.toMatch(/(^|[\s{;])color:/);
+  });
+
   for (const scheme of ["light", "dark"] as const) {
     const palette = PALETTES[scheme];
 
@@ -449,6 +457,18 @@ describe("PremiumWorkbenchHero colour scheme durability", () => {
         resolve(declaration(".editorial", "background"), palette),
       );
       expect(ratio, `secondary CTA contrast in ${scheme}: ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+    });
+
+    it(`holds the primary call to action at AA while hovered in ${scheme}`, () => {
+      // The hover rule replaces the fill and inherits the rest label colour.
+      const ratio = contrast(
+        resolve(declaration(".actionPrimary", "color"), palette),
+        resolve(declaration(".actionPrimary:hover", "background"), palette),
+      );
+      expect(
+        ratio,
+        `hovered primary CTA contrast in ${scheme}: ${ratio.toFixed(2)}:1`,
+      ).toBeGreaterThanOrEqual(4.5);
     });
 
     it(`holds the heading, lede, kicker, and primary call to action at AA in ${scheme}`, () => {

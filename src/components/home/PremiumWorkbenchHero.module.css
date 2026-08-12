@@ -147,7 +147,7 @@
 }
 
 .actionPrimary:hover {
-  background: var(--pwh-forest-deep);
+  background: var(--color-forest-deep-surface, #121a17);
 }
 
 /*
