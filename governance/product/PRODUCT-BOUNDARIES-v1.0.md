@@ -1,6 +1,6 @@
 # PRODUCT-BOUNDARIES v1.0 — West Coast KBP / KBP OS
 
-Status: `IN PROGRESS — SECTIONS A–C FROZEN; SECTIONS D–H NOT YET ADOPTED`
+Status: `IN PROGRESS — SECTIONS A–D FROZEN; SECTIONS E–H NOT YET ADOPTED`
 
 This file is the Product 2 product canon for `WEST-COAST-KBP-ADU/construction-os`.
 It carries exactly what the Owner has adopted, and nothing else.
@@ -25,6 +25,7 @@ head. The Owner alone adopts and merges.
 | Owner decision record — Section A adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273946430> |
 | Owner decision record — Section B adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273999441> |
 | Owner decision record — Section C adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274068664> |
+| Owner decision record — Section D adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274198559> |
 | Immutable upstream Product 1 canon, pinned to an exact commit | <https://github.com/kbp-core-engineering/kbp-dev-office/blob/a4f008d0cecaa10a561122f4f6a8affd94b70e24/docs/coordination/product/PRODUCT-BOUNDARIES-v1.0.md> |
 
 ## A. Canonical proposition — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
@@ -119,9 +120,53 @@ A capability may leave **NOT OPENED** only when the proposed flow conforms to th
 
 `governance/BOUNDARIES.md` остаётся выше этого раздела и не superseded.
 
+## D. First buyer and first pain — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
+
+### D1. Покупатель №1
+
+Частный владелец либо уполномоченный decision-maker жилой недвижимости в регионе Большого Сакраменто, который всерьёз рассматривает ADU как реальный строительный проект.
+
+Он покупает ответственность и ведение проекта West Coast KBP — не AI, не подписку на KBP OS, не каталог домов и не автоматическое заключение.
+
+### D2. Первая задача клиента
+
+Перевести исходное намерение:
+
+> «Я хочу построить ADU на этой недвижимости»
+
+в один контролируемый путь проекта:
+
+> цель → подтверждённые исходные данные → неизвестные и ограничения → необходимые проверки → человеческое решение → следующее bounded action.
+
+### D3. Первая боль
+
+У клиента нет единого достоверного состояния проекта. Данные об участке, правила, идеи, планы, бюджеты, переписка, мнения подрядчиков и решения существуют раздельно.
+
+Из-за этого клиент:
+
+- не отличает факт от предположения;
+- не понимает, что уже проверено, а что ещё неизвестно;
+- не отличает оценку от обязательства;
+- не видит, кто отвечает за следующий шаг;
+- теряет контекст при каждой передаче между участниками.
+
+Это и есть первая боль — не отсутствие красивой картинки дома, а отсутствие одного ответственного и проверяемого пути от намерения к следующему допустимому действию.
+
+### D4. Граница `owner_qualified`
+
+Клиент считается `owner_qualified`, только если одновременно присутствуют:
+
+1. право принимать решения по недвижимости;
+2. объект внутри действующей географии West Coast KBP;
+3. реальное намерение вести ADU-проект, а не просто посмотреть картинки или получить мгновенную цену;
+4. готовность к проверке источников и человеческому review;
+5. принятие того, что ранняя стадия не гарантирует feasibility, стоимость, срок, permit или начало строительства.
+
+Это пока семантическая граница `[DIRECTION]`, а не открытие intake. Любой публичный запуск по-прежнему требует выполнения Section B и соответствия `governance/BOUNDARIES.md`.
+
 ## Sections not yet adopted
 
-Only Sections A–C are adopted and frozen in this repository canon. Sections D–H
+Only Sections A–D are adopted and frozen in this repository canon. Sections E–H
 carry no adopted, proposed, provisional, or skeletal content here, and none may
 be invented, stubbed as a decision, or implemented ahead of its own bounded
 landing packet. Each enters this canon only from its exact Owner-adopted record,
