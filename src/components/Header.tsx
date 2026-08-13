@@ -47,8 +47,10 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="portal-container site-header__inner">
+        {/* P2-PRESENTATION-CHROME-0001: Product 2's identity is typographic
+            only. The former brand-seal was Product 1's signal device and is
+            not substituted by another icon, dot, monogram, or badge here. */}
         <Link href="/" className="brand" aria-label={accessibility.brandHomeLabel}>
-          <span className="brand-seal" aria-hidden="true"><span /></span>
           <span className="brand__wordmark">
             <span className="brand__name">{name}</span>
             <span className="brand__tagline">{tagline}</span>
