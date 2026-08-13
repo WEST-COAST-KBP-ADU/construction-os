@@ -1,6 +1,6 @@
 # PRODUCT-BOUNDARIES v1.0 — West Coast KBP / KBP OS
 
-Status: `IN PROGRESS — SECTIONS A–B FROZEN; SECTIONS C–H NOT YET ADOPTED`
+Status: `IN PROGRESS — SECTIONS A–C FROZEN; SECTIONS D–H NOT YET ADOPTED`
 
 This file is the Product 2 product canon for `WEST-COAST-KBP-ADU/construction-os`.
 It carries exactly what the Owner has adopted, and nothing else.
@@ -24,6 +24,7 @@ head. The Owner alone adopts and merges.
 | Mission brief — Product 2 boundaries session | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273825219> |
 | Owner decision record — Section A adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273946430> |
 | Owner decision record — Section B adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273999441> |
+| Owner decision record — Section C adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274068664> |
 | Immutable upstream Product 1 canon, pinned to an exact commit | <https://github.com/kbp-core-engineering/kbp-dev-office/blob/a4f008d0cecaa10a561122f4f6a8affd94b70e24/docs/coordination/product/PRODUCT-BOUNDARIES-v1.0.md> |
 
 ## A. Canonical proposition — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
@@ -99,10 +100,29 @@ A capability may leave **NOT OPENED** only when the proposed flow conforms to th
 | Intake, qualification, GIS, estimating, takeoff, permit/admin, scheduling, and inspection workflows | **DIRECTION · NOT OPENED** | Every contour remains subject to the binding NOT OPENED rule above. |
 | CRM writes, client messages, calls, booking, or other external actions | **NOT OPENED** | Disabled and unauthorized under current v1 and current repository boundaries. |
 
+## C. Closed anti-scope — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
+
+1. Просто сайт, лендинг, портфолио или цифровая брошюра. Сайт — публичная поверхность живого бизнеса.
+2. Одноразовый лидогенератор или рекламная воронка. Лид — начало управляемого бизнес-графа, а не продаваемая запись.
+3. Маркетплейс, каталог подрядчиков, брокер заявок или перепродавец лидов.
+4. Универсальная CRM, ERP, таск-трекер или обычная система управления строительными проектами. Такие системы могут стать источниками или потребителями KBP OS, но не определяют продукт.
+5. Каталог домов, конфигуратор или один конкретный ADU. Модели и Concept Studio — входные поверхности; ни A600, ни другой статичный дом не является сущностью продукта.
+6. Товарный handyman-бренд, поток дешёвых ремонтов или массовая низкоценовая строительная воронка. Позиционирование — ADU и серьёзный general construction.
+7. В v1 — универсальный SaaS для сторонних подрядчиков. Возможное внешнее лицензирование требует отдельного решения Владельца и не выводится из существования KBP OS.
+8. Витрина, white-label оболочка или доказательство интеграции Deedseal. P1 и P2 имеют отдельные идентичности; публичная связь ограничена принятой first-user формулировкой.
+9. Чат-бот, AI-помощник или AI-шоу. AI находится под капотом и не заменяет строительный бизнес как главный предмет продукта.
+10. Автономный управляющий, подрядчик или профессиональный авторитет. AI не утверждает scope, цену, срок, permit/code/zoning/buildability, юридический или инженерный вывод и не запускает внешнее действие.
+11. Графовая память не является историей чатов, свалкой документов, обычным RAG, векторной базой или неуправляемым журналом. В память бизнеса входит только принятое человеком, связанное с источниками состояние.
+12. Принятая запись не является гарантией качества строительства, законности, buildability, стоимости, срока, безопасности или прибыльности. Она фиксирует проверяемое состояние работы, но не подменяет профессиональную ответственность.
+
+Список закрытый: добавление, удаление или ослабление пункта — только новым решением Владельца.
+
+`governance/BOUNDARIES.md` остаётся выше этого раздела и не superseded.
+
 ## Sections not yet adopted
 
-Only Sections A and B are adopted and frozen in this repository canon. Sections
-C–H carry no adopted, proposed, provisional, or skeletal content here, and none
-may be invented, stubbed as a decision, or implemented ahead of its own bounded
+Only Sections A–C are adopted and frozen in this repository canon. Sections D–H
+carry no adopted, proposed, provisional, or skeletal content here, and none may
+be invented, stubbed as a decision, or implemented ahead of its own bounded
 landing packet. Each enters this canon only from its exact Owner-adopted record,
 after its predecessor is Owner-merged.
