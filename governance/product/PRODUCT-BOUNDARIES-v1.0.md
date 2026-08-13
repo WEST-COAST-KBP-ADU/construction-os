@@ -1,6 +1,6 @@
 # PRODUCT-BOUNDARIES v1.0 — West Coast KBP / KBP OS
 
-Status: `IN PROGRESS — SECTION A FROZEN; SECTIONS B–H NOT YET ADOPTED`
+Status: `IN PROGRESS — SECTIONS A–B FROZEN; SECTIONS C–H NOT YET ADOPTED`
 
 This file is the Product 2 product canon for `WEST-COAST-KBP-ADU/construction-os`.
 It carries exactly what the Owner has adopted, and nothing else.
@@ -23,6 +23,7 @@ head. The Owner alone adopts and merges.
 | :--- | :--- |
 | Mission brief — Product 2 boundaries session | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273825219> |
 | Owner decision record — Section A adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273946430> |
+| Owner decision record — Section B adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273999441> |
 | Immutable upstream Product 1 canon, pinned to an exact commit | <https://github.com/kbp-core-engineering/kbp-dev-office/blob/a4f008d0cecaa10a561122f4f6a8affd94b70e24/docs/coordination/product/PRODUCT-BOUNDARIES-v1.0.md> |
 
 ## A. Canonical proposition — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
@@ -52,9 +53,8 @@ and neither is a synonym for the other.
 
 **Section A defines identity and direction. It does not classify any capability
 as shipping.** Nothing here asserts that a described capability is available on
-a public or internal surface. The separation of what works now from what is
-direction is reserved for Section B, which is not adopted; until the Owner adopts
-it, no session may derive a TODAY / DIRECTION classification from Section A.
+a public or internal surface. The TODAY / DIRECTION / NOT OPENED classification
+is defined by Section B below; Section A itself creates no availability claim.
 
 **No commercial or integration claim arises from this section.** Section A
 carries no Deedseal integration claim, no buyer claim, no deployment claim, no
@@ -67,10 +67,42 @@ already-adopted first-user wording held byte-for-byte in
 which is the wording the upstream Product 1 canon section D governs. This packet
 does not widen, shorten, reword, or re-scope it.
 
+## B. V1 boundary ledger — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
+
+### B1 — canonical v1 boundary
+
+> V1 сегодня — публичная строительная поверхность West Coast KBP: опубликованные маршруты, три принадлежащие компании concept-only модели и анонимная детерминированная Concept Studio уже работают; live intake, аккаунты, клиентские данные, property conclusions и внешние бизнес-действия выключены. Полный KBP OS — многоуровневый граф работы, человеческое принятие решений и накопление принятого состояния в графовую память компании — является направлением продукта, а не заявлением о поставленной сегодня возможности.
+
+### Status grammar
+
+- **TODAY** — capability or surface exists in the exact current repository state and, where a public-runtime claim is made, is separately observed on the canonical public domain.
+- **DIRECTION** — Owner-adopted product direction; not a claim that the capability is shipped, public, integrated, or production-enabled.
+- **NOT OPENED** — no current authority to operate or represent the capability as available.
+
+#### Binding NOT OPENED rule
+
+The product canon, a roadmap entry, the presence of code, or an ordinary task packet cannot open a **NOT OPENED** capability.
+
+A capability may leave **NOT OPENED** only when the proposed flow conforms to the current `governance/BOUNDARIES.md`. If the current boundary prohibits that flow, `governance/BOUNDARIES.md` must first be changed through a separate Owner-adopted decision record. A separate Owner-approved bounded implementation packet is still required afterward.
+
+`governance/BOUNDARIES.md` remains higher authority and is not superseded by this product canon.
+
+### V1 ledger
+
+| Contour | Status | Frozen boundary |
+| :--- | :--- | :--- |
+| Public portal | **TODAY** | Home, Services, Service Areas, Process, FAQ, About, Compare, Models, model pages, and Studio are published surfaces. |
+| Owned model catalog | **TODAY** | `adu-s-450`, `adu-a-600`, and `adu-b-800`; all are `concept_only`, with no construction-readiness claim. |
+| Concept Studio | **TODAY** | Anonymous deterministic work on a synthetic sample property; no address/contact collection and no real-property conclusion. |
+| Public P1↔P2 relationship | **TODAY** | Only the frozen first-user wording; no public integration record is claimed. |
+| Multi-level work graph and business graph memory | **DIRECTION** | KBP OS north star; not represented as a fully shipped production contour. |
+| Intake, qualification, GIS, estimating, takeoff, permit/admin, scheduling, and inspection workflows | **DIRECTION · NOT OPENED** | Every contour remains subject to the binding NOT OPENED rule above. |
+| CRM writes, client messages, calls, booking, or other external actions | **NOT OPENED** | Disabled and unauthorized under current v1 and current repository boundaries. |
+
 ## Sections not yet adopted
 
-Only Section A is adopted and frozen. The remaining sections of the Owner's
-boundaries process carry no adopted, proposed, provisional, or skeletal content
-in this repository, and none may be invented, stubbed as a decision, or
-implemented ahead of an Owner decision record. Each one enters this canon only
-as its own bounded, Owner-adopted packet.
+Only Sections A and B are adopted and frozen in this repository canon. Sections
+C–H carry no adopted, proposed, provisional, or skeletal content here, and none
+may be invented, stubbed as a decision, or implemented ahead of its own bounded
+landing packet. Each enters this canon only from its exact Owner-adopted record,
+after its predecessor is Owner-merged.
