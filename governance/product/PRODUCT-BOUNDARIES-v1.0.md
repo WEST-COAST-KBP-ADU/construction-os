@@ -1,6 +1,6 @@
 # PRODUCT-BOUNDARIES v1.0 — West Coast KBP / KBP OS
 
-Status: `IN PROGRESS — SECTIONS A–E FROZEN; SECTIONS F–H NOT YET ADOPTED`
+Status: `IN PROGRESS — SECTIONS A–F FROZEN; SECTIONS G–H NOT YET ADOPTED`
 
 This file is the Product 2 product canon for `WEST-COAST-KBP-ADU/construction-os`.
 It carries exactly what the Owner has adopted, and nothing else.
@@ -27,6 +27,7 @@ head. The Owner alone adopts and merges.
 | Owner decision record — Section C adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274068664> |
 | Owner decision record — Section D adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274198559> |
 | Owner decision record — Section E adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274224565> |
+| Owner decision record — Section F adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274255255> |
 | Immutable upstream Product 1 canon, pinned to an exact commit | <https://github.com/kbp-core-engineering/kbp-dev-office/blob/a4f008d0cecaa10a561122f4f6a8affd94b70e24/docs/coordination/product/PRODUCT-BOUNDARIES-v1.0.md> |
 
 ## A. Canonical proposition — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
@@ -210,9 +211,85 @@ A capability may leave **NOT OPENED** only when the proposed flow conforms to th
 
 [PR #245](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/245) остаётся свидетельством запрещённого регресса, а не источником для продолжения.
 
+## F. Canonical vocabulary — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
+
+### F1. Основные термины
+
+| Термин | Каноническое значение |
+|---|---|
+| **West Coast KBP** | Реальный ADU- и general-construction бизнес. Главный публичный субъект и сторона, которую нанимает клиент. |
+| **KBP OS** | Управляемый владельцем операционный слой West Coast KBP. Не компания, не сайт, не SaaS и не продукт, продаваемый домовладельцу. |
+| **AI-native** | Способ ведения бизнеса: AI готовит кандидаты, человек принимает авторитетное состояние, только принятое входит в память. Не самостоятельная категория и не headline. |
+| **ADU + General Construction** | ADU — первый клиентообразующий клин; General Construction — более широкий строительный контур. Формулировка не означает открытый intake или принятие любого проекта. |
+| **Lead** | Первичный кандидат намерения. Не клиент, не подтверждённая заявка и не customer record. |
+| **Project** | Ограниченный строительный контекст, объединяющий цель, источники, неизвестные, решения, работу и доказательства. Публичный работающий lifecycle пока `[DIRECTION]`. |
+| **Candidate** | Неавторитетное предложение AI, человека или источника. Не становится фактом или действием без проверки и принятия. |
+| **Bounded work** | Работа с точной целью, scope, authority, stop conditions и требуемым evidence. |
+| **Human review** | Публичное название человеческой проверки. `OwnerReview` — внутренний формальный authority packet и не обязан появляться в клиентском тексте. |
+| **Accepted record** | Принятое человеком, версионированное и связанное с источниками состояние. Не гарантия feasibility, permit, цены, срока или качества строительства. |
+| **Business graph** | Версионированная сеть целей, источников, ограничений, решений, работы и доказательств. Полный рабочий контур — `[DIRECTION]`. |
+| **P2 business graph memory** | Принадлежащая West Coast KBP версионированная сеть только принятого, source-bound состояния бизнеса. Не чат-история, document dump, RAG, vector database или неподконтрольный журнал. Полный рабочий контур — `[DIRECTION]`. |
+| **Source** | Происхождение утверждения или данных. Наличие источника само по себе не означает verification или acceptance. |
+| **Unknown** | Первоклассное сохранённое состояние, а не пустое поле и не разрешение AI додумать ответ. |
+| **Owner-qualified** | Граница, принятая в D4. Это semantic qualification, а не открытый intake или гарантированная продажа. |
+
+### F2. Разведение P1 и P2 Graph Memory
+
+1. **`P1 Graph Memory`** — собственное имя компонента/понятия Продукта 1 и определяется только каноном P1.
+2. **`P2 business graph memory`** — доменное понятие Продукта 2: память строительного бизнеса West Coast KBP внутри направления KBP OS.
+3. Нельзя использовать неквалифицированное собственное имя **`Graph Memory`** для P2.
+4. Совпадение слов не означает общий компонент, runtime, schema, storage, API, deployment, ownership boundary или интеграцию P1↔P2.
+5. В cross-product документах первое употребление всегда квалифицируется как `P1 Graph Memory` либо `P2 business graph memory`.
+6. Уже замороженные формулировки A–E вида «графовая память бизнеса/компании» сохраняются байт-в-байт: их явная принадлежность бизнесу P2 достаточна и не именует компонент P1.
+7. Любое неквалифицированное употребление на живой поверхности регистрируется как `CANON_DIVERGENCE` и исправляется bounded alignment packet без молчаливого переноса семантики между продуктами.
+
+### F3. Статусы возможностей
+
+| Статус | Значение |
+|---|---|
+| **TODAY** | Работает сейчас и подтверждается точным кодом, тестом и живой поверхностью. |
+| **DIRECTION** | Принятое направление продукта без заявления о текущей поставке или доступности. |
+| **NOT OPENED** | Authority не открыта; возможность запрещено изображать доступной. Требуется отдельное решение Владельца и соответствие `governance/BOUNDARIES.md`. |
+
+### F4. Термины публичной поверхности
+
+- **Concept model** — принадлежащая компании concept-only модель; не approved plan и не вывод о конкретной недвижимости.
+- **Concept Studio** — анонимное property-agnostic исследование вариантов; не intake, не конфигуратор заказа и не feasibility tool.
+- **Property context** — ориентация по источникам и неизвестным; не eligibility, zoning, permit или buildability conclusion.
+- **Live surface** — фактически отрендеренная публичная поверхность на идентифицированной голове и deployment, а не макет.
+- **Frozen formulation** — Owner-adopted строка, сохраняемая байт-в-байт до нового решения Владельца.
+
+### F5. Запрещённые подмены
+
+Нельзя использовать как определение продукта:
+
+- «сайт», «портал» или «лендинг» вместо West Coast KBP;
+- «lead-generation platform» вместо строительного бизнеса;
+- «CRM», «project-management system» или «contractor marketplace» вместо KBP OS;
+- «AI assistant», «chatbot» или «neural engine» вместо операционного слоя;
+- `Powered by Deedseal`, «Deedseal integration» или «runs on Deedseal» без отдельной owner-gated публичной записи;
+- `customer`, `verified lead` или `project record` для непринятого candidate;
+- `feasible`, `approved`, `permitted` или `buildable` для concept/property-context результата.
+
+### F6. Реестр расхождений
+
+Каждое расхождение живой поверхности получает запись:
+
+> ID → canonical term/string → current live bytes → path/URL → divergence class → authority source → alignment packet → state.
+
+Правила:
+
+1. Живая формулировка не может молча переписать канон.
+2. Канон не считается реализованным, пока live surface ему не соответствует.
+3. Alignment выполняется отдельным bounded packet.
+4. Frozen formulations защищаются byte assertions и визуальной проверкой.
+5. До merge исправления расхождение остаётся явно открытым как `CANON_DIVERGENCE`.
+
+Первый подтверждённый элемент реестра: текущий `src/components/home/premiumWorkbenchHero.contract.ts` определяет KBP OS как `KBP OS is a lead-generation and process-management platform...`. Это расходится с принятыми A, C, D и E: публичным продуктом должен быть строительный бизнес West Coast KBP, а KBP OS остаётся под капотом. Финальный replacement-copy требует отдельного alignment packet.
+
 ## Sections not yet adopted
 
-Only Sections A–E are adopted and frozen in this repository canon. Sections F–H
+Only Sections A–F are adopted and frozen in this repository canon. Sections G–H
 carry no adopted, proposed, provisional, or skeletal content here, and none may
 be invented, stubbed as a decision, or implemented ahead of its own bounded
 landing packet. Each enters this canon only from its exact Owner-adopted record,
