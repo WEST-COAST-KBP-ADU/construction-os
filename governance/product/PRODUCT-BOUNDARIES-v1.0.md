@@ -1,6 +1,6 @@
 # PRODUCT-BOUNDARIES v1.0 — West Coast KBP / KBP OS
 
-Status: `IN PROGRESS — SECTIONS A–D FROZEN; SECTIONS E–H NOT YET ADOPTED`
+Status: `IN PROGRESS — SECTIONS A–E FROZEN; SECTIONS F–H NOT YET ADOPTED`
 
 This file is the Product 2 product canon for `WEST-COAST-KBP-ADU/construction-os`.
 It carries exactly what the Owner has adopted, and nothing else.
@@ -26,6 +26,7 @@ head. The Owner alone adopts and merges.
 | Owner decision record — Section B adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5273999441> |
 | Owner decision record — Section C adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274068664> |
 | Owner decision record — Section D adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274198559> |
+| Owner decision record — Section E adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274224565> |
 | Immutable upstream Product 1 canon, pinned to an exact commit | <https://github.com/kbp-core-engineering/kbp-dev-office/blob/a4f008d0cecaa10a561122f4f6a8affd94b70e24/docs/coordination/product/PRODUCT-BOUNDARIES-v1.0.md> |
 
 ## A. Canonical proposition — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
@@ -164,9 +165,54 @@ A capability may leave **NOT OPENED** only when the proposed flow conforms to th
 
 Это пока семантическая граница `[DIRECTION]`, а не открытие intake. Любой публичный запуск по-прежнему требует выполнения Section B и соответствия `governance/BOUNDARIES.md`.
 
+## E. Visual canon — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
+
+1. **Первое прочтение — строительный бизнес.** За пять секунд человек видит профессиональную калифорнийскую ADU/construction-компанию, а не SaaS, AI-лабораторию, каталог домов или архитектурное шоу.
+
+2. **Option 2 — единственная визуальная система.** Доминируют тёплая архитектурная бумага и минеральные светлые поверхности; deep forest используется как редакционная краска, graphite — для чертежей, oxidized copper — только как сдержанный акцент. Никакой второй палитры.
+
+3. **Premium означает точность.** Редакционная типографика, пространство, материальная достоверность, направленный калифорнийский свет и профессиональная композиция — без декоративной «роскоши», стерильного шоурума и пластикового рекламного блеска.
+
+4. **Hero — живое состояние проекта, не картинка дома.** Одна проектная реальность проходит через последовательные состояния:
+
+   > недвижимость и намерение → источники и неизвестные → bounded work → human review → accepted record → следующее действие.
+
+   Дом, план и строительная сцена являются материалом проекта, а не статичным фоном или сущностью продукта.
+
+5. **Движение показывает причинность.** Анимация разрешена только для перехода между состояниями проекта, появления подтверждённых данных и человеческого принятия. Логотип неподвижен; декоративное движение, бесконечный ambient motion и бессмысленный parallax запрещены. Reduced motion сохраняет весь смысл.
+
+6. **KBP OS находится под капотом.** AI и граф не становятся headline или самостоятельной эстетикой. Операционный принцип раскрывается одной спокойной нижней полосой человеческим языком. Никаких fake-graph визуализаций и AI-шоу.
+
+7. **Идентичности P1 и P2 не смешиваются.** На P2 запрещена пульсирующая зелёная точка и другие сигнальные элементы Deedseal. Нижний мост использует только принятую owner-gated формулировку связи — без заявления интеграции, покупки или коммерческих отношений.
+
+8. **Зафиксированные анти-паттерны:**
+   - болотный цветовой cast;
+   - статичный пластиковый render;
+   - AI-generated house wallpaper;
+   - квадратная фотокарточка;
+   - pale-on-pale;
+   - дешёвые тени, glassmorphism и чрезмерный blur;
+   - движущийся логотип;
+   - SaaS-dashboard и cyberpunk;
+   - внутренний инженерный жаргон на публичной поверхности.
+
+9. **Только студийный производственный путь.**
+
+   > editable deterministic source → зафиксированные camera/material/light/motion contracts → воспроизводимый output → provenance manifest → exact-head visual QA.
+
+   Одноразовая генеративная картинка не может быть production master.
+
+10. **Обязательная проверка поверхности.** Desktop, tablet, mobile и reduced-motion должны сохранять одну композиционную и смысловую систему. Визуал принимается только по фактическим кадрам и независимой exact-head проверке.
+
+11. **Дисциплина выравнивания живой поверхности.** Канон, design board или исходная сцена сами по себе не доказывают соответствие продукта. Каждый визуальный change set проверяется на фактически отрендеренной живой поверхности точной головы во всех затронутых viewport, theme, interaction и motion-состояниях. Любое расхождение между каноном и живой поверхностью регистрируется явно как `CANON_DIVERGENCE` и устраняется отдельным bounded alignment packet; молчаливое «примерное соответствие» запрещено.
+
+12. **Выживание замороженных формулировок.** Любая Owner-adopted публичная формулировка, availability/boundary label и cross-product sentence должна переживать визуальный, responsive и motion-рефакторинг байт-в-байт. Её нельзя перефразировать, сокращать, переводить, скрывать, обрезать, заменять иконкой или уводить анимацией. Если формулировка не помещается, адаптируется композиция, а не текст. Проверка включает byte assertion по источнику и читаемость на exact-head кадрах; изменение возможно только новым решением Владельца.
+
+[PR #245](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/245) остаётся свидетельством запрещённого регресса, а не источником для продолжения.
+
 ## Sections not yet adopted
 
-Only Sections A–D are adopted and frozen in this repository canon. Sections E–H
+Only Sections A–E are adopted and frozen in this repository canon. Sections F–H
 carry no adopted, proposed, provisional, or skeletal content here, and none may
 be invented, stubbed as a decision, or implemented ahead of its own bounded
 landing packet. Each enters this canon only from its exact Owner-adopted record,
