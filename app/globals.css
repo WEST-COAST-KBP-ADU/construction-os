@@ -3015,38 +3015,60 @@ a {
 }
 
 /* WORK-ORDER-005: development-preview release notice. Token-only styling;
- * subordinate to the primary navigation and never styled as an alert. */
+ * subordinate to the primary navigation and never styled as an alert.
+ *
+ * KBPOS-PUBLIC-FACADE-0001: it is site chrome, not a dev plaque. Every
+ * configured word is kept — including the truth that live intake is not
+ * enabled — and set as one calm line: the shell's own ground rather than a
+ * raised strip, a hairline rather than a strong boundary, and a quiet
+ * sentence-case lead-in rather than an uppercase badge. Below the shell's
+ * breakpoint the row is allowed to wrap so the same words stay legible. */
 .development-notice {
-  border-bottom: var(--line-width) solid var(--color-boundary-strong);
-  background: var(--color-shell-raised);
+  border-bottom: var(--line-width) solid var(--color-boundary);
+  background: var(--color-shell);
   color: var(--color-shell-text-muted);
 }
 
 .development-notice__inner {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: baseline;
-  gap: var(--space-1) var(--space-3);
+  gap: var(--space-2);
   padding-block: var(--space-2);
 }
 
 .development-notice__label {
   font-size: var(--font-size-label);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.01em;
+  text-transform: none;
   color: var(--color-shell-text);
   white-space: nowrap;
 }
 
+.development-notice__label::after {
+  content: "·";
+  margin-inline-start: var(--space-2);
+  color: var(--color-shell-text-muted);
+}
+
 .development-notice__message {
+  min-width: 0;
   margin: 0;
-  font-size: var(--font-size-body-sm);
+  font-size: var(--font-size-label);
   line-height: var(--line-height-body);
+  text-wrap: pretty;
 }
 
 .development-notice__supporting {
   color: var(--color-shell-text-muted);
+}
+
+@media (max-width: 47.5rem) {
+  .development-notice__inner {
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+  }
 }
 
 /* DESIGN-003: compose the focus ring after component shadows. The focused
@@ -3563,6 +3585,41 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
  * case any word here can sit over: statement 4.90:1, link text 11.61:1, link
  * underline 4.72:1, copper hairline 3.07:1.
  */
+/*
+ * KBPOS-PUBLIC-FACADE-0001 — the "under the hood" band.
+ *
+ * This band is the same bridge the Deedseal seam below already uses, applied
+ * to the spine section it reuses: it introduces no design system, no new
+ * component, and no `--o2-*` value of its own. It re-points the base tokens
+ * its existing children read at the Option 2 recipe and stops there, so the
+ * band is lit by the same daylight as the hero stage and the seam.
+ *
+ * Copper appears here exactly where the recipe clears it — the top hairline
+ * and the eyebrow — and nowhere in body type.
+ */
+.spine-principle {
+  /* Ground and rules. */
+  --color-canvas: var(--o2-paper-base);
+  --color-line: var(--o2-line-hairline);
+  --color-line-strong: var(--o2-line-strong);
+
+  /* Ink. Headings carry the primary ink, the statement and the points read at
+   * muted weight, and the eyebrow takes the one copper step cleared for type. */
+  --color-forest-deep: var(--o2-ink-primary);
+  --color-ink-muted: var(--o2-ink-muted);
+  --color-gold-deep: var(--o2-copper-text);
+
+  --color-focus: var(--o2-focus-ring);
+  --color-focus-contrast: var(--o2-focus-halo);
+
+  --duration-standard: var(--o2-duration-standard);
+  --easing-standard: var(--o2-easing-standard);
+
+  border-top: var(--o2-stroke-thin) solid var(--o2-copper-line);
+  border-bottom: 0;
+  background: var(--o2-wash-daylight);
+}
+
 .spine-crosslink {
   /* Ground and rules. */
   --color-canvas: var(--o2-paper-base);

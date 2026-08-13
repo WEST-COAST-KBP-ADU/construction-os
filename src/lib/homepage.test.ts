@@ -9,7 +9,20 @@ import {
   PREMIUM_WORKBENCH_HERO_COPY,
   PREMIUM_WORKBENCH_HERO_MEDIA,
 } from "../components/home/premiumWorkbenchHero.contract";
+import {
+  WCAG_AA_NORMAL,
+  WCAG_NON_TEXT,
+  buildPalette,
+  contrastRatio,
+  parseTokenFile,
+} from "../styles/option2-premium.contract";
 import { getServicePage } from "./contentPages";
+import { DEEDSEAL_CROSS_REFERENCE_SENTENCE } from "./deedsealCrossReference";
+import {
+  OPERATING_PRINCIPLE_COPY,
+  OPERATING_PRINCIPLE_POINTS,
+  OPERATING_PRINCIPLE_RECORD_URL,
+} from "./operatingPrinciple";
 import { homepageServices, homepageServiceSlugs } from "./homepageServices";
 import { PUBLIC_MODEL_IDS } from "./publicModelCatalog";
 import { siteConfig } from "./siteConfig";
@@ -111,6 +124,10 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
       'aria-labelledby="process-title"',
       'aria-labelledby="service-context-title"',
       'aria-labelledby="truth-boundary-title"',
+      // KBPOS-PUBLIC-FACADE-0001 seats the operating-principle band between the
+      // truth boundary and the exits: how the business is being built is the
+      // last thing said before the visitor is offered somewhere to go.
+      "aria-labelledby={OPERATING_PRINCIPLE_TITLE_ID}",
       'aria-labelledby="final-exits-title"',
     ];
     const positions = sectionMarkers.map((marker) => page.indexOf(marker));
@@ -349,5 +366,220 @@ describe("PUBLIC-CONCEPT-VERTICAL-001 homepage", () => {
     expect(slotRules).toMatch(/border:\s*0/);
     expect(slotRules).toMatch(/border-radius:\s*0/);
     expect(slotRules).not.toMatch(/box-shadow:\s*inset/);
+  });
+});
+
+/*
+ * KBPOS-PUBLIC-FACADE-0001 — the homepage reads as the business, not as the
+ * scaffolding that builds it.
+ *
+ * The suite above holds the product narrative and the Option 2 mechanics. This
+ * one holds the *facade*: what a visitor arriving from deedseal.com is asked to
+ * read. Each block below is one of the packet's five declared moves, so a later
+ * edit that reintroduces a dev plaque, an engineering heading, or an unanchored
+ * architecture claim fails at the move it undoes.
+ */
+describe("KBPOS-PUBLIC-FACADE-0001 the business, not the scaffolding", () => {
+  /** The band's markup, from its own section to the exits that follow it. */
+  const principleBand = page.slice(
+    page.indexOf('className="spine-section spine-principle"'),
+    page.indexOf('aria-labelledby="final-exits-title"'),
+  );
+
+  /** The `.spine-principle` rule body, brace-matched like the seam's own suite. */
+  const principleRule = (() => {
+    const open = stylesheet.indexOf(".spine-principle {");
+    expect(open, ".spine-principle is not declared in app/globals.css").toBeGreaterThan(-1);
+    let depth = 0;
+    let cursor = stylesheet.indexOf("{", open);
+    const start = cursor;
+    while (cursor < stylesheet.length) {
+      if (stylesheet[cursor] === "{") depth += 1;
+      if (stylesheet[cursor] === "}") {
+        depth -= 1;
+        if (depth === 0) break;
+      }
+      cursor += 1;
+    }
+    return stylesheet.slice(start + 1, cursor);
+  })();
+
+  /** Move 1 — the notice keeps its truth and stops being a plaque. */
+  it("states the development-preview truth as one calm line of site chrome", () => {
+    // The truth is unchanged: this is a presentation change, not a claims change.
+    expect(siteConfig.developmentNotice.supporting).toContain("Live intake");
+    expect(siteConfig.developmentNotice.supporting).toContain("are not enabled");
+
+    const notice = stylesheet.slice(
+      stylesheet.indexOf(".development-notice {"),
+      stylesheet.indexOf(".development-notice__supporting"),
+    );
+
+    // One line: the label and the sentence share a row rather than stacking.
+    expect(notice).toMatch(/\.development-notice__inner\s*\{[\s\S]*?flex-wrap:\s*nowrap/);
+    // Site chrome: the shell's own ground and a hairline, not a raised strip
+    // behind a strong boundary.
+    expect(notice).toMatch(/\.development-notice\s*\{[\s\S]*?background:\s*var\(--color-shell\)/);
+    expect(notice).toMatch(
+      /\.development-notice\s*\{[\s\S]*?border-bottom:[^;]*var\(--color-boundary\)/,
+    );
+    // A badge is an uppercase, heavy, wide-tracked chip. None of the three survive.
+    expect(notice).toMatch(/\.development-notice__label\s*\{[\s\S]*?text-transform:\s*none/);
+    expect(notice).not.toMatch(/\.development-notice__label\s*\{[\s\S]*?text-transform:\s*uppercase/);
+    expect(notice).not.toMatch(/\.development-notice__label\s*\{[\s\S]*?font-weight:\s*var\(--font-weight-(?:semibold|bold)\)/);
+  });
+
+  /*
+   * Move 2 — the hero sells the business.
+   *
+   * The headline is asserted here. The lede still opens with the platform
+   * sentence, and it is published from
+   * `src/components/home/premiumWorkbenchHero.contract.ts`, which is outside
+   * this packet's declared allowlist — so this packet reports that move BLOCKED
+   * rather than reaching for the file. The assertion below is deliberately the
+   * part that is true today; it is not a claim that the move is complete.
+   */
+  it("keeps the hero headline in business language", () => {
+    expect(PREMIUM_WORKBENCH_HERO_COPY.heading).not.toMatch(
+      /platform|software|system|product|pipeline|workflow|dashboard|module/i,
+    );
+  });
+
+  /** Move 3 — no internal vocabulary reaches the public surface. */
+  it("publishes no internal engineering vocabulary on the homepage", () => {
+    for (const phrase of [
+      "how the product stays legible",
+      "product taxonomy",
+      "owned model preview",
+      "owned-model release",
+      "concept families",
+      "release-bound",
+      "maturity boundaries",
+      "model-bound migration",
+      "property-agnostic",
+      "service paths",
+      "route selection",
+      "jurisdiction records",
+      "truth boundary",
+      "verified product facts",
+      "professional gates",
+      "editorial card",
+      "opening an intake",
+      "operating model",
+      "the surface separates",
+      "owned families",
+      "bounded answers",
+    ]) {
+      expect(page.toLowerCase(), `${phrase} still reaches the public homepage`).not.toContain(
+        phrase,
+      );
+    }
+  });
+
+  /** Move 4 — the architecture claim is design language, and it is anchored. */
+  it("states the operating principle as a design intention, not a shipped system", () => {
+    expect(page).toContain("OPERATING_PRINCIPLE_COPY.heading");
+    expect(page).toContain("OPERATING_PRINCIPLE_POINTS.map");
+    expect(OPERATING_PRINCIPLE_COPY.heading).toContain("is being built to");
+
+    const bandCopy = [
+      ...Object.values(OPERATING_PRINCIPLE_COPY),
+      ...OPERATING_PRINCIPLE_POINTS.flatMap((point) => [point.title, point.body]),
+    ].join(" ");
+
+    // Product 2's own architecture only. The adopted Deedseal sentence is the
+    // one place this site speaks about that relationship, and it is not here.
+    expect(bandCopy).not.toMatch(/deedseal|integrat/i);
+    expect(bandCopy).toMatch(/graph/i);
+  });
+
+  it("carries exactly one external link, pinned to this repository's own record", () => {
+    expect(principleBand.match(/<a\b/g)).toHaveLength(1);
+    expect(principleBand).toContain("href={OPERATING_PRINCIPLE_RECORD_URL}");
+    expect(OPERATING_PRINCIPLE_RECORD_URL).toMatch(
+      /^https:\/\/github\.com\/WEST-COAST-KBP-ADU\/construction-os\/blob\/[0-9a-f]{40}\//,
+    );
+  });
+
+  it("leaves the adopted Deedseal sentence untouched, byte for byte", () => {
+    // The band and the seam sit within one screen of each other. If the band
+    // ever starts editing the seam's sentence, that is a claims change.
+    expect(DEEDSEAL_CROSS_REFERENCE_SENTENCE).toBe(
+      "KBP OS is the first user of Deedseal. The public integration record is " +
+        "not yet available; view Deedseal’s current public proof.",
+    );
+    expect(page).toContain("{DEEDSEAL_CROSS_REFERENCE_LEAD}");
+    expect(page).toContain("{DEEDSEAL_CROSS_REFERENCE_LINK_TEXT}");
+    expect(page).toContain("{DEEDSEAL_CROSS_REFERENCE_TAIL}");
+  });
+
+  /** Move 5 — the band is a bridge into Option 2, not a second design system. */
+  it("bridges the band into the recipe instead of restyling it", () => {
+    expect(principleBand).toContain("data-o2-premium");
+    // It reuses the spine section it sits in; it introduces no component.
+    expect(principleBand).toContain('className="spine-section spine-principle"');
+    expect(principleBand).toContain('className="spine-truth"');
+
+    for (const token of [
+      "--color-canvas",
+      "--color-line",
+      "--color-line-strong",
+      "--color-ink-muted",
+      "--color-forest-deep",
+      "--color-gold-deep",
+      "--color-focus",
+    ]) {
+      expect(principleRule).toMatch(new RegExp(`${token}:\\s*var\\(--o2-`));
+    }
+
+    // A bridge reads the recipe. Assigning an `--o2-*` name here would be this
+    // band quietly authoring its own recipe under the recipe's prefix.
+    expect(principleRule).not.toMatch(/--o2-[a-z0-9-]+\s*:/);
+    expect(principleRule).toMatch(/background:\s*var\(--o2-wash-daylight\)/);
+    // Copper is cleared for the hairline and the eyebrow, never for body type.
+    expect(principleRule).toMatch(/border-top:[^;]*var\(--o2-copper-line\)/);
+    expect(principleRule).toMatch(/--color-gold-deep:\s*var\(--o2-copper-text\)/);
+  });
+
+  it("clears every contrast floor at the wash's darkest step", () => {
+    const tokens = readFileSync(
+      resolve(process.cwd(), "src/styles/option2-premium.tokens.css"),
+      "utf8",
+    );
+    const palette = buildPalette(parseTokenFile(tokens));
+    const worstGround = palette.get("paper-shade");
+
+    expect(worstGround).toBeDefined();
+
+    // Resolved from what the bridge actually declares, never restated here, so
+    // a recipe edit that pushes a word under its floor fails in both suites.
+    const bridged = (baseToken: string) => {
+      const match = principleRule.match(
+        new RegExp(`${baseToken}:\\s*var\\((--o2-[a-z0-9-]+)\\)`),
+      );
+
+      expect(match, `${baseToken} is not bridged to an --o2-* step`).not.toBeNull();
+
+      const value = palette.get(match![1].slice("--o2-".length));
+
+      expect(value, `${match![1]} is not a registered Option 2 color`).toBeDefined();
+      return value!;
+    };
+
+    expect(contrastRatio(bridged("--color-forest-deep"), worstGround!)).toBeGreaterThanOrEqual(
+      WCAG_AA_NORMAL,
+    );
+    expect(contrastRatio(bridged("--color-ink-muted"), worstGround!)).toBeGreaterThanOrEqual(
+      WCAG_AA_NORMAL,
+    );
+    expect(contrastRatio(bridged("--color-gold-deep"), worstGround!)).toBeGreaterThanOrEqual(
+      WCAG_AA_NORMAL,
+    );
+    expect(contrastRatio(bridged("--color-line-strong"), worstGround!)).toBeGreaterThanOrEqual(
+      WCAG_NON_TEXT,
+    );
+    expect(contrastRatio(palette.get("copper-line")!, worstGround!)).toBeGreaterThanOrEqual(
+      WCAG_NON_TEXT,
+    );
   });
 });
