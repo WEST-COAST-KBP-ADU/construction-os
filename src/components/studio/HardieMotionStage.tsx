@@ -3,6 +3,12 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import {
+  AUTO_LIGHTING_REFRESH_MS,
+  resolveDeviceLighting,
+  type LightingMode,
+} from "@/src/lib/studio/timeLighting";
+
 import styles from "./HardieMotionStage.module.css";
 
 type ConceptFacade = "lap-siding" | "dark-siding";
@@ -20,6 +26,21 @@ type HardieMotionStageProps = {
   exterior: string;
   palette: string;
 };
+
+type LightingPreference = "auto" | LightingMode;
+
+const LIGHTING_LABELS: Record<LightingMode, string> = {
+  day: "Day",
+  dusk: "Dusk",
+  night: "Night",
+};
+
+const LIGHTING_CONTROLS: { value: LightingPreference; label: string }[] = [
+  { value: "auto", label: "Auto" },
+  { value: "day", label: "Day" },
+  { value: "dusk", label: "Dusk" },
+  { value: "night", label: "Night" },
+];
 
 const PREVIEW_ASSETS = {
   "lap-siding": {
@@ -80,6 +101,27 @@ export default function HardieMotionStage({
     previous: null,
     nonce: 0,
   });
+  // Day is deliberately shared by SSR and the first client render. Device time
+  // is resolved only after hydration, so the static presentation stays stable.
+  const [lightingPreference, setLightingPreference] = useState<LightingPreference>("auto");
+  const [lightingMode, setLightingMode] = useState<LightingMode>("day");
+
+  useEffect(() => {
+    if (lightingPreference !== "auto") return;
+
+    const refreshFromDevice = () => setLightingMode(resolveDeviceLighting());
+    const initialTimer = window.setTimeout(refreshFromDevice, 0);
+    const timer = window.setInterval(refreshFromDevice, AUTO_LIGHTING_REFRESH_MS);
+    return () => {
+      window.clearTimeout(initialTimer);
+      window.clearInterval(timer);
+    };
+  }, [lightingPreference]);
+
+  function selectLighting(preference: LightingPreference) {
+    setLightingPreference(preference);
+    if (preference !== "auto") setLightingMode(preference);
+  }
 
   if (renderState.current !== resolvedAsset) {
     setRenderState((current) => {
@@ -129,6 +171,7 @@ export default function HardieMotionStage({
         renderState.previous ? styles.stageTransitioning : "",
       ].join(" ")}
       aria-label={selectionLabel}
+      data-lighting-mode={lightingMode}
     >
       {previewAvailable && renderState.current ? (
         <>
@@ -151,6 +194,28 @@ export default function HardieMotionStage({
             className={styles.currentImage}
           />
           <div className={styles.materialSweep} aria-hidden="true" />
+          <div className={styles.lightingDusk} aria-hidden="true" />
+          <div className={styles.lightingNight} aria-hidden="true" />
+          <div className={styles.lightingGlow} aria-hidden="true" />
+          <div className={styles.lightingControls} aria-label="Concept lighting">
+            <span>Lighting</span>
+            <div>
+              {LIGHTING_CONTROLS.map((control) => (
+                <button
+                  key={control.value}
+                  type="button"
+                  aria-pressed={lightingPreference === control.value}
+                  onClick={() => selectLighting(control.value)}
+                >
+                  {control.label}
+                </button>
+              ))}
+            </div>
+            <small aria-live="polite" aria-atomic="true">
+              {lightingPreference === "auto" ? "Auto · " : ""}
+              {LIGHTING_LABELS[lightingMode]} lighting active
+            </small>
+          </div>
           <div className={styles.selection} aria-live="polite">
             <span>{selectionLabel}</span>
             <small>

@@ -118,6 +118,27 @@ describe("A600 exterior concept motion preview", () => {
     expect(styles).toContain("animation: none;");
   });
 
+  it("provides an accessible, non-persistent lighting control surface", () => {
+    for (const label of ["Auto", "Day", "Dusk", "Night"]) {
+      expect(component).toContain(`label: "${label}"`);
+    }
+    expect(component).toContain('data-lighting-mode={lightingMode}');
+    expect(component).toContain('aria-pressed={lightingPreference === control.value}');
+    expect(component).toContain('aria-live="polite"');
+    expect(component).toContain("window.setInterval(refreshFromDevice, AUTO_LIGHTING_REFRESH_MS)");
+    expect(component).toContain("window.clearInterval(timer)");
+    expect(component).toContain("window.clearTimeout(initialTimer)");
+    expect(component).toContain('if (preference !== "auto") setLightingMode(preference)');
+    expect(component).toContain('useState<LightingMode>("day")');
+    expect(styles).toContain('[data-lighting-mode="dusk"]');
+    expect(styles).toContain('[data-lighting-mode="night"]');
+    expect(styles).toContain("transition-property: opacity;");
+
+    for (const forbidden of ["localStorage", "sessionStorage", "document.cookie", "fetch(", "geolocation"]) {
+      expect(component).not.toContain(forbidden);
+    }
+  });
+
   it("labels conceptual status and physical-sample boundary", () => {
     expect(component).toContain("Concept render · physical sample");
     expect(component).toContain("Conceptual — not a completed West Coast KBP project.");
