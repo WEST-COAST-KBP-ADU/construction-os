@@ -130,56 +130,12 @@
   gap: var(--space-3);
 }
 
-.brand-seal {
-  position: relative;
-  display: inline-flex;
-  flex: none;
-  width: 1.875rem;
-  height: 1.875rem;
-  align-items: center;
-  justify-content: center;
-  border: var(--line-width) solid rgb(var(--color-signal-rgb) / 0.25);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(var(--color-signal-rgb) / 0.12), transparent 65%);
-}
-
-.brand-seal::before,
-.brand-seal::after {
-  position: absolute;
-  border: var(--line-width) solid rgb(var(--color-signal-rgb) / 0.14);
-  border-radius: 50%;
-  content: "";
-}
-
-.brand-seal::before {
-  inset: 0.25rem;
-}
-
-.brand-seal::after {
-  inset: 0.5rem;
-}
-
-.brand-seal span {
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 50%;
-  background: var(--color-signal);
-  box-shadow: 0 0 0.75rem var(--color-signal);
-  animation: brand-signal-pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes brand-signal-pulse {
-  0%,
-  100% {
-    opacity: 0.78;
-    box-shadow: 0 0 0.5rem rgb(var(--color-signal-rgb) / 0.68);
-  }
-
-  50% {
-    opacity: 1;
-    box-shadow: 0 0 1rem rgb(var(--color-signal-rgb) / 0.92);
-  }
-}
+/* P2-CHROME-CANON-ALIGN-0001: the brand-seal ring, its decorative circles, its
+ * emerald signal paint, and the brand-signal-pulse keyframes are removed. Canon
+ * E7 forbids the pulsing green dot and every other Deedseal signal element on
+ * Product 2, and canon E5 requires a stationary mark; that device is not
+ * restated here in any form. The --color-signal tokens remain declared as part
+ * of the pinned token contract and are deliberately unpainted by this surface. */
 
 .brand__wordmark {
   display: flex;
@@ -1359,10 +1315,6 @@
   }
 
   .residential-hero__image {
-    animation: none;
-  }
-
-  .brand-seal span {
     animation: none;
   }
 
@@ -3014,11 +2966,16 @@ a {
   padding-block: var(--space-20) var(--space-10);
 }
 
-/* WORK-ORDER-005: development-preview release notice. Token-only styling;
- * subordinate to the primary navigation and never styled as an alert. */
+/* WORK-ORDER-005 · P2-CHROME-CANON-ALIGN-0001: development-preview release
+ * notice. Token-only styling drawn from the Option 2 shell roles; no second
+ * palette. The complete configured truth is retained word for word (canon E12)
+ * and presented as one calm subordinate line of site chrome: the same shell
+ * surface as the header, a hairline boundary, sentence case, quiet weight. It
+ * is never an alert, a raised strip, an uppercase badge, a pill, or a card, and
+ * it is never shortened or moved below the fold. */
 .development-notice {
   border-bottom: var(--line-width) solid var(--color-boundary-strong);
-  background: var(--color-shell-raised);
+  background: var(--color-shell);
   color: var(--color-shell-text-muted);
 }
 
@@ -3026,27 +2983,43 @@ a {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--space-1) var(--space-3);
+  gap: var(--space-1) var(--space-2);
   padding-block: var(--space-2);
 }
 
 .development-notice__label {
   font-size: var(--font-size-label);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: normal;
+  text-transform: none;
   color: var(--color-shell-text);
   white-space: nowrap;
 }
 
 .development-notice__message {
   margin: 0;
-  font-size: var(--font-size-body-sm);
+  font-size: var(--font-size-label);
   line-height: var(--line-height-body);
 }
 
 .development-notice__supporting {
   color: var(--color-shell-text-muted);
+}
+
+/* P2-CHROME-CANON-ALIGN-0001 calm-line mobile containment: the status line is
+ * one row at desktop and is allowed to wrap cleanly on narrow screens. Long
+ * configured sentences wrap instead of forcing horizontal overflow, and the
+ * label rejoins the flow rather than holding a nowrap badge shape. Canon E12
+ * adapts the composition, never the frozen text. */
+@media (max-width: 47.5rem) {
+  .development-notice__label {
+    white-space: normal;
+  }
+
+  .development-notice__message {
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+  }
 }
 
 /* DESIGN-003: compose the focus ring after component shadows. The focused
