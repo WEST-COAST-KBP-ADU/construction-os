@@ -1,6 +1,6 @@
 # PRODUCT-BOUNDARIES v1.0 — West Coast KBP / KBP OS
 
-Status: `IN PROGRESS — SECTIONS A–F FROZEN; SECTIONS G–H NOT YET ADOPTED`
+Status: `IN PROGRESS — SECTIONS A–G FROZEN; SECTION H NOT YET ADOPTED`
 
 This file is the Product 2 product canon for `WEST-COAST-KBP-ADU/construction-os`.
 It carries exactly what the Owner has adopted, and nothing else.
@@ -28,6 +28,7 @@ head. The Owner alone adopts and merges.
 | Owner decision record — Section D adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274198559> |
 | Owner decision record — Section E adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274224565> |
 | Owner decision record — Section F adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274255255> |
+| Owner decision record — Section G adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274332730> |
 | Immutable upstream Product 1 canon, pinned to an exact commit | <https://github.com/kbp-core-engineering/kbp-dev-office/blob/a4f008d0cecaa10a561122f4f6a8affd94b70e24/docs/coordination/product/PRODUCT-BOUNDARIES-v1.0.md> |
 
 ## A. Canonical proposition — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
@@ -287,10 +288,98 @@ A capability may leave **NOT OPENED** only when the proposed flow conforms to th
 
 Первый подтверждённый элемент реестра: текущий `src/components/home/premiumWorkbenchHero.contract.ts` определяет KBP OS как `KBP OS is a lead-generation and process-management platform...`. Это расходится с принятыми A, C, D и E: публичным продуктом должен быть строительный бизнес West Coast KBP, а KBP OS остаётся под капотом. Финальный replacement-copy требует отдельного alignment packet.
 
+## G. Decision registry — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
+
+### G1. Замороженные решения
+
+1. Sections A–F действуют только в Owner-adopted формулировках.
+
+2. Публичная P1↔P2 строка сохраняется как следующая точная UTF-8 последовательность:
+
+```text
+KBP OS is the first user of Deedseal. The public integration record is not yet available; view Deedseal’s current public proof.
+```
+
+   В слове `Deedseal’s` между `l` и `s` находится **U+2019 RIGHT SINGLE QUOTATION MARK** (UTF-8 `E2 80 99`). Замена на ASCII `U+0027`, иной апостроф, изменение регистра, пунктуации, пробелов, порядка или слов является `CANON_DIVERGENCE`. При рендеринге только точная подстрока `proof` может быть ссылкой; собранная видимая строка обязана остаться byte-exact.
+
+3. [`construction-os#243`](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/243) смержен: cross-product seam присутствует в `construction-os/main@cf099534cb0256a1748641972abbdad49fcf8645`.
+
+4. Option 2 — единственная визуальная система P2.
+
+5. Пульсирующая точка и прочая идентичность P1 запрещены на P2.
+
+6. [`construction-os#245`](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/245) — отвергнутый регресс: не мержить и не ремонтировать; только историческое evidence.
+
+7. Статические и генеративные visual-направления остановлены. Production master создаётся только студийным воспроизводимым путём из Section E.
+
+8. Открытый или готовый PR не становится решением, пока его явно не принял и не смержил Владелец.
+
+### G2. Живой исполнительный реестр
+
+Это указатели, а не замороженные факты. Перед любым запуском, ревью, отправкой Preview или merge они заново читаются из GitHub. Следующий snapshot зафиксирован относительно `construction-os/main@cf099534cb0256a1748641972abbdad49fcf8645`:
+
+| Полностью квалифицированный узел | Живое состояние при записи |
+|---|---|
+| [`construction-os#258`](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/258) | Draft `5dd3dbcdd070d2ede94d800b39cb2d07dd03dffc`; сохраняет только Section A; ожидает независимого exact-head review |
+| [`construction-os#252`](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/252) | Draft `d61969a6e3b9fc294d74770b187b0c49743b8167`; chrome-кандидат; Preview READY; ожидает verdict `construction-os#254` |
+| [`construction-os#254`](https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/254) | Независимый review-пакет; `STARTED`, `RESULT` и verdict в GitHub отсутствуют |
+| [`kbp-dev-office#383`](https://github.com/kbp-core-engineering/kbp-dev-office/issues/383) | Studio-previs пакет; `STARTED` и `RESULT` в GitHub отсутствуют |
+| [`construction-os#253`](https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/253) | Motion-runtime пакет; `STARTED` и `RESULT` в GitHub отсутствуют |
+| [`construction-os#255`](https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/255) | Финальный Hero join; `BLOCKED — DO NOT LAUNCH` до принятия всех входов |
+| [`construction-os#256`](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/256) | Draft `4e1e40ff804b654b065a504202a057490a114a3b`; gates красные из-за allowlist; не принят и не является входом финального join |
+| [`construction-os#250`](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/250) | Draft `172d844fd738af3f771ef4b3a909e22c2221a123`; `SUPERSEDED — DO NOT MERGE`; только историческое evidence |
+| [`construction-os#245`](https://github.com/WEST-COAST-KBP-ADU/construction-os/pull/245) | Draft `da0dfb7c19dc6118c33cd5433b269d43df6fd5e2`; Owner-rejected regression; только историческое evidence |
+
+Любой неуказанный старый PR не получает authority по факту существования. Номер без repo-префикса запрещён в G2 и в производных cross-repository реестрах.
+
+### G3. Допустимые состояния
+
+`OWNER-ADOPTED` → `IMPLEMENTED CANDIDATE` → `INDEPENDENTLY REVIEWED` → `OWNER-MERGED`
+
+Отдельные терминальные состояния:
+
+- `BLOCKED`
+- `SUPERSEDED`
+- `REJECTED`
+- `HISTORICAL EVIDENCE ONLY`
+- `CANON_DIVERGENCE`
+- `UNKNOWN — FAIL CLOSED`
+
+Ни `READY`, ни зелёные тесты, ни Preview не заменяют Owner merge.
+
+### G4. Правило обновления
+
+Каждая запись содержит:
+
+> decision ID → authority link → repository → exact base/head → state → evidence → dependency → supersedes/superseded-by.
+
+1. Решение меняется только новым решением Владельца.
+2. Исполнительный статус обновляется только по GitHub evidence.
+3. Новый commit инвалидирует старый review.
+4. Замороженный текст проверяется byte-for-byte.
+5. Расхождение с живой поверхностью остаётся открытым до merged alignment.
+6. Закрытие или открытость PR сами по себе не определяют его семантический статус.
+7. Все cross-repository ссылки и упоминания используют repo-префикс.
+
+### G5. Граф к презентационному результату
+
+```text
+P2 canon A–H
+       ──────────────────────────────────────────┐
+kbp-dev-office#383 — accepted studio target ─────┤
+construction-os#253 — reviewed/merged runtime ───┼→ construction-os#255
+construction-os#252 + construction-os#254 ────────┘
+→ exact-head Preview
+→ independent visual + semantic review
+→ Owner presentation gate
+```
+
+Именно этот граф приводит к результату: не ещё одному документу, а к проверенной ссылке на живую presentation-grade поверхность.
+
 ## Sections not yet adopted
 
-Only Sections A–F are adopted and frozen in this repository canon. Sections G–H
-carry no adopted, proposed, provisional, or skeletal content here, and none may
-be invented, stubbed as a decision, or implemented ahead of its own bounded
-landing packet. Each enters this canon only from its exact Owner-adopted record,
+Only Sections A–G are adopted and frozen in this repository canon. Section H
+carries no adopted, proposed, provisional, or skeletal content here, and none
+may be invented, stubbed as a decision, or implemented ahead of its own bounded
+landing packet. It enters this canon only from its exact Owner-adopted record,
 after its predecessor is Owner-merged.
