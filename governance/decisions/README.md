@@ -22,3 +22,4 @@ Numbering is sequential and permanent; superseded records stay in place.
 | [DR-0015](DR-0015-lead-generation-phase-0-and-phase-1-boundary.md) | Open lead generation for Phase 0 and bounded Phase 1 | adopted | 2026-08-04 |
 | [DR-0016](DR-0016-public-voice-english-only.md) | Public automated voice is English-only | adopted | 2026-08-04 |
 | [DR-0017](DR-0017-claude-lead-parallel-codex-execution.md) | Claude lead with parallel Codex execution | adopted | 2026-08-09 |
+| [DR-0018](DR-0018-house-portal-hero-and-gis-separation.md) | House-portal Hero doctrine with GIS kept separate | adopted | 2026-08-14 |
