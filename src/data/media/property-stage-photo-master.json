@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "PROPERTY_STAGE_MEDIA/v1",
+  "id": "property-stage-photo-master",
+  "source": {
+    "provider": "Adobe",
+    "urn": "urn:aaid:sc:VA6C2:5bff5e42-4594-46ff-a113-66289890f8ec",
+    "downloadUrl": "https://at.adobe.com/0o6lQNXnJoJeTPDA",
+    "upstreamSelectedVisualSha256": "74e1c769fa0dc09639d537d7d93e26c93f6cb1cec431a084263c9f882cc2976e"
+  },
+  "asset": {
+    "path": "public/images/house-portal/property-stage-photo-master.png",
+    "mediaType": "image/png",
+    "width": 1486,
+    "height": 672,
+    "bytes": 2100199,
+    "sha256": "c2de7b0fb9bf6149b866058f56838add9cea22ac3a0db0ccce967729d4eedb25",
+    "transformed": false
+  },
+  "disclosure": "Conceptual visualization — not a completed West Coast KBP project or a property-specific feasibility result."
+}
