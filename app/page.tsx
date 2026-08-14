@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import ModelCatalog from "@/src/components/content/ModelCatalog";
-import HeroBlueprintStage from "@/src/components/home/HeroBlueprintStage";
+import HousePortalHero from "@/src/components/home/HousePortalHero";
 import {
   DEEDSEAL_CROSS_REFERENCE_LEAD,
   DEEDSEAL_CROSS_REFERENCE_LINK_TEXT,
@@ -26,7 +26,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildBusinessJsonLd()) }}
       />
 
-      <HeroBlueprintStage />
+      <HousePortalHero />
 
       <section className="spine-section" aria-labelledby="product-planes-title">
         <div className="portal-container spine-section__inner">
