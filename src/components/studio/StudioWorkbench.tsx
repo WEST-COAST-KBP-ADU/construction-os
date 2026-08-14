@@ -9,6 +9,7 @@ import {
   buildConfigurationCandidate,
   evaluateOption,
 } from "@/src/lib/studio/studio";
+import { STUDIO_DEFAULT_ARCHETYPE } from "@/src/lib/studio/heroEntryContract";
 import type {
   ConfigurationCandidate,
   ConfigurationCandidateInput,
@@ -111,9 +112,17 @@ function sizeLabel(archetypeId: string): string {
   return `${Math.round((archetype.size_band.min_sqft + archetype.size_band.max_sqft) / 2)} sq ft`;
 }
 
-export default function StudioWorkbench() {
-  const [archetype, setArchetype] = useState("one-bed-600");
-  const [selections, setSelections] = useState<StudioSelections>(() => defaultsFor("one-bed-600"));
+type StudioWorkbenchProps = {
+  initialArchetype?: typeof STUDIO_DEFAULT_ARCHETYPE;
+};
+
+export default function StudioWorkbench({
+  initialArchetype = STUDIO_DEFAULT_ARCHETYPE,
+}: StudioWorkbenchProps) {
+  const [archetype, setArchetype] = useState<string>(initialArchetype);
+  const [selections, setSelections] = useState<StudioSelections>(() =>
+    defaultsFor(initialArchetype),
+  );
   const [candidate, setCandidate] = useState<ConfigurationCandidate | null>(null);
   const [status, setStatus] = useState("Building deterministic configuration…");
   const [comparisonOpen, setComparisonOpen] = useState(false);
