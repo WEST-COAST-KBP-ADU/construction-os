@@ -5,6 +5,14 @@ import { describe, expect, it } from "vitest";
 
 const stylesheet = readFileSync(resolve(process.cwd(), "app/globals.css"), "utf8");
 const compareRoute = readFileSync(resolve(process.cwd(), "app/compare/page.tsx"), "utf8");
+const header = readFileSync(
+  resolve(process.cwd(), "src/components/Header.tsx"),
+  "utf8",
+);
+// Executable declarations only: a comment naming a removed device is a record
+// of the removal, never a restoration of it.
+const executableStylesheet = stylesheet.replace(/\/\*[\s\S]*?\*\//g, "");
+const executableHeader = header.replace(/\{?\/\*[\s\S]*?\*\/\}?/g, "");
 const studioStylesheet = readFileSync(
   resolve(process.cwd(), "src/components/studio/StudioWorkbench.module.css"),
   "utf8",
@@ -220,27 +228,96 @@ describe("portal visual-system regressions", () => {
     );
   });
 
-  it("contains the emerald signal in the brand mark without hard-coded drift", () => {
-    const signalRegion = stylesheet.match(
-      /\.brand-seal \{[\s\S]*?\n\}\n\n\.brand__wordmark/,
-    )?.[0];
-
-    expect(signalRegion).toBeDefined();
-    expect(signalRegion).toContain("var(--color-signal)");
-    expect(signalRegion).toContain("var(--color-signal-rgb)");
+  it("keeps the emerald signal declared as a token and unpainted by Product 2", () => {
+    // P2-CHROME-CANON-ALIGN-0001: the pinned signal token contract is
+    // unchanged, but canon E7 forbids painting the borrowed Product 1 signal
+    // anywhere on Product 2. Repainting it fails here.
     expect(stylesheet.match(/--color-signal:\s*#39D98A;/g)).toHaveLength(2);
     expect(
       stylesheet.match(/--color-signal-rgb:\s*57 217 138;/g),
     ).toHaveLength(2);
 
-    const outsideBrandAndDeclarations = stylesheet
-      .replace(signalRegion!, "")
+    const outsideDeclarations = stylesheet
       .replace(/--color-signal:\s*#39D98A;/g, "")
       .replace(/--color-signal-rgb:\s*57 217 138;/g, "");
 
-    expect(outsideBrandAndDeclarations).not.toContain("var(--color-signal");
-    expect(outsideBrandAndDeclarations).not.toMatch(
+    expect(outsideDeclarations).not.toContain("var(--color-signal");
+    expect(outsideDeclarations).not.toMatch(
       /#39d98a|rgb\(\s*57\s+217\s+138\s*\//i,
+    );
+  });
+
+  it("refuses the brand-seal device and its pulse anywhere in the shell", () => {
+    // Canon E7 mutation probe: restoring a brand-seal element, the
+    // brand-signal-pulse animation, or any green pulsing-dot paint in the
+    // Product 2 header must fail here.
+    expect(executableStylesheet).not.toContain("brand-seal");
+    expect(executableStylesheet).not.toContain("brand-signal-pulse");
+    expect(executableStylesheet).not.toMatch(/@keyframes\s+brand-/);
+    expect(executableHeader).not.toContain("brand-seal");
+    expect(executableHeader).not.toContain("brand-signal-pulse");
+
+    // No substituted mark either: Product 2's identity is typographic only.
+    // The mobile-menu affordance is outside the brand link and is untouched.
+    const brandLink = header.match(
+      /<Link href="\/" className="brand"[\s\S]*?<\/Link>/,
+    )?.[0];
+
+    expect(brandLink).toBeDefined();
+    expect(brandLink).not.toMatch(/<svg|<img|<Image|role="img"|aria-hidden/i);
+    expect(brandLink).toContain('className="brand__name"');
+    expect(brandLink).toContain('className="brand__tagline"');
+    expect(header).toContain("accessibility.brandHomeLabel");
+    expect(header).toContain("aria-label={accessibility.primaryNavigationLabel}");
+  });
+
+  it("keeps the Product 2 mark stationary in every motion state", () => {
+    // Canon E5 mutation probe: the logo does not move. Any animation or
+    // transition reaching the brand link or its typographic parts fails here,
+    // so no ambient motion can be reintroduced under a different name.
+    const brandRules = [
+      ...executableStylesheet.matchAll(
+        /(^|\n)([^\n{}]*\.brand(?:__[a-z]+)?[^\n{}]*)\{([^}]*)\}/g,
+      ),
+    ];
+
+    expect(brandRules.length).toBeGreaterThan(0);
+
+    for (const [, , selector, body] of brandRules) {
+      expect(body, `brand rule ${selector.trim()}`).not.toMatch(
+        /(^|[;\s])(animation|transition)(-[a-z]+)?\s*:/,
+      );
+    }
+  });
+
+  it("paints header and notice chrome only from Option 2 role tokens", () => {
+    // Canon E2 mutation probe: the shell carries one visual system. A raw
+    // color, a second palette, or a semantic status paint in the header or the
+    // release line fails here.
+    const finalShell = executableStylesheet.slice(
+      executableStylesheet.indexOf(".brand {"),
+    );
+    const chromeRules = [
+      ...finalShell.matchAll(
+        /(^|\n)([^\n{}]*(?:\.brand|\.site-header|\.site-nav|\.development-notice)[^\n{}]*)\{([^}]*)\}/g,
+      ),
+    ];
+
+    expect(chromeRules.length).toBeGreaterThan(0);
+
+    for (const [, , selector, body] of chromeRules) {
+      expect(body, `chrome rule ${selector.trim()}`).not.toMatch(
+        /#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(/,
+      );
+      expect(body, `chrome rule ${selector.trim()}`).not.toMatch(
+        /var\(--color-(?:danger|warning|success|signal)\b/,
+      );
+    }
+
+    // No Hero, decorative graph, AI-show surface, or device protagonist is
+    // introduced into the chrome by this alignment.
+    expect(executableHeader).not.toMatch(
+      /Hero|canvas|graph|A600|<video|backdrop-filter/i,
     );
   });
 
@@ -257,6 +334,46 @@ describe("portal visual-system regressions", () => {
     expect(contrastRatio(heading, surface)).toBeGreaterThanOrEqual(4.5);
     expect(heading).not.toBe(brandSurface);
     expect(stylesheet).not.toMatch(/background:\s*var\(--color-forest-deep\);/);
+  });
+
+  it("presents the release status as one calm line of shell chrome", () => {
+    // Canon E12 mutation probe: an uppercase, letter-spaced, raised, or
+    // otherwise plaque-like treatment of the release status must fail here.
+    const notice = stylesheet.match(
+      /\.development-notice \{[\s\S]*?\.development-notice__supporting \{[\s\S]*?\n\}/,
+    )?.[0];
+
+    expect(notice).toBeDefined();
+
+    // Sentence case and quiet weight — no uppercase badge.
+    expect(notice).toContain("text-transform: none;");
+    expect(notice).toContain("letter-spacing: normal;");
+    expect(notice).not.toMatch(/text-transform:\s*uppercase/);
+    expect(notice).toMatch(
+      /\.development-notice__label\s*\{[\s\S]*?font-weight:\s*var\(--font-weight-medium\)/,
+    );
+
+    // Shell surface with hairline separation — not a raised strip or a card.
+    expect(notice).toMatch(
+      /\.development-notice \{[\s\S]*?background:\s*var\(--color-shell\);/,
+    );
+    expect(notice).not.toContain("var(--color-shell-raised)");
+    expect(notice).toContain(
+      "border-bottom: var(--line-width) solid var(--color-boundary-strong);",
+    );
+
+    // No alert color, glow, pill, or card.
+    expect(notice).not.toMatch(/box-shadow|border-radius|text-shadow/);
+    expect(notice).not.toMatch(
+      /var\(--color-(?:danger|warning|success|signal|gold)\b/,
+    );
+
+    // Removing the calm-line mobile containment rule must fail here. The line
+    // is one row at desktop and wraps cleanly when narrow, so the frozen text
+    // is never the thing that gives way.
+    expect(stylesheet).toMatch(
+      /@media \(max-width: 47\.5rem\) \{\s*\.development-notice__label \{\s*white-space: normal;[\s\S]*?\.development-notice__message \{\s*overflow-wrap: break-word;/,
+    );
   });
 
   it("keeps comparison semantics visible in the stacked mobile treatment", () => {

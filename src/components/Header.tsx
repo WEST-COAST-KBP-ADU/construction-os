@@ -47,8 +47,11 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="portal-container site-header__inner">
+        {/* P2-CHROME-CANON-ALIGN-0001 (canon E5, E7): Product 2's identity is
+            typographic and stationary. The former brand-seal carried Product 1's
+            pulsing signal device; it is removed and is not substituted by another
+            icon, dot, monogram, badge, or animated mark here. */}
         <Link href="/" className="brand" aria-label={accessibility.brandHomeLabel}>
-          <span className="brand-seal" aria-hidden="true"><span /></span>
           <span className="brand__wordmark">
             <span className="brand__name">{name}</span>
             <span className="brand__tagline">{tagline}</span>
