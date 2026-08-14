@@ -64,6 +64,11 @@ const reasonLabels: Record<string, string> = {
 
 const optionKeys: StudioOptionKey[] = ["exterior", "palette"];
 
+export const INITIAL_COMPARISON_STATES = [
+  { archetype: "one-bed-600", exterior: "lap-siding", palette: "sage" },
+  { archetype: "one-bed-600", exterior: "dark-siding", palette: "charcoal" },
+] as const;
+
 function defaultsFor(archetype: string): StudioSelections {
   if (archetype === "one-bed-600") {
     return {
@@ -117,10 +122,15 @@ export default function StudioWorkbench() {
   const [candidate, setCandidate] = useState<ConfigurationCandidate | null>(null);
   const [status, setStatus] = useState("Building deterministic configuration…");
   const [comparisonOpen, setComparisonOpen] = useState(false);
-  const [comparisonInputs, setComparisonInputs] = useState<ConfigurationCandidateInput[]>(() => [
-    inputFor("one-bed-600"),
-    inputFor("studio-450"),
-  ]);
+  const [comparisonInputs, setComparisonInputs] = useState<ConfigurationCandidateInput[]>(() =>
+    INITIAL_COMPARISON_STATES.map((state) =>
+      inputFor(state.archetype, {
+        ...defaultsFor(state.archetype),
+        exterior: state.exterior,
+        palette: state.palette,
+      }),
+    ),
+  );
 
   const activeArchetype = useMemo(
     () => catalog.archetypes.find((item) => item.id === archetype) ?? catalog.archetypes[0],
