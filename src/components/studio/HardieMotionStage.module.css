@@ -39,6 +39,98 @@
   );
 }
 
+.lightingDusk,
+.lightingNight,
+.lightingGlow {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 420ms ease;
+}
+
+.lightingDusk {
+  background: linear-gradient(180deg, rgb(111 79 78 / 32%), rgb(222 143 82 / 18%) 58%, rgb(42 46 50 / 28%));
+  mix-blend-mode: multiply;
+}
+
+.lightingNight {
+  background: linear-gradient(180deg, rgb(13 27 50 / 54%), rgb(20 37 58 / 42%) 62%, rgb(7 15 26 / 58%));
+  mix-blend-mode: multiply;
+}
+
+.lightingGlow {
+  background: radial-gradient(circle at 56% 59%, rgb(255 213 139 / 32%), transparent 27%);
+  mix-blend-mode: screen;
+}
+
+.stage[data-lighting-mode="dusk"] .lightingDusk,
+.stage[data-lighting-mode="dusk"] .lightingGlow,
+.stage[data-lighting-mode="night"] .lightingNight {
+  opacity: 1;
+}
+
+.stage[data-lighting-mode="night"] .lightingGlow {
+  opacity: 0.58;
+}
+
+.lightingControls {
+  position: absolute;
+  top: clamp(6.3rem, 10vw, 7.75rem);
+  left: clamp(1rem, 2vw, 1.75rem);
+  z-index: 5;
+  display: grid;
+  gap: 0.42rem;
+  color: var(--studio-shell-ink);
+  background: color-mix(in srgb, var(--studio-shell) 82%, transparent);
+  padding: 0.65rem 0.72rem;
+  backdrop-filter: blur(16px);
+}
+
+.lightingControls > span,
+.lightingControls small {
+  font-size: 0.64rem;
+}
+
+.lightingControls > span {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lightingControls small {
+  color: var(--studio-shell-muted);
+}
+
+.lightingControls > div {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.lightingControls button {
+  min-height: 2rem;
+  border: 1px solid color-mix(in srgb, var(--studio-shell-ink) 34%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--studio-shell-ink);
+  cursor: pointer;
+  font-size: 0.64rem;
+  font-weight: 650;
+  padding: 0.34rem 0.62rem;
+}
+
+.lightingControls button[aria-pressed="true"] {
+  border-color: var(--studio-shell-ink);
+  background: var(--studio-shell-ink);
+  color: var(--studio-shell);
+}
+
+.lightingControls button:focus-visible {
+  outline: var(--focus-outline-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-outline-offset);
+}
+
 .stageTransitioning .materialSweep {
   animation: materialSweep 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
@@ -193,13 +285,17 @@
     padding: 0.58rem 0.68rem;
   }
 
+  .lightingControls {
+    top: auto;
+    bottom: 3.15rem;
+  }
+
   .materialCaption {
     display: none;
   }
 
   .replayButton {
-    right: 1rem;
-    bottom: 3.15rem;
+    display: none;
   }
 
   .stage figcaption {
@@ -213,5 +309,12 @@
   .stageTransitioning .currentImage,
   .stageTransitioning .materialSweep {
     animation: none;
+  }
+
+  .lightingDusk,
+  .lightingNight,
+  .lightingGlow {
+    transition-duration: 120ms;
+    transition-property: opacity;
   }
 }
