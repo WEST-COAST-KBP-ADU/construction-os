@@ -1,6 +1,6 @@
 # PRODUCT-BOUNDARIES v1.0 — West Coast KBP / KBP OS
 
-Status: `IN PROGRESS — SECTIONS A–G FROZEN; SECTION H NOT YET ADOPTED`
+Status: `COMPLETE · FROZEN`
 
 This file is the Product 2 product canon for `WEST-COAST-KBP-ADU/construction-os`.
 It carries exactly what the Owner has adopted, and nothing else.
@@ -29,6 +29,7 @@ head. The Owner alone adopts and merges.
 | Owner decision record — Section E adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274224565> |
 | Owner decision record — Section F adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274255255> |
 | Owner decision record — Section G adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274332730> |
+| Owner decision record — Section H adopted | <https://github.com/kbp-core-engineering/kbp-dev-office/issues/373#issuecomment-5274398879> |
 | Immutable upstream Product 1 canon, pinned to an exact commit | <https://github.com/kbp-core-engineering/kbp-dev-office/blob/a4f008d0cecaa10a561122f4f6a8affd94b70e24/docs/coordination/product/PRODUCT-BOUNDARIES-v1.0.md> |
 
 ## A. Canonical proposition — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
@@ -376,10 +377,151 @@ construction-os#252 + construction-os#254 ────────┘
 
 Именно этот граф приводит к результату: не ещё одному документу, а к проверенной ссылке на живую presentation-grade поверхность.
 
-## Sections not yet adopted
+## H. Change discipline — [ЗАМОРОЖЕНО · OWNER-ADOPTED]
 
-Only Sections A–G are adopted and frozen in this repository canon. Section H
-carries no adopted, proposed, provisional, or skeletal content here, and none
-may be invented, stubbed as a decision, or implemented ahead of its own bounded
-landing packet. It enters this canon only from its exact Owner-adopted record,
-after its predecessor is Owner-merged.
+### H-1. Иерархия источников
+
+1. `construction-os/governance/BOUNDARIES.md` — высшая safety/authority-граница P2.
+2. Явное persisted решение Владельца внутри разрешённых границ.
+3. Текущий `PRODUCT-BOUNDARIES` на merged `construction-os/main`.
+4. Decision records, claims ledger и divergence registry на merged `main`.
+5. Остальные merged-документы, реализация и проверенное живое состояние GitHub.
+6. Issues, комментарии, ветки и Draft PR.
+7. Чат, terminal scrollback и память модели — никогда не evidence.
+
+Неприземлённое Owner-решение разрешает только bounded-пакет собственного внесения в канон. Оно не открывает runtime, публичный claim, intake или внешнее действие.
+
+### H-2. Холодный старт
+
+Обязательный порядок:
+
+1. `AGENTS.md`;
+2. `governance/memory/SESSION-START.md`;
+3. точный remote `construction-os/main@<40-hex>`;
+4. `governance/BOUNDARIES.md`, действующий Product Boundaries и claims/divergence registry;
+5. полный живой граф Issues, PR, checks, reviews и dependencies;
+6. только затем исполняемый Issue со всеми комментариями.
+
+Если Issue противоречит канону:
+
+> `BLOCKED: CANON DIVERGENCE`
+
+Расхождение нельзя усреднять, угадывать или исправлять расширением scope.
+
+### H-3. Новая идея
+
+Всё отсутствующее в каноне маркируется:
+
+> `[НОВОЕ — ТРЕБУЕТ ПРИНЯТИЯ ВЛАДЕЛЬЦЕМ]`
+
+До принятия идея:
+
+- не смешивается с замороженным текстом;
+- не становится публичным claim;
+- не используется для DISPATCH;
+- не меняет design/runtime-пакеты;
+- не получает статус `DIRECTION`.
+
+### H-4. Версионирование
+
+После Owner merge всех A–H файл получает:
+
+> `COMPLETE · FROZEN`
+
+- Смысловое изменение создаёт следующую версию с явным `supersedes`.
+- История и старые источники не переписываются и не удаляются.
+- Живые указатели G2 могут обновляться по evidence без изменения смысла.
+- Любое изменение байта frozen formulation, включая «исправление опечатки», требует нового решения Владельца.
+- Принятие раздела в Issue не считается его merge в канон.
+
+### H-5. Пакет изменения канона
+
+Каждое смысловое изменение требует:
+
+- persisted Owner decision;
+- точного repository и base SHA;
+- одной цели, одной ветки и одного Draft PR;
+- старой и новой формулировки с причиной;
+- точного allowlist и domain lease;
+- impact list всех downstream-поверхностей;
+- claim ceiling и stop conditions;
+- byte assertions для frozen formulations;
+- независимого non-author review на точной голове;
+- Owner merge.
+
+Issue или DISPATCH не запускает worker. Только Владелец вручную открывает отдельную исполнительную сессию. Автор не ревьюит, не принимает и не мержит собственную голову.
+
+### H-6. Клеймы не повышаются продуктовым решением
+
+Merge канона не переводит:
+
+- `DIRECTION` → `TODAY`;
+- `NOT OPENED` → доступно;
+- candidate → accepted record;
+- concept → feasible/approved/buildable.
+
+Повышение требует отдельно: evidence на exact SHA, claims-ledger update, механические проверки, live-surface verification, non-author review и Owner merge.
+
+`NOT OPENED` дополнительно требует соответствия `governance/BOUNDARIES.md`.
+
+### H-7. Выравнивание downstream-поверхностей
+
+После изменения канона создаётся конечный impact list.
+
+Каждый независимый контур получает собственные Issue, branch и Draft PR. Один пакет не изменяет одновременно:
+
+- продуктовый канон;
+- публичную поверхность;
+- runtime;
+- studio asset;
+- Product 1.
+
+Cross-repository связь не передаёт authority между репозиториями. Alignment доказывается на exact head: байты, фактические viewport/motion-состояния, tests и Preview. До merge расхождение остаётся `CANON_DIVERGENCE`.
+
+### H-8. Срок действия DISPATCH
+
+Каждый P2 DISPATCH привязан к:
+
+- точной версии и SHA P2-канона;
+- точному base/head;
+- при cross-product scope — точному SHA upstream P1-канона;
+- allowlist, claim ceiling, dependencies и join-point.
+
+После смыслового изменения канона:
+
+1. незапущенный DISPATCH устаревает;
+2. директор публикует `CANON_ALIGNMENT` с новым SHA и повторной проверкой;
+3. если scope не изменился, тот же Issue можно повторно валидировать;
+4. если scope изменился — требуется новый пакет;
+5. уже созданная голова остаётся immutable candidate и проходит новый current-canon review либо supersede.
+
+После приземления v1.0 до ручного запуска требуют повторного alignment:
+
+- `kbp-dev-office#383`;
+- `kbp-dev-office#388`;
+- `construction-os#253`;
+- `construction-os#254`;
+- `construction-os#255`.
+
+`construction-os#252` должен проверяться относительно финального канона до Owner gate. `construction-os#256` остаётся исключённым из join согласно Section G.
+
+### H-9. Полномочия Владельца
+
+Только Владелец:
+
+- принимает и меняет границы продукта;
+- выбирает визуальное направление и canonical asset SHA;
+- утверждает публичный claim;
+- мержит;
+- разрешает Production и публикацию;
+- разрешает доступы, секреты и расходы;
+- принимает материальное изменение архитектуры или trust boundary.
+
+Ни канон, ни worker RESULT, ни review, ни зелёные checks, ни Preview не заменяют это решение.
+
+## Canon status
+
+Sections A–H are adopted and frozen in this repository canon. Product
+Boundaries v1.0 and its Owner decision session are `COMPLETE · FROZEN`.
+No semantic change or frozen-byte change is permitted without a new persisted
+Owner decision and a separately bounded superseding packet.
