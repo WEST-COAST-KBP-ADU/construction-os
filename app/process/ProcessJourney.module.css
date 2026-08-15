@@ -1,0 +1,138 @@
+/**
+ * Presentation for the twelve-stage ADU construction journey on /process.
+ * Scoped to this route. Uses the shared design tokens from app/globals.css.
+ */
+
+.journey {
+  margin: var(--space-12) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  border-top: var(--line-width) solid var(--color-line-strong);
+  padding-block: var(--space-8);
+}
+
+.stage:last-child {
+  border-bottom: var(--line-width) solid var(--color-line-strong);
+}
+
+.marker {
+  margin: 0;
+  color: var(--color-gold-deep);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+}
+
+.body {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-forest-deep);
+  font-size: var(--font-size-heading-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--line-height-heading);
+}
+
+.questionBlock {
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--copy-max);
+  margin-top: var(--space-5);
+  border-left: var(--line-width) solid var(--color-gold);
+  padding-left: var(--space-4);
+}
+
+.questionLabel {
+  color: var(--color-gold-deep);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.question {
+  margin: 0;
+  color: var(--color-forest);
+  font-family: var(--font-serif);
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+}
+
+.description {
+  max-width: var(--copy-max);
+  margin: var(--space-5) 0 0;
+  color: var(--color-ink-muted);
+  line-height: var(--line-height-copy);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  margin: var(--space-6) 0 0;
+}
+
+.fact {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  border-top: var(--line-width) solid var(--color-line);
+  padding-top: var(--space-3);
+}
+
+.factBlocking {
+  border-top-color: var(--color-warning);
+}
+
+.factLabel {
+  color: var(--color-ink-subtle);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.factBlocking .factLabel {
+  color: var(--color-warning);
+}
+
+.factValue {
+  margin: 0;
+  min-width: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-copy);
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 40rem) {
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-8);
+  }
+
+  .factBlocking {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 54rem) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 11fr);
+    gap: var(--space-6);
+  }
+
+  .marker {
+    padding-top: var(--space-2);
+  }
+}

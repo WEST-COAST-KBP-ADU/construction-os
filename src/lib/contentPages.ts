@@ -77,9 +77,16 @@ export type ComparePage = {
   faq: FaqItem[];
 };
 
-export type ProcessStep = IndexedContentItem & {
+export type ProcessStage = IndexedContentItem & {
   sequence: string;
+  /** The question a homeowner is actually asking at this point in the build. */
+  question: string;
+  /** The human, professional, supplier, or authority who owns this stage. */
+  responsibleParty: string;
+  /** What the stage produces once it is finished. */
   output: string;
+  /** The exact kind of fact whose absence stops progression. */
+  blocker: string;
 };
 
 export type ProcessPage = {
@@ -89,10 +96,11 @@ export type ProcessPage = {
   description: string;
   lede: string;
   heroSignal: string;
-  stepsHeading: string;
+  stagesHeading: string;
+  stagesIntro: string;
   boundaryHeading: string;
   boundaryIntro: string;
-  steps: ProcessStep[];
+  stages: ProcessStage[];
   boundaries: IndexedContentItem[];
   faq: FaqItem[];
 };
@@ -154,8 +162,11 @@ export const contentPageLabels = {
     serviceContext: "See the model in context",
   },
   processTemplate: {
-    controlSequence: "Control sequence",
-    stageOutput: "Review output",
+    constructionJourney: "Construction journey",
+    stageQuestion: "The question you are asking",
+    stageResponsible: "Who is responsible",
+    stageOutput: "What this stage produces",
+    stageBlocker: "What stops progress here",
     operatingBoundaries: "Operating boundaries",
     relatedQuestions: "Related questions",
   },
@@ -763,60 +774,166 @@ export const comparePage = {
 
 export const processPage = {
   metaTitle: "Process",
-  title: "A construction process that keeps evidence, decisions, and action connected",
-  eyebrow: "Controlled project pathway",
+  title: "The twelve stages of building an ADU, and who is responsible for each one",
+  eyebrow: "ADU construction journey",
   description:
-    "How West Coast KBP structures residential construction work from initial intent through evidence, OwnerReview, controlled action, and a reviewable record.",
+    "The twelve stages West Coast KBP works through to deliver an ADU — intent, property facts, jurisdiction research, design, engineering, permitting, procurement, construction, inspections, and handover — with the responsible person or authority named at every stage.",
   lede:
-    "Construction questions rarely arrive in a clean sequence. The process creates that sequence deliberately: organize the request, expose what is unknown, prepare a bounded decision, and authorize only the next appropriate action.",
+    "Building an ADU is not one decision. It is a sequence of them, and each one belongs to a specific person, licensed professional, supplier, or public authority. This page publishes that sequence in the order it happens, including the point at which each stage stops if a fact is missing.",
   heroSignal:
-    "The process organizes work; it does not guarantee property eligibility, permit approval, cost, schedule, or a construction outcome.",
-  stepsHeading: "Every stage produces something the next reviewer can inspect",
-  boundaryHeading: "Control improves visibility without replacing official or professional judgment",
+    "This page describes how the work is organized. It does not evaluate a property and it does not guarantee eligibility, permit approval, cost, schedule, or a construction outcome.",
+  stagesHeading: "From the first conversation to the handover of a finished building",
+  stagesIntro:
+    "The stages are ordered by dependency, not by calendar. Several can be open at once, and later stages reopen earlier ones when something new is found. Nothing below is a promise about timing.",
+  boundaryHeading: "Organizing the work does not replace official or professional judgment",
   boundaryIntro:
-    "The public portal explains the operating model only. It does not collect project information or initiate a business action.",
-  steps: [
+    "This public page explains how the work is structured. It does not collect project information and it does not start a business action.",
+  stages: [
     {
       sequence: "01",
-      title: "Frame the request",
+      title: "Intent and constraints",
+      question: "Is this project worth starting, and what would stop it?",
       description:
-        "Separate the desired result from property assumptions, implied scope, and unanswered questions.",
-      output: "A candidate request with assumptions and exclusions labeled.",
+        "Your goal, who the unit is for, and the limits you already know about are written down as statements you made on a given date — not as verified facts, and not as a budget or timeline anyone has committed to.",
+      responsibleParty:
+        "You state the intent. The West Coast KBP owner decides whether to take the project on. Software prepares the write-up and decides nothing.",
+      output:
+        "A written intent summary with every unknown listed by name rather than left blank.",
+      blocker:
+        "An unidentified parcel, or a property you do not control, stops the work here. Nothing proceeds on an assumed address.",
     },
     {
       sequence: "02",
-      title: "Assemble evidence",
+      title: "Property facts of record",
+      question: "What is actually known about my property, and what still has to be looked up?",
       description:
-        "Identify the official records, existing-condition material, and discipline inputs needed for review.",
-      output: "An evidence index with source, date, subject, and missing items visible.",
+        "Parcel identity from the official record, existing structures, existing utility service, recorded easements, and any survey or site measurement taken by a named person on a named date. Each item is labeled as an official record, a site observation, your own statement, or unknown.",
+      responsibleParty:
+        "The official record and a licensed surveyor are the authorities here. A named West Coast KBP person records what was observed on site and asserts no property fact beyond that.",
+      output:
+        "A property fact list carrying the source and retrieval date on every line, alongside a written list of what is still missing.",
+      blocker:
+        "A fact that no source confirms stays marked unknown and stops any later stage that depends on it. It is never filled in by inference.",
     },
     {
       sequence: "03",
-      title: "Classify uncertainty",
-      description:
-        "Keep facts, owner preferences, professional questions, conflicts, and unknowns in distinct categories.",
-      output: "A review packet that does not smooth gaps into conclusions.",
+      title: "Jurisdiction path and constraint research",
+      question: "Who decides whether I can build this, and what do they require?",
+      description: `Which authority governs the parcel is verified against the official boundary record — a mailing address does not establish it. That authority's published ADU standards, submittal checklist, and review path are then retrieved and cited with the date they were read. ${officialVerificationWarning}`,
+      responsibleParty:
+        "The authority having jurisdiction decides, and only that authority. A named West Coast KBP person retrieves and cites what is published; a licensed design professional interprets it.",
+      output: `A cited constraint list, each line bound to an exact official source and its retrieval date. ${officialVerificationWarning}`,
+      blocker: `A boundary result that is ambiguous, recently changed, or contradicted by another source is a refusal to name a jurisdiction rather than a best guess. ${officialVerificationWarning}`,
     },
     {
       sequence: "04",
-      title: "OwnerReview",
+      title: "Concept selection and configuration",
+      question: "Which unit am I building, and exactly which version of it?",
       description:
-        "The owner reviews scope, dependencies, evidence, risks, and the proposed boundary of the next step.",
-      output: "An explicit accept, reject, revise, pause, or request-evidence decision.",
+        "You choose an exact model, an exact version, and a set of options from the published range. A choice outside that range is refused rather than quietly adjusted until it fits.",
+      responsibleParty:
+        "You select. A licensed design professional confirms whether that selection is a valid starting point for a real parcel.",
+      output:
+        "A fixed configuration naming the exact model, version, release, and options you chose, reproducible from the same inputs.",
+      blocker:
+        "A concept-stage model is not a construction basis. Until a licensed professional issues a stamped set, the project cannot move to permit submittal, however finished the images look.",
     },
     {
       sequence: "05",
-      title: "Authorize one bounded action",
-      description:
-        "Only an approved next step may progress; wider commitments remain outside the authorization.",
-      output: "A named action, owner, prerequisites, and stop conditions.",
+      title: "Scope, budget basis, and written agreement",
+      question: "What exactly am I paying for, what is not included, and what have I signed?",
+      description: `Inclusions bound to the exact configuration, exclusions, allowance lines and their basis, quote references with their dates and expiry, a payment schedule tied to defined work milestones, permit responsibility, the contractor license number, and written warranty terms. ${officialVerificationWarning}`,
+      responsibleParty:
+        "You and the West Coast KBP owner sign. A licensed contractor holds the license the work is performed under. Software assembles the draft and never prices, promises, commits, or signs.",
+      output:
+        "A signed written agreement and a documented budget basis, every line marked fixed, allowance, quote-backed, or contingency. Amounts stay private to your project and appear on no public page.",
+      blocker:
+        "A missing license number, an absent payment schedule, an absent warranty statement, or an expired supplier quote stops execution at that exact line.",
     },
     {
       sequence: "06",
-      title: "Record the result",
+      title: "Design documentation",
+      question: "What do the drawings actually show, and is this the current set?",
       description:
-        "Capture a sanitized account of what was accepted or rejected and what remains unresolved.",
-      output: "A reviewable record that supports the next decision without storing public-site PII.",
+        "Site plan, floor plans, elevations, sections, door, window and finish schedules, and the specification set — each sheet carrying its set version and issue date. Catalogue images and renders are presentation material and are never submitted as drawings.",
+      responsibleParty:
+        "The licensed design professional of record. Software stores versions and checks the set against the authority's published checklist; it interprets nothing.",
+      output:
+        "A dated, versioned drawing and specification set, with every superseded sheet still readable so work already done against it stays explicable.",
+      blocker: `A set that does not satisfy the authority's published checklist is stopped before submittal, at the exact sheet that is missing. ${officialVerificationWarning}`,
+    },
+    {
+      sequence: "07",
+      title: "Engineering, energy, and consultant packages",
+      question: "Which professionals have signed off, and on what?",
+      description: `Structural calculations and stamped structural sheets, a soils or geotechnical report where one is required, energy compliance documentation registered with an approved provider, and any further consultant report the authority's checklist calls for. ${officialVerificationWarning}`,
+      responsibleParty:
+        "Each licensed professional of record, individually and by name. A stamp is that professional's own assertion; nobody restates it, summarizes it into a conclusion, or infers it.",
+      output:
+        "A sign-off record naming the professional, the license reference, the exact document version stamped, the stamp date, and the scope it covers.",
+      blocker:
+        "A stamp binds to one exact drawing version. If the drawings are revised after stamping, the earlier stamp no longer covers the revised scope and submittal stops until it is re-issued.",
+    },
+    {
+      sequence: "08",
+      title: "Permit submittal and review cycles",
+      question: "Where is my permit, and what is the city or county waiting on?",
+      description: `The complete submittal is filed through the authority's own channel by a named applicant. Every comment the authority returns is recorded word for word with its review cycle and date, and every resubmittal names the document versions that answer it. ${officialVerificationWarning}`,
+      responsibleParty:
+        "The permitting agency reviews and decides — it alone. A named person files, and only after the owner explicitly authorizes it. No software submits anything.",
+      output:
+        "A dated submittal, the authority's comments quoted exactly, the resubmittals answering them, and — if the authority issues one — the permit under the authority's own reference.",
+      blocker: `An incomplete submittal or an unanswered authority comment stops progress at that exact item. Neither reviewed jurisdiction publishes a general ADU review timeline, so this stage shows only that the submittal has been with the authority since a stated date, never a projected decision date. ${officialVerificationWarning}`,
+    },
+    {
+      sequence: "09",
+      title: "Procurement and supplier commitments",
+      question: "What has been ordered, from whom, and is it the thing I chose?",
+      description:
+        "Each item is ordered against a fixed specification from a named supplier, with the quote reference, its date and expiry, and the supplier's own stated lead time attributed to that supplier, not promised by anyone else.",
+      responsibleParty:
+        "The West Coast KBP owner authorizes every commitment individually. The named supplier commits to it. Software issues no purchase order and places no order.",
+      output:
+        "A purchase record for each item naming the supplier, the specification it was ordered against, and the delivery confirmation with its date and the person who received it.",
+      blocker:
+        "An expired quote or an unavailable product stops that item. A substitution is recorded as a substitution — what you originally chose stays visible beside what was installed — and it changes nothing until a written change order is signed first.",
+    },
+    {
+      sequence: "10",
+      title: "Site work and construction",
+      question: "What has actually been built so far?",
+      description:
+        "Every work item names the crew or subcontractor who performed it, the exact drawing version it was built against, the date it was done, and the named person who observed it, with photographs attached to what they observed.",
+      responsibleParty:
+        "The licensed contractor performs the work. A named site superintendent observes and records it. Software records those observations and certifies nothing as correct, complete, or compliant.",
+      output:
+        "A dated field record for each work item, naming the drawing version and the observer, with progress counted from recorded work rather than entered as an opinion.",
+      blocker:
+        "A condition found on site that contradicts the property record stops the affected work and reopens stage 02. No dependent work starts while the inspection ahead of it is unreleased.",
+    },
+    {
+      sequence: "11",
+      title: "Inspections and corrections",
+      question: "Has the inspector approved this, and what happens next?",
+      description: `Inspections are requested through the authority's own scheduling channel, and each result is recorded exactly as the inspector wrote it. A correction notice and the later approval both stay in the record, in order, because the correction work between them was real work. ${officialVerificationWarning}`,
+      responsibleParty:
+        "The building inspector employed by the authority having jurisdiction decides, exclusively. A named West Coast KBP person requests the inspection and records the result verbatim. The authority's own record is the original; ours is a copy and says so.",
+      output:
+        "A dated inspection record for each request: the inspection type under the authority's own code, the result, the inspector as the authority recorded them, and any correction items quoted word for word.",
+      blocker: `A correction notice stops every dependent work item until a re-inspection is recorded as approved. The required inspection sequence is set by the authority for your permit and is not published in full by either reviewed jurisdiction. ${officialVerificationWarning}`,
+    },
+    {
+      sequence: "12",
+      title: "Closeout and handover",
+      question: "What do I receive, and what do I do if something goes wrong later?",
+      description:
+        "As-built drawings, every document version, every inspection result, equipment manuals with model and serial numbers, registered field verification documentation, warranty terms and their start date, lien releases, and a final reconciliation against the work recorded as performed.",
+      responsibleParty:
+        "The West Coast KBP owner assembles and hands over the set; you confirm you received it. The final approval remains the authority's own record, not ours.",
+      output:
+        "One indexed handover set covering the whole project, including a written list of anything that could not be resolved.",
+      blocker:
+        "A missing lien release, a missing utility release, an unrecorded final approval, or an unreconciled payment stops handover at that exact item. A project is never closed by dropping an open item quietly.",
     },
   ],
   boundaries: [
@@ -827,23 +944,23 @@ export const processPage = {
     {
       title: "Professional questions stay assigned",
       description:
-        "Design and construction-discipline judgments are routed to qualified review rather than inferred by the portal.",
+        "Design, engineering, and construction-discipline judgments are held by the licensed professional of record, not inferred by the portal.",
     },
     {
       title: "Owner approval remains explicit",
       description:
-        "Software may prepare a candidate artifact, but it cannot approve work or make an external commitment.",
+        "Software may prepare a draft for review, but it cannot approve work, place an order, schedule a crew, file a submittal, or make any other external commitment.",
     },
     {
       title: "Unknowns remain visible",
       description:
-        "Missing information is a recorded state and a stop condition, not an invitation to guess.",
+        "Missing information is a stated state and a stop condition, not an invitation to guess. An unknown is shown as an unknown, together with who has to answer it.",
     },
   ],
   faq: [
     {
       question: "Does this process guarantee a permit or construction result?",
-      answer: `No. It creates clearer review and control; it does not determine an external outcome. ${officialVerificationWarning}`,
+      answer: `No. It makes the sequence, the responsible party, and the missing facts visible; it does not determine an outcome that a public authority, a utility, or a supplier controls. ${officialVerificationWarning}`,
     },
     {
       question: "Can a visitor submit a project through this page?",
@@ -853,7 +970,7 @@ export const processPage = {
     {
       question: "Who approves the next action?",
       answer:
-        "The owner is the final approval authority. AI and software may organize evidence and prepare a candidate review packet, but they do not approve or trigger business action.",
+        "The owner is the final approval authority for business decisions, and you are the approval authority for anything that changes your own agreement. AI and software may organize evidence and prepare a draft for that review, but they do not approve or trigger business action.",
     },
   ],
 } as const satisfies ProcessPage;
