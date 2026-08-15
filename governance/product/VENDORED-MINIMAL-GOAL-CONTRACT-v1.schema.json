@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kbp-dev-office/graph-foundation/minimal-goal-contract/v1.0",
+  "title": "Minimal 4x4 goal-graph contract manifest",
+  "description": "The Owner-adopted four-layer graph control plane as machine-readable data: four control-plane layers, exactly four node types, exactly four edge types. Decision: docs/coordination/decisions/decision-goal-control-plane-4x4.md. Packet: GOAL-GRAPH-MINIMAL-CONTRACT-0001, issue #505. Validator: tools/graph_foundation/goal_contract.py (fail-closed). This schema does not replace the topology manifest of GRAPH-FOUNDATION-0002; it is the goal layer above it.",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "basis",
+    "data_class",
+    "adopts_live_north_star",
+    "planes",
+    "node_types",
+    "edge_types",
+    "nodes",
+    "edges",
+    "owner_decisions",
+    "admitted_actions",
+    "state_updates",
+    "external_runtimes"
+  ],
+  "properties": {
+    "contract_version": { "type": "string", "const": "goal-contract/v1.0" },
+    "basis": {
+      "description": "Where this contract comes from, in enough detail to find it again.",
+      "type": "object",
+      "required": ["decision", "packet", "architecture", "adopted_at"],
+      "properties": {
+        "decision": { "type": "string" },
+        "packet": { "type": "string" },
+        "architecture": { "type": "string" },
+        "adopted_at": { "type": "string" }
+      }
+    },
+    "data_class": {
+      "description": "synthetic-conformance is committed test data. It adopts no live North Star and decides no product direction.",
+      "type": "string",
+      "enum": ["synthetic-conformance", "live"]
+    },
+    "adopts_live_north_star": { "type": "boolean" },
+    "planes": {
+      "description": "The four control-plane layers. Authority and processing boundaries, not additional node types.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["GOAL_PLANE", "EXECUTION_PLANE", "AUTHORITY_PLANE", "EVIDENCE_STATE_PLANE"]
+      }
+    },
+    "node_types": {
+      "description": "Exactly four. No fifth node type is admitted; Owner decisions and admitted actions are typed authority records, not hidden fifth graph nodes.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["GOAL", "MODULE_SUBGRAPH", "WORK_NODE", "EVIDENCE"]
+      }
+    },
+    "edge_types": {
+      "description": "Exactly four. No free-text edge type and no fifth edge type.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["ADVANCES", "DEPENDS_ON", "SUPERSEDES", "PROVES"]
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "plane", "title"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["GOAL", "MODULE_SUBGRAPH", "WORK_NODE", "EVIDENCE"]
+          },
+          "plane": {
+            "type": "string",
+            "enum": ["GOAL_PLANE", "EXECUTION_PLANE", "AUTHORITY_PLANE", "EVIDENCE_STATE_PLANE"]
+          },
+          "title": { "type": "string" },
+          "parent": {
+            "description": "The one declared parent scope. Null on a NORTH_STAR and on nothing else.",
+            "type": ["string", "null"]
+          },
+          "subtype": {
+            "description": "GOAL only.",
+            "type": "string",
+            "enum": ["NORTH_STAR", "OUTCOME"]
+          },
+          "lifecycle": {
+            "description": "GOAL only. An ADVANCES edge ends on a live goal.",
+            "type": "string",
+            "enum": ["live", "retired"]
+          },
+          "synthetic": { "type": "boolean" },
+          "join": {
+            "description": "MODULE_SUBGRAPH only. The declared join contract.",
+            "type": "object",
+            "required": ["id", "policy", "expected_branches", "declared_before_fanout", "satisfied"],
+            "properties": {
+              "id": { "type": "string" },
+              "policy": {
+                "description": "Fail-closed: every declared branch is required. No policy can decide that enough branches arrived.",
+                "type": "string",
+                "enum": ["all_required"]
+              },
+              "expected_branches": {
+                "description": "The complete branch set, declared before fan-out.",
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              },
+              "declared_before_fanout": { "type": "boolean" },
+              "satisfied": { "type": "boolean" }
+            }
+          },
+          "inputs": {
+            "description": "WORK_NODE only. Typed inputs.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "properties": { "name": { "type": "string" }, "type": { "type": "string" } }
+            }
+          },
+          "outputs": {
+            "description": "WORK_NODE only. Typed outputs.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["name", "type"],
+              "properties": { "name": { "type": "string" }, "type": { "type": "string" } }
+            }
+          },
+          "dependencies": {
+            "description": "Declared predecessor nodes. Must agree exactly with this node's DEPENDS_ON edges; an empty list says 'none' out loud.",
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "terminal_conditions": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
+          "join_destination": { "type": "string" },
+          "terminal_result": {
+            "type": "object",
+            "required": ["state"],
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": ["PENDING", "ACCEPTED", "REFUSED", "SUPERSEDED"]
+              },
+              "evidence": { "type": ["string", "null"] }
+            }
+          },
+          "source": {
+            "description": "EVIDENCE only. An immutable reference with an exact source revision and digest.",
+            "type": "object",
+            "required": ["repository", "path", "revision", "digest"],
+            "properties": {
+              "repository": { "type": "string" },
+              "path": { "type": "string" },
+              "revision": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+              "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+            }
+          },
+          "immutable": { "type": "boolean" }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "from", "to"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["ADVANCES", "DEPENDS_ON", "SUPERSEDES", "PROVES"]
+          },
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "claim": {
+            "description": "PROVES only. What this evidence proves.",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "owner_decisions": {
+      "description": "Typed authority records. Not graph nodes.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "plane", "decided_by", "decided_at", "record", "subject"],
+        "properties": {
+          "id": { "type": "string" },
+          "plane": { "type": "string", "const": "AUTHORITY_PLANE" },
+          "decided_by": { "type": "string" },
+          "decided_at": { "type": "string" },
+          "record": { "type": "string" },
+          "subject": { "type": "string" }
+        }
+      }
+    },
+    "admitted_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "plane", "action", "material", "admitted", "admitted_by", "owner_decision", "evidence"],
+        "properties": {
+          "id": { "type": "string" },
+          "plane": { "type": "string", "const": "AUTHORITY_PLANE" },
+          "action": { "type": "string" },
+          "material": { "type": "boolean" },
+          "admitted": { "type": "boolean" },
+          "admitted_by": { "type": "string" },
+          "owner_decision": { "type": "string" },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "state_updates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "plane", "authoritative", "admitted_action", "evidence", "written_by", "statement"],
+        "properties": {
+          "id": { "type": "string" },
+          "plane": { "type": "string", "const": "EVIDENCE_STATE_PLANE" },
+          "authoritative": { "type": "boolean" },
+          "admitted_action": { "type": "string" },
+          "evidence": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "written_by": { "type": "string" },
+          "statement": { "type": "string" }
+        }
+      }
+    },
+    "external_runtimes": {
+      "description": "Named only as replaceable executors, outside the control-plane trust boundary. Never Owner, authorizer, ledger, policy authority, or authoritative-state writer.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "role", "inside_trust_boundary", "replaceable", "note"],
+        "properties": {
+          "name": { "type": "string" },
+          "role": { "type": "string", "enum": ["candidate_executor", "executor"] },
+          "inside_trust_boundary": { "type": "boolean", "const": false },
+          "replaceable": { "type": "boolean", "const": true },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}

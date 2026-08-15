@@ -1,0 +1,457 @@
+{
+  "contract_version": "goal-contract/v1.0",
+  "basis": {
+    "decision": "governance/product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md",
+    "packet": "PRODUCT2-LIVE-4X4-GRAPH-AND-DIRECTOR-0001 (issue #321)",
+    "architecture": "kbp-core-engineering/kbp-dev-office docs/coordination/graph/GRAPH-NATIVE-ARCHITECTURE-v1.md, adopted minimal 4x4 contract vendored here as governance/product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json",
+    "adopted_at": "2026-08-15"
+  },
+  "data_class": "live",
+  "adopts_live_north_star": true,
+  "vendored_contract": {
+    "why_outside_the_bytes": "The vendored schema is byte-identical to the accepted source, so it cannot carry its own provenance. Provenance lives here and in tools/memory/check-product2-live-goal-graph.mjs, and the checker refuses a vendored file whose digest drifts from the pinned one.",
+    "vendored_path": "governance/product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json",
+    "source_repository": "kbp-core-engineering/kbp-dev-office",
+    "source_path": "docs/coordination/graph/minimal-goal-contract/manifest.schema.json",
+    "source_revision": "3f97384db04d7644ed65b30d005a03863adcb024",
+    "source_blob_sha1": "27c95ad64314dfa2fe44421cc0159392ca0560a1",
+    "source_digest": "sha256:c27f84bdeb2677778cbaa07a373c61a34bb51664ffc2bcb2d9fdaf22dca9b6dd",
+    "adopted_validator": "kbp-core-engineering/kbp-dev-office tools/graph_foundation/goal_contract.py at the same revision; its refusal vocabulary is mirrored, not redesigned",
+    "verify": "git hash-object governance/product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json  # 27c95ad64314dfa2fe44421cc0159392ca0560a1"
+  },
+  "graph_surfaces": {
+    "statement": "This repository carries two graph surfaces. They are distinct and neither replaces the other.",
+    "intent_work_graph": {
+      "path": "governance/product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json",
+      "kind": "persistent authority-routed intent and work graph",
+      "authored_by": "an Owner-adopted decision carried by a bounded packet",
+      "committed": true,
+      "role": "states intended Product 2 state and what work advances it; a Director hydrates it before dispatch"
+    },
+    "derived_engineering_graph": {
+      "path": "tools/memory/build-graph.mjs and governance/memory/graph-source-truth-v1.schema.json",
+      "kind": "derived observation of Issues, branches, pull requests, reviews, merges, deployments and evidence",
+      "authored_by": "the builder, from a frozen observation of live GitHub",
+      "committed": false,
+      "role": "reports what has actually happened; it is an index, never an authority source"
+    },
+    "separation": "The derived projection is not deleted, merged into, or reinterpreted by this manifest. Intended state is never inferred from the projection, and observed state is never asserted by this manifest. A contradiction between them is reported, never averaged."
+  },
+  "boundary_classification": {
+    "source": "governance/product/PRODUCT-BOUNDARIES-v1.0.md section B, V1 boundary ledger and status grammar; section B is byte-identical in v1.1",
+    "TODAY": [
+      "the published West Coast KBP construction surface: Home, Services, Service Areas, Process, FAQ, About, Compare, Models, model pages and Studio",
+      "the owned concept-only model catalog adu-s-450, adu-a-600 and adu-b-800, with no construction-readiness claim",
+      "the anonymous deterministic Concept Studio on a synthetic sample property, with no address or contact collection and no real-property conclusion",
+      "the frozen public Product 1 relationship wording, and nothing beyond it"
+    ],
+    "DIRECTION": [
+      "the AI-native operating platform: KBP OS as the owner-controlled operating layer the construction business runs on",
+      "the multi-level work graph carrying goals, sources, constraints, decisions and work under human control",
+      "the Product 2 business Graph Memory: an owned, versioned network of accepted, source-bound state only",
+      "house-centered Hero-to-Studio as an Owner-adopted direction that this manifest does not implement, review, merge or live-verify"
+    ],
+    "NOT_OPENED": [
+      "live intake, qualification and any real inbound operational event",
+      "accounts and client data",
+      "PII persistence of any kind",
+      "property conclusions, including address, parcel, GIS and geometric-fit screening",
+      "CRM writes, client messages, calls, booking and every other external business effect",
+      "autonomous authority for any model over scope, price, schedule, permit, code, zoning, buildability, or any legal or engineering conclusion",
+      "any deployment claim that is not separately observed on the canonical public domain"
+    ],
+    "rule": "The status grammar is the canon's own. A roadmap entry, the presence of code, this manifest, or an ordinary task packet cannot open a NOT_OPENED capability; only a separate Owner-adopted decision under governance/BOUNDARIES.md can, and a separate bounded implementation packet is still required afterwards."
+  },
+  "product_1_relation": {
+    "relation": "West Coast KBP — first user",
+    "frozen": true,
+    "public_wording_record": "src/lib/deedsealCrossReference.ts",
+    "governing_canon": "governance/product/PRODUCT-BOUNDARIES-v1.0.md sections A and B",
+    "shares_runtime": false,
+    "shares_identity": false,
+    "shares_authority": false,
+    "shares_data": false,
+    "shares_graph_memory": false,
+    "shares_product_branding": false,
+    "note": "This is the only cross-contour relation. Product 1 holds its own north star, its own goal graph, its own authority and its own graph memory in its own repositories. No node, edge, decision, admitted action or state update in this manifest is a Product 1 record, and this manifest cannot decide anything for Product 1."
+  },
+  "not_implemented_at_this_stage": [
+    "enforcement: no runtime reads this manifest to admit or refuse a session; the Owner launch line and the packet grammar remain the only gate",
+    "reconciliation: no reconciler compares this manifest with live GitHub state; drift between intended state here and observed state in the derived engineering projection is invisible to the machine and must be read by a human at hydration time",
+    "durable event accumulation: no append-only ledger exists in this repository; the exact pull request head, check output and terminal RESULT remain external execution evidence",
+    "STARTED events: no persisted STARTED event store exists, so no node in this manifest is marked running; a node may only be described as PENDING until such an event is persisted",
+    "external runtimes: none is named here; when one is, it is admitted only as a replaceable executor outside the control-plane trust boundary"
+  ],
+  "planes": [
+    "GOAL_PLANE",
+    "EXECUTION_PLANE",
+    "AUTHORITY_PLANE",
+    "EVIDENCE_STATE_PLANE"
+  ],
+  "node_types": [
+    "GOAL",
+    "MODULE_SUBGRAPH",
+    "WORK_NODE",
+    "EVIDENCE"
+  ],
+  "edge_types": [
+    "ADVANCES",
+    "DEPENDS_ON",
+    "SUPERSEDES",
+    "PROVES"
+  ],
+  "next_executable_work_node": "work.product2-live-4x4-graph-and-director-0001",
+  "nodes": [
+    {
+      "id": "goal.product-2.north-star",
+      "type": "GOAL",
+      "subtype": "NORTH_STAR",
+      "plane": "GOAL_PLANE",
+      "lifecycle": "live",
+      "synthetic": false,
+      "parent": null,
+      "title": "West Coast KBP — the real Greater Sacramento ADU and general-construction business, first user of Product 1, operating AI-natively on its own owner-controlled KBP OS, where goals, sources, constraints, decisions and work run through a multi-level graph under human control and accepted results accumulate into a company-owned verifiable network",
+      "statement_verbatim": "West Coast KBP — реальный ADU- и general-construction бизнес региона Большого Сакраменто, который работает AI-native на собственной платформе KBP OS: она ведёт цели, источники, ограничения, решения и работу через многоуровневый граф под контролем людей, а принятые результаты накапливаются в принадлежащую компании проверяемую сеть.",
+      "source": {
+        "canon": "governance/product/PRODUCT-BOUNDARIES-v1.0.md",
+        "section": "A1 — master",
+        "adopted_by": "Owner decision record, Section A adopted; see the Sources table of the canon"
+      },
+      "irreducibility": "Narrowing this north star to lead generation, inquiry transport, a website, a Hero, a CRM, a contractor marketplace, a house catalog or a generic AI agent is BLOCKED: CANON DIVERGENCE against section C, the closed anti-scope. West Coast KBP is the business; KBP OS is its platform; the two names are not interchangeable.",
+      "note": "Taken verbatim from the adopted canon and not rewritten. Section A defines identity and direction and creates no availability claim, so this node carries no boundary_status; availability is classified by boundary_classification, which is section B's own grammar."
+    },
+    {
+      "id": "goal.product-2.ai-native-operating-platform",
+      "type": "GOAL",
+      "subtype": "OUTCOME",
+      "plane": "GOAL_PLANE",
+      "lifecycle": "live",
+      "synthetic": false,
+      "parent": "goal.product-2.north-star",
+      "boundary_status": "DIRECTION",
+      "title": "KBP OS operates the construction business AI-natively: a multi-level work graph carries goals, sources, constraints, decisions and work; humans accept authoritative state; and only accepted, source-bound state enters the company's business Graph Memory",
+      "measurable_done": [
+        "a persistent multi-level work graph exists in the repository and is machine-validated",
+        "every dispatched packet is a node in that graph with a path to this north star",
+        "acceptance is a human act recorded as an authority record, never a model act",
+        "only accepted, source-bound state is written into business Graph Memory",
+        "intended state and observed engineering evidence remain separate surfaces that are reconciled, never merged"
+      ],
+      "source": {
+        "canon": "governance/product/PRODUCT-BOUNDARIES-v1.0.md",
+        "section": "B, V1 ledger row 'Multi-level work graph and business graph memory'",
+        "note": "The canon classifies this contour as DIRECTION: an Owner-adopted product direction, not a claim that the capability is shipped, public, integrated or production-enabled. This OUTCOME inherits that plate exactly."
+      },
+      "note": "Selected because it is already adopted canon. This packet decides no new outcome."
+    },
+    {
+      "id": "goal.product-2.publicly-supported-surface",
+      "type": "GOAL",
+      "subtype": "OUTCOME",
+      "plane": "GOAL_PLANE",
+      "lifecycle": "live",
+      "synthetic": false,
+      "parent": "goal.product-2.north-star",
+      "boundary_status": "TODAY",
+      "title": "The publicly supported West Coast KBP construction surface stays truthful: published routes, three owned concept-only models and an anonymous deterministic Concept Studio, with intake, accounts, client data, property conclusions and external business effects switched off",
+      "measurable_done": [
+        "every published route exists in the exact current repository state",
+        "each owned model is represented as concept_only with no construction-readiness claim",
+        "the Concept Studio remains anonymous, deterministic and synthetic, collecting no address or contact",
+        "no surface asserts a capability the canon classifies NOT OPENED",
+        "any public-runtime claim is separately observed on the canonical public domain before it is made"
+      ],
+      "source": {
+        "canon": "governance/product/PRODUCT-BOUNDARIES-v1.0.md",
+        "section": "B, V1 ledger rows classified TODAY",
+        "note": "TODAY means the capability exists in the exact current repository state and, where a public-runtime claim is made, is separately observed on the canonical public domain. This packet observes no domain and therefore makes no runtime claim."
+      },
+      "note": "Present so the graph distinguishes what is supported today from what is direction. No work node in this manifest advances it; it is the boundary the direction work must not quietly cross."
+    },
+    {
+      "id": "module.product-2-graph-control-plane",
+      "type": "MODULE_SUBGRAPH",
+      "plane": "EXECUTION_PLANE",
+      "parent": "goal.product-2.ai-native-operating-platform",
+      "boundary_status": "DIRECTION",
+      "title": "Product 2 graph control plane — the persistent goal graph a Director hydrates before dispatch, and the machine that refuses it when it drifts",
+      "advances_how": "The AI-native operating platform cannot be dispatched against chat memory. This module builds the intent side of that platform first-party, in the adopted 4x4 contract, as repository-owned data with a fail-closed checker. It creates no runtime, database, service or deployment.",
+      "coordination_node": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/320",
+      "join": {
+        "id": "join.product-2-graph-control-plane.stage-1",
+        "policy": "all_required",
+        "expected_branches": [
+          "work.product2-live-4x4-graph-and-director-0001",
+          "work.product2-goal-graph-reconciliation-0002"
+        ],
+        "declared_before_fanout": true,
+        "satisfied": false
+      },
+      "note": "The join names its complete branch set before fan-out and stays unsatisfied while any required branch lacks an accepted terminal result. It is unsatisfied here by design, not by omission."
+    },
+    {
+      "id": "work.product2-live-4x4-graph-and-director-0001",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-graph-control-plane",
+      "boundary_status": "DIRECTION",
+      "title": "PRODUCT2-LIVE-4X4-GRAPH-AND-DIRECTOR-0001 — persist the Product 2 live goal graph in the adopted 4x4 contract and bind the Director to it",
+      "node_url": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/321",
+      "inputs": [
+        {
+          "name": "adopted_product_2_boundary",
+          "type": "text/markdown+canon"
+        },
+        {
+          "name": "merged_alignment_record",
+          "type": "text/markdown+decision"
+        },
+        {
+          "name": "pinned_minimal_goal_contract",
+          "type": "application/schema+json"
+        },
+        {
+          "name": "base_revision",
+          "type": "text/git-sha"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "persistent_goal_graph",
+          "type": "application/json+goal-contract"
+        },
+        {
+          "name": "vendored_contract",
+          "type": "application/schema+json"
+        },
+        {
+          "name": "fail_closed_checker",
+          "type": "application/javascript+esm"
+        },
+        {
+          "name": "director_binding",
+          "type": "text/markdown+entry"
+        },
+        {
+          "name": "traversal_proof",
+          "type": "text/deterministic-path"
+        }
+      ],
+      "dependencies": [],
+      "terminal_conditions": [
+        "the vendored contract is byte-identical to the pinned accepted source and its provenance is recorded outside its bytes",
+        "this manifest validates against the vendored contract and the mirrored fail-closed checker with zero refusals",
+        "the checker prints the deterministic path from this Work Node to the Product 2 NORTH_STAR and the terminal state of every branch",
+        "the negative suite refuses an unknown node or edge type, an orphan Work Node, an ADVANCES target that is not a live GOAL, an unmet DEPENDS_ON presented as executable, duplicate terminal evidence, a missing path to the NORTH_STAR, and Product 1 / Product 2 authority or memory conflation",
+        "the existing derived engineering graph and cold-start suites still pass unchanged",
+        "the frozen Product 2 boundary bytes are unchanged",
+        "a terminal RESULT naming the exact head is posted on the Work Node",
+        "an independent non-author review at the exact head reports no blocking finding",
+        "the Owner merges; the Owner alone may do so"
+      ],
+      "join_destination": "join.product-2-graph-control-plane.stage-1",
+      "terminal_result": {
+        "state": "PENDING",
+        "evidence": null
+      },
+      "execution": {
+        "started_event": null,
+        "running": false,
+        "why": "No persisted STARTED event store exists in this repository, so no node here is marked running. PENDING is the honest state of a branch whose terminal result is not yet accepted."
+      },
+      "evidence_expectation": {
+        "state": "EXPECTED_NOT_YET_EXISTING",
+        "artefacts": [
+          "the exact Draft PR head SHA of this packet, which cannot be embedded in the commit that produces it",
+          "the checker and negative-suite output at that head",
+          "the terminal RESULT comment on issue #321",
+          "the independent exact-head review verdict on the Draft PR"
+        ],
+        "why_not_a_node": "The adopted contract refuses EVIDENCE_WITHOUT_EXACT_SOURCE: an EVIDENCE node carries an exact 40-hex revision and a sha256 digest of something that already exists. A promise cannot be typed as evidence, so these artefacts are declared as an expectation on this Work Node rather than minted as an evidence node before they exist.",
+        "custody_until_ledger_exists": "External to the graph: the GitHub Issue comment and the pull request. No durable ledger accumulates them yet."
+      },
+      "note": "PENDING while this packet is in flight. Nothing in this manifest claims the packet is complete, reviewed, merged or deployed."
+    },
+    {
+      "id": "work.product2-goal-graph-reconciliation-0002",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-graph-control-plane",
+      "boundary_status": "DIRECTION",
+      "title": "PRODUCT2-GOAL-GRAPH-RECONCILIATION-0002 — reconcile this persistent goal graph against the derived engineering projection and report drift, without merging the two surfaces",
+      "inputs": [
+        {
+          "name": "persistent_goal_graph",
+          "type": "application/json+goal-contract"
+        },
+        {
+          "name": "frozen_github_observation",
+          "type": "application/json+observation"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "drift_report",
+          "type": "application/json+reconciliation"
+        }
+      ],
+      "dependencies": [
+        "work.product2-live-4x4-graph-and-director-0001"
+      ],
+      "terminal_conditions": [
+        "the reconciler reads both surfaces and writes neither",
+        "every difference between intended state here and observed state in the derived projection is reported as a named discrepancy",
+        "no discrepancy is averaged, smoothed or silently resolved",
+        "a terminal RESULT naming the exact head is posted on its own Issue",
+        "an independent non-author review at the exact head reports no blocking finding",
+        "the Owner merges; the Owner alone may do so"
+      ],
+      "join_destination": "join.product-2-graph-control-plane.stage-1",
+      "terminal_result": {
+        "state": "PENDING",
+        "evidence": null
+      },
+      "execution": {
+        "started_event": null,
+        "running": false,
+        "why": "Declared, not dispatched. It has no Issue yet; when one is cut, its identity becomes Worker-N for that Issue number."
+      },
+      "note": "Declared so the module's join can name its complete branch set before fan-out. It is NOT executable: its DEPENDS_ON gate is unmet while work.product2-live-4x4-graph-and-director-0001 is PENDING. The checker refuses any manifest that presents it as the next executable Work Node in that condition."
+    },
+    {
+      "id": "evidence.product-2-alignment-adopted-at-merge",
+      "type": "EVIDENCE",
+      "plane": "EVIDENCE_STATE_PLANE",
+      "parent": "work.product2-live-4x4-graph-and-director-0001",
+      "immutable": true,
+      "title": "The Product 2 graph foundation alignment record exists in merged main at an exact revision — the authority basis of this Work Node, not proof of its completion",
+      "source": {
+        "repository": "WEST-COAST-KBP-ADU/construction-os",
+        "path": "governance/product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md",
+        "revision": "af6b1f3ed22daedaa05c60a923891020da48e6bc",
+        "digest": "sha256:48c4def74fc1a63a1ff026a53dc3cf2d59a84356d37eac91be35c53cf8eff45b"
+      },
+      "verify": "git show af6b1f3ed22daedaa05c60a923891020da48e6bc:governance/product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md | sha256sum",
+      "note": "Pinned at the merge commit of pull request #318, which is this packet's declared base. The digest is of the file as merged, before this packet's own status-and-provenance reconciliation of that same file. It proves the Owner adopted the alignment record; it proves nothing about whether this Work Node succeeded."
+    },
+    {
+      "id": "evidence.product-2-north-star-in-adopted-canon",
+      "type": "EVIDENCE",
+      "plane": "EVIDENCE_STATE_PLANE",
+      "parent": "work.product2-live-4x4-graph-and-director-0001",
+      "immutable": true,
+      "title": "The Product 2 NORTH_STAR statement exists verbatim in the adopted, frozen product canon at an exact revision",
+      "source": {
+        "repository": "WEST-COAST-KBP-ADU/construction-os",
+        "path": "governance/product/PRODUCT-BOUNDARIES-v1.0.md",
+        "revision": "af6b1f3ed22daedaa05c60a923891020da48e6bc",
+        "digest": "sha256:c1df149da6839518ddaaea5b834b83308a536d118d122c53091f8387d636f6f9"
+      },
+      "verify": "git show af6b1f3ed22daedaa05c60a923891020da48e6bc:governance/product/PRODUCT-BOUNDARIES-v1.0.md | sha256sum",
+      "note": "Section A1 of this file is the statement this graph adopts as NORTH_STAR, byte-resolvable at the named revision. The checker re-extracts A1 from the working tree and refuses a NORTH_STAR that has drifted into a paraphrase."
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge.advances.platform-to-north-star",
+      "type": "ADVANCES",
+      "from": "goal.product-2.ai-native-operating-platform",
+      "to": "goal.product-2.north-star",
+      "claim": "Operating the construction business AI-natively on an owner-controlled multi-level graph is what makes the north star real rather than declared."
+    },
+    {
+      "id": "edge.advances.surface-to-north-star",
+      "type": "ADVANCES",
+      "from": "goal.product-2.publicly-supported-surface",
+      "to": "goal.product-2.north-star",
+      "claim": "A public surface that stays inside what is actually supported keeps the business real; an overstated surface would falsify the north star rather than advance it."
+    },
+    {
+      "id": "edge.advances.module-to-platform",
+      "type": "ADVANCES",
+      "from": "module.product-2-graph-control-plane",
+      "to": "goal.product-2.ai-native-operating-platform",
+      "claim": "The multi-level work graph is the substrate of the AI-native operating platform; this module builds its intent side first-party in the adopted contract."
+    },
+    {
+      "id": "edge.advances.graph-and-director-to-platform",
+      "type": "ADVANCES",
+      "from": "work.product2-live-4x4-graph-and-director-0001",
+      "to": "goal.product-2.ai-native-operating-platform",
+      "claim": "A Director cannot dispatch against an empty graph. This packet seeds the first live Product 2 path, makes it machine-traversable, and binds the Director to hydrate it before dispatch. Its containment in module.product-2-graph-control-plane is its parent scope, which is how the adopted contract expresses membership: an ADVANCES edge ends on a live GOAL."
+    },
+    {
+      "id": "edge.advances.reconciliation-to-platform",
+      "type": "ADVANCES",
+      "from": "work.product2-goal-graph-reconciliation-0002",
+      "to": "goal.product-2.ai-native-operating-platform",
+      "claim": "Intended state that is never compared with observed state decays into a second memory. Reconciliation keeps the two surfaces distinct and honest about their differences."
+    },
+    {
+      "id": "edge.depends-on.reconciliation-needs-graph",
+      "type": "DEPENDS_ON",
+      "from": "work.product2-goal-graph-reconciliation-0002",
+      "to": "work.product2-live-4x4-graph-and-director-0001"
+    },
+    {
+      "id": "edge.proves.alignment-authority-basis",
+      "type": "PROVES",
+      "from": "evidence.product-2-alignment-adopted-at-merge",
+      "to": "work.product2-live-4x4-graph-and-director-0001",
+      "claim": "The alignment record this Work Node reconciles was adopted by the Owner and exists in merged main at the pinned base revision, byte-resolvable by the recorded digest. This claim covers the authority basis only; this Work Node's own terminal result is PENDING and no evidence for it exists yet."
+    },
+    {
+      "id": "edge.proves.north-star-provenance",
+      "type": "PROVES",
+      "from": "evidence.product-2-north-star-in-adopted-canon",
+      "to": "goal.product-2.north-star",
+      "claim": "The NORTH_STAR statement adopted here is the frozen product canon's own section A1 text at the recorded revision, not a paraphrase authored by a session."
+    }
+  ],
+  "owner_decisions": [
+    {
+      "id": "decision.product-2-boundaries-v1-canon",
+      "plane": "AUTHORITY_PLANE",
+      "decided_by": "avoroncov971-maker",
+      "decided_at": "2026-08-14",
+      "record": "governance/product/PRODUCT-BOUNDARIES-v1.0.md",
+      "subject": "The Product 2 canonical proposition, the V1 TODAY / DIRECTION / NOT OPENED boundary ledger, the closed anti-scope, and the frozen first-user relation to Product 1 — the boundary this live graph is seeded inside. Frozen as sections A–H at commit b9093ccd4a99f36d5b3f39fb19053fcb0b51100c."
+    },
+    {
+      "id": "decision.product-2-graph-foundation-alignment",
+      "plane": "AUTHORITY_PLANE",
+      "decided_by": "avoroncov971-maker",
+      "decided_at": "2026-08-15",
+      "record": "governance/product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md",
+      "subject": "Adoption of the Product 2 graph foundation alignment record by merging pull request #318 at merge commit af6b1f3ed22daedaa05c60a923891020da48e6bc, which fixes the graph-native vocabulary this manifest is written in and authorizes its two ordered follow-on code edges."
+    }
+  ],
+  "admitted_actions": [
+    {
+      "id": "action.adopt-product-2-graph-foundation-alignment",
+      "plane": "AUTHORITY_PLANE",
+      "action": "Merge pull request #318, adopting the Product 2 graph foundation alignment record into main",
+      "material": true,
+      "admitted": true,
+      "admitted_by": "avoroncov971-maker",
+      "owner_decision": "decision.product-2-graph-foundation-alignment",
+      "evidence": "evidence.product-2-alignment-adopted-at-merge"
+    }
+  ],
+  "state_updates": [
+    {
+      "id": "state.alignment-record-is-adopted",
+      "plane": "EVIDENCE_STATE_PLANE",
+      "authoritative": true,
+      "admitted_action": "action.adopt-product-2-graph-foundation-alignment",
+      "evidence": [
+        "evidence.product-2-alignment-adopted-at-merge"
+      ],
+      "written_by": "avoroncov971-maker",
+      "statement": "The Product 2 graph foundation alignment record is Owner-adopted and present in merged main at the pinned base revision. This state was written by the Owner's merge, not by any session or model."
+    }
+  ],
+  "external_runtimes": [],
+  "contract_note_on_edges": "The adopted contract refuses ADVANCES_ENDPOINT_TYPE for an ADVANCES edge that ends on a MODULE_SUBGRAPH: intended state lives on goals, so ADVANCES always terminates on a live GOAL. Module membership is therefore the parent scope chain (work.parent = module, module.parent = outcome, outcome.parent = north_star), and the full NORTH_STAR -> OUTCOME -> MODULE_SUBGRAPH -> WORK_NODE -> EVIDENCE chain is present as: OUTCOME ADVANCES NORTH_STAR, MODULE ADVANCES OUTCOME, WORK ADVANCES OUTCOME inside MODULE by parent scope, EVIDENCE PROVES WORK. One DEPENDS_ON is declared because one real gate exists. No SUPERSEDES is declared: nothing here replaces anything.",
+  "contract_note_on_expected_evidence": "This packet's own evidence is declared as evidence_expectation with state EXPECTED_NOT_YET_EXISTING on its Work Node, not minted as an EVIDENCE node. The packet brief asks for an expected EVIDENCE node; the pinned contract refuses an evidence node without an exact 40-hex revision and sha256 digest of something that already exists. The conflict is named rather than resolved by widening the vocabulary: the expectation is declared where the contract admits it, and the two EVIDENCE nodes present are the ones that genuinely resolve today."
+}

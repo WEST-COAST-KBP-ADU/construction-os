@@ -42,7 +42,9 @@ with the record that governs it. Read the record; do not trust a summary.
 | ChatGPT Lead is a control-plane role and authors no repository byte, and never becomes the fallback executor. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2, §4 |
 | Workers are bounded executors: one packet, one branch, one Draft PR, one declared allowlist. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2 |
 | An author never reviews, accepts, certifies, or merges its own head. Roles are scoped to the engagement, not the model. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §3 |
-| Product 2 is this repository, `WEST-COAST-KBP-ADU/construction-os` — the West Coast KBP ADU customer platform. | [`../README.md`](../README.md), [`../charter.md`](../charter.md) |
+| Product 2 is this repository, `WEST-COAST-KBP-ADU/construction-os`: West Coast KBP, the real Greater Sacramento ADU and general-construction business, operating AI-natively on its own owner-controlled platform, KBP OS. The business is not reducible to lead generation, inquiry transport, a website, a Hero, a CRM, or a generic AI agent. | [`../product/PRODUCT-BOUNDARIES-v1.0.md`](../product/PRODUCT-BOUNDARIES-v1.0.md) sections A, B and C, [`../README.md`](../README.md), [`../charter.md`](../charter.md) |
+| Product 2 direction is repository data, not conversation: one persistent, machine-checkable goal graph carries the NORTH_STAR, outcomes, modules, work and evidence. | [`../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json`](../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json), [`../product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md`](../product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md) |
+| The only Product 1 cross-contour relation is the frozen `West Coast KBP — first user`. Runtime, identity, authority, data, Graph Memory, and product branding are never shared across contours. | [`../product/PRODUCT-BOUNDARIES-v1.0.md`](../product/PRODUCT-BOUNDARIES-v1.0.md) sections A and B, [`../../src/lib/deedsealCrossReference.ts`](../../src/lib/deedsealCrossReference.ts) |
 | Product 1 / Deedseal is an **external** controlled-engineering foundation with its own repositories and authority. Public `Powered by Deedseal` labelling, cross-brand transition, public dependency claims, and cross-repository technical binding are **deferred** until a separately adopted decision opens them. | [`../BOUNDARIES.md`](../BOUNDARIES.md), Product 1 boundary sections of the Release 1 decision record once adopted |
 | Hard prohibitions bind every session and are not negotiated inside a packet. | [`../BOUNDARIES.md`](../BOUNDARIES.md) |
 | Stages and gates, and the visual production contract. | [`../office/PROGRAM-PLAN-v1.md`](../office/PROGRAM-PLAN-v1.md) |
@@ -74,15 +76,78 @@ a named gap, never an inference.
 
 1. This file, then [`README.md`](README.md) in this directory.
 2. `BOUNDARIES.md`, `OPERATING-MODEL-v5.md`, `PROGRAM-PLAN-v1.md`, `../control-plane/README.md`.
-3. `STATE.md` — as a possibly stale index only.
-4. Live `main` and its exact current SHA.
-5. Every open Issue: body, **every** comment, labels, and linked pull requests.
-6. Every open pull request: metadata, exact head SHA, draft status, checks, reviews, and comments.
-7. Merge records and any production-verification evidence for recently merged work.
+3. The persistent Product 2 goal graph — see [§2a](#2a-hydrate-the-persistent-goal-graph) below. Hydrate it before any dispatch.
+4. `STATE.md` — as a possibly stale index only.
+5. Live `main` and its exact current SHA.
+6. Every open Issue: body, **every** comment, labels, and linked pull requests.
+7. Every open pull request: metadata, exact head SHA, draft status, checks, reviews, and comments.
+8. Merge records and any production-verification evidence for recently merged work.
 
 Record for every source: its URL, an immutable SHA, the observation time,
 whether the read was complete, and each named gap. Those five fields are what
 make the result auditable; a source without them cannot support a decision.
+
+## 2a. Hydrate the persistent goal graph
+
+Product 2 direction is repository data. A session reconstructs **what the work
+is for** from [`../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json`](../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json),
+never from chat memory or from a model's own proposal.
+
+```bash
+node tools/memory/check-product2-live-goal-graph.mjs
+```
+
+The checker is fail-closed against the Owner-adopted minimal four-by-four
+contract, vendored byte-identically at
+[`../product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json`](../product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json)
+with its provenance recorded outside its bytes. Four node types — `GOAL`,
+`MODULE_SUBGRAPH`, `WORK_NODE`, `EVIDENCE`; four edge types — `ADVANCES`,
+`DEPENDS_ON`, `SUPERSEDES`, `PROVES`. No fifth type is admitted, and no session
+designs a parallel vocabulary.
+
+It refuses an unknown node or edge type, an orphan Work Node, an `ADVANCES`
+edge that does not end on a live goal, an unmet `DEPENDS_ON` presented as
+executable, duplicate terminal evidence, a missing path to the NORTH_STAR, and
+any conflation of Product 1 and Product 2 authority or memory. On success it
+prints the active path, the terminal state of every branch, and the graph
+digest. A refusal **stops the cold start**; it is never a warning.
+
+Then verify the graph against live GitHub. The graph states intended state and
+observes nothing about itself, so a Work Node it calls active is a claim to be
+checked against the Issue, the branch, the pull request head, and the persisted
+`STARTED` evidence. Where the two disagree, live GitHub wins and the divergence
+is **reported**, never silently resolved.
+
+The hydrated result is reported in this order:
+
+```text
+NORTH_STAR -> current OUTCOME -> current MODULE_SUBGRAPH
+           -> active or next WORK_NODE -> expected EVIDENCE
+```
+
+Selection is constrained, not advisory:
+
+- Work is selectable only when it has a valid `ADVANCES` path to the NORTH_STAR
+  **and** every declared `DEPENDS_ON` gate carries an accepted terminal result.
+- A free lane, a chat discussion, a label, an opened Issue, a green check, or a
+  model proposal is **not progress**. Only an accepted terminal result with its
+  evidence moves the graph, and a capability the boundary classifies
+  `NOT_OPENED` is not opened by any packet.
+- Nothing is marked running without a persisted `STARTED` event.
+- Tony remains the sole material authority. The graph prepares decisions and
+  takes none.
+
+### Two graph surfaces, kept distinct
+
+| Surface | What it is | Committed |
+| :--- | :--- | :--- |
+| [`../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json`](../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json) | The authority-routed **intent and work** graph: what Product 2 is for, and what advances it. Changes only by an Owner-adopted decision in a bounded packet. | yes |
+| The engineering projection built by [`../../tools/memory/build-graph.mjs`](../../tools/memory/build-graph.mjs) | A derived **observation** of Issues, branches, pull requests, reviews, merges, deployments, and evidence. Rebuilt from a frozen observation; an index, never an authority source. | no |
+
+Neither replaces the other. The projection is not deleted, merged into, or
+reinterpreted by the goal graph. Intended state is never inferred from the
+projection, and observed state is never asserted by the goal graph. A
+contradiction between them is a reported discrepancy, never an average.
 
 ## 3. `COLD_START_RESULT/v1`
 
@@ -246,10 +311,25 @@ or launches anything.
 ## 5. Verification
 
 ```bash
-node --test tools/memory/build-graph.test.mjs tools/memory/build-session-start.test.mjs
+node tools/memory/check-product2-live-goal-graph.mjs
+node --test tools/memory/build-graph.test.mjs tools/memory/build-session-start.test.mjs \
+  tools/memory/check-product2-live-goal-graph.test.mjs
 ```
 
-The suite builds every fixture in-process and covers a fresh board, a stale
+The goal-graph suite proves the committed manifest validates with zero
+refusals, that the vendored contract is byte-identical to the pinned accepted
+source, that the NORTH_STAR is the adopted canon's own statement rather than a
+paraphrase, and that the deterministic path from the active packet to the
+NORTH_STAR prints. Its negative fixtures each assert one refusal: an unknown
+node or edge type, an orphan Work Node, an `ADVANCES` target that is not a live
+goal, an unmet `DEPENDS_ON` presented as executable, duplicate terminal
+evidence, a missing or ambiguous path to the NORTH_STAR, Product 1 / Product 2
+authority or memory conflation, a node marked running without a persisted
+`STARTED` event, a join satisfied while a required branch is unfinished,
+evidence without an exact source, and a graph that goes silent about status,
+gaps, or surface separation.
+
+The cold-start suite builds every fixture in-process and covers a fresh board, a stale
 committed index, a missing source, incomplete comments, split brain, a stale
 review, overlapping leases, a repeated failed precondition, a free lane, a full
 board, and watermark regression. Its adversarial fixtures cover a wrong lane key

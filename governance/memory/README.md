@@ -5,6 +5,39 @@ evidence. The graph is an index, never an authority source. It cannot approve,
 merge, dispatch, launch a worker, accept a review, or change GitHub state.
 Before any later mutation, critical facts must be read again from GitHub.
 
+## Two graph surfaces, and why they stay apart
+
+This repository carries two graphs. They answer different questions, they are
+authored by different acts, and neither is rewritten into the other.
+
+| | Derived engineering graph — **this directory** | Persistent Product 2 goal graph |
+| :--- | :--- | :--- |
+| Question | What has actually happened? | What is the work for? |
+| Kind | Derived **observation** of Issues, branches, pull requests, reviews, merges, deployments, and evidence | Authority-routed **intent and work** graph |
+| Authored by | `build-graph.mjs`, from a frozen observation of live GitHub | An Owner-adopted decision carried by a bounded packet |
+| Location | `tools/memory/build-graph.mjs`, `graph-source-truth-v1.schema.json` | `../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json` |
+| Committed | No — generated into a temporary directory | Yes — it is repository data |
+| Vocabulary | The lineage and edge types described below | The Owner-adopted four-by-four contract: `GOAL`, `MODULE_SUBGRAPH`, `WORK_NODE`, `EVIDENCE`; `ADVANCES`, `DEPENDS_ON`, `SUPERSEDES`, `PROVES` |
+| Checked by | `node --test tools/memory/build-graph.test.mjs` | `node tools/memory/check-product2-live-goal-graph.mjs` |
+
+The goal graph is validated against the accepted minimal four-by-four contract,
+vendored byte-identically at
+`../product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json`. Because the vendored
+bytes must stay identical to the accepted source, they cannot carry their own
+provenance: the source repository, path, exact revision, blob SHA, and content
+digest are recorded outside the bytes, in the manifest's `vendored_contract`
+block and in the header of `tools/memory/check-product2-live-goal-graph.mjs`,
+which refuses a vendored copy whose digest has drifted. That provenance is
+deliberately **not** repeated in this directory, whose own audit forbids a
+hard-coded exact SHA.
+
+Intended state is never inferred from the projection, and observed state is
+never asserted by the goal graph. A cold start hydrates the goal graph for
+direction and this projection for evidence, then reports any contradiction
+between them as a named discrepancy. It never merges, averages, or silently
+reconciles the two. Deleting, folding in, or reinterpreting either surface is
+outside any ordinary packet.
+
 ## Source and projection contract
 
 `graph-source-truth-v1.schema.json` describes normalized output. Frozen input is
@@ -130,5 +163,16 @@ Like the graph, the result is derived, deterministic, rebuildable, and never
 committed, and it cannot approve, accept, merge, dispatch, or launch a worker.
 
 ```bash
-node --test tools/memory/build-graph.test.mjs tools/memory/build-session-start.test.mjs
+node tools/memory/check-product2-live-goal-graph.mjs
+node --test tools/memory/build-graph.test.mjs tools/memory/build-session-start.test.mjs \
+  tools/memory/check-product2-live-goal-graph.test.mjs
 ```
+
+The goal-graph checker prints the deterministic path from the active Work Node
+to the Product 2 NORTH_STAR, the terminal state of every branch and join, the
+next executable Work Node, and an order-independent digest of the manifest. Its
+negative suite proves the refusals fire: an unknown node or edge type, an orphan
+Work Node, an `ADVANCES` target that is not a live goal, an unmet `DEPENDS_ON`
+presented as executable, duplicate terminal evidence, a missing or ambiguous
+path to the NORTH_STAR, and Product 1 / Product 2 authority or memory
+conflation.
