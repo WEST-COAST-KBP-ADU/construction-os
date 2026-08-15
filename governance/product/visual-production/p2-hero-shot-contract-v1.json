@@ -1,0 +1,104 @@
+{
+  "schema": "p2-hero-shot-contract/1",
+  "subject": "West Coast KBP concept-only detached A600 on a representative Greater Sacramento residential lot",
+  "source_ledger": "governance/product/visual-production/p2-hero-source-ledger-v1.json",
+  "physical_truth": {
+    "a600": {
+      "reference_footprint_ft": [20, 30],
+      "stories": 1,
+      "reference_wall_plate_height_ft": 9,
+      "reference_roof": "gable 4:12",
+      "height_ceiling_ft": 16,
+      "entry_side": "front",
+      "status": "concept_only",
+      "governing_detail_source": "src/data/studio/models/executable/adu-a-600@1.0.0.json",
+      "rule": "Do not invent assemblies, junctions, structure, MEP, code compliance, construction readiness, or site fit."
+    },
+    "lot": {
+      "type": "representative Greater Sacramento single-family rear yard; not a real or identifiable parcel",
+      "characteristics": [
+        "dry-summer California daylight and restrained drought-aware planting",
+        "credible fence/property-edge cues without legal-boundary meaning",
+        "flat-to-gently-graded usable yard without survey or drainage claims",
+        "ordinary mature neighborhood scale; no resort landscape or wilderness setting"
+      ],
+      "forbidden": ["address", "APN", "parcel outline", "setback dimension", "zoning", "survey", "utility location", "feasibility conclusion"]
+    },
+    "existing_house_relationship": "Camera begins inside the existing main house, looking through a credible full-height opening into the rear yard. Foreground structure, yard and detached A600 remain three legible depth planes; A600 is visibly subordinate in scale.",
+    "adu_placement": "Rear-yard detached object with visible circulation and open-yard breathing room; no numeric setback or property-line claim. Never intersect the existing house, fence, mature tree, or implied access path.",
+    "construction_continuity": "Use restrained reversible cues such as a clean planning table/overlay, compact material samples, or one orderly work-zone trace. No workers, unsafe activity, heavy equipment spectacle, or claim that the depicted project was built."
+  },
+  "cameras": [
+    {
+      "id": "C01-establishing-interior-to-yard",
+      "purpose": "First-frame physical truth and continuous inhabited space",
+      "full_frame_focal_length_mm": [28, 35],
+      "camera_height_ft": [4.5, 5.2],
+      "position": "Inside main house, 6-12 ft from the opening; axis oblique enough to retain an interior jamb/ceiling/floor cue.",
+      "composition": "Existing-house foreground 20-35% of frame; yard is connective middle plane; A600 occupies 18-30% of frame width and is not merged with copy.",
+      "refusals": ["telephoto flattening", "ultra-wide distortion", "framed-picture effect", "A600 larger than the existing-house read"]
+    },
+    {
+      "id": "C02-yard-authored-reveal",
+      "purpose": "R2 material, landscape and construction credibility",
+      "full_frame_focal_length_mm": [35, 50],
+      "camera_height_ft": [4.0, 5.5],
+      "position": "At or just beyond the house opening, maintaining a traceable reverse relationship to C01.",
+      "composition": "Three-quarter A600 view with footprint and gable legible; retain yard access and a main-house edge.",
+      "refusals": ["portfolio glamour shot with no lot", "heroic low angle", "material macro presented as sample truth"]
+    },
+    {
+      "id": "C03-object-first-studio-anchor",
+      "purpose": "Stable A600 object for the later R3 transition",
+      "full_frame_focal_length_mm": [45, 65],
+      "camera_height_ft": [4.5, 5.5],
+      "position": "Deterministic continuation from C02, centered on the same A600 massing anchor.",
+      "composition": "A600 silhouette and front-left origin remain stable while plan lines may register; UI appears only after physical object truth.",
+      "refusals": ["orbiting product spin", "dashboard-first frame", "decorative node network", "geometry morph that changes the A600"]
+    }
+  ],
+  "light": {
+    "intent": "Natural late-morning California daylight, airy rather than sunset-cinematic; warm neutral interior bounce and controlled exterior highlights.",
+    "solar_direction": "side/back-side light that reveals gable, siding rhythm and landscape depth without silhouetting the A600",
+    "color_boundary": "No exact physical color or manufacturer colorimetry claim without a verified sample and calibrated capture.",
+    "forbidden": ["night scene", "orange sunset", "neon/HUD light", "wet tropical look", "blown exterior window"]
+  },
+  "materials": {
+    "a600": "Use source-neutral warm mineral/stucco or clearly conceptual siding; James Hardie names may guide attributed intent only, not texture or local-availability truth.",
+    "existing_house": "Quiet warm mineral/painted wood surfaces, visibly distinct from A600; do not copy a specific property.",
+    "hardscape": "Ordinary patio/threshold material with believable scale and no brand claim.",
+    "landscape": "Drought-aware mixed planting and restrained lawn/groundcover; no species or irrigation claim unless independently sourced.",
+    "truth_rule": "Every texture/HDRI/mesh used later requires its own admitted ledger row or must be authored procedurally as CUSTOM-3D."
+  },
+  "plan_overlay_anchors": [
+    {"id": "A0", "geometry": "front_left_exterior_wall_corner", "coordinate_q16": [0, 0], "screen_role": "stable world-to-plan origin"},
+    {"id": "A1", "geometry": "front_right_exterior_wall_corner", "coordinate_q16": [3840, 0], "screen_role": "front width registration"},
+    {"id": "A2", "geometry": "rear_left_exterior_wall_corner", "coordinate_q16": [0, 5760], "screen_role": "depth registration"},
+    {"id": "A3", "geometry": "rear_right_exterior_wall_corner", "coordinate_q16": [3840, 5760], "screen_role": "envelope closure"},
+    {"id": "A4", "geometry": "entry opening D-ENTRY-01", "coordinate_q16_range": [[3168, 0], [3744, 0]], "screen_role": "portal/circulation cue"},
+    {"id": "A5", "geometry": "rear living openings W-LIV-01/W-LIV-02", "screen_role": "interior-to-yard continuity cue"}
+  ],
+  "responsive_frames": [
+    {
+      "viewport": "1440x900",
+      "crop_safe": "A600 and its yard breathing room occupy the right 54-62%; preserve an interior jamb/floor/ceiling cue and reserve the left 34-40% for editorial copy.",
+      "must_remain": ["existing-house foreground", "yard connection", "whole A600 silhouette", "concept disclosure"]
+    },
+    {
+      "viewport": "820",
+      "crop_safe": "Center the three depth planes; keep A600 fully inside the middle 70% width and reserve a calm upper/left band for compact copy.",
+      "must_remain": ["one existing-house edge", "yard path", "whole A600 massing", "concept disclosure"]
+    },
+    {
+      "viewport": "390x844",
+      "crop_safe": "Use a dedicated portrait camera/framing, not a blind desktop center crop. A600 occupies the lower-middle 55-75% width; retain one vertical opening edge, yard plane and sky/light separation.",
+      "must_remain": ["opening edge", "yard depth", "A600 roof and base", "concept disclosure"]
+    }
+  ],
+  "publication_disclosure": "Conceptual A600 visualization on a representative property — not a completed project, parcel-specific fit, approved plan, permit, price, schedule, or buildability conclusion.",
+  "join_gate": {
+    "status": "BLOCKED",
+    "reason": "No rights-complete real California existing-house/backyard source is admitted, and the current Adobe composite has no explicit publication/derivative license grant in repository evidence.",
+    "minimum_clearing_evidence": "Either (a) an owner-signed photography/source record with property/model releases, exact file digest, allowed publication/derivative scope and crop limits, or (b) a fully source-ledgered CUSTOM-3D environment whose every constituent asset is owned or license-admitted."
+  }
+}

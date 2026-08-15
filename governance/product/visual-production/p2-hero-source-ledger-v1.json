@@ -1,0 +1,178 @@
+{
+  "schema": "p2-hero-source-ledger/1",
+  "packet": "P2-HERO-PHYSICAL-TRUTH-0001",
+  "base_sha": "c3d90705f4cf868a0cdee1912f0d9227887fe22b",
+  "truth_policy": {
+    "classes": ["OWNED", "LICENSED-ADMITTED", "CUSTOM-3D", "BLOCKED"],
+    "unknown_rights": "BLOCKED",
+    "generated_concept_media": "May be inventoried as repository-controlled but is refused as physical, photographic, project, property, or exact A600 truth.",
+    "crop_rule": "No crop may remove a required conceptual disclosure or imply a completed project, real parcel, manufacturer match, or construction readiness."
+  },
+  "records": [
+    {
+      "id": "a600-executable-geometry-1.0.0",
+      "media_role": "A600 geometry",
+      "classification": "OWNED",
+      "source": "West Coast KBP original q16 transcription of the Owner-adopted concept test-fit",
+      "path": "src/data/studio/models/executable/adu-a-600@1.0.0.json",
+      "revision": "profile 1.0.0; git 4c87d74f5c624ecddd1d232e5d8d9b2ce33cf69e",
+      "sha256": "a74bd40fb7bf7b7ae66ec1216a4c92f512258e168a0bc27e87993aa147e0cf38",
+      "physical_identity": "Concept-only 20 ft x 30 ft, one-story A600 plan, exact q16 regions/openings and unresolved derived assemblies.",
+      "resolution": "q16 inch coordinates",
+      "crop_limits": "Not raster media; projections must retain concept-only boundary.",
+      "admissibility": "ADMITTED for deterministic concept geometry only; not construction, code, site, permit, structural, MEP, or professional truth."
+    },
+    {
+      "id": "a600-geometry-source-1",
+      "media_role": "A600 parametric massing",
+      "classification": "OWNED",
+      "source": "West Coast KBP original deterministic geometry",
+      "path": "src/data/studio/models/geometry/adu-a-600@1.json",
+      "revision": "adu-a-600@1; git db121e157ac195872b8b6286da9aea94ae7c5a55",
+      "sha256": "28985d3de6ed42804761b888ab8e0442e32315e586df8b23d5ac004cf6ea9e29",
+      "physical_identity": "20 ft x 30 ft reference rectangle, 9 ft wall plate, gable 4:12 reference roof, maximum stated height 16 ft.",
+      "resolution": "feet/degrees typed JSON",
+      "crop_limits": "Not raster media.",
+      "admissibility": "ADMITTED for concept massing; the executable profile governs detailed plan topology."
+    },
+    {
+      "id": "a600-testfit-svg",
+      "media_role": "plan/elevation source",
+      "classification": "OWNED",
+      "source": "West Coast KBP exact-coordinate editable fallback",
+      "path": "docs/design/a600/A600-CONCEPT-TESTFIT-001.svg",
+      "revision": "git 085353bf0f7d3bec86eb7c9a46977bde9f822d9a",
+      "sha256": "54cb40a6212916d83ab5638ae05330d113a06dc9c09a03fe5f120875f03da5f4",
+      "physical_identity": "Candidate plan/elevation study for the 20 ft x 30 ft A600 envelope; explicitly not adopted and not for construction.",
+      "resolution": "SVG 3560 x 3450 viewBox; plan scale 24 SVG units/ft",
+      "crop_limits": "Any presentation crop must retain CANDIDATE / NOT FOR CONSTRUCTION meaning adjacent to the projection.",
+      "admissibility": "ADMITTED as plan-overlay geometry/evidence only; not a permit or construction drawing."
+    },
+    {
+      "id": "hardie-reference-registry",
+      "media_role": "material naming/reference",
+      "classification": "LICENSED-ADMITTED",
+      "source": "James Hardie public product pages, factual manufacturer reference only",
+      "path": "src/data/materials/james-hardie/2026-08-10.json",
+      "revision": "verified 2026-08-10; git 17639ff297098402b531115dee1fb24ce269c5d1",
+      "sha256": "199ff3842a32fb5f86331de9fd0ff89ae9ebfd7880fcad481f96795647003ab8",
+      "physical_identity": "Product/profile/color names; screen color values are not physical sample truth.",
+      "resolution": "typed factual registry; no texture bytes",
+      "crop_limits": "No manufacturer media is admitted by this record.",
+      "admissibility": "ADMITTED only for attributed naming and design intent; no affiliation, availability, adoption, colorimetry, texture, or sample-equivalence claim."
+    },
+    {
+      "id": "hardie-a600-generated-set",
+      "media_role": "four A600 material-state concept renders",
+      "classification": "OWNED",
+      "source": "Repository-controlled OpenAI-generated conceptual media",
+      "paths": [
+        "public/images/adu-600-hardie-panel-evening-blue-concept-v1.webp",
+        "public/images/adu-600-hardie-panel-iron-gray-concept-v1.webp",
+        "public/images/adu-600-hardie-plank-evening-blue-concept-v1.webp",
+        "public/images/adu-600-hardie-plank-iron-gray-concept-v1.webp"
+      ],
+      "revision": "git b32c384b9c946a2f5ac9dd7ee66f3301ba49c103",
+      "sha256": [
+        "2be8cde9ac42e5a61a684af1e3020d190bd7adffecd707793e0eb79ee5983aad",
+        "112f25f6cf03f2bab4fce242f46dedd61e7ebace123f3d8b6e1b121e3c9e8e42",
+        "b7c89de849c81e9a56652ec3b1daeb7e4059b5c87cfa6426ad5ef1ee852dbcf9",
+        "c0c91ce90ca7ed8b46bb7bc61fd56b1d1f823219edb627428d15c537fc4eaa74"
+      ],
+      "physical_identity": "Generated matched concept set; not photographs and not manufacturer-supplied media.",
+      "resolution": "each 1672 x 941 WebP",
+      "crop_limits": "Concept disclosure must remain present; no detail crop may be presented as material sample truth.",
+      "admissibility": "REFUSED for final physical-truth Hero; may be used only as internal visual reference."
+    },
+    {
+      "id": "property-stage-photo-master",
+      "media_role": "lot/existing-house/ADU composite",
+      "classification": "BLOCKED",
+      "source": "Adobe URN urn:aaid:sc:VA6C2:5bff5e42-4594-46ff-a113-66289890f8ec; repository provenance does not record a publication license grant",
+      "path": "public/images/house-portal/property-stage-photo-master.png",
+      "url": "https://at.adobe.com/0o6lQNXnJoJeTPDA",
+      "revision": "git 3749ee54de76e46722d910447be224b3521aa430",
+      "sha256": "c2de7b0fb9bf6149b866058f56838add9cea22ac3a0db0ccce967729d4eedb25",
+      "physical_identity": "Conceptual composite, not a completed West Coast KBP project or property-specific feasibility result.",
+      "resolution": "1486 x 672 PNG",
+      "crop_limits": "Existing/Proposed baked control and A600 label regions are not source-clean; cropping must not erase conceptual status.",
+      "admissibility": "REFUSED for the visual master until the exact creation method, copyright owner, publication grant, and derivative-use terms are recorded."
+    },
+    {
+      "id": "gabled-adu-generated-concept",
+      "media_role": "exterior ADU/landscape concept",
+      "classification": "OWNED",
+      "source": "Owner-requested generated concept; Adobe-hosted conversion input",
+      "path": "public/images/homepage-gabled-adu-concept-v1.webp",
+      "url": "https://at.adobe.com/DdIsghj3066AKYMu",
+      "revision": "git 58f15f3dbdd42b90472ee35fcb75b342026fbc2b",
+      "sha256": "b8f2fec8a7a323ebc75be2bdcff04de277820776976d2160a950e092bbccba67",
+      "physical_identity": "Generated conceptual ADU; not A600-matched, a project photo, property record, plan, or manufacturer product.",
+      "resolution": "1672 x 941 WebP",
+      "crop_limits": "Only with visible conceptual-media disclosure.",
+      "admissibility": "REFUSED for final physical or exact A600 truth; internal composition reference only."
+    },
+    {
+      "id": "legacy-generated-concept-set",
+      "media_role": "ADU, interior, material-table and residential-addition concepts",
+      "classification": "OWNED",
+      "source": "Repository-controlled generated conceptual assets; catalog explicitly records OpenAI-generated ownership for the three v1 archetype bindings",
+      "paths": [
+        "public/images/adu-courtyard-concept-v1.webp",
+        "public/images/attainable-adu-hero-concept-v1.webp",
+        "public/images/attainable-residential-addition-concept-v1.webp",
+        "public/images/balanced-adu-hero-concept-v2.webp",
+        "public/images/balanced-interior-concept-v2.webp",
+        "public/images/balanced-process-materials-concept-v2.webp",
+        "public/images/balanced-residential-addition-concept-v2.webp"
+      ],
+      "sha256": [
+        "0bf4bfa2306311e10a9420c7b0fb9c5b89eb200eadf71e9bc5d875bbc8bb3334",
+        "90226ec38c12f9187d4d9a2a3d03e4113ae10aeaabee98a5b5bed1b9e5773093",
+        "edc3f8b2155f6faf3ea8f8ecb6915b7f5e91889bc083546ef5a68e95bd3ced1b",
+        "cc31cb6d6c628f52694a2c3580035c479bd677c1b5224faaad9025176e68e4db",
+        "312184c2614296bd25dcde6487637ee0b12e3fc4b69274084452fa13303f360c",
+        "d49460d7ab2b632f92e0d0f588e1c8d4b4ceaa009d56d4a8e7ccf2eb0812eefe",
+        "74928c0f1dc81c9fc3279045c1c443651929c2a9528fb691cc62cc5f209c5290"
+      ],
+      "physical_identity": "Generated concepts with no verified real lot, existing-house, exact A600, project, or physical-material identity.",
+      "resolution": "1536x1024, 1672x941, 1536x1024, 1693x929, 1500x1000, 1500x1000, 1448x1086 respectively",
+      "crop_limits": "Concept disclosure required; no completed-project or physical-product crop.",
+      "admissibility": "REFUSED for final physical-truth Hero; internal visual/composition reference only."
+    },
+    {
+      "id": "real-california-lot-photography",
+      "media_role": "existing house, backyard, landscape and construction context",
+      "classification": "BLOCKED",
+      "source": "No candidate with recorded owner, consent, release, exact location-safe publication scope, or digest exists in the Product 2 repository.",
+      "path": null,
+      "revision": null,
+      "sha256": null,
+      "physical_identity": "Missing.",
+      "resolution": null,
+      "crop_limits": "Cannot be defined before a source is admitted.",
+      "admissibility": "REFUSED. Do not scrape, infer rights, or reuse a customer/property image."
+    },
+    {
+      "id": "hero-environment-custom-3d",
+      "media_role": "source-clean California lot, existing house, landscaping and construction continuity",
+      "classification": "CUSTOM-3D",
+      "source": "To be authored specifically from this shot contract; no third-party mesh, texture, HDRI, photograph, plan, or vegetation pack is admitted by default.",
+      "path": null,
+      "revision": null,
+      "sha256": null,
+      "physical_identity": "Synthetic representative environment, never a specific parcel or completed project.",
+      "resolution": "Must satisfy all output frames in p2-hero-shot-contract-v1.json.",
+      "crop_limits": "Must preserve existing-house/yard/A600 separation and concept disclosure.",
+      "admissibility": "ADMISSIBLE only when every constituent source is ledgered and the final artifact is labeled conceptual."
+    }
+  ],
+  "refusals": [
+    "No real project photograph is admitted.",
+    "No real parcel, address, GIS, survey, zoning, permit, buildability, price, schedule, or construction-readiness evidence is admitted.",
+    "No third-party 3D model, stock image, HDRI, texture, vegetation pack, font, or manufacturer media is admitted by silence.",
+    "No generated raster is evidence of exact A600 geometry, physical material, real property, or completed work.",
+    "No upscaling, generative extension, scraping, purchase, or silent substitution is permitted."
+  ],
+  "join_blocker": "No rights-complete real California existing-house/backyard source is admitted, and the repository's Adobe property-stage composite lacks an explicit publication/derivative license grant."
+}
