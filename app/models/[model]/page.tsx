@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ModelDetail } from "@/src/components/content/ModelCatalog";
+import A600TruthSheet, {
+  A600_TRUTH_SHEET_MODEL_ID,
+} from "@/src/components/models/A600TruthSheet";
 import {
   findPublicModel,
   getPublicModelCatalog,
@@ -57,6 +60,7 @@ export default async function ModelPage({ params }: ModelRouteProps) {
   return (
     <main id="main-content" className="site-main spine-home">
       <ModelDetail catalog={catalog} model={model} />
+      {model.modelId === A600_TRUTH_SHEET_MODEL_ID ? <A600TruthSheet /> : null}
     </main>
   );
 }
