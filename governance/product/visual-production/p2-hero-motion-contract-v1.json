@@ -1,0 +1,38 @@
+{
+  "schema": "p2-hero-motion-contract/1",
+  "work_node": "work.product2-hero-blender-camera-motion-recovery-0001",
+  "timeline": {
+    "fps": 24,
+    "frame_start": 1,
+    "frame_end": 96,
+    "duration_seconds": 4.0,
+    "deterministic_seed": 327
+  },
+  "causal_sequence": [
+    {"phase": "OWNER_REQUEST_AND_LOT", "frames": [1, 20], "meaning": "inhabited existing-house foreground opens onto a bounded residential lot", "motion": "slow authored camera settle; no ambient drift"},
+    {"phase": "PROPERTY_PLANNING_INTELLIGENCE", "frames": [21, 44], "meaning": "setback/path marks resolve around the physical site", "motion": "planning lines reveal from lot anchors"},
+    {"phase": "DESIGN_PERMITS_CONSTRUCTION", "frames": [45, 70], "meaning": "four causal project stages advance toward the detached ADU proxy", "motion": "stage nodes appear in order along one spatial line"},
+    {"phase": "INTERFACE_EMERGENCE", "frames": [71, 96], "meaning": "KBP OS plane becomes available only after physical-product truth", "motion": "bounded interface plane rises and gains opacity behind the A600 proxy"}
+  ],
+  "animation_channels": [
+    {"object": "CAM_DESKTOP", "property": "location", "interpolation": "BLENDER_5_2_DEFAULT_BEZIER"},
+    {"object": "Planning_Path", "property": "scale", "interpolation": "LINEAR"},
+    {"object": "Stage_01..Stage_04", "property": "scale", "interpolation": "BACK"},
+    {"object": "KBP_OS_Plane", "property": "location", "interpolation": "BLENDER_5_2_DEFAULT_BEZIER"}
+  ],
+  "first_scroll_transition": {
+    "frames": [71, 96],
+    "start_state": "physical lot and A600 proxy remain dominant",
+    "end_state": "same physical composition with secondary editable-interface entry",
+    "reduced_motion": "direct dissolve between frames 71 and 96; identical meaning and destination",
+    "no_motion": "frame 96 poster; no forced travel"
+  },
+  "constraints": {
+    "physical_product_precedes_interface": true,
+    "graph_is_causal_not_decorative": true,
+    "infinite_or_ambient_motion": false,
+    "randomness": false,
+    "cpu_fallback": "REFUSED",
+    "final_public_master": false
+  }
+}
