@@ -68,7 +68,7 @@
     "existing_house": "Quiet warm mineral/painted wood surfaces, visibly distinct from A600; do not copy a specific property.",
     "hardscape": "Ordinary patio/threshold material with believable scale and no brand claim.",
     "landscape": "Drought-aware mixed planting and restrained lawn/groundcover; no species or irrigation claim unless independently sourced.",
-    "truth_rule": "Every texture/HDRI/mesh used later requires its own admitted ledger row or must be authored procedurally as CUSTOM-3D."
+    "truth_rule": "Only procedural materials defined by p2-hero-custom-3d-constituent-policy-v1.json are admitted. Image textures, scanned materials, downloaded node groups, and manufacturer media are refused."
   },
   "plan_overlay_anchors": [
     {"id": "A0", "geometry": "front_left_exterior_wall_corner", "coordinate_q16": [0, 0], "screen_role": "stable world-to-plan origin"},
@@ -97,8 +97,10 @@
   ],
   "publication_disclosure": "Conceptual A600 visualization on a representative property — not a completed project, parcel-specific fit, approved plan, permit, price, schedule, or buildability conclusion.",
   "join_gate": {
-    "status": "BLOCKED",
-    "reason": "No rights-complete real California existing-house/backyard source is admitted, and the current Adobe composite has no explicit publication/derivative license grant in repository evidence.",
-    "minimum_clearing_evidence": "Either (a) an owner-signed photography/source record with property/model releases, exact file digest, allowed publication/derivative scope and crop limits, or (b) a fully source-ledgered CUSTOM-3D environment whose every constituent asset is owned or license-admitted."
+    "status": "READY_FOR_CUSTOM_3D_VISUAL_JOIN",
+    "constituent_policy": "governance/product/visual-production/p2-hero-custom-3d-constituent-policy-v1.json",
+    "route": "Procedural-only CUSTOM-3D environment using owned A600 records, packet-authored Blender primitives/generated geometry, procedural materials, and procedural sun/sky/world.",
+    "refused_routes": ["photography", "Adobe composite", "external mesh", "texture", "HDRI", "stock", "font", "manufacturer media", "ImageGen", "purchase", "unknown-rights source"],
+    "pass_rule": "All constituent-policy join checks must pass against one exact scene head, its render manifest, reopened artifact, and recomputed SHA-256 digests."
   }
 }

@@ -1,8 +1,8 @@
 # P2 Hero physical truth and rights contract
 
-Status: `COMPLETE — JOIN BLOCKED ON ONE SOURCE PRECONDITION`
+Status: `COMPLETE — PROCEDURAL CUSTOM-3D SOURCE GATE DEFINED`
 
-Base: `c3d90705f4cf868a0cdee1912f0d9227887fe22b`
+Recovery base: `4bf96a00ca2ec5577b5fd9da6468fda1d68cd818`
 
 This packet defines what the later visual master may use and show. It creates no Hero, image, Blender scene, Figma frame, purchase, public claim, or permission by implication.
 
@@ -12,7 +12,7 @@ The repository contains a usable, owned A600 concept geometry chain: the 20 × 3
 
 The repository does **not** contain a rights-complete real Greater Sacramento existing-house/backyard photograph. The current Adobe property-stage composite records origin and byte provenance but not the copyright owner or an explicit publication/derivative license grant. It is therefore refused for the visual master. Every other committed residential raster inspected is generated conceptual media and is refused as physical, photographic, exact-A600, completed-project, property, and material truth.
 
-The complete candidate/refusal ledger is in `p2-hero-source-ledger-v1.json`. The physical camera, lot, light, material, overlay and responsive-frame contract is in `p2-hero-shot-contract-v1.json`.
+The complete candidate/refusal ledger is in `p2-hero-source-ledger-v1.json`. The physical camera, lot, light, material, overlay and responsive-frame contract is in `p2-hero-shot-contract-v1.json`. The closed procedural constituent and join policy is in `p2-hero-custom-3d-constituent-policy-v1.json`.
 
 ## A600 identity
 
@@ -31,7 +31,7 @@ The Hero must keep the A600 visibly smaller than the existing main house and spa
 | --- | --- |
 | `OWNED` | A600 geometry and plan records are admitted within their concept-only boundaries. Repository-controlled generated rasters remain owned candidates but are refused as physical truth. |
 | `LICENSED-ADMITTED` | James Hardie public facts are admitted only for attributed product/profile/color naming. No manufacturer image, texture, colorimetry, affiliation, availability or sample equivalence is admitted. |
-| `CUSTOM-3D` | A representative lot, existing house and A600 environment may be newly authored only if every mesh, texture, HDRI and other constituent is independently ledgered. |
+| `CUSTOM-3D` | The representative environment is admitted only through the closed procedural policy: owned A600 records plus packet-authored Blender primitives/generated geometry, procedural materials, and procedural sun/sky/world. Every generated source and returned artifact requires an exact SHA-256. |
 | `BLOCKED` | Real lot photography and the Adobe property-stage composite remain refused until exact publication/derivative rights are recorded. Unknown rights always refuse. |
 
 No stock or asset purchase, scraping, upscaling, generative extension, invented source, or silent substitution is allowed.
@@ -44,13 +44,14 @@ Plan overlays register only to exact q16 envelope corners and named openings. Th
 
 > Conceptual A600 visualization on a representative property — not a completed project, parcel-specific fit, approved plan, permit, price, schedule, or buildability conclusion.
 
+## Closed procedural route
+
+Photography is not a clearing route for this join. Real lot photography, the Adobe property-stage composite, generated rasters, and every unknown-rights source remain refused. No external mesh, texture, HDRI, stock media, font, manufacturer media, copied property design, ImageGen, or purchased asset may enter the scene.
+
+The only admitted environment route is procedural CUSTOM-3D: A600 geometry derives solely from the owned q16/geometry records; lot, existing-house massing, hardscape, landscape, and props derive from Blender primitives or packet-owned generated geometry; materials and sun/sky/world are procedural. The later join must apply all ten checks in the constituent policy to the independently produced scene script, manifest, reopened `.blend`, and recomputed artifact digests.
+
 ## Direct join disposition
 
-`BLOCKED — no rights-complete real California existing-house/backyard source is admitted, and the current Adobe property-stage composite lacks an explicit publication/derivative license grant.`
+`READY FOR CUSTOM-3D VISUAL JOIN`
 
-Minimum clearing evidence is either:
-
-1. an owner-signed photography/source record with property/model releases, exact digest, allowed publication/derivative scope and crop limits; or
-2. a fully source-ledgered custom 3D environment whose every constituent asset is owned or license-admitted.
-
-This blocker does not authorize a purchase, asset generation, final assembly, implementation, merge, deployment, or Production action.
+This disposition clears the source-policy prerequisite only. Any undeclared or external constituent fails closed, and this record does not approve a visual, final assembly, merge, deployment, Production action, spend, or public claim.
