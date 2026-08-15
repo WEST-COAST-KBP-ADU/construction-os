@@ -1,0 +1,72 @@
+{
+  "schema": "p2-hero-custom-3d-constituent-policy/1",
+  "packet": "P2-HERO-CUSTOM-3D-SOURCE-CLEARANCE-0001",
+  "exact_base_sha": "4bf96a00ca2ec5577b5fd9da6468fda1d68cd818",
+  "status": "READY_FOR_CUSTOM_3D_VISUAL_JOIN",
+  "environment_identity": "A synthetic, non-identifiable representative Greater Sacramento residential lot; never a real parcel or completed project.",
+  "closed_world_rule": "A constituent is admitted only when it matches one entry in admitted_constituent_classes and the join manifest proves its required origin and digest fields. Anything else is refused.",
+  "admitted_constituent_classes": [
+    {
+      "id": "a600-owned-geometry",
+      "roles": ["A600 massing", "A600 plan overlay", "A600 openings"],
+      "origin": "Only the three OWNED A600 records in p2-hero-source-ledger-v1.json.",
+      "generation": "Deterministic geometry derived from the admitted q16/profile records; no substituted or inferred construction assemblies.",
+      "required_manifest_evidence": ["ledger_record_id", "source_path", "source_sha256", "generator_path", "generated_file_sha256"]
+    },
+    {
+      "id": "packet-procedural-geometry",
+      "roles": ["lot", "existing-house massing", "hardscape", "fence cues", "landscape", "planning props"],
+      "origin": "Authored by packet-owned code from Blender primitives or geometry generated wholly by that code.",
+      "generation": "No imported mesh, curve, point cloud, scan, plan, GIS data, photograph, vegetation pack, or copied identifiable property/design.",
+      "required_manifest_evidence": ["generator_path", "generator_git_sha", "parameters", "generated_file_path", "generated_file_sha256"]
+    },
+    {
+      "id": "packet-procedural-material",
+      "roles": ["A600", "existing house", "ground", "hardscape", "landscape", "planning layer"],
+      "origin": "Blender node graphs and constant values authored by packet-owned code.",
+      "generation": "No image texture, scanned material, downloaded node group, manufacturer media, or externally sourced colorimetry.",
+      "required_manifest_evidence": ["generator_path", "generator_git_sha", "material_name", "node_graph_digest"]
+    },
+    {
+      "id": "packet-procedural-world",
+      "roles": ["sun", "sky", "world", "atmosphere"],
+      "origin": "Blender procedural sun, sky, world nodes, and constant values authored by packet-owned code.",
+      "generation": "No HDRI, sky photograph, environment map, or downloaded lighting rig.",
+      "required_manifest_evidence": ["generator_path", "generator_git_sha", "world_parameters", "world_digest"]
+    }
+  ],
+  "absolute_refusals": [
+    "external or third-party mesh, geometry library, vegetation pack, scan, point cloud, CAD, GIS, survey, or plan",
+    "downloaded or scanned texture, image texture, material library, manufacturer media, or physical sample claim",
+    "HDRI, environment map, sky photograph, stock media, photography, video, font, icon pack, or template",
+    "Adobe property-stage composite or any Adobe composite constituent",
+    "ImageGen, generative image, generative fill, generative extension, or generated raster as a source",
+    "purchase, paid license, trial asset, scraped asset, unattributed source, or source with unknown rights",
+    "copied identifiable house, landscape, parcel, client property, or authored third-party design"
+  ],
+  "manifest_contract": {
+    "scope": "Every generated source file and every returned artifact, including .blend, still, contact sheet, animation, and manifest.",
+    "digest_algorithm": "SHA-256 lowercase hexadecimal",
+    "required_top_level_fields": ["worker_issue", "exact_head_sha", "generator_paths", "constituents", "generated_sources", "returned_artifacts", "refusals", "disclosure"],
+    "constituent_required_fields": ["id", "policy_class_id", "role", "origin", "generator_path", "sha256_or_node_digest"],
+    "rule": "Missing, null, malformed, duplicate, unknown, or unverifiable constituent evidence fails closed. Artifact digests do not legalize a refused source."
+  },
+  "join_checks": [
+    {"id": "J01-exact-head", "pass": "Manifest identifies Issue #327 and binds the inspected scene script and all generated files to one exact head SHA."},
+    {"id": "J02-script-allowlist", "pass": "Every generator path is repository-owned and declared; no executable, add-on, linked library, appended external blend, or undeclared helper is used."},
+    {"id": "J03-a600-chain", "pass": "A600 geometry cites only the three admitted OWNED ledger records and preserves their concept-only limits."},
+    {"id": "J04-procedural-geometry", "pass": "Lot, existing house, hardscape, landscape, fence cues, and props are generated from Blender primitives or packet-owned generated geometry."},
+    {"id": "J05-procedural-materials", "pass": "Every material is a declared procedural node graph; the scene and manifest contain zero image textures or external material libraries."},
+    {"id": "J06-procedural-world", "pass": "Lighting uses only declared procedural sun/sky/world; the scene and manifest contain zero HDRI or environment-image dependency."},
+    {"id": "J07-external-dependency-refusal", "pass": "Manifest and scene inspection find zero external mesh, texture, HDRI, stock, font, photography, Adobe composite, ImageGen, manufacturer media, purchase, or unknown-rights dependency."},
+    {"id": "J08-packed-and-portable", "pass": "The returned .blend reports no missing files, linked libraries, unresolved paths, or network-loaded constituent; reopening it does not fetch external content."},
+    {"id": "J09-digests", "pass": "Every generated source file and returned artifact has a recomputed matching SHA-256; duplicates and omissions fail."},
+    {"id": "J10-physical-and-claim-boundary", "pass": "Responsive evidence preserves the shot contract and exact conceptual representative-property disclosure without parcel, feasibility, permit, completed-project, material-sample, or construction-readiness claim."}
+  ],
+  "join_decision": {
+    "pass": "READY FOR CUSTOM-3D VISUAL JOIN",
+    "fail": "BLOCKED — name the first failed join check and exact missing or refused evidence",
+    "authority": "This policy clears source admissibility only. It does not approve a visual, merge, deployment, Production use, spend, or public claim."
+  },
+  "required_disclosure": "Conceptual A600 visualization on a representative property — not a completed project, parcel-specific fit, approved plan, permit, price, schedule, or buildability conclusion."
+}

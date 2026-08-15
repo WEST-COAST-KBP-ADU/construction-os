@@ -1,7 +1,7 @@
 {
   "schema": "p2-hero-source-ledger/1",
-  "packet": "P2-HERO-PHYSICAL-TRUTH-0001",
-  "base_sha": "c3d90705f4cf868a0cdee1912f0d9227887fe22b",
+  "packet": "P2-HERO-CUSTOM-3D-SOURCE-CLEARANCE-0001",
+  "base_sha": "4bf96a00ca2ec5577b5fd9da6468fda1d68cd818",
   "truth_policy": {
     "classes": ["OWNED", "LICENSED-ADMITTED", "CUSTOM-3D", "BLOCKED"],
     "unknown_rights": "BLOCKED",
@@ -157,14 +157,14 @@
       "id": "hero-environment-custom-3d",
       "media_role": "source-clean California lot, existing house, landscaping and construction continuity",
       "classification": "CUSTOM-3D",
-      "source": "To be authored specifically from this shot contract; no third-party mesh, texture, HDRI, photograph, plan, or vegetation pack is admitted by default.",
-      "path": null,
+      "source": "Closed procedural route defined by p2-hero-custom-3d-constituent-policy-v1.json: owned A600 records plus packet-authored Blender primitives/generated geometry, procedural materials, and procedural sun/sky/world.",
+      "path": "governance/product/visual-production/p2-hero-custom-3d-constituent-policy-v1.json",
       "revision": null,
       "sha256": null,
       "physical_identity": "Synthetic representative environment, never a specific parcel or completed project.",
       "resolution": "Must satisfy all output frames in p2-hero-shot-contract-v1.json.",
       "crop_limits": "Must preserve existing-house/yard/A600 separation and concept disclosure.",
-      "admissibility": "ADMISSIBLE only when every constituent source is ledgered and the final artifact is labeled conceptual."
+      "admissibility": "ADMITTED AS POLICY for join evaluation only when all ten closed-world checks pass and every generated source file and returned artifact has a recomputed matching SHA-256."
     }
   ],
   "refusals": [
@@ -174,5 +174,11 @@
     "No generated raster is evidence of exact A600 geometry, physical material, real property, or completed work.",
     "No upscaling, generative extension, scraping, purchase, or silent substitution is permitted."
   ],
-  "join_blocker": "No rights-complete real California existing-house/backyard source is admitted, and the repository's Adobe property-stage composite lacks an explicit publication/derivative license grant."
+  "join_gate": {
+    "status": "READY_FOR_CUSTOM_3D_VISUAL_JOIN",
+    "policy_path": "governance/product/visual-production/p2-hero-custom-3d-constituent-policy-v1.json",
+    "photography_route": "REFUSED",
+    "adobe_composite": "REFUSED",
+    "rule": "The visual input passes only when every policy join check passes against one exact head and recomputed digests; any undeclared constituent fails closed."
+  }
 }
