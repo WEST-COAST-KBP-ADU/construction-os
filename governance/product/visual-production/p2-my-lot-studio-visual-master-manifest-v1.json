@@ -1,0 +1,29 @@
+{
+  "schema": "p2-my-lot-studio-visual-master-manifest/1",
+  "worker_issue": 333,
+  "recovery": "R2",
+  "exact_base_sha": "4b02116f859cc9b8c7c7f1486617089df96a88bb",
+  "generator_paths": ["tools/visual/p2_my_lot_studio_master.py"],
+  "figma_authority": {"file_key":"EJ1Xdwz9iatidL07uq9Bms","section":"24:3","target":"24:4","use":"comparison-only; raster is not a production constituent","mutation":false},
+  "render": {"blender":"5.2.0 LTS","engine":"Cycles","backend":"CUDA","device":"NVIDIA A10","scene_device":"GPU","samples":10,"driver_witness_observations":185,"cpu_refusal_exit":13,"fps":60,"frame_count":241,"duration_seconds":4.016667},
+  "constituents": [
+    {"id":"owned-a600","policy_class_id":"OWNED","role":"exact 20 x 30 ft A600 concept envelope, 9 ft plate, 4:12 roof","origin":"merged repository geometry records","generator_path":"tools/visual/p2_my_lot_studio_master.py","sha256_or_node_digest":"script-bound"},
+    {"id":"procedural-scene","policy_class_id":"CUSTOM-3D","role":"representative parcel, main house, context houses, landscape and placement volumes","origin":"packet-authored Blender primitives/generated geometry","generator_path":"tools/visual/p2_my_lot_studio_master.py","sha256_or_node_digest":"script-bound"},
+    {"id":"procedural-materials-world","policy_class_id":"CUSTOM-3D","role":"node materials and procedural sky/sun","origin":"packet-authored Blender nodes","generator_path":"tools/visual/p2_my_lot_studio_master.py","sha256_or_node_digest":"script-bound"}
+  ],
+  "returned_artifacts": [
+    {"path":"governance/product/visual-production/evidence/p2-my-lot-studio-master-0001/p2-my-lot-studio-master.blend","sha256":"63350caf626530e62b17f1b746f492f84985340369acfbf08c51b8b4ed429c6c"},
+    {"path":"governance/product/visual-production/evidence/p2-my-lot-studio-master-0001/desktop-1440x1024.png","sha256":"1723696198d8292adcbaa3de9eb24463504a50c7db19d0be27c67a07931809b3"},
+    {"path":"governance/product/visual-production/evidence/p2-my-lot-studio-master-0001/tablet-820x1180.png","sha256":"88e3ba9255b1704d407ea0bc98c8d0c44d4222e8aa095cb2e449286b666fceee"},
+    {"path":"governance/product/visual-production/evidence/p2-my-lot-studio-master-0001/mobile-390x844.png","sha256":"8c78198b4fa03e734e448ede57654d9e37f451705e8c85d2003605e26c327de9"},
+    {"path":"governance/product/visual-production/evidence/p2-my-lot-studio-master-0001/responsive-contact-sheet.png","sha256":"3848c7f1906d92786ac5f2d2b65d57585cc2c00cd03b0ce8fc1225a521814a3e"},
+    {"path":"governance/product/visual-production/evidence/p2-my-lot-studio-master-0001/target-vs-render-comparison.png","sha256":"93f83ef0379a1853b6cb855235d01a94c17ce4c1693556cebf2bc8c6b004ecc2"},
+    {"path":"governance/product/visual-production/evidence/p2-my-lot-studio-master-0001/first-transition-60fps.mp4","sha256":"95d9520061cbf2f8613a9946df8a96bbb7d71404fa2bfa7bd3c137cbc8e10bf2"}
+  ],
+  "reopen": {"linked_libraries":0,"external_images":0,"image_texture_nodes":0,"external_paths":0,"scene_device":"GPU","production_use":"REFUSED"},
+  "join_checks": {"J01":"PASS","J02":"PASS","J03":"PASS","J04":"PASS","J05":"PASS","J06":"PASS","J07":"PASS","J08":"PASS","J09":"PASS","J10":"PASS"},
+  "visual_acceptance": {"state":"BLOCKED","failed":["controlled-highlights: final daylight pass clips warm-white architectural surfaces","exact-visible-copy: final responsive renders hide or wash out required labels and CTA","target-fidelity: final scene does not reach the Owner target's photographic neighborhood depth and integrated editorial hierarchy"]},
+  "refusals": ["external mesh","image texture","HDRI","stock media","photography as production constituent","ImageGen","Adobe composite","purchase","unknown-rights source","CPU fallback","Production use"],
+  "disclosure": "Conceptual A600 visualization on a representative property — not a completed project, parcel-specific fit, approved plan, permit, price, schedule, or buildability conclusion.",
+  "production_use": "REFUSED"
+}
