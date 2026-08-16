@@ -273,6 +273,144 @@
       "note": "PENDING while this packet is in flight. Nothing in this manifest claims the packet is complete, reviewed, merged or deployed."
     },
     {
+      "id": "module.product-2-hero-visual-production-0001",
+      "type": "MODULE_SUBGRAPH",
+      "plane": "EXECUTION_PLANE",
+      "parent": "goal.product-2.publicly-supported-surface",
+      "boundary_status": "DIRECTION",
+      "title": "Product 2 Hero visual production — rights-clean physical truth, camera and motion, and the Owner-adopted parcel-first My Lot Studio master",
+      "advances_how": "This module turns the adopted house-centered Hero-to-Studio direction into bounded, rights-clean visual evidence without opening intake, property conclusions, implementation, deployment or Production use.",
+      "coordination_node": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/320",
+      "dependencies": [],
+      "join": {
+        "id": "join.product-2-hero-visual-production.stage-1",
+        "policy": "all_required",
+        "expected_branches": [
+          "work.product2-hero-physical-truth-0001",
+          "work.product2-hero-blender-camera-motion-recovery-0001",
+          "work.product2-hero-custom-3d-source-clearance-0001",
+          "work.product2-my-lot-studio-visual-master-recovery-0001"
+        ],
+        "declared_before_fanout": true,
+        "satisfied": false
+      },
+      "note": "Worker-331 remains in this module as immutable technical evidence but is excluded from the live branch set because Worker-333 supersedes it for visual acceptance."
+    },
+    {
+      "id": "work.product2-hero-physical-truth-0001",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-hero-visual-production-0001",
+      "boundary_status": "DIRECTION",
+      "title": "Worker-324 / Issue #324 — bind the A600 physical truth, source rights and shot truth",
+      "node_url": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/324",
+      "inputs": [{"name": "owned_a600_source", "type": "application/3d-source+owned"}],
+      "outputs": [{"name": "physical_truth_record", "type": "text/markdown+evidence"}],
+      "dependencies": [],
+      "terminal_conditions": ["the physical-truth and source-rights record is Owner-merged at an exact revision"],
+      "join_destination": "join.product-2-hero-visual-production.stage-1",
+      "terminal_result": {"state": "ACCEPTED", "evidence": "evidence.product2-hero-physical-truth-merged"},
+      "execution": {"started_event": null, "running": false},
+      "note": "Accepted prerequisite evidence; this node is not running."
+    },
+    {
+      "id": "work.product2-hero-blender-camera-motion-recovery-0001",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-hero-visual-production-0001",
+      "boundary_status": "DIRECTION",
+      "title": "Worker-327 / Issue #327 — provide the editable Blender camera and motion system",
+      "node_url": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/327",
+      "inputs": [{"name": "physical_scene_contract", "type": "application/json+scene-contract"}],
+      "outputs": [{"name": "camera_motion_record", "type": "text/markdown+evidence"}],
+      "dependencies": [],
+      "terminal_conditions": ["the Blender camera and motion record is Owner-merged at an exact revision"],
+      "join_destination": "join.product-2-hero-visual-production.stage-1",
+      "terminal_result": {"state": "ACCEPTED", "evidence": "evidence.product2-hero-camera-motion-merged"},
+      "execution": {"started_event": null, "running": false},
+      "note": "Accepted prerequisite evidence; this node is not running."
+    },
+    {
+      "id": "work.product2-hero-custom-3d-source-clearance-0001",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-hero-visual-production-0001",
+      "boundary_status": "DIRECTION",
+      "title": "Worker-328 / Issue #328 — close procedural constituent rights for custom 3D production",
+      "node_url": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/328",
+      "inputs": [{"name": "constituent_sources", "type": "application/json+source-ledger"}],
+      "outputs": [{"name": "closed_rights_policy", "type": "application/json+rights-policy"}],
+      "dependencies": [],
+      "terminal_conditions": ["the procedural constituent policy is Owner-merged at an exact revision"],
+      "join_destination": "join.product-2-hero-visual-production.stage-1",
+      "terminal_result": {"state": "ACCEPTED", "evidence": "evidence.product2-hero-procedural-rights-merged"},
+      "execution": {"started_event": null, "running": false},
+      "note": "Accepted prerequisite evidence; this node is not running."
+    },
+    {
+      "id": "work.product2-hero-visual-master-assembly-0001",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-hero-visual-production-0001",
+      "boundary_status": "DIRECTION",
+      "title": "Worker-331 / Issue #331 — technically valid responsive Hero render rejected as the live visual target",
+      "node_url": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/331",
+      "inputs": [{"name": "merged_visual_prerequisites", "type": "application/vnd.kbp.visual-join+json"}],
+      "outputs": [{"name": "technical_render_evidence", "type": "application/vnd.kbp.render-manifest+json"}],
+      "dependencies": [
+        "work.product2-hero-physical-truth-0001",
+        "work.product2-hero-blender-camera-motion-recovery-0001",
+        "work.product2-hero-custom-3d-source-clearance-0001"
+      ],
+      "terminal_conditions": ["technical GPU, reopen, digest and J01-J10 evidence remains preserved", "visual acceptance is refused against the Owner-adopted My Lot Studio target"],
+      "join_destination": "join.product-2-hero-visual-production.stage-1",
+      "terminal_result": {"state": "SUPERSEDED", "evidence": "evidence.product2-hero-worker-331-technical-render"},
+      "execution": {"started_event": null, "running": false},
+      "note": "Exact head 747cf379952c87816499b2a7ea587ff6167774c8 is retained as technical evidence only. It is not accepted, merge-admissible or the live visual target."
+    },
+    {
+      "id": "work.product2-my-lot-studio-visual-master-recovery-0001",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-hero-visual-production-0001",
+      "boundary_status": "DIRECTION",
+      "title": "Worker-333 / Issue #333 — recover the responsive parcel-first My Lot Studio visual master",
+      "node_url": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/333",
+      "inputs": [
+        {"name": "owner_adopted_figma_target_24_4", "type": "application/vnd.figma.design+visual-authority"},
+        {"name": "merged_physical_camera_motion_and_rights_truth", "type": "application/vnd.kbp.visual-join+json"}
+      ],
+      "outputs": [
+        {"name": "responsive_my_lot_studio_visual_master", "type": "image/png+responsive-set"},
+        {"name": "target_vs_render_comparison", "type": "image/png+comparison"},
+        {"name": "first_transition_60fps", "type": "video/mp4"},
+        {"name": "editable_blend", "type": "application/x-blender"},
+        {"name": "exact_artifact_manifest", "type": "application/json+sha256-manifest"}
+      ],
+      "dependencies": [
+        "work.product2-hero-physical-truth-0001",
+        "work.product2-hero-blender-camera-motion-recovery-0001",
+        "work.product2-hero-custom-3d-source-clearance-0001"
+      ],
+      "terminal_conditions": [
+        "the exact Owner Figma target is shown beside the final desktop render",
+        "desktop, tablet and mobile preserve the parcel-first My Lot Studio hierarchy",
+        "the first continuous transition is at least four seconds at 60 fps",
+        "the editable BLEND reopens and J01-J10 pass against recomputed digests",
+        "a terminal RESULT or BLOCKED names the exact head; Owner acceptance and merge remain separate acts"
+      ],
+      "join_destination": "join.product-2-hero-visual-production.stage-1",
+      "terminal_result": {"state": "PENDING", "evidence": null},
+      "execution": {"started_event": null, "running": false, "why": "Issue #333 is dispatched but has no persisted STARTED event and is therefore not running."},
+      "evidence_expectation": {
+        "state": "EXPECTED_NOT_YET_EXISTING",
+        "artefacts": ["responsive My Lot Studio visual master", "target-vs-render comparison", "60 fps first transition", "editable BLEND", "exact SHA-256 artifact and constituent manifest"],
+        "why_not_a_node": "The evidence does not yet exist at an exact revision and digest, so the contract forbids minting an EVIDENCE node for it.",
+        "custody_until_ledger_exists": "The eventual exact Draft PR head and Issue #333 terminal record."
+      },
+      "note": "W1 observes this Product 2 recovery edge in the intent graph. It authorizes no launch, visual acceptance, implementation, deployment or Production use."
+    },
+    {
       "id": "work.product2-goal-graph-reconciliation-0002",
       "type": "WORK_NODE",
       "plane": "EXECUTION_PLANE",
@@ -349,6 +487,35 @@
       },
       "verify": "git show af6b1f3ed22daedaa05c60a923891020da48e6bc:governance/product/PRODUCT-BOUNDARIES-v1.0.md | sha256sum",
       "note": "Section A1 of this file is the statement this graph adopts as NORTH_STAR, byte-resolvable at the named revision. The checker re-extracts A1 from the working tree and refuses a NORTH_STAR that has drifted into a paraphrase."
+    },
+    {
+      "id": "evidence.product2-hero-physical-truth-merged",
+      "type": "EVIDENCE", "plane": "EVIDENCE_STATE_PLANE", "parent": "work.product2-hero-physical-truth-0001", "immutable": true,
+      "title": "Owner-merged A600 physical-truth and source-rights record",
+      "source": {"repository": "WEST-COAST-KBP-ADU/construction-os", "path": "governance/product/visual-production/P2-HERO-PHYSICAL-TRUTH-0001.md", "revision": "4bf96a00ca2ec5577b5fd9da6468fda1d68cd818", "digest": "sha256:082f6001bdd65bf34822e5e5f20d27937a83b139dc73d2ce9737328baaa4da08"},
+      "verify": "git show 4bf96a00ca2ec5577b5fd9da6468fda1d68cd818:governance/product/visual-production/P2-HERO-PHYSICAL-TRUTH-0001.md | sha256sum"
+    },
+    {
+      "id": "evidence.product2-hero-camera-motion-merged",
+      "type": "EVIDENCE", "plane": "EVIDENCE_STATE_PLANE", "parent": "work.product2-hero-blender-camera-motion-recovery-0001", "immutable": true,
+      "title": "Owner-merged editable Blender camera and motion record",
+      "source": {"repository": "WEST-COAST-KBP-ADU/construction-os", "path": "governance/product/visual-production/P2-HERO-BLENDER-CAMERA-MOTION-0001.md", "revision": "584e474dc4cefd2142f5c9c01fa35db8cd5d2548", "digest": "sha256:12e40788a17cea428329bde132f674003c48ce57226b2564c1eaf398972fd764"},
+      "verify": "git show 584e474dc4cefd2142f5c9c01fa35db8cd5d2548:governance/product/visual-production/P2-HERO-BLENDER-CAMERA-MOTION-0001.md | sha256sum"
+    },
+    {
+      "id": "evidence.product2-hero-procedural-rights-merged",
+      "type": "EVIDENCE", "plane": "EVIDENCE_STATE_PLANE", "parent": "work.product2-hero-custom-3d-source-clearance-0001", "immutable": true,
+      "title": "Owner-merged closed procedural constituent-rights policy",
+      "source": {"repository": "WEST-COAST-KBP-ADU/construction-os", "path": "governance/product/visual-production/p2-hero-custom-3d-constituent-policy-v1.json", "revision": "31417cd621d1372f03fa735ef328c5103829f860", "digest": "sha256:fec068bb46eca31d7921b07b870cd00d6f3971b8f5e9d30601c67d9099a33f66"},
+      "verify": "git show 31417cd621d1372f03fa735ef328c5103829f860:governance/product/visual-production/p2-hero-custom-3d-constituent-policy-v1.json | sha256sum"
+    },
+    {
+      "id": "evidence.product2-hero-worker-331-technical-render",
+      "type": "EVIDENCE", "plane": "EVIDENCE_STATE_PLANE", "parent": "work.product2-hero-visual-master-assembly-0001", "immutable": true,
+      "title": "Worker-331 exact-head technical render manifest, retained without visual acceptance",
+      "source": {"repository": "WEST-COAST-KBP-ADU/construction-os", "path": "governance/product/visual-production/p2-hero-visual-master-manifest-v1.json", "revision": "747cf379952c87816499b2a7ea587ff6167774c8", "digest": "sha256:b38b3d7a6e6836af252a926d872bfb0c03694a0b07c3d9e403b8dc05a2038d38"},
+      "verify": "git show 747cf379952c87816499b2a7ea587ff6167774c8:governance/product/visual-production/p2-hero-visual-master-manifest-v1.json | sha256sum",
+      "note": "Proves only the technical render evidence at PR #332 exact head. The Owner visual gate rejected it as the production target."
     }
   ],
   "edges": [
@@ -388,10 +555,61 @@
       "claim": "Intended state that is never compared with observed state decays into a second memory. Reconciliation keeps the two surfaces distinct and honest about their differences."
     },
     {
+      "id": "edge.advances.hero-visual-module-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "module.product-2-hero-visual-production-0001",
+      "to": "goal.product-2.publicly-supported-surface",
+      "claim": "A rights-clean, Owner-gated Hero-to-Studio visual master advances the truthful public construction surface without claiming that the recovery is implemented, deployed or accepted."
+    },
+    {
+      "id": "edge.advances.physical-truth-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "work.product2-hero-physical-truth-0001",
+      "to": "goal.product-2.publicly-supported-surface"
+    },
+    {
+      "id": "edge.advances.camera-motion-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "work.product2-hero-blender-camera-motion-recovery-0001",
+      "to": "goal.product-2.publicly-supported-surface"
+    },
+    {
+      "id": "edge.advances.procedural-rights-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "work.product2-hero-custom-3d-source-clearance-0001",
+      "to": "goal.product-2.publicly-supported-surface"
+    },
+    {
+      "id": "edge.advances.worker-331-technical-render-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "work.product2-hero-visual-master-assembly-0001",
+      "to": "goal.product-2.publicly-supported-surface"
+    },
+    {
+      "id": "edge.advances.my-lot-studio-recovery-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "work.product2-my-lot-studio-visual-master-recovery-0001",
+      "to": "goal.product-2.publicly-supported-surface",
+      "claim": "Worker-333 produces the responsive parcel-first visual evidence required for a truthful Owner visual gate; it makes no implementation or runtime claim."
+    },
+    {
       "id": "edge.depends-on.reconciliation-needs-graph",
       "type": "DEPENDS_ON",
       "from": "work.product2-goal-graph-reconciliation-0002",
       "to": "work.product2-live-4x4-graph-and-director-0001"
+    },
+    {"id": "edge.depends-on.worker-331-needs-physical-truth", "type": "DEPENDS_ON", "from": "work.product2-hero-visual-master-assembly-0001", "to": "work.product2-hero-physical-truth-0001"},
+    {"id": "edge.depends-on.worker-331-needs-camera-motion", "type": "DEPENDS_ON", "from": "work.product2-hero-visual-master-assembly-0001", "to": "work.product2-hero-blender-camera-motion-recovery-0001"},
+    {"id": "edge.depends-on.worker-331-needs-procedural-rights", "type": "DEPENDS_ON", "from": "work.product2-hero-visual-master-assembly-0001", "to": "work.product2-hero-custom-3d-source-clearance-0001"},
+    {"id": "edge.depends-on.worker-333-needs-physical-truth", "type": "DEPENDS_ON", "from": "work.product2-my-lot-studio-visual-master-recovery-0001", "to": "work.product2-hero-physical-truth-0001"},
+    {"id": "edge.depends-on.worker-333-needs-camera-motion", "type": "DEPENDS_ON", "from": "work.product2-my-lot-studio-visual-master-recovery-0001", "to": "work.product2-hero-blender-camera-motion-recovery-0001"},
+    {"id": "edge.depends-on.worker-333-needs-procedural-rights", "type": "DEPENDS_ON", "from": "work.product2-my-lot-studio-visual-master-recovery-0001", "to": "work.product2-hero-custom-3d-source-clearance-0001"},
+    {
+      "id": "edge.supersedes.worker-333-replaces-worker-331-for-visual-acceptance",
+      "type": "SUPERSEDES",
+      "from": "work.product2-my-lot-studio-visual-master-recovery-0001",
+      "to": "work.product2-hero-visual-master-assembly-0001",
+      "claim": "Worker-333 supersedes Worker-331 only for visual acceptance; Worker-331 exact-head technical evidence remains immutable and retained."
     },
     {
       "id": "edge.proves.alignment-authority-basis",
@@ -406,7 +624,11 @@
       "from": "evidence.product-2-north-star-in-adopted-canon",
       "to": "goal.product-2.north-star",
       "claim": "The NORTH_STAR statement adopted here is the frozen product canon's own section A1 text at the recorded revision, not a paraphrase authored by a session."
-    }
+    },
+    {"id": "edge.proves.hero-physical-truth", "type": "PROVES", "from": "evidence.product2-hero-physical-truth-merged", "to": "work.product2-hero-physical-truth-0001", "claim": "The Owner-merged record proves the physical-truth prerequisite at an exact revision and digest."},
+    {"id": "edge.proves.hero-camera-motion", "type": "PROVES", "from": "evidence.product2-hero-camera-motion-merged", "to": "work.product2-hero-blender-camera-motion-recovery-0001", "claim": "The Owner-merged record proves the Blender camera and motion prerequisite at an exact revision and digest."},
+    {"id": "edge.proves.hero-procedural-rights", "type": "PROVES", "from": "evidence.product2-hero-procedural-rights-merged", "to": "work.product2-hero-custom-3d-source-clearance-0001", "claim": "The Owner-merged policy proves the closed procedural-rights prerequisite at an exact revision and digest."},
+    {"id": "edge.proves.worker-331-technical-render-only", "type": "PROVES", "from": "evidence.product2-hero-worker-331-technical-render", "to": "work.product2-hero-visual-master-assembly-0001", "claim": "The exact manifest proves Worker-331 technical render evidence only; it does not prove visual acceptance or Production readiness."}
   ],
   "owner_decisions": [
     {
@@ -452,6 +674,6 @@
     }
   ],
   "external_runtimes": [],
-  "contract_note_on_edges": "The adopted contract refuses ADVANCES_ENDPOINT_TYPE for an ADVANCES edge that ends on a MODULE_SUBGRAPH: intended state lives on goals, so ADVANCES always terminates on a live GOAL. Module membership is therefore the parent scope chain (work.parent = module, module.parent = outcome, outcome.parent = north_star), and the full NORTH_STAR -> OUTCOME -> MODULE_SUBGRAPH -> WORK_NODE -> EVIDENCE chain is present as: OUTCOME ADVANCES NORTH_STAR, MODULE ADVANCES OUTCOME, WORK ADVANCES OUTCOME inside MODULE by parent scope, EVIDENCE PROVES WORK. One DEPENDS_ON is declared because one real gate exists. No SUPERSEDES is declared: nothing here replaces anything.",
+  "contract_note_on_edges": "The adopted contract requires ADVANCES to terminate on a live GOAL, while parent scope expresses module membership. The visual-production path is Worker-333 inside module.product-2-hero-visual-production-0001 -> goal.product-2.publicly-supported-surface -> NORTH_STAR. Worker-333 DEPENDS_ON the three accepted physical-truth, camera/motion and procedural-rights Work Nodes and SUPERSEDES Worker-331 only for visual acceptance; Worker-331 technical evidence remains preserved by its exact PROVES edge.",
   "contract_note_on_expected_evidence": "This packet's own evidence is declared as evidence_expectation with state EXPECTED_NOT_YET_EXISTING on its Work Node, not minted as an EVIDENCE node. The packet brief asks for an expected EVIDENCE node; the pinned contract refuses an evidence node without an exact 40-hex revision and sha256 digest of something that already exists. The conflict is named rather than resolved by widening the vocabulary: the expectation is declared where the contract admits it, and the two EVIDENCE nodes present are the ones that genuinely resolve today."
 }
