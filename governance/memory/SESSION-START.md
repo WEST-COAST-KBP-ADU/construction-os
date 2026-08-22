@@ -10,6 +10,15 @@ queue position, and no board occupancy. Everything mutable is reconstructed by
 running the hydration below against live GitHub. If this file ever appears to
 tell you what is currently active, that is a defect — re-read from GitHub.
 
+This repository's current contour is `CONSTRUCTION`; its model- and
+vendor-neutral role address is `role.construction.operations-director`, for the
+West Coast KBP / ADU and construction operational domain. The role remains
+`referenced-not-frozen`. Product 2 remains valid business and product vocabulary
+inside the Construction contour, not a current top-level contour; the legacy
+`PRODUCT_2 / product-adu` address resolves to `CONSTRUCTION / construction`.
+Addressing the role does not hydrate PostgreSQL, activate runtime, grant
+credentials, or produce business or external effects.
+
 ## 0. Execution surface
 
 This entry works from any repository-attached checkout: a Cloud Codex or Claude
@@ -39,10 +48,11 @@ with the record that governs it. Read the record; do not trust a summary.
 | Fact | Governing record |
 | :--- | :--- |
 | Tony (`avoroncov971-maker`) is the sole Owner, approver, and merger. Silence is not approval. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2, [`../control-plane/README.md`](../control-plane/README.md) §1 |
+| The Owner alone launches the model- and vendor-neutral Construction Operations Director role. Its current address is contour `CONSTRUCTION`, role `role.construction.operations-director`; the role status is `referenced-not-frozen`. | Owner-adopted external record `kbp-core-engineering/kbp-dev-office: manifests/contour/deedseal-contour-topology-v1.json`, pinned by the adopting packet |
 | ChatGPT Lead is a control-plane role and authors no repository byte, and never becomes the fallback executor. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2, §4 |
 | Workers are bounded executors: one packet, one branch, one Draft PR, one declared allowlist. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2 |
 | An author never reviews, accepts, certifies, or merges its own head. Roles are scoped to the engagement, not the model. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §3 |
-| Product 2 is this repository, `WEST-COAST-KBP-ADU/construction-os`: West Coast KBP, the real Greater Sacramento ADU and general-construction business, operating AI-natively on its own owner-controlled platform, KBP OS. The business is not reducible to lead generation, inquiry transport, a website, a Hero, a CRM, or a generic AI agent. | [`../product/PRODUCT-BOUNDARIES-v1.0.md`](../product/PRODUCT-BOUNDARIES-v1.0.md) sections A, B and C, [`../README.md`](../README.md), [`../charter.md`](../charter.md) |
+| Product 2 is business/product vocabulary inside the Construction contour for this repository, `WEST-COAST-KBP-ADU/construction-os`: West Coast KBP, the real Greater Sacramento ADU and general-construction business, operating AI-natively on its own owner-controlled platform, KBP OS. Product 2 is not a current top-level contour. The business is not reducible to lead generation, inquiry transport, a website, a Hero, a CRM, or a generic AI agent. | [`../product/PRODUCT-BOUNDARIES-v1.0.md`](../product/PRODUCT-BOUNDARIES-v1.0.md) sections A, B and C, [`../README.md`](../README.md), [`../charter.md`](../charter.md) |
 | Product 2 direction is repository data, not conversation: one persistent, machine-checkable goal graph carries the NORTH_STAR, outcomes, modules, work and evidence. | [`../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json`](../product/PRODUCT2-LIVE-GOAL-GRAPH-v1.json), [`../product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md`](../product/PRODUCT2-GRAPH-FOUNDATION-ALIGNMENT-v1.md) |
 | The only Product 1 cross-contour relation is the frozen `West Coast KBP — first user`. Runtime, identity, authority, data, Graph Memory, and product branding are never shared across contours. | [`../product/PRODUCT-BOUNDARIES-v1.0.md`](../product/PRODUCT-BOUNDARIES-v1.0.md) sections A and B, [`../../src/lib/deedsealCrossReference.ts`](../../src/lib/deedsealCrossReference.ts) |
 | Product 1 / Deedseal is an **external** controlled-engineering foundation with its own repositories and authority. Public `Powered by Deedseal` labelling, cross-brand transition, public dependency claims, and cross-repository technical binding are **deferred** until a separately adopted decision opens them. | [`../BOUNDARIES.md`](../BOUNDARIES.md), Product 1 boundary sections of the Release 1 decision record once adopted |

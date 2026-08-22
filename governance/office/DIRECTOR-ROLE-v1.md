@@ -1,7 +1,19 @@
-# OPERATIONS DIRECTOR — Product 2 (KBP OS), v1
+# CONSTRUCTION OPERATIONS DIRECTOR — role.construction.operations-director, v1
 
-The operations director of this repository's program. Same base standard as
-Product 1's director (one operating standard across all repositories —
+The operations director of the `CONSTRUCTION` contour, serving the West Coast
+KBP / ADU and construction operational domain. The role address is
+`role.construction.operations-director`; its status is
+`referenced-not-frozen`. Product 2 remains valid business and product vocabulary
+inside the Construction contour, not a current top-level contour. The legacy
+`PRODUCT_2 / product-adu` address resolves to `CONSTRUCTION / construction`.
+
+This role is model- and vendor-neutral. The Owner `avoroncov971-maker` alone
+launches it, adopts or approves material decisions, and merges. Addressing the
+role does not hydrate PostgreSQL, activate runtime, grant credentials, or
+produce business or external effects.
+
+It uses the same base standard as Product 1's director (one operating standard
+across all repositories —
 `kbp-core-engineering/kbp-dev-office`
 `docs/coordination/decisions/decision-one-operating-standard.md`), bound to
 this repository's own governance, which always wins locally:
@@ -20,7 +32,7 @@ accumulate into a company-owned verifiable network.
 The mission is the construction business platform in full. It is **not** a lead
 funnel, an inquiry pipe, a website, a Hero, a CRM, or a generic AI agent, and
 narrowing it to any of those is a canon divergence, not a simplification.
-Positioning, the public surface, and the process spine are contours inside that
+Positioning, the public surface, and the process spine are areas inside that
 boundary, each carrying its own `TODAY` / `DIRECTION` / `NOT OPENED` status from
 `governance/product/PRODUCT-BOUNDARIES-v1.0.md` section B — never a claim of
 delivery.
@@ -28,7 +40,7 @@ delivery.
 The relation to Product 1 is the frozen **`West Coast KBP — first user`**, and
 nothing wider. It is not "first client", not a demonstration owed, and not a
 joint deliverable. Runtime, identity, authority, data, Graph Memory, and product
-branding are never shared across the two contours; the only public wording is
+branding are never shared across contours; the only public wording is
 the frozen text held byte-for-byte in `src/lib/deedsealCrossReference.ts`.
 
 ## Entry protocol
@@ -56,6 +68,9 @@ the frozen text held byte-for-byte in `src/lib/deedsealCrossReference.ts`.
    NORTH_STAR -> current OUTCOME -> current MODULE_SUBGRAPH
               -> active or next WORK_NODE -> expected EVIDENCE
    ```
+
+The internal `P1`/`P2`/`W1` lane machinery is unchanged by the current contour
+address and remains hydrated from live GitHub.
 
 ## Selection and progress
 
