@@ -3,32 +3,12 @@
 /**
  * Fail-closed checker for the Construction contour's canonical role door.
  *
- * The door's address is not asserted here. It is derived from an immutable,
- * independently pinned authority vendored byte-identically at
- * `governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json` from:
- *
- *   repository : kbp-core-engineering/kbp-dev-office
- *   path       : manifests/contour/deedseal-contour-topology-v1.json
- *   revision   : d8038451c820ce0ae22b8575bbbfa7183424f79d
- *   blob sha1  : 634f8927a98db840a48bc2d8d281d9e7645f8c9b
- *   sha256     : c5170a7df374a72c740c4ccc62a93b8b91a93caf086193f19c9566affe1fb972
- *   byte count : 18515
- *
- * The vendored bytes carry no provenance of their own — that would break the
- * byte identity they exist to prove — so provenance lives here, outside them,
- * exactly as `tools/memory/check-product2-live-goal-graph.mjs` records it for
- * the vendored minimal goal contract.
- *
- * Pin reconciliation, recorded because the adopting packet states two of these
- * six values differently. Issue #341 pins `byte count: 18516` and
- * `sha256: e132395db9a274b52c1003096f89a6a802e362e1134f4c1fb8038ed821bb91dd`.
- * Those two values describe the source blob's bytes **plus one appended
- * terminating newline**, not the blob itself: appending `\n` to the vendored
- * file reproduces both exactly. The other four pins — repository, path,
- * revision and blob SHA-1 — are verified identical against live GitHub, and a
- * git blob SHA-1 fixes both the content and its 18515-byte length. The vendored
- * copy is therefore the exact source bytes the packet's imperative and its own
- * blob SHA-1 name, and `git hash-object` on it reproduces `634f8927…`.
+ * The door's address is not asserted here. It is derived from vendored topology
+ * bytes only after their Git blob SHA-1, byte size, and SHA-256 match the
+ * separately reviewed source pin integrated from merged `main`. Repository,
+ * source path, revision, blob identity, digest, trust boundary, and authority
+ * are therefore data read from that merged anchor, never execution constants
+ * in this candidate-controlled checker.
  *
  * The checker reads repository bytes only, uses the Node standard library, and
  * runs hostile probes entirely in memory. It activates no runtime and writes no
@@ -61,18 +41,24 @@ const README = 'governance/memory/README.md';
 /** The four role-entry surfaces whose address must match the pinned authority. */
 const PATHS = [ENTRY, AGENTS, SESSION, DIRECTOR];
 
-/** Every surface this checker reads. */
+/** Every role surface this checker reads. */
 const SURFACES = [...PATHS, README];
 
-export const VENDORED_TOPOLOGY = Object.freeze({
-  path: 'governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json',
-  sourceRepository: 'kbp-core-engineering/kbp-dev-office',
-  sourcePath: 'manifests/contour/deedseal-contour-topology-v1.json',
-  sourceRevision: 'd8038451c820ce0ae22b8575bbbfa7183424f79d',
-  sourceBlobSha1: '634f8927a98db840a48bc2d8d281d9e7645f8c9b',
-  sourceDigest: 'sha256:c5170a7df374a72c740c4ccc62a93b8b91a93caf086193f19c9566affe1fb972',
-  sourceBytes: 18515,
-});
+/** The only locally named source-identity locations. Their contents are data. */
+const SOURCE_PIN_PATH = 'governance/contour/DEEDSEAL-CONTOUR-TOPOLOGY-SOURCE-PIN-v1.json';
+const VENDORED_TOPOLOGY_PATH = 'governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json';
+
+const SOURCE_PIN_KEYS = Object.freeze([
+  'record',
+  'source_repository',
+  'source_path',
+  'source_revision',
+  'source_blob_sha1',
+  'source_size_bytes',
+  'source_sha256',
+  'trust_boundary',
+  'authority',
+]);
 
 /**
  * The only thing this repository is allowed to assert about itself: which door
@@ -114,11 +100,119 @@ const REFUSAL = Object.freeze({
 });
 
 const clone = (input) => ({
+  pin: `${input.pin}`,
   topology: `${input.topology}`,
   surfaces: Object.fromEntries(
     Object.entries(input.surfaces).map(([path, content]) => [path, `${content}`]),
   ),
 });
+
+/**
+ * Return every top-level JSON object key, including duplicates. JSON.parse
+ * intentionally discards duplicate keys, so the lexical pass is a separate
+ * part of the closed-record boundary.
+ */
+function topLevelJsonKeys(content) {
+  const keys = [];
+  let objectDepth = 0;
+  let arrayDepth = 0;
+  let stringStart = -1;
+  let escaped = false;
+
+  for (let index = 0; index < content.length; index += 1) {
+    const character = content[index];
+    if (stringStart >= 0) {
+      if (escaped) {
+        escaped = false;
+      } else if (character === '\\') {
+        escaped = true;
+      } else if (character === '"') {
+        if (objectDepth === 1 && arrayDepth === 0) {
+          let next = index + 1;
+          while (/\s/.test(content[next] ?? '')) next += 1;
+          if (content[next] === ':') {
+            keys.push(JSON.parse(content.slice(stringStart, index + 1)));
+          }
+        }
+        stringStart = -1;
+      }
+      continue;
+    }
+
+    if (character === '"') stringStart = index;
+    else if (character === '{') objectDepth += 1;
+    else if (character === '}') objectDepth -= 1;
+    else if (character === '[') arrayDepth += 1;
+    else if (character === ']') arrayDepth -= 1;
+  }
+  return keys;
+}
+
+/** Parse and validate the merged source pin as one closed scalar record. */
+function parseSourcePin(raw, refuse) {
+  if ((!Buffer.isBuffer(raw) && typeof raw !== 'string') || raw.length === 0) {
+    refuse(REFUSAL.TOPOLOGY, `the merged source pin at ${SOURCE_PIN_PATH} is missing or empty`);
+    return null;
+  }
+
+  const content = Buffer.isBuffer(raw) ? raw.toString('utf8') : `${raw}`;
+  let pin;
+  try {
+    pin = JSON.parse(content);
+  } catch {
+    refuse(REFUSAL.TOPOLOGY, `the merged source pin at ${SOURCE_PIN_PATH} is malformed JSON`);
+    return null;
+  }
+
+  if (!pin || typeof pin !== 'object' || Array.isArray(pin)) {
+    refuse(REFUSAL.TOPOLOGY, `the merged source pin at ${SOURCE_PIN_PATH} is not a JSON object`);
+    return null;
+  }
+
+  const lexicalKeys = topLevelJsonKeys(content);
+  const duplicateKeys = lexicalKeys.filter((key, index) => lexicalKeys.indexOf(key) !== index);
+  if (duplicateKeys.length > 0) {
+    refuse(REFUSAL.TOPOLOGY, `the merged source pin repeats key(s) ${JSON.stringify([...new Set(duplicateKeys)].sort())}`);
+    return null;
+  }
+
+  const actualKeys = Object.keys(pin).sort();
+  const expectedKeys = [...SOURCE_PIN_KEYS].sort();
+  if (actualKeys.length !== expectedKeys.length
+      || actualKeys.some((key, index) => key !== expectedKeys[index])) {
+    refuse(REFUSAL.TOPOLOGY, `the merged source pin keys are ${JSON.stringify(actualKeys)}; exactly ${JSON.stringify(expectedKeys)} are required`);
+    return null;
+  }
+
+  if (Object.values(pin).some((value) => value === null || !['string', 'number', 'boolean'].includes(typeof value))) {
+    refuse(REFUSAL.TOPOLOGY, 'the merged source pin must contain scalar values only');
+    return null;
+  }
+
+  const repositoryGrammar = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
+  const pathSegments = typeof pin.source_path === 'string' ? pin.source_path.split('/') : [];
+  const validPath = typeof pin.source_path === 'string'
+    && /^[A-Za-z0-9._/-]+$/.test(pin.source_path)
+    && !pin.source_path.startsWith('/')
+    && pathSegments.length > 1
+    && pathSegments.every((segment) => segment !== '' && segment !== '.' && segment !== '..');
+  const invalidFields = [];
+  if (pin.record !== 'DEEDSEAL-CONTOUR-TOPOLOGY-SOURCE-PIN-0001') invalidFields.push('record');
+  if (typeof pin.source_repository !== 'string' || !repositoryGrammar.test(pin.source_repository)) invalidFields.push('source_repository');
+  if (!validPath) invalidFields.push('source_path');
+  if (typeof pin.source_revision !== 'string' || !/^[0-9a-f]{40}$/.test(pin.source_revision)) invalidFields.push('source_revision');
+  if (typeof pin.source_blob_sha1 !== 'string' || !/^[0-9a-f]{40}$/.test(pin.source_blob_sha1)) invalidFields.push('source_blob_sha1');
+  if (!Number.isSafeInteger(pin.source_size_bytes) || pin.source_size_bytes <= 0) invalidFields.push('source_size_bytes');
+  if (typeof pin.source_sha256 !== 'string' || !/^[0-9a-f]{64}$/.test(pin.source_sha256)) invalidFields.push('source_sha256');
+  if (pin.trust_boundary !== 'merged-base-pin; updates require a separate exact-source review') invalidFields.push('trust_boundary');
+  if (pin.authority !== 'none') invalidFields.push('authority');
+  if (invalidFields.length > 0) {
+    refuse(REFUSAL.TOPOLOGY, `the merged source pin violates its reviewed closed-record contract at ${JSON.stringify(invalidFields)}`);
+    return null;
+  }
+
+  return Object.freeze({ ...pin });
+}
 
 /**
  * Derive the door's address from the vendored authority, or refuse.
@@ -128,31 +222,31 @@ const clone = (input) => ({
  * bytes there is no address, and every address-bearing check below is skipped
  * rather than silently satisfied by a local constant.
  */
-function deriveAuthority(raw, refuse) {
+function deriveAuthority(raw, pin, refuse) {
   if ((!Buffer.isBuffer(raw) && typeof raw !== 'string') || raw.length === 0) {
-    refuse(REFUSAL.TOPOLOGY, `the vendored contour topology at ${VENDORED_TOPOLOGY.path} is missing or empty`);
+    refuse(REFUSAL.TOPOLOGY, `the vendored contour topology at ${VENDORED_TOPOLOGY_PATH} is missing or empty`);
     return null;
   }
 
   const content = Buffer.isBuffer(raw) ? raw : Buffer.from(raw, 'utf8');
   const bytes = content.byteLength;
-  const digest = `sha256:${createHash('sha256').update(content).digest('hex')}`;
+  const digest = createHash('sha256').update(content).digest('hex');
   const blobSha1 = createHash('sha1')
     .update(Buffer.from(`blob ${bytes}\0`, 'utf8'))
     .update(content)
     .digest('hex');
-  if (bytes !== VENDORED_TOPOLOGY.sourceBytes
-      || digest !== VENDORED_TOPOLOGY.sourceDigest
-      || blobSha1 !== VENDORED_TOPOLOGY.sourceBlobSha1) {
-    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY.path} is ${bytes} bytes digesting ${digest} with Git blob identity ${blobSha1}; the pinned authority at ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} is ${VENDORED_TOPOLOGY.sourceBytes} bytes digesting ${VENDORED_TOPOLOGY.sourceDigest} with Git blob identity ${VENDORED_TOPOLOGY.sourceBlobSha1}. The vendored copy is no longer byte-identical to the authority it claims to reuse, so the door's address cannot be derived from it.`);
+  if (bytes !== pin.source_size_bytes
+      || digest !== pin.source_sha256
+      || blobSha1 !== pin.source_blob_sha1) {
+    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY_PATH} is ${bytes} bytes digesting sha256:${digest} with Git blob identity ${blobSha1}; the merged source pin for ${pin.source_repository}:${pin.source_path}@${pin.source_revision} requires ${pin.source_size_bytes} bytes digesting sha256:${pin.source_sha256} with Git blob identity ${pin.source_blob_sha1}. The vendored copy is no longer byte-identical to the reviewed source, so the door's address cannot be derived from it.`);
     return null;
   }
 
   let topology;
   try {
     topology = JSON.parse(content.toString('utf8'));
-  } catch (error) {
-    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY.path} is not parseable JSON: ${error?.message ?? error}`);
+  } catch {
+    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY_PATH} is not parseable JSON`);
     return null;
   }
 
@@ -219,8 +313,24 @@ function deriveAuthority(raw, refuse) {
  * stacks are implementation details, while every failed authority observation
  * has the one stable public meaning `CONTOUR_TOPOLOGY_DRIFT`.
  */
-async function observeTopology(root, refuse) {
-  const path = resolve(root, VENDORED_TOPOLOGY.path);
+async function observeSourcePin(root, refuse) {
+  const path = resolve(root, SOURCE_PIN_PATH);
+  let metadata;
+  let raw;
+  try {
+    metadata = await stat(path);
+    if (!metadata.isFile() || (metadata.mode & 0o444) === 0) throw new Error('unreadable source pin');
+    raw = await readFile(path);
+  } catch {
+    refuse(REFUSAL.TOPOLOGY, `the merged source pin at ${SOURCE_PIN_PATH} is missing or unreadable; the vendored authority cannot be authenticated`);
+    return null;
+  }
+  const pin = parseSourcePin(raw, refuse);
+  return pin ? { pin, raw } : null;
+}
+
+async function observeTopology(root, pin, refuse) {
+  const path = resolve(root, VENDORED_TOPOLOGY_PATH);
   let metadata;
   let raw;
   try {
@@ -228,10 +338,10 @@ async function observeTopology(root, refuse) {
     if (!metadata.isFile() || (metadata.mode & 0o444) === 0) throw new Error('unreadable authority');
     raw = await readFile(path);
   } catch {
-    refuse(REFUSAL.TOPOLOGY, `the vendored contour topology at ${VENDORED_TOPOLOGY.path} is missing or unreadable; the door's address cannot be derived`);
+    refuse(REFUSAL.TOPOLOGY, `the vendored contour topology at ${VENDORED_TOPOLOGY_PATH} is missing or unreadable; the door's address cannot be derived`);
     return null;
   }
-  const authority = deriveAuthority(raw, refuse);
+  const authority = deriveAuthority(raw, pin, refuse);
   return authority ? raw : null;
 }
 
@@ -307,7 +417,8 @@ export function validate(input) {
   const joined = PATHS.map((path) => surfaces[path] ?? '').join('\n');
   const entry = surfaces[ENTRY] ?? '';
 
-  const authority = deriveAuthority(input.topology, refuse);
+  const pin = parseSourcePin(input.pin, refuse);
+  const authority = pin ? deriveAuthority(input.topology, pin, refuse) : null;
 
   if (authority) {
     if (!entry.startsWith(`# ENTRY · CONTOUR: ${authority.contour} · ROLE:`)
@@ -414,7 +525,7 @@ function assertHostileProbe(name, baseline, mutate, expectedCode) {
 const CHECKER = 'tools/memory/check-construction-role-door.mjs';
 
 async function copyFixture(sourceRoot, fixtureRoot) {
-  for (const path of [...SURFACES, VENDORED_TOPOLOGY.path, CHECKER]) {
+  for (const path of [...SURFACES, SOURCE_PIN_PATH, VENDORED_TOPOLOGY_PATH, CHECKER]) {
     await mkdir(dirname(resolve(fixtureRoot, path)), { recursive: true });
     await copyFile(resolve(sourceRoot, path), resolve(fixtureRoot, path));
   }
@@ -453,51 +564,110 @@ function assertFixtureRefusal(name, fixtureRoot, expectedCode) {
  * fixture must pass before any mutation; each attack must then emit the exact
  * topology refusal without a raw filesystem code or stack.
  */
-async function runRealFileProbes(sourceRoot, authority) {
+async function runRealFileProbes(sourceRoot, authority, pin) {
   const temporary = await mkdtemp(join(tmpdir(), 'construction-role-door-'));
   try {
     const baselineRoot = resolve(temporary, 'baseline');
     await copyFixture(sourceRoot, baselineRoot);
     assertFixturePass('untouched copied tree', baselineRoot);
 
-    const coordinatedRoot = resolve(temporary, 'coordinated-false-authority');
+    const coordinatedRoot = resolve(temporary, 'all-pin-reset-attack');
     await copyFixture(sourceRoot, coordinatedRoot);
     for (const path of PATHS) {
       const target = resolve(coordinatedRoot, path);
       const content = await readFile(target, 'utf8');
-      await writeFile(target, content.replaceAll(authority.role, 'role.construction.false-director'));
+      await writeFile(target, content.replaceAll(authority.role, 'role.construction.evil-director'));
     }
-    const topologyPath = resolve(coordinatedRoot, VENDORED_TOPOLOGY.path);
+    const topologyPath = resolve(coordinatedRoot, VENDORED_TOPOLOGY_PATH);
     const falseTopology = (await readFile(topologyPath, 'utf8'))
-      .replaceAll(authority.role, 'role.construction.false-director');
+      .replaceAll(authority.role, 'role.construction.evil-director');
     await writeFile(topologyPath, falseTopology);
-    const resetDigest = `sha256:${createHash('sha256').update(falseTopology, 'utf8').digest('hex')}`;
+    const resetDigest = createHash('sha256').update(falseTopology, 'utf8').digest('hex');
     const resetBytes = Buffer.byteLength(falseTopology, 'utf8');
+    const resetBlobSha1 = createHash('sha1')
+      .update(Buffer.from(`blob ${resetBytes}\0`, 'utf8'))
+      .update(falseTopology, 'utf8')
+      .digest('hex');
     const checkerPath = resolve(coordinatedRoot, CHECKER);
     const checker = await readFile(checkerPath, 'utf8');
     const resetChecker = checker
-      .replace(/sourceDigest: 'sha256:[0-9a-f]{64}'/, `sourceDigest: '${resetDigest}'`)
-      .replace(/sourceBytes: \d+/, `sourceBytes: ${resetBytes}`);
-    if (resetChecker === checker
-        || falseTopology === (await readFile(resolve(sourceRoot, VENDORED_TOPOLOGY.path), 'utf8'))) {
-      throw new Error('HOSTILE_REAL_FILE_PROBE_INERT coordinated false authority: the attack changed nothing');
+      .replaceAll(pin.source_blob_sha1, resetBlobSha1)
+      .replaceAll(`${pin.source_size_bytes}`, `${resetBytes}`)
+      .replaceAll(pin.source_sha256, resetDigest);
+    if (falseTopology === (await readFile(resolve(sourceRoot, VENDORED_TOPOLOGY_PATH), 'utf8'))) {
+      throw new Error('HOSTILE_REAL_FILE_PROBE_INERT all-pin reset: the authority mutation changed nothing');
     }
     await writeFile(checkerPath, resetChecker);
-    assertFixtureRefusal('coordinated false role, topology, size, and SHA-256', coordinatedRoot, REFUSAL.TOPOLOGY);
+    assertFixtureRefusal('role changed on four surfaces and vendor with every checker-local byte pin reset', coordinatedRoot, REFUSAL.TOPOLOGY);
 
-    const missingRoot = resolve(temporary, 'missing-authority');
+    const missingRoot = resolve(temporary, 'missing-vendored-authority');
     await copyFixture(sourceRoot, missingRoot);
-    await rm(resolve(missingRoot, VENDORED_TOPOLOGY.path));
+    await rm(resolve(missingRoot, VENDORED_TOPOLOGY_PATH));
     assertFixtureRefusal('missing vendored authority', missingRoot, REFUSAL.TOPOLOGY);
 
-    const unreadableRoot = resolve(temporary, 'unreadable-authority');
+    const unreadableRoot = resolve(temporary, 'unreadable-vendored-authority');
     await copyFixture(sourceRoot, unreadableRoot);
-    await chmod(resolve(unreadableRoot, VENDORED_TOPOLOGY.path), 0o000);
+    await chmod(resolve(unreadableRoot, VENDORED_TOPOLOGY_PATH), 0o000);
     assertFixtureRefusal('unreadable vendored authority', unreadableRoot, REFUSAL.TOPOLOGY);
+
+    const missingPinRoot = resolve(temporary, 'missing-source-pin');
+    await copyFixture(sourceRoot, missingPinRoot);
+    await rm(resolve(missingPinRoot, SOURCE_PIN_PATH));
+    assertFixtureRefusal('missing merged source pin', missingPinRoot, REFUSAL.TOPOLOGY);
+
+    const unreadablePinRoot = resolve(temporary, 'unreadable-source-pin');
+    await copyFixture(sourceRoot, unreadablePinRoot);
+    await chmod(resolve(unreadablePinRoot, SOURCE_PIN_PATH), 0o000);
+    assertFixtureRefusal('unreadable merged source pin', unreadablePinRoot, REFUSAL.TOPOLOGY);
+
+    const malformedPinRoot = resolve(temporary, 'malformed-source-pin');
+    await copyFixture(sourceRoot, malformedPinRoot);
+    await writeFile(resolve(malformedPinRoot, SOURCE_PIN_PATH), '{');
+    assertFixtureRefusal('malformed merged source pin', malformedPinRoot, REFUSAL.TOPOLOGY);
+
+    const duplicatePinRoot = resolve(temporary, 'duplicate-source-pin-key');
+    await copyFixture(sourceRoot, duplicatePinRoot);
+    const duplicatePinPath = resolve(duplicatePinRoot, SOURCE_PIN_PATH);
+    const duplicatePin = (await readFile(duplicatePinPath, 'utf8'))
+      .replace('  "authority": "none"', '  "authority": "none",\n  "authority": "none"');
+    await writeFile(duplicatePinPath, duplicatePin);
+    assertFixtureRefusal('duplicate merged source pin key', duplicatePinRoot, REFUSAL.TOPOLOGY);
+
+    const extraPinRoot = resolve(temporary, 'extra-source-pin-key');
+    await copyFixture(sourceRoot, extraPinRoot);
+    const extraPinPath = resolve(extraPinRoot, SOURCE_PIN_PATH);
+    const extraPin = (await readFile(extraPinPath, 'utf8'))
+      .replace('  "authority": "none"', '  "authority": "none",\n  "candidate_override": true');
+    await writeFile(extraPinPath, extraPin);
+    assertFixtureRefusal('extra merged source pin key', extraPinRoot, REFUSAL.TOPOLOGY);
+
+    const grammarPinRoot = resolve(temporary, 'grammar-invalid-source-pin');
+    await copyFixture(sourceRoot, grammarPinRoot);
+    const grammarPinPath = resolve(grammarPinRoot, SOURCE_PIN_PATH);
+    const grammarPin = JSON.parse(await readFile(grammarPinPath, 'utf8'));
+    grammarPin.source_revision = 'main';
+    await writeFile(grammarPinPath, `${JSON.stringify(grammarPin, null, 2)}\n`);
+    assertFixtureRefusal('grammar-invalid merged source pin', grammarPinRoot, REFUSAL.TOPOLOGY);
+
+    const authorityPinRoot = resolve(temporary, 'authority-drifted-source-pin');
+    await copyFixture(sourceRoot, authorityPinRoot);
+    const authorityPinPath = resolve(authorityPinRoot, SOURCE_PIN_PATH);
+    const authorityPin = JSON.parse(await readFile(authorityPinPath, 'utf8'));
+    authorityPin.authority = 'candidate';
+    await writeFile(authorityPinPath, `${JSON.stringify(authorityPin, null, 2)}\n`);
+    assertFixtureRefusal('authority-drifted merged source pin', authorityPinRoot, REFUSAL.TOPOLOGY);
+
+    const structuredPinRoot = resolve(temporary, 'structured-source-pin-value');
+    await copyFixture(sourceRoot, structuredPinRoot);
+    const structuredPinPath = resolve(structuredPinRoot, SOURCE_PIN_PATH);
+    const structuredPin = JSON.parse(await readFile(structuredPinPath, 'utf8'));
+    structuredPin.trust_boundary = { candidate: true };
+    await writeFile(structuredPinPath, `${JSON.stringify(structuredPin, null, 2)}\n`);
+    assertFixtureRefusal('non-scalar merged source pin value', structuredPinRoot, REFUSAL.TOPOLOGY);
   } finally {
     await rm(temporary, { recursive: true, force: true });
   }
-  return 3;
+  return 11;
 }
 
 const replaceLast = (content, needle, replacement) => {
@@ -507,8 +677,19 @@ const replaceLast = (content, needle, replacement) => {
 
 async function main() {
   const topologyErrors = [];
+  const sourcePinObservation = await observeSourcePin(
+    ROOT,
+    (code, detail) => topologyErrors.push(`${code}: ${detail}`),
+  );
+  if (!sourcePinObservation) {
+    for (const error of topologyErrors) process.stderr.write(`CONSTRUCTION_ROLE_DOOR_REFUSED: ${error}\n`);
+    process.exitCode = 1;
+    return;
+  }
+
   const observation = await observeTopology(
     ROOT,
+    sourcePinObservation.pin,
     (code, detail) => topologyErrors.push(`${code}: ${detail}`),
   );
   if (!observation) {
@@ -521,7 +702,7 @@ async function main() {
     path,
     await readFile(resolve(ROOT, path), 'utf8'),
   ])));
-  const baseline = { surfaces, topology: observation };
+  const baseline = { pin: sourcePinObservation.raw, surfaces, topology: observation };
 
   const { errors: baselineErrors, authority } = validate(baseline);
   if (baselineErrors.length > 0) {
@@ -563,13 +744,17 @@ async function main() {
     assertHostileProbe(name, baseline, mutate, expectedCode);
   }
 
-  const realFileProbeCount = FIXTURE_CHILD ? 0 : await runRealFileProbes(ROOT, authority);
+  const realFileProbeCount = FIXTURE_CHILD ? 0 : await runRealFileProbes(
+    ROOT,
+    authority,
+    sourcePinObservation.pin,
+  );
 
   process.stdout.write(`CONSTRUCTION_ROLE_DOOR_OK: 14 positive check groups, ${probes.length + realFileProbeCount} hostile probes, 0 refusals\n`);
   if (realFileProbeCount > 0) {
-    process.stdout.write(`CONSTRUCTION_ROLE_DOOR_REAL_FILE_PROBES: untouched=PASS coordinated-false-authority=${REFUSAL.TOPOLOGY} missing-authority=${REFUSAL.TOPOLOGY} unreadable-authority=${REFUSAL.TOPOLOGY} raw-stacks=0\n`);
+    process.stdout.write(`CONSTRUCTION_ROLE_DOOR_REAL_FILE_PROBES: untouched=PASS all-pin-reset=${REFUSAL.TOPOLOGY} missing-vendor=${REFUSAL.TOPOLOGY} unreadable-vendor=${REFUSAL.TOPOLOGY} missing-anchor=${REFUSAL.TOPOLOGY} unreadable-anchor=${REFUSAL.TOPOLOGY} malformed-anchor=${REFUSAL.TOPOLOGY} duplicate-anchor=${REFUSAL.TOPOLOGY} extra-key-anchor=${REFUSAL.TOPOLOGY} grammar-anchor=${REFUSAL.TOPOLOGY} authority-anchor=${REFUSAL.TOPOLOGY} scalar-anchor=${REFUSAL.TOPOLOGY} raw-stacks=0\n`);
   }
-  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_AUTHORITY: ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} blob:${VENDORED_TOPOLOGY.sourceBlobSha1} ${VENDORED_TOPOLOGY.sourceDigest} (vendored byte-identical at ${VENDORED_TOPOLOGY.path})\n`);
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_AUTHORITY: ${sourcePinObservation.pin.source_repository}:${sourcePinObservation.pin.source_path}@${sourcePinObservation.pin.source_revision} blob:${sourcePinObservation.pin.source_blob_sha1} sha256:${sourcePinObservation.pin.source_sha256} (vendored byte-identical at ${VENDORED_TOPOLOGY_PATH}; source pin ${SOURCE_PIN_PATH}; ${sourcePinObservation.pin.trust_boundary}; authority=${sourcePinObservation.pin.authority})\n`);
   process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ADDRESS: contour=${authority.contour} role=${authority.role} status=${authority.status} (derived from the pinned authority, not asserted here)\n`);
   process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ROUTE: ${ENTRY} -> ${authority.route}\n`);
   process.stdout.write(`CONSTRUCTION_ROLE_DOOR_COLD_START: ${REGISTRATIONS.map(([path, count]) => `${path}x${count}`).join(' ')}\n`);
