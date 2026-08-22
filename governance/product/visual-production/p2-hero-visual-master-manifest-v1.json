@@ -1,0 +1,127 @@
+{
+  "schema": "p2-hero-visual-master-manifest/1",
+  "worker_issue": 331,
+  "exact_head_sha": "82eeb9c0dc1337eda19a60fa1033bf07bc4a372e",
+  "exact_head_role": "render-source commit containing the byte-exact generators and returned artifacts inspected by this manifest",
+  "generator_paths": [
+    {
+      "path": "tools/visual/p2_hero_visual_master.py",
+      "sha256": "de446a75a91dc71690f8fcc2c9aa72e8cddad3147b54e0899c1d3777cfdbcb2d"
+    },
+    {
+      "path": "tools/visual/p2_hero_scene.py",
+      "sha256": "c1338a2fd6ddede7d226d6012aa6477af8d1933efde6a9a0004daa093b4a67f0"
+    }
+  ],
+  "constituents": [
+    {
+      "id": "a600-owned-executable",
+      "policy_class_id": "a600-owned-geometry",
+      "role": "20 x 30 ft envelope and openings",
+      "origin": "West Coast KBP owned q16 executable model",
+      "ledger_record_id": "a600-executable-geometry-1.0.0",
+      "generator_path": "tools/visual/p2_hero_visual_master.py",
+      "sha256_or_node_digest": "a74bd40fb7bf7b7ae66ec1216a4c92f512258e168a0bc27e87993aa147e0cf38"
+    },
+    {
+      "id": "a600-owned-massing",
+      "policy_class_id": "a600-owned-geometry",
+      "role": "9 ft plate and 4:12 gable",
+      "origin": "West Coast KBP owned deterministic geometry",
+      "ledger_record_id": "a600-geometry-source-1",
+      "generator_path": "tools/visual/p2_hero_visual_master.py",
+      "sha256_or_node_digest": "28985d3de6ed42804761b888ab8e0442e32315e586df8b23d5ac004cf6ea9e29"
+    },
+    {
+      "id": "a600-owned-plan-overlay",
+      "policy_class_id": "a600-owned-geometry",
+      "role": "concept plan anchors",
+      "origin": "West Coast KBP exact-coordinate editable fallback",
+      "ledger_record_id": "a600-testfit-svg",
+      "generator_path": "tools/visual/p2_hero_visual_master.py",
+      "sha256_or_node_digest": "54cb40a6212916d83ab5638ae05330d113a06dc9c09a03fe5f120875f03da5f4"
+    },
+    {
+      "id": "representative-lot-and-existing-house",
+      "policy_class_id": "packet-procedural-geometry",
+      "role": "lot, existing-house opening, hardscape, fence and planting",
+      "origin": "Blender primitives authored only by the two declared generators",
+      "generator_path": "tools/visual/p2_hero_visual_master.py",
+      "sha256_or_node_digest": "de446a75a91dc71690f8fcc2c9aa72e8cddad3147b54e0899c1d3777cfdbcb2d"
+    },
+    {
+      "id": "warm-editorial-material-system",
+      "policy_class_id": "packet-procedural-material",
+      "role": "limestone, warm bone, charcoal, restrained clay and sage",
+      "origin": "constant-value Blender Principled BSDF node graphs; no image nodes",
+      "generator_path": "tools/visual/p2_hero_visual_master.py",
+      "sha256_or_node_digest": "de446a75a91dc71690f8fcc2c9aa72e8cddad3147b54e0899c1d3777cfdbcb2d"
+    },
+    {
+      "id": "california-daylight-world",
+      "policy_class_id": "packet-procedural-world",
+      "role": "sun, area fill and constant procedural world",
+      "origin": "Blender lights and World Background constants",
+      "generator_path": "tools/visual/p2_hero_visual_master.py",
+      "sha256_or_node_digest": "de446a75a91dc71690f8fcc2c9aa72e8cddad3147b54e0899c1d3777cfdbcb2d"
+    }
+  ],
+  "generated_sources": [
+    {
+      "path": "governance/product/visual-production/evidence/p2-hero-visual-master-0001/p2-hero-visual-master.blend",
+      "generator_git_sha": "82eeb9c0dc1337eda19a60fa1033bf07bc4a372e",
+      "parameters": {"samples": 64, "seed": 327, "engine": "CYCLES", "device": "GPU"},
+      "sha256": "1b72b4573cfc02efb9e5f552e7d399c69a09fe3145bd8b5f531a970db5c92016"
+    }
+  ],
+  "returned_artifacts": [
+    {"path": "governance/product/visual-production/evidence/p2-hero-visual-master-0001/desktop-1440x900.png", "sha256": "bfa2b9f1867c56361d983d5f51968a1fd0eaf1c684dac8def3726c21d19f3667", "bytes": 2123765},
+    {"path": "governance/product/visual-production/evidence/p2-hero-visual-master-0001/tablet-820x1180.png", "sha256": "8409d9efc53536cb028cad5a395e1248235354ed15a10f8e099ce10a5040faad", "bytes": 1629136},
+    {"path": "governance/product/visual-production/evidence/p2-hero-visual-master-0001/mobile-390x844.png", "sha256": "eff68ad0c67b53a32fe269756e7180797b22046b8c088e9ca7718f5a82649edf", "bytes": 554662},
+    {"path": "governance/product/visual-production/evidence/p2-hero-visual-master-0001/responsive-contact-sheet.png", "sha256": "38fe6e3db214af2757efe9a09f160893573bd74ad5c9ea8be7fda274ec5d5e4b", "bytes": 288944},
+    {"path": "governance/product/visual-production/evidence/p2-hero-visual-master-0001/first-transition.mp4", "sha256": "eb7b110ed90e3c6387f6a88a191eb5b01ef2aaac31a1658b8afc6feb737ca33c", "bytes": 96305, "frames": 26, "fps": 24, "dimensions": [960, 600]},
+    {"path": "governance/product/visual-production/evidence/p2-hero-visual-master-0001/p2-hero-visual-master.blend", "sha256": "1b72b4573cfc02efb9e5f552e7d399c69a09fe3145bd8b5f531a970db5c92016", "bytes": 137650}
+  ],
+  "gpu_evidence": {
+    "doctor": "DOCTOR_PASS",
+    "blender": "5.2.0 LTS",
+    "gpu": "NVIDIA A10, 23028 MiB",
+    "cycles_backend": "CUDA",
+    "scene_device": "GPU",
+    "driver_compute_observations": 115,
+    "render_log_sha256": "7bf1a4d0f08ae6a230cb3f6b76b83c6d6f1fd566d0db683919c22ae40effa4d9",
+    "driver_samples_sha256": "1174349b85b93d5682a0d676c9a901d988697d451ecc3ab4d90d3b3e5acda7f3"
+  },
+  "reopen_evidence": {
+    "blender": "5.2.0 LTS",
+    "linked_libraries": 0,
+    "external_images": 0,
+    "image_texture_nodes": 0,
+    "missing_paths": 0,
+    "scene_device": "GPU",
+    "production_use": "REFUSED",
+    "log_sha256": "af1353734fa7bdf16341f35117685a2c8096add121717cfaf025dadd07d11c02"
+  },
+  "join_checks": [
+    {"id": "J01-exact-head", "result": "PASS"},
+    {"id": "J02-script-allowlist", "result": "PASS"},
+    {"id": "J03-a600-chain", "result": "PASS"},
+    {"id": "J04-procedural-geometry", "result": "PASS"},
+    {"id": "J05-procedural-materials", "result": "PASS"},
+    {"id": "J06-procedural-world", "result": "PASS"},
+    {"id": "J07-external-dependency-refusal", "result": "PASS"},
+    {"id": "J08-packed-and-portable", "result": "PASS"},
+    {"id": "J09-digests", "result": "PASS"},
+    {"id": "J10-physical-and-claim-boundary", "result": "PASS"}
+  ],
+  "refusals": [
+    "external mesh, CAD, GIS, scan, point cloud or geometry library",
+    "image texture, scanned material or external material library",
+    "HDRI, environment image, stock, photography, Adobe composite or ImageGen",
+    "external font, icon pack, template, manufacturer media, purchase or unknown-rights source",
+    "CPU fallback",
+    "Production use"
+  ],
+  "disclosure": "Conceptual A600 visualization on a representative property — not a completed project, parcel-specific fit, approved plan, permit, price, schedule, or buildability conclusion.",
+  "production_use": "REFUSED"
+}
