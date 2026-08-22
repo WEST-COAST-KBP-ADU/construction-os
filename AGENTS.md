@@ -6,6 +6,20 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Start here
 
+This repository is the `CONSTRUCTION` contour. Its current role address is
+`role.construction.operations-director`, for the West Coast KBP / ADU and
+construction operational domain, with status `referenced-not-frozen`. This
+address is model- and vendor-neutral: the Owner `avoroncov971-maker` alone
+launches the role, approves or adopts material decisions, and merges.
+
+Product 2 remains valid business and product vocabulary inside the Construction
+contour; it is not a current top-level contour. The legacy `PRODUCT_2 /
+product-adu` address resolves to `CONSTRUCTION / construction`. The frozen
+cross-contour relation remains exactly `West Coast KBP — first user`.
+
+Addressing the role does not hydrate PostgreSQL, activate runtime, grant
+credentials, or produce business or external effects.
+
 Before anything else in this repository, read
 [`governance/memory/SESSION-START.md`](governance/memory/SESSION-START.md).
 
