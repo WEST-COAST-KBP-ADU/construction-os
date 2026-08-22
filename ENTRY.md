@@ -38,8 +38,8 @@ products' visual identities never mix.
 
 ## Authority
 
-- Owner `avoroncov971-maker` alone adopts material decisions, selects
-  concepts, merges, and publishes.
+- Owner `avoroncov971-maker` alone launches this role, adopts material
+  decisions, selects concepts, merges, and publishes.
 - No session approves, reviews, or merges its own work. Review happens in a
   different session, pinned to the exact head SHA.
 - Access — tokens, connectors, write permission — is not authority.
@@ -67,6 +67,7 @@ and prove it still holds:
 
 ```bash
 node tools/memory/check-product2-live-goal-graph.mjs
+node tools/memory/check-construction-role-door.mjs
 ```
 
 The checker is fail-closed. It refuses an unknown node or edge type, an orphan
@@ -76,6 +77,14 @@ path to the NORTH_STAR, and any conflation of Product 1 and Product 2 authority
 or memory. On success it prints the active path, the terminal state of every
 branch, and the graph digest. **A refusal stops the session; it is not a
 warning.**
+
+The second checker is the door guard, and it is fail-closed in the same way. It
+derives this repository's contour, role address and role status from the pinned
+contour topology vendored at
+[`governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json`](governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json)
+— never from prose in this repository — and refuses drifted authority bytes, a
+role-entry surface that has lost the address, the uppercase `ADU` operational
+domain, the Owner-only launch/approval/merge assertion, or this invocation.
 
 Then verify the graph against live GitHub — the graph states intended state and
 never observes itself. Where the two disagree, live GitHub wins, and the

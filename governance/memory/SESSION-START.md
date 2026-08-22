@@ -47,7 +47,7 @@ with the record that governs it. Read the record; do not trust a summary.
 
 | Fact | Governing record |
 | :--- | :--- |
-| Tony (`avoroncov971-maker`) is the sole Owner, approver, and merger. Silence is not approval. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2, [`../control-plane/README.md`](../control-plane/README.md) §1 |
+| Tony (`avoroncov971-maker`) is the sole Owner, approver, and merger: he alone launches the role, adopts or approves material decisions, and merges. Silence is not approval. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2, [`../control-plane/README.md`](../control-plane/README.md) §1 |
 | The Owner alone launches the model- and vendor-neutral Construction Operations Director role. Its current address is contour `CONSTRUCTION`, role `role.construction.operations-director`; the role status is `referenced-not-frozen`. | Owner-adopted external record `kbp-core-engineering/kbp-dev-office: manifests/contour/deedseal-contour-topology-v1.json`, pinned by the adopting packet |
 | ChatGPT Lead is a control-plane role and authors no repository byte, and never becomes the fallback executor. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2, §4 |
 | Workers are bounded executors: one packet, one branch, one Draft PR, one declared allowlist. | [`../office/OPERATING-MODEL-v5.md`](../office/OPERATING-MODEL-v5.md) §2 |
@@ -105,9 +105,22 @@ never from chat memory or from a model's own proposal.
 
 ```bash
 node tools/memory/check-product2-live-goal-graph.mjs
+node tools/memory/check-construction-role-door.mjs
 ```
 
-The checker is fail-closed against the Owner-adopted minimal four-by-four
+The door checker is fail-closed against the Owner-adopted contour topology,
+vendored byte-identically at
+[`../contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json`](../contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json)
+with its provenance recorded outside its bytes. It derives this repository's
+contour, primary role address and role status from the single contour record
+the authority binds to this repository's door, and refuses drifted authority
+bytes with `CONTOUR_TOPOLOGY_DRIFT`. It refuses a role-entry surface that has
+lost the derived address, the uppercase `ADU` operational domain, the frozen
+`West Coast KBP — first user` relation, the `P1`/`P2`/`W1` lane machinery, the
+Owner-only launch/approval/merge assertion, or either required invocation of
+the checker itself.
+
+The graph checker is fail-closed against the Owner-adopted minimal four-by-four
 contract, vendored byte-identically at
 [`../product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json`](../product/VENDORED-MINIMAL-GOAL-CONTRACT-v1.schema.json)
 with its provenance recorded outside its bytes. Four node types — `GOAL`,
@@ -322,6 +335,7 @@ or launches anything.
 
 ```bash
 node tools/memory/check-product2-live-goal-graph.mjs
+node tools/memory/check-construction-role-door.mjs
 node --test tools/memory/build-graph.test.mjs tools/memory/build-session-start.test.mjs \
   tools/memory/check-product2-live-goal-graph.test.mjs
 ```

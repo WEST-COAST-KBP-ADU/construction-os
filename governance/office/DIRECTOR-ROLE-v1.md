@@ -54,7 +54,15 @@ the frozen text held byte-for-byte in `src/lib/deedsealCrossReference.ts`.
 
    ```bash
    node tools/memory/check-product2-live-goal-graph.mjs
+   node tools/memory/check-construction-role-door.mjs
    ```
+
+   The second checker guards the role door itself. It derives the contour, the
+   role address and the role status from the pinned contour topology vendored
+   at `governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json`, refuses
+   drifted authority bytes, and refuses any role-entry surface that has lost
+   the address, the uppercase `ADU` operational domain, the Owner-only
+   launch/approval/merge assertion, or this invocation.
 
    A refusal stops the session at the refusal. The graph states intended state
    and observes nothing about itself, so anything it calls active is a claim to

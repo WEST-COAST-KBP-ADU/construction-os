@@ -1,0 +1,312 @@
+{
+  "topology_version": "deedseal-contour-topology/v1.0",
+  "platform": {
+    "name": "Deedseal",
+    "statement": "Deedseal is the canonical platform name. Every canonical topology artifact of this packet identifies the platform as Deedseal and never as KBP.",
+    "internal_or_legacy_namespaces": [
+      "KBP",
+      "KBP Core",
+      "kbp-core-engineering/kbp-dev-office",
+      "kbp-core-engineering/kbp-core",
+      "kbp.work-class-policy.v1",
+      "kbp.work-class-capability-profile.v1",
+      "control-plane",
+      "product-deedseal",
+      "product-adu"
+    ],
+    "namespace_note": "These are internal engineering or legacy identifiers: repository names, schema ids, package prefixes and historical address roots. They are not renamed by this packet and they are not the platform name. This manifest performs no global rename."
+  },
+  "basis": {
+    "decision": "docs/coordination/decisions/decision-deedseal-contour-topology-v1.md",
+    "packet": "DEEDSEAL-CONTOUR-TOPOLOGY-IMPLEMENTATION-0001",
+    "issue": "https://github.com/kbp-core-engineering/kbp-dev-office/issues/709",
+    "base_revision": "2859b5348a5a46496d93a97f3a1ae7af788cbf0c",
+    "adopted_at": "2026-08-21",
+    "authorities": [
+      "https://github.com/kbp-core-engineering/kbp-dev-office/issues/644 — three-contour Owner decision, OWNER_ACCEPTED 2026-08-19",
+      "https://github.com/kbp-core-engineering/kbp-dev-office/issues/672 — A2 asynchronous dispatch boundary",
+      "https://github.com/kbp-core-engineering/kbp-dev-office/issues/707#issuecomment-5365387930 — BRIEFING_RESULT",
+      "https://github.com/kbp-core-engineering/kbp-dev-office/issues/707#issuecomment-5365485287 — OWNER_DECISION"
+    ]
+  },
+  "adoption": {
+    "production_adoption": "NOT_ADOPTED",
+    "activation": false,
+    "statement": "This manifest freezes topology, not runtime activation. Issue #644: 'This decision establishes topology, not runtime activation.'"
+  },
+  "not_implemented_at_this_stage": [
+    "SQL contour registry activation: core.contour_registry seeds exactly one contour under contour_registry_one_seed with registration_gate OWNER_DECISION_REQUIRED; the repository canon may name three contours while the database seeds one, because that constraint governs activation and this record governs topology. No migration is written or run by this packet",
+    "Owner Personal and Construction Department rosters: #644 froze the contours, not their internals, and no Owner decision names them yet",
+    "Session Passport v1 / executable Session Cursor extension: deferred by OWNER_DECISION D-4 to a separate packet; no passport, cursor or worker schema is touched here",
+    "the frozen Engineering primary role identifier: #644 defers it to the engineering-role canon packet, so this manifest references a role id and does not freeze one",
+    "runtime enforcement: nothing at runtime reads this manifest to admit or deny an action; it is a checked record, and the work-class policy remains the enforcement surface",
+    "no service, scheduler, queue, daemon, credential, protected-host contact or external publication is introduced by this record or its checker"
+  ],
+  "contour_keys": ["ENGINEERING", "OWNER_PERSONAL", "CONSTRUCTION"],
+  "contours": [
+    {
+      "key": "ENGINEERING",
+      "id": "engineering",
+      "title": "Engineering / Product Creation",
+      "primary_role": "role.engineering.director",
+      "role_status": "referenced-not-frozen",
+      "repositories": [
+        "kbp-core-engineering/kbp-dev-office",
+        "kbp-core-engineering/kbp-core",
+        "deedseal/deedseal",
+        "deedseal/deedseal-portal"
+      ],
+      "door": {
+        "repository": "kbp-core-engineering/kbp-dev-office",
+        "entry": "ENTRY.md",
+        "entry_route": null
+      },
+      "smallest_missing_fact": null,
+      "scope": "Deedseal Core and DEV OFFICE engineering; research, architecture, implementation, independent review, release preparation and evidence; Product 1 / Deedseal as an internal product scope and deployment target; the Design Studio capability pack; replaceable model workers selected by role and model policy.",
+      "note": "Product 1 keeps its repository, runtime, deployment credentials and release evidence isolated by execution profile and receives no top-level contour. It is not a Department: OWNER_DECISION 5365485287 corrected the briefing on exactly this point, and this packet mints no project or workspace taxonomy."
+    },
+    {
+      "key": "OWNER_PERSONAL",
+      "id": "owner-personal",
+      "title": "Owner Personal",
+      "primary_role": "role.owner-personal.chief-of-staff",
+      "role_status": "referenced-not-frozen",
+      "repositories": [],
+      "door": null,
+      "smallest_missing_fact": "the repository and entry file of the Owner Personal door. #644 declares the contour and its trust boundary; it names no repository, and this packet does not invent one. Until an Owner decision names it, the door is declared-not-opened rather than pointed at a file that does not exist.",
+      "scope": "private Owner memory, personal tasks, decisions, documents, approvals and personal ContextPackets, with data and credentials isolated from Engineering and Construction.",
+      "note": "It may approve bounded proposals and inherits no arbitrary engineering or construction execution authority. Declaring a contour is not activating it: no roster, no credential, no store and no route is created here."
+    },
+    {
+      "key": "CONSTRUCTION",
+      "id": "construction",
+      "title": "Construction",
+      "primary_role": "role.construction.operations-director",
+      "role_status": "referenced-not-frozen",
+      "repositories": ["WEST-COAST-KBP-ADU/construction-os"],
+      "door": {
+        "repository": "WEST-COAST-KBP-ADU/construction-os",
+        "entry": "ENTRY.md",
+        "entry_route": "governance/memory/SESSION-START.md"
+      },
+      "smallest_missing_fact": null,
+      "scope": "the ADU and construction operational domain: property, GIS and project records, clients, permits, contractors, commercial operations and physical-world effects.",
+      "note": "Isolated because its data, credentials, legal and commercial consequences and blast radius differ materially from Engineering and Owner Personal. Business-process activation stays deferred until the Owner opens it explicitly."
+    }
+  ],
+  "department_grammar": {
+    "term": "Department",
+    "plural": "Departments",
+    "machine_token": "DEPARTMENT",
+    "pattern": "^department\\.[a-z][a-z0-9-]*\\.[a-z][a-z0-9-]*$",
+    "cardinality": "a Department belongs to exactly one contour and is never shared between two",
+    "authority": "a Department is an organizational record. It grants nothing: authority continues to come only from role plus capability plus a Gate decision.",
+    "forbidden_aliases": [
+      "module", "Module", "MODULE_SUBGRAPH", "cell", "unit", "function",
+      "functional_unit", "capability", "cap", "role", "pack", "lane",
+      "contour", "stage", "entrypoint", "team", "squad", "division",
+      "branch", "workstream"
+    ],
+    "alias_note": "Screened by measured occurrence at 2859b53: Department occurs zero times in the tree, and every alias above is either already taken by a committed vocabulary or collides in prose. MODULE_SUBGRAPH in particular is one of the four adopted graph node types and a hard SQL constraint; a Department is not a graph node and introduces no fifth node type."
+  },
+  "departments": [
+    {
+      "id": "department.engineering.research",
+      "contour": "ENGINEERING",
+      "title": "Research",
+      "mandate": "read the world and the repository, and produce briefings and measured findings",
+      "capabilities": ["cap.connector.github_read", "cap.connector.drive_read", "cap.connector.search_read", "cap.connector.git_fetch"]
+    },
+    {
+      "id": "department.engineering.architecture",
+      "contour": "ENGINEERING",
+      "title": "Architecture",
+      "mandate": "decide structure, contracts and boundaries, and record them as canon",
+      "capabilities": ["cap.worktree.edit", "cap.connector.github_read"]
+    },
+    {
+      "id": "department.engineering.software-factory",
+      "contour": "ENGINEERING",
+      "title": "Software Factory",
+      "mandate": "implement bounded packets in a worktree and prove them locally",
+      "capabilities": ["cap.worktree.edit", "cap.disposable.execute", "cap.connector.git_fetch"]
+    },
+    {
+      "id": "department.engineering.review-verification",
+      "contour": "ENGINEERING",
+      "title": "Review / Verification",
+      "mandate": "adversarial exact-head review and independent verification, never of its own work",
+      "capabilities": ["cap.connector.github_read", "cap.disposable.execute"]
+    },
+    {
+      "id": "department.engineering.infrastructure",
+      "contour": "ENGINEERING",
+      "title": "Infrastructure",
+      "mandate": "the substrate the other Departments run on, up to but never past the Gate/Broker line",
+      "capabilities": ["cap.worktree.edit", "cap.disposable.execute"]
+    },
+    {
+      "id": "department.engineering.release-evidence",
+      "contour": "ENGINEERING",
+      "title": "Release / Evidence",
+      "mandate": "prepare releases and preserve append-only evidence, receipts and read models",
+      "capabilities": ["cap.publisher.push", "cap.publisher.draft_pr", "cap.connector.github_read"]
+    }
+  ],
+  "packs": [
+    {
+      "id": "pack.engineering.design-studio",
+      "contour": "ENGINEERING",
+      "title": "Design Studio",
+      "kind": "capability_pack",
+      "is_department": false,
+      "is_contour": false,
+      "capabilities": [
+        "cap.connector.search_read",
+        "cap.connector.drive_read",
+        "cap.connector.github_read",
+        "cap.worktree.edit",
+        "cap.disposable.execute"
+      ],
+      "grants": [],
+      "note": "A named, bounded subset of existing cap.* ids attachable to a Department's work. It defines no capability of its own and holds no authority. Design Studio creation stays inside Engineering; any public publishing is an external effect that must pass the common Gate/Broker path with exact authority, and content generation grants no publication authority. A future independent Design Studio contour requires a new Owner decision with its own trust, data and authority boundary."
+    }
+  ],
+  "capability_reference": {
+    "profile": "manifests/work-class/kbp-work-class-capability-profile-v1.json",
+    "profile_version": "kbp.work-class-capability-profile.v1",
+    "policy": "manifests/work-class/kbp-work-class-policy-v1.json",
+    "policy_version": "kbp.work-class-policy.v1",
+    "operations_no_capability_can_grant": [
+      "ready_for_review",
+      "merge",
+      "external_mutation",
+      "live_mutation",
+      "credential_operation",
+      "promotion",
+      "owner_decision"
+    ],
+    "statement": "Every capability a Department or pack names is a reference into the pinned profile; neither defines one. Publication authority is denied structurally rather than by assertion: the merged work-class policy gives these operation kinds capability 'none', so no capability and therefore no pack can grant them, and they fire RED_PRODUCTION_PROMOTION, RED_EXTERNAL_EFFECT, RED_LIVE_SYSTEM, RED_CREDENTIAL_ACCESS and RED_MAIN_OR_MERGE_AUTHORITY. This manifest cites that policy; it does not restate or weaken it."
+  },
+  "shared_substrate": {
+    "is_a_contour": false,
+    "statement": "All three contours reuse one governed platform substrate. Shared substrate is not a fourth contour and is refused by name if it is counted as one. It implies no shared raw memory, credential or authority: cross-contour exchange uses typed references, events and bounded ContextPackets, and direct cross-contour data or tool access fails closed.",
+    "components": [
+      "dataset and typed event envelope",
+      "contour, role and capability registries",
+      "Context Assembler and bounded ContextPackets",
+      "Dispatcher",
+      "Data Gateway",
+      "Gate and Broker",
+      "append-only evidence, receipts and read models",
+      "Owner Cockpit"
+    ]
+  },
+  "not_a_contour": [
+    {"name": "shared substrate", "why": "a reused platform layer beneath all three contours, not a trust boundary of its own"},
+    {"name": "pack.engineering.design-studio", "why": "a capability pack inside Engineering; it is neither a Department nor a contour and carries no publication authority"},
+    {"name": "PRODUCT_1", "why": "a legacy router stage absorbed below ENGINEERING as a retained internal product scope and address root"},
+    {"name": "product-deedseal", "why": "a legacy contour id retained only as a historical address root below ENGINEERING; it is not a top-level contour, not a router entrypoint and not a Department"},
+    {"name": "control-plane", "why": "the legacy contour id of Engineering; the meaning is unchanged and the token is superseded by ENGINEERING / engineering"},
+    {"name": "product-adu", "why": "the legacy contour id superseded by CONSTRUCTION / construction; retained as a historical address root"},
+    {"name": "a product, repository, workspace, capability pack, deployment target or model", "why": "#644: none of these is by itself a contour; a new contour requires a materially distinct trust boundary — isolated durable memory and data, authority and credentials, failure blast radius, regulatory or privacy class, lifecycle, or acting principal"}
+  ],
+  "supersession": {
+    "legacy_registry": "docs/coordination/graph/manifest/topology.json",
+    "legacy_router_stages": ["ENGINEERING", "PRODUCT_1", "PRODUCT_2"],
+    "stages": [
+      {
+        "legacy_stage": "ENGINEERING",
+        "legacy_contour_id": "control-plane",
+        "becomes": "contour",
+        "successor": "ENGINEERING",
+        "note": "meaning unchanged, token renamed"
+      },
+      {
+        "legacy_stage": "PRODUCT_1",
+        "legacy_contour_id": "product-deedseal",
+        "becomes": "internal-scope-below-engineering",
+        "successor": "ENGINEERING",
+        "note": "absorbed below ENGINEERING as a retained internal product scope and address root; not a contour, not a router entrypoint, not a Department"
+      },
+      {
+        "legacy_stage": "PRODUCT_2",
+        "legacy_contour_id": "product-adu",
+        "becomes": "contour",
+        "successor": "CONSTRUCTION",
+        "note": "renamed to the operational domain it always was"
+      },
+      {
+        "legacy_stage": null,
+        "legacy_contour_id": null,
+        "becomes": "contour",
+        "successor": "OWNER_PERSONAL",
+        "note": "new; it supersedes nothing and therefore names no legacy stage or contour id"
+      }
+    ],
+    "seams": {
+      "removed": [
+        {
+          "seam": "seam.engineering-to-product-1.adopted-goal-contract",
+          "why": "with Product 1 below ENGINEERING the edge is intra-contour, and the router declares cross-contour edges only. It leaves the router rather than being restated there, because the same edge in two places is ROUTER_SEAM_DOUBLE_DECLARED and two readers would get two answers.",
+          "evidence_contract_retained": "evidence.control-plane.adopted-4x4-goal-contract"
+        }
+      ],
+      "remapped": [
+        {
+          "seam": "seam.product-1-to-product-2.frozen-public-cross-reference-wording",
+          "from": "PRODUCT_1 -> PRODUCT_2",
+          "to": "ENGINEERING -> CONSTRUCTION"
+        },
+        {
+          "seam": "seam.engineering-to-product-2.vendored-goal-contract",
+          "from": "ENGINEERING -> PRODUCT_2",
+          "to": "ENGINEERING -> CONSTRUCTION"
+        }
+      ]
+    }
+  },
+  "legacy_address_roots": [
+    {"root": "control-plane.", "legacy_contour": "control-plane", "successor": "ENGINEERING", "rewritten": false},
+    {"root": "core.", "legacy_contour": "control-plane", "successor": "ENGINEERING", "rewritten": false},
+    {"root": "product-deedseal.", "legacy_contour": "product-deedseal", "successor": "ENGINEERING", "rewritten": false},
+    {"root": "product-adu.", "legacy_contour": "product-adu", "successor": "CONSTRUCTION", "rewritten": false}
+  ],
+  "preserved_evidence": [
+    {
+      "path": "docs/coordination/graph/live/product-1-goal-graph.json",
+      "digest": "sha256:9bb98df0c56ac24e293149f7c5d97d1e3a52fcaf714470d496f1d226b5f6cd2a",
+      "why": "the live Product 1 goal graph is referenced and re-pinned, never rewritten; the router pin and check_graph_reconcile.py both resolve against these exact bytes"
+    },
+    {
+      "path": "docs/coordination/graph/minimal-goal-contract/manifest.schema.json",
+      "digest": "sha256:c27f84bdeb2677778cbaa07a373c61a34bb51664ffc2bcb2d9fdaf22dca9b6dd",
+      "why": "the adopted 4x4 contract two router evidence contracts pin at two different revisions; identical bytes, so the digest is the binding"
+    },
+    {
+      "path": "docs/coordination/decisions/decision-unified-concept.md",
+      "digest": "sha256:01231a0fd3fdb7c40774acd65a8215edbf6a397ed6f634134ea39a745daa778a",
+      "why": "the frozen public cross-reference wording; the seam that carries it is remapped, its bytes are not"
+    }
+  ],
+  "legacy_session_tokens": {
+    "record": "docs/coordination/graph/SESSION-PASSPORT-v0.md",
+    "validator": "tools/graph_foundation/passport.py",
+    "tokens": [
+      {"token": "CONTROL_PLANE", "successor": "ENGINEERING"},
+      {"token": "PRODUCT_DEEDSEAL", "successor": "ENGINEERING"},
+      {"token": "PRODUCT_ADU", "successor": "CONSTRUCTION"}
+    ],
+    "statement": "Session Passport v0 keeps its own closed contour vocabulary and is not retokenized by this packet. Existing v0 preambles stay valid: nothing here edits the passport record, its validator or its two acceptance guards. The mapping is declared so a reader of an old preamble can resolve it, not so a session is forced to break."
+  },
+  "session_contract": {
+    "owner": "docs/coordination/graph/SESSION-PASSPORT-v0.md",
+    "deferred_extension": "Session Passport v1 / executable Session Cursor, OWNER_DECISION D-4 — a separate packet",
+    "fields_this_manifest_must_not_carry": [
+      "session_id", "work_node_id", "base_sha", "packet_digest",
+      "read_set", "write_set", "expires_at", "allowlist_entries",
+      "activity_mode", "cursor_id"
+    ],
+    "statement": "There is exactly one session/worker binding record and this manifest is not it. A contour, Department or pack record that declared any field above would be a second, competing session contract, and it is refused by name rather than merged."
+  }
+}

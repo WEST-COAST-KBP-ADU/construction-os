@@ -164,9 +164,19 @@ committed, and it cannot approve, accept, merge, dispatch, or launch a worker.
 
 ```bash
 node tools/memory/check-product2-live-goal-graph.mjs
+node tools/memory/check-construction-role-door.mjs
 node --test tools/memory/build-graph.test.mjs tools/memory/build-session-start.test.mjs \
   tools/memory/check-product2-live-goal-graph.test.mjs
 ```
+
+The door checker derives this repository's contour, primary role address and
+role status from the contour topology vendored byte-identically at
+[`../contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json`](../contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json),
+with its provenance recorded outside its bytes in
+`tools/memory/check-construction-role-door.mjs`. It refuses drifted authority
+bytes with `CONTOUR_TOPOLOGY_DRIFT`, and refuses a role-entry surface that has
+lost the derived address, the uppercase `ADU` operational domain, the
+Owner-only launch/approval/merge assertion, or a required invocation of itself.
 
 The goal-graph checker prints the deterministic path from the active Work Node
 to the Product 2 NORTH_STAR, the terminal state of every branch and join, the

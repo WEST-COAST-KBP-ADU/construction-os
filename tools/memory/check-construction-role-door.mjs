@@ -3,11 +3,39 @@
 /**
  * Fail-closed checker for the Construction contour's canonical role door.
  *
- * It reads repository bytes only, uses the Node standard library, and runs
- * hostile probes entirely in memory. It activates no runtime and writes no
+ * The door's address is not asserted here. It is derived from an immutable,
+ * independently pinned authority vendored byte-identically at
+ * `governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json` from:
+ *
+ *   repository : kbp-core-engineering/kbp-dev-office
+ *   path       : manifests/contour/deedseal-contour-topology-v1.json
+ *   revision   : d8038451c820ce0ae22b8575bbbfa7183424f79d
+ *   blob sha1  : 634f8927a98db840a48bc2d8d281d9e7645f8c9b
+ *   sha256     : c5170a7df374a72c740c4ccc62a93b8b91a93caf086193f19c9566affe1fb972
+ *   byte count : 18515
+ *
+ * The vendored bytes carry no provenance of their own — that would break the
+ * byte identity they exist to prove — so provenance lives here, outside them,
+ * exactly as `tools/memory/check-product2-live-goal-graph.mjs` records it for
+ * the vendored minimal goal contract.
+ *
+ * Pin reconciliation, recorded because the adopting packet states two of these
+ * six values differently. Issue #341 pins `byte count: 18516` and
+ * `sha256: e132395db9a274b52c1003096f89a6a802e362e1134f4c1fb8038ed821bb91dd`.
+ * Those two values describe the source blob's bytes **plus one appended
+ * terminating newline**, not the blob itself: appending `\n` to the vendored
+ * file reproduces both exactly. The other four pins — repository, path,
+ * revision and blob SHA-1 — are verified identical against live GitHub, and a
+ * git blob SHA-1 fixes both the content and its 18515-byte length. The vendored
+ * copy is therefore the exact source bytes the packet's imperative and its own
+ * blob SHA-1 name, and `git hash-object` on it reproduces `634f8927…`.
+ *
+ * The checker reads repository bytes only, uses the Node standard library, and
+ * runs hostile probes entirely in memory. It activates no runtime and writes no
  * repository or external state.
  */
 
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -17,15 +45,47 @@ const ENTRY = 'ENTRY.md';
 const AGENTS = 'AGENTS.md';
 const SESSION = 'governance/memory/SESSION-START.md';
 const DIRECTOR = 'governance/office/DIRECTOR-ROLE-v1.md';
+const README = 'governance/memory/README.md';
+
+/** The four role-entry surfaces whose address must match the pinned authority. */
 const PATHS = [ENTRY, AGENTS, SESSION, DIRECTOR];
 
-const CONTOUR = 'CONSTRUCTION';
-const ROLE = 'role.construction.operations-director';
+/** Every surface this checker reads. */
+const SURFACES = [...PATHS, README];
+
+export const VENDORED_TOPOLOGY = Object.freeze({
+  path: 'governance/contour/VENDORED-DEEDSEAL-CONTOUR-TOPOLOGY-v1.json',
+  sourceRepository: 'kbp-core-engineering/kbp-dev-office',
+  sourcePath: 'manifests/contour/deedseal-contour-topology-v1.json',
+  sourceRevision: 'd8038451c820ce0ae22b8575bbbfa7183424f79d',
+  sourceBlobSha1: '634f8927a98db840a48bc2d8d281d9e7645f8c9b',
+  sourceDigest: 'sha256:c5170a7df374a72c740c4ccc62a93b8b91a93caf086193f19c9566affe1fb972',
+  sourceBytes: 18515,
+});
+
+/**
+ * The only thing this repository is allowed to assert about itself: which door
+ * it is. Everything else — contour key, role address, role status, cold-start
+ * route, operational domain — is looked up in the pinned authority under this
+ * binding and can never be supplied by a constant in this delta.
+ */
+const LOCAL_REPOSITORY = 'WEST-COAST-KBP-ADU/construction-os';
+const LOCAL_DOOR_ENTRY = ENTRY;
+
 const OWNER = 'avoroncov971-maker';
 const FROZEN_RELATION = 'West Coast KBP — first user';
-const COLD_START_ROUTE = 'governance/memory/SESSION-START.md';
+const COLD_START_COMMAND = 'node tools/memory/check-construction-role-door.mjs';
+
+/** Cold-start / verification surfaces, with the number of required invocations. */
+const REGISTRATIONS = [
+  [ENTRY, 1],
+  [DIRECTOR, 1],
+  [README, 1],
+  [SESSION, 2],
+];
 
 const REFUSAL = Object.freeze({
+  TOPOLOGY: 'CONTOUR_TOPOLOGY_DRIFT',
   CONTOUR: 'CONSTRUCTION_CONTOUR_MISSING_OR_WRONG',
   ROLE: 'CONSTRUCTION_ROLE_ADDRESS_MISSING_OR_WRONG',
   LEGACY_DOOR: 'LEGACY_PRODUCT2_CURRENT_DOOR',
@@ -38,26 +98,201 @@ const REFUSAL = Object.freeze({
   FROZEN_RELATION: 'FROZEN_FIRST_USER_RELATION_DRIFT',
   LANES: 'INTERNAL_LANE_MACHINERY_MISSING',
   DOMAIN: 'CONSTRUCTION_OPERATIONAL_DOMAIN_MISSING',
+  REGISTRATION: 'COLD_START_REGISTRATION_MISSING',
 });
 
-const clone = (surfaces) => Object.fromEntries(
-  Object.entries(surfaces).map(([path, content]) => [path, `${content}`]),
-);
+const clone = (input) => ({
+  topology: `${input.topology}`,
+  surfaces: Object.fromEntries(
+    Object.entries(input.surfaces).map(([path, content]) => [path, `${content}`]),
+  ),
+});
 
-function validate(surfaces) {
+/**
+ * Derive the door's address from the vendored authority, or refuse.
+ *
+ * Missing, unreadable, malformed, digest-drifted, or ambiguous authority all
+ * produce `CONTOUR_TOPOLOGY_DRIFT`. There is no fallback: without the pinned
+ * bytes there is no address, and every address-bearing check below is skipped
+ * rather than silently satisfied by a local constant.
+ */
+function deriveAuthority(raw, refuse) {
+  if (typeof raw !== 'string' || raw.length === 0) {
+    refuse(REFUSAL.TOPOLOGY, `the vendored contour topology at ${VENDORED_TOPOLOGY.path} is missing or empty`);
+    return null;
+  }
+
+  const bytes = Buffer.byteLength(raw, 'utf8');
+  const digest = `sha256:${createHash('sha256').update(raw, 'utf8').digest('hex')}`;
+  if (bytes !== VENDORED_TOPOLOGY.sourceBytes || digest !== VENDORED_TOPOLOGY.sourceDigest) {
+    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY.path} is ${bytes} bytes digesting ${digest}; the pinned authority at ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} is ${VENDORED_TOPOLOGY.sourceBytes} bytes digesting ${VENDORED_TOPOLOGY.sourceDigest}. The vendored copy is no longer byte-identical to the authority it claims to reuse, so the door's address cannot be derived from it.`);
+    return null;
+  }
+
+  let topology;
+  try {
+    topology = JSON.parse(raw);
+  } catch (error) {
+    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY.path} is not parseable JSON: ${error?.message ?? error}`);
+    return null;
+  }
+
+  const contours = Array.isArray(topology?.contours) ? topology.contours : [];
+  const matches = contours.filter((contour) => contour
+    && typeof contour === 'object'
+    && contour.door
+    && typeof contour.door === 'object'
+    && contour.door.repository === LOCAL_REPOSITORY
+    && contour.door.entry === LOCAL_DOOR_ENTRY);
+
+  if (matches.length !== 1) {
+    refuse(REFUSAL.TOPOLOGY, `the pinned authority binds ${matches.length} contour records to the door ${LOCAL_REPOSITORY}:${LOCAL_DOOR_ENTRY}; exactly one is required`);
+    return null;
+  }
+
+  const [record] = matches;
+  const text = (value) => (typeof value === 'string' ? value.trim() : '');
+  const authority = {
+    contour: text(record.key),
+    role: text(record.primary_role),
+    status: text(record.role_status),
+    route: text(record.door.entry_route),
+    scope: text(record.scope),
+  };
+
+  for (const [field, value] of Object.entries(authority)) {
+    if (!value) {
+      refuse(REFUSAL.TOPOLOGY, `the pinned contour record for ${LOCAL_REPOSITORY} carries no usable '${field}'; the door's address cannot be derived`);
+      return null;
+    }
+  }
+
+  const keys = Array.isArray(topology?.contour_keys) ? topology.contour_keys : [];
+  if (!keys.includes(authority.contour)) {
+    refuse(REFUSAL.TOPOLOGY, `the pinned contour key '${authority.contour}' is not one of the authority's declared contour keys ${JSON.stringify(keys)}`);
+    return null;
+  }
+
+  if (!Array.isArray(record.repositories) || !record.repositories.includes(LOCAL_REPOSITORY)) {
+    refuse(REFUSAL.TOPOLOGY, `the pinned contour record for door ${LOCAL_REPOSITORY} does not list ${LOCAL_REPOSITORY} among its repositories`);
+    return null;
+  }
+
+  if (authority.route !== SESSION) {
+    refuse(REFUSAL.TOPOLOGY, `the pinned authority routes this door to '${authority.route}', not to the cold start this repository ships at '${SESSION}'`);
+    return null;
+  }
+
+  // The operational-domain tokens are read out of the authority's own scope
+  // sentence, so they cannot be softened by editing this file.
+  authority.domainTokens = ['ADU', 'construction'].filter((token) => authority.scope.includes(token));
+  if (authority.domainTokens.length !== 2) {
+    refuse(REFUSAL.TOPOLOGY, `the pinned contour scope does not name the ADU and construction operational domain: ${JSON.stringify(authority.scope)}`);
+    return null;
+  }
+
+  return authority;
+}
+
+/**
+ * Segment a markdown surface into assertion units: one bullet, table cell, or
+ * sentence each. An Owner-only authority claim must live inside a single unit,
+ * so unrelated prose elsewhere in the file cannot lend it a verb it lacks.
+ */
+export function assertionUnits(content) {
+  const blocks = [];
+  let current = [];
+  const flush = () => {
+    if (current.length > 0) blocks.push(current.join(' '));
+    current = [];
+  };
+
+  for (const rawLine of `${content}`.split('\n')) {
+    const line = rawLine.trim();
+    const startsBlock = line === ''
+      || /^#{1,6}\s/.test(line)
+      || /^```/.test(line)
+      || /^(?:[-*+]|\d+\.)\s/.test(line)
+      || /^\|/.test(line)
+      || /^>/.test(line);
+    if (startsBlock) {
+      flush();
+      if (line === '') continue;
+    }
+    current.push(line);
+  }
+  flush();
+
+  return blocks
+    .flatMap((block) => (block.startsWith('|') ? block.split('|') : [block]))
+    .flatMap((chunk) => chunk.split(/(?<=\.)\s+/))
+    .map((unit) => unit.trim())
+    .filter((unit) => unit.length > 0);
+}
+
+const OWNER_VERBS = Object.freeze({
+  launch: /\blaunch(?:es|ed|ing)?\b/i,
+  'approve/adopt': /\b(?:approves?|approval|approving|adopts?|adoption|adopting)\b/i,
+  merge: /\bmerges?\b/i,
+});
+
+/**
+ * Return the Owner-only authority verbs that no single Owner assertion binds on
+ * this surface. An assertion qualifies only if it names the Owner login, scopes
+ * it with `alone`/`sole`, and carries the verb itself.
+ */
+function unboundOwnerVerbs(content) {
+  const claims = assertionUnits(content).filter((unit) => unit.includes(OWNER)
+    && /\b(?:alone|sole)\b/i.test(unit));
+  const names = Object.keys(OWNER_VERBS);
+  if (claims.length === 0) return names;
+
+  for (const claim of claims) {
+    const missing = names.filter((name) => !OWNER_VERBS[name].test(claim));
+    if (missing.length === 0) return [];
+  }
+
+  // Report the closest near-miss so the refusal names a repairable gap.
+  return claims
+    .map((claim) => names.filter((name) => !OWNER_VERBS[name].test(claim)))
+    .sort((a, b) => a.length - b.length)[0];
+}
+
+export function validate(input) {
   const errors = [];
   const refuse = (code, detail) => errors.push(`${code}: ${detail}`);
+  const surfaces = input.surfaces ?? {};
   const every = (predicate) => PATHS.every((path) => predicate(surfaces[path] ?? '', path));
   const joined = PATHS.map((path) => surfaces[path] ?? '').join('\n');
   const entry = surfaces[ENTRY] ?? '';
 
-  if (!entry.startsWith(`# ENTRY · CONTOUR: ${CONTOUR} · ROLE:`)
-      || !every((content) => content.includes(CONTOUR))) {
-    refuse(REFUSAL.CONTOUR, `the current door and all role-entry surfaces must declare contour ${CONTOUR}`);
-  }
+  const authority = deriveAuthority(input.topology, refuse);
 
-  if (!every((content) => content.includes(ROLE))) {
-    refuse(REFUSAL.ROLE, `all role-entry surfaces must carry the exact role address ${ROLE}`);
+  if (authority) {
+    if (!entry.startsWith(`# ENTRY · CONTOUR: ${authority.contour} · ROLE:`)
+        || !every((content) => content.includes(authority.contour))) {
+      refuse(REFUSAL.CONTOUR, `the current door and all role-entry surfaces must declare the pinned contour ${authority.contour}`);
+    }
+
+    if (!every((content) => content.includes(authority.role))) {
+      refuse(REFUSAL.ROLE, `all role-entry surfaces must carry the pinned role address ${authority.role}`);
+    }
+
+    if (!every((content) => content.includes(authority.status))
+        || /role status\s*:\s*`?(?:frozen|adopted|active)`?/i.test(joined)) {
+      refuse(REFUSAL.ROLE_STATUS, `the referenced Construction role must be presented exactly at its pinned status ${authority.status}, never as frozen, adopted, or active`);
+    }
+
+    const routeLink = '[`' + authority.route + '`](' + authority.route + ')';
+    if (!entry.includes(routeLink)) {
+      refuse(REFUSAL.ROUTE, `ENTRY.md must route directly to the pinned cold start ${authority.route}`);
+    }
+
+    if (!every((content) => /West Coast KBP/i.test(content)
+        && /\bADU\b/.test(content)
+        && /construction/i.test(content))) {
+      refuse(REFUSAL.DOMAIN, `every role-entry surface must retain the West Coast KBP / ${authority.domainTokens.join(' and ')} operational domain, with the operational-domain token \`ADU\` in uppercase; lowercase legacy text such as \`product-adu\` does not satisfy it`);
+    }
   }
 
   if (/^#.*PRODUCT 2 DIRECTOR|role\s*:\s*PRODUCT 2 DIRECTOR/im.test(entry)) {
@@ -73,22 +308,21 @@ function validate(surfaces) {
     refuse(REFUSAL.PRODUCT2_CONTOUR, 'Product 2 is business/product vocabulary inside Construction, not a current top-level contour');
   }
 
-  if (!every((content) => content.includes(OWNER)
-      && /Owner[^\n]{0,100}\b(?:alone|sole)\b/i.test(content)
-      && /launch/i.test(content)
-      && /approv|adopt/i.test(content)
-      && /merg/i.test(content))) {
-    refuse(REFUSAL.OWNER, `every role-entry surface must preserve ${OWNER} as the only launcher, approver/adopter, and merger`);
+  for (const path of PATHS) {
+    const content = surfaces[path] ?? '';
+    if (!content.includes(OWNER)) {
+      refuse(REFUSAL.OWNER, `${path} must name ${OWNER} as the Owner`);
+      continue;
+    }
+    const missing = unboundOwnerVerbs(content);
+    if (missing.length > 0) {
+      refuse(REFUSAL.OWNER, `${path} carries no single Owner-only assertion binding ${missing.join(', ')} to ${OWNER} alone; an occurrence elsewhere in the file does not bind it`);
+    }
   }
 
   const neutral = /neutral to model and vendor|model- and vendor-neutral|model and vendor neutral/i;
   if (!every((content) => neutral.test(content))) {
     refuse(REFUSAL.NEUTRALITY, 'the role handoff must remain explicitly neutral to model and vendor');
-  }
-
-  const routeLink = '[`' + COLD_START_ROUTE + '`](' + COLD_START_ROUTE + ')';
-  if (!entry.includes(routeLink)) {
-    refuse(REFUSAL.ROUTE, `ENTRY.md must route directly to ${COLD_START_ROUTE}`);
   }
 
   const liveClaims = [
@@ -104,11 +338,6 @@ function validate(surfaces) {
     refuse(REFUSAL.ACTIVATION, 'every role-entry surface must state the non-activation boundary');
   }
 
-  if (!every((content) => content.includes('referenced-not-frozen'))
-      || /role status\s*:\s*`?(?:frozen|adopted|active)`?/i.test(joined)) {
-    refuse(REFUSAL.ROLE_STATUS, 'the referenced Construction role must not be presented as frozen, adopted, or active');
-  }
-
   if (!every((content) => content.includes(FROZEN_RELATION)) || joined.includes('West Coast KBP — first client')) {
     refuse(REFUSAL.FROZEN_RELATION, `the only admitted wording is ${FROZEN_RELATION}`);
   }
@@ -117,31 +346,44 @@ function validate(surfaces) {
     refuse(REFUSAL.LANES, 'the internal P1/P2/W1 lane machinery must remain explicit on every role-entry surface');
   }
 
-  if (!every((content) => /West Coast KBP/i.test(content)
-      && /\bADU\b/i.test(content)
-      && /construction/i.test(content))) {
-    refuse(REFUSAL.DOMAIN, 'every role-entry surface must retain the West Coast KBP / ADU and construction operational domain');
+  for (const [path, required] of REGISTRATIONS) {
+    const content = surfaces[path] ?? '';
+    const found = content.split(COLD_START_COMMAND).length - 1;
+    if (found < required) {
+      refuse(REFUSAL.REGISTRATION, `${path} invokes \`${COLD_START_COMMAND}\` ${found} time(s); the cold-start and verification sequence requires ${required}`);
+    }
   }
 
-  return errors;
+  return { errors, authority };
 }
 
 function assertHostileProbe(name, baseline, mutate, expectedCode) {
   const hostile = clone(baseline);
-  mutate(hostile);
-  const codes = validate(hostile).map((error) => error.split(':', 1)[0]);
+  mutate(hostile.surfaces, hostile);
+  if (hostile.topology === baseline.topology
+      && PATHS.concat(README).every((path) => hostile.surfaces[path] === baseline.surfaces[path])) {
+    throw new Error(`HOSTILE_PROBE_INERT ${name}: the mutation changed nothing, so it proves nothing`);
+  }
+  const codes = validate(hostile).errors.map((error) => error.split(':', 1)[0]);
   if (!codes.includes(expectedCode)) {
     throw new Error(`HOSTILE_PROBE_FAILED ${name}: expected ${expectedCode}, observed ${JSON.stringify(codes)}`);
   }
 }
 
+const replaceLast = (content, needle, replacement) => {
+  const index = content.lastIndexOf(needle);
+  return index < 0 ? content : content.slice(0, index) + replacement + content.slice(index + needle.length);
+};
+
 async function main() {
-  const surfaces = Object.fromEntries(await Promise.all(PATHS.map(async (path) => [
+  const surfaces = Object.fromEntries(await Promise.all(SURFACES.map(async (path) => [
     path,
     await readFile(resolve(ROOT, path), 'utf8'),
   ])));
+  const topology = await readFile(resolve(ROOT, VENDORED_TOPOLOGY.path), 'utf8');
+  const baseline = { surfaces, topology };
 
-  const baselineErrors = validate(surfaces);
+  const { errors: baselineErrors, authority } = validate(baseline);
   if (baselineErrors.length > 0) {
     for (const error of baselineErrors) process.stderr.write(`CONSTRUCTION_ROLE_DOOR_REFUSED: ${error}\n`);
     process.exitCode = 1;
@@ -149,26 +391,43 @@ async function main() {
   }
 
   const probes = [
-    ['wrong contour', (input) => { input[ENTRY] = input[ENTRY].replace('CONTOUR: CONSTRUCTION', 'CONTOUR: ENGINEERING'); }, REFUSAL.CONTOUR],
-    ['wrong role', (input) => { for (const path of PATHS) input[path] = input[path].replaceAll(ROLE, 'role.construction.general-manager'); }, REFUSAL.ROLE],
+    ['wrong contour', (input) => { input[ENTRY] = input[ENTRY].replace(`CONTOUR: ${authority.contour}`, 'CONTOUR: ENGINEERING'); }, REFUSAL.CONTOUR],
+    ['wrong role', (input) => { for (const path of PATHS) input[path] = input[path].replaceAll(authority.role, 'role.construction.general-manager'); }, REFUSAL.ROLE],
     ['legacy current door', (input) => { input[ENTRY] = input[ENTRY].replace(/^#.*$/m, '# ENTRY · ROLE: PRODUCT 2 DIRECTOR'); }, REFUSAL.LEGACY_DOOR],
     ['Product 2 promoted to contour', (input) => { input[ENTRY] += '\nProduct 2 is the current top-level contour.\n'; }, REFUSAL.PRODUCT2_CONTOUR],
-    ['Owner authority lost', (input) => { for (const path of PATHS) input[path] = input[path].replaceAll(OWNER, 'Worker-338'); }, REFUSAL.OWNER],
+    ['Owner identity lost', (input) => { for (const path of PATHS) input[path] = input[path].replaceAll(OWNER, 'Worker-341'); }, REFUSAL.OWNER],
+    ['Owner assertion loses launch authority', (input) => { input[DIRECTOR] = input[DIRECTOR].replace('launches it, adopts or approves', 'adopts or approves'); }, REFUSAL.OWNER],
+    ['Owner assertion loses approval/adoption authority', (input) => { input[DIRECTOR] = input[DIRECTOR].replace(', adopts or approves material decisions,', ','); }, REFUSAL.OWNER],
+    ['Owner assertion loses merge authority', (input) => { input[DIRECTOR] = input[DIRECTOR].replace('material decisions, and merges.', 'material decisions.'); }, REFUSAL.OWNER],
     ['model/vendor neutrality lost', (input) => { for (const path of PATHS) input[path] = input[path].replace(/neutral to model and vendor|model- and vendor-neutral|model and vendor neutral/gi, 'runtime-specific'); }, REFUSAL.NEUTRALITY],
-    ['cold-start route lost', (input) => { input[ENTRY] = input[ENTRY].replaceAll(COLD_START_ROUTE, 'governance/memory/MISSING.md'); }, REFUSAL.ROUTE],
+    ['cold-start route lost', (input) => { input[ENTRY] = input[ENTRY].replaceAll(authority.route, 'governance/memory/MISSING.md'); }, REFUSAL.ROUTE],
     ['runtime falsely active', (input) => { input[ENTRY] += '\nRuntime is active.\n'; }, REFUSAL.ACTIVATION],
-    ['role status overclaimed', (input) => { input[ENTRY] = input[ENTRY].replace('role status: `referenced-not-frozen`', 'role status: `active`'); }, REFUSAL.ROLE_STATUS],
+    ['role status overclaimed', (input) => { input[ENTRY] = input[ENTRY].replace(`role status: \`${authority.status}\``, 'role status: `active`'); }, REFUSAL.ROLE_STATUS],
     ['frozen relation widened', (input) => { for (const path of PATHS) input[path] = input[path].replaceAll(FROZEN_RELATION, 'West Coast KBP — first client'); }, REFUSAL.FROZEN_RELATION],
     ['lane board lost', (input) => { input[AGENTS] = input[AGENTS].replaceAll('`W1`', '`W2`'); }, REFUSAL.LANES],
+    ['operational domain lost, legacy lowercase product-adu left intact', (input) => { for (const path of PATHS) input[path] = input[path].replaceAll('ADU', 'DWELLING'); }, REFUSAL.DOMAIN],
+    ['vendored authority bytes altered', (input, state) => { state.topology = state.topology.replace('"referenced-not-frozen"', '"frozen"'); }, REFUSAL.TOPOLOGY],
+    ['vendored authority unparseable', (input, state) => { state.topology = state.topology.slice(0, 4096); }, REFUSAL.TOPOLOGY],
+    ['role relabelled on every surface and in the vendored authority together', (input, state) => {
+      for (const path of PATHS) input[path] = input[path].replaceAll(authority.role, 'role.construction.general-manager');
+      state.topology = state.topology.replaceAll(authority.role, 'role.construction.general-manager');
+    }, REFUSAL.TOPOLOGY],
+    ['cold-start registration removed from ENTRY.md', (input) => { input[ENTRY] = input[ENTRY].replaceAll(COLD_START_COMMAND, ''); }, REFUSAL.REGISTRATION],
+    ['cold-start registration removed from DIRECTOR-ROLE-v1.md', (input) => { input[DIRECTOR] = input[DIRECTOR].replaceAll(COLD_START_COMMAND, ''); }, REFUSAL.REGISTRATION],
+    ['cold-start registration removed from governance/memory/README.md', (input) => { input[README] = input[README].replaceAll(COLD_START_COMMAND, ''); }, REFUSAL.REGISTRATION],
+    ['first SESSION-START.md registration removed, second left intact', (input) => { input[SESSION] = input[SESSION].replace(COLD_START_COMMAND, ''); }, REFUSAL.REGISTRATION],
+    ['second SESSION-START.md registration removed, first left intact', (input) => { input[SESSION] = replaceLast(input[SESSION], COLD_START_COMMAND, ''); }, REFUSAL.REGISTRATION],
   ];
 
   for (const [name, mutate, expectedCode] of probes) {
-    assertHostileProbe(name, surfaces, mutate, expectedCode);
+    assertHostileProbe(name, baseline, mutate, expectedCode);
   }
 
-  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_OK: 12 positive check groups, ${probes.length} hostile probes, 0 refusals\n`);
-  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ADDRESS: contour=${CONTOUR} role=${ROLE} status=referenced-not-frozen\n`);
-  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ROUTE: ${ENTRY} -> ${COLD_START_ROUTE}\n`);
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_OK: 14 positive check groups, ${probes.length} hostile probes, 0 refusals\n`);
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_AUTHORITY: ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} ${VENDORED_TOPOLOGY.sourceDigest} (vendored byte-identical at ${VENDORED_TOPOLOGY.path})\n`);
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ADDRESS: contour=${authority.contour} role=${authority.role} status=${authority.status} (derived from the pinned authority, not asserted here)\n`);
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ROUTE: ${ENTRY} -> ${authority.route}\n`);
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_COLD_START: ${REGISTRATIONS.map(([path, count]) => `${path}x${count}`).join(' ')}\n`);
   process.stdout.write('CONSTRUCTION_ROLE_DOOR_EXTERNAL_EFFECTS: none\n');
 }
 
