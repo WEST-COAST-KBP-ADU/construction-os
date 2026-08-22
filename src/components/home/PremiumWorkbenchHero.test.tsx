@@ -13,17 +13,31 @@ import {
   BLUEPRINT_MOTION_SLOT_ID,
   HERO_CHAPTERS,
   HERO_CHAPTER_LABELS,
+  HERO_PHASE_DERIVED_CHAPTERS,
+  HERO_RAIL_LABEL,
+  HERO_STANDING_CHAPTER,
   PREMIUM_WORKBENCH_HERO_ACTIONS,
   PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION,
   PREMIUM_WORKBENCH_HERO_COPY,
-  PREMIUM_WORKBENCH_HERO_MEDIA,
-  PREMIUM_WORKBENCH_HERO_MEDIA_ASPECT,
   heroChapterElementId,
   isBlueprintMotionPhase,
   isHeroChapter,
 } from "./premiumWorkbenchHero.contract";
 
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
+
+const COMPONENT_SOURCE = readFileSync(
+  path.join(moduleDir, "PremiumWorkbenchHero.tsx"),
+  "utf8",
+);
+const CONTRACT_SOURCE = readFileSync(
+  path.join(moduleDir, "premiumWorkbenchHero.contract.ts"),
+  "utf8",
+);
+const CSS_SOURCE = readFileSync(
+  path.join(moduleDir, "PremiumWorkbenchHero.module.css"),
+  "utf8",
+);
 
 function render(node: Parameters<typeof renderToStaticMarkup>[0]): string {
   return renderToStaticMarkup(node);
@@ -58,31 +72,54 @@ function ruleBody(css: string, selector: string): string {
 }
 
 describe("premiumWorkbenchHero.contract", () => {
-  it("publishes the five stable motion phases in narrative order", () => {
+  it("publishes the five internal motion phases in drafting order", () => {
     expect(BLUEPRINT_MOTION_PHASES).toEqual(["lead", "project", "plan", "build", "record"]);
     expect(BLUEPRINT_MOTION_DEFAULT_PHASE).toBe("lead");
     expect(BLUEPRINT_MOTION_SLOT_ID).toBe("blueprint-motion-slot");
   });
 
-  it("renders three rail chapters, each drawn from the phase vocabulary", () => {
-    expect(HERO_CHAPTERS).toEqual(["lead", "project", "record"]);
-    for (const chapter of HERO_CHAPTERS) {
-      expect(isBlueprintMotionPhase(chapter)).toBe(true);
-      expect(HERO_CHAPTER_LABELS[chapter]).toBeTruthy();
-    }
+  it("publishes the four public stations, exactly and in order", () => {
+    expect(HERO_CHAPTERS).toEqual([
+      "lead",
+      "bounded-work",
+      "verified-record",
+      "business-memory",
+    ]);
+    expect(HERO_CHAPTERS.map((chapter) => HERO_CHAPTER_LABELS[chapter])).toEqual([
+      "Lead",
+      "Bounded work",
+      "Verified record",
+      "Business memory",
+    ]);
   });
 
-  it("guards phase and chapter membership", () => {
+  it("keeps the public stations separate from the internal phase vocabulary", () => {
+    // The two vocabularies no longer share identifiers: the fold reads a
+    // business progression, the instrument runs drafting phases.
+    for (const chapter of HERO_CHAPTERS) {
+      if (chapter === "lead") continue;
+      expect(isBlueprintMotionPhase(chapter)).toBe(false);
+    }
+    expect(isHeroChapter("verified-record")).toBe(true);
+    expect(isHeroChapter("plan")).toBe(false);
     expect(isBlueprintMotionPhase("plan")).toBe(true);
     expect(isBlueprintMotionPhase("Plan")).toBe(false);
     expect(isBlueprintMotionPhase(undefined)).toBe(false);
-    expect(isHeroChapter("record")).toBe(true);
-    // `plan` and `build` exist as phases but are not surfaced in the rail.
-    expect(isHeroChapter("plan")).toBe(false);
+  });
+
+  it("excludes business memory from every phase-derived station", () => {
+    expect(HERO_PHASE_DERIVED_CHAPTERS).toEqual(["lead", "bounded-work", "verified-record"]);
+    expect(HERO_STANDING_CHAPTER).toBe("business-memory");
+    expect(HERO_PHASE_DERIVED_CHAPTERS).not.toContain(HERO_STANDING_CHAPTER);
+    // Every phase-derived station is still a published station.
+    for (const chapter of HERO_PHASE_DERIVED_CHAPTERS) {
+      expect(HERO_CHAPTERS).toContain(chapter);
+    }
   });
 
   it("binds the slot descriptor to the published values", () => {
     expect(BLUEPRINT_MOTION_SLOT_CONTRACT.version).toBe(PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION);
+    expect(PREMIUM_WORKBENCH_HERO_CONTRACT_VERSION).toBe("2.0.0");
     expect(BLUEPRINT_MOTION_SLOT_CONTRACT.slotId).toBe(BLUEPRINT_MOTION_SLOT_ID);
     expect(BLUEPRINT_MOTION_SLOT_CONTRACT.phases).toEqual(BLUEPRINT_MOTION_PHASES);
     expect(BLUEPRINT_MOTION_SLOT_CONTRACT.chapters).toEqual(HERO_CHAPTERS);
@@ -90,26 +127,80 @@ describe("premiumWorkbenchHero.contract", () => {
     expect(Object.isFrozen(BLUEPRINT_MOTION_SLOT_CONTRACT)).toBe(true);
   });
 
-  it("addresses each rail chapter by a stable element id", () => {
+  it("publishes no media custom property, because there is no media", () => {
+    expect(Object.keys(BLUEPRINT_MOTION_SLOT_CONTRACT.customProperties)).toEqual([
+      "motionEnabled",
+    ]);
+  });
+
+  it("addresses each station by a stable element id", () => {
     expect(heroChapterElementId("lead")).toBe("premium-workbench-hero-chapter-lead");
+    expect(heroChapterElementId("business-memory")).toBe(
+      "premium-workbench-hero-chapter-business-memory",
+    );
     expect(new Set(HERO_CHAPTERS.map(heroChapterElementId)).size).toBe(HERO_CHAPTERS.length);
   });
 
-  it("carries the workbench source dimensions of the committed asset", () => {
-    expect(PREMIUM_WORKBENCH_HERO_MEDIA.src).toBe(
-      "/images/balanced-process-materials-concept-v2.webp",
-    );
-    expect(PREMIUM_WORKBENCH_HERO_MEDIA.width).toBe(1500);
-    expect(PREMIUM_WORKBENCH_HERO_MEDIA.height).toBe(1000);
-    expect(PREMIUM_WORKBENCH_HERO_MEDIA_ASPECT).toBe(1.5);
+  it("carries the two published calls to action, primary first", () => {
+    expect(PREMIUM_WORKBENCH_HERO_ACTIONS.map((action) => [action.label, action.href])).toEqual([
+      ["Open Concept Studio", "/studio"],
+      ["See how a project runs", "/process"],
+    ]);
+    expect(PREMIUM_WORKBENCH_HERO_ACTIONS.map((action) => action.emphasis)).toEqual([
+      "primary",
+      "secondary",
+    ]);
+  });
+});
+
+/*
+ * The mutation probes for this packet's single outcome. Each one fails the
+ * moment the removed layer comes back, in any of the forms it could return in:
+ * the import, the element, the asset reference, or the contract constant.
+ */
+describe("PremiumWorkbenchHero · the workbench bitmap is gone", () => {
+  const markup = render(<PremiumWorkbenchHero />);
+
+  it("imports no image machinery and renders no image element", () => {
+    expect(COMPONENT_SOURCE).not.toContain("next/image");
+    expect(COMPONENT_SOURCE).not.toMatch(/<Image\b/);
+    expect(COMPONENT_SOURCE).not.toContain("<img");
+    expect(markup).not.toContain("<img");
+    expect(markup).not.toContain("<picture");
+    expect(markup).not.toContain("srcset");
   });
 
-  it("carries the calls to action published at the packet base", () => {
-    expect(PREMIUM_WORKBENCH_HERO_ACTIONS.map((action) => [action.label, action.href])).toEqual([
-      ["Explore models", "/models"],
-      ["Open Concept Studio", "/studio"],
-    ]);
-    expect(PREMIUM_WORKBENCH_HERO_ACTIONS[0].emphasis).toBe("primary");
+  it("references no bitmap asset from the component, the contract, or the paint", () => {
+    for (const [name, source] of [
+      ["component", COMPONENT_SOURCE],
+      ["contract", CONTRACT_SOURCE],
+      ["stylesheet", CSS_SOURCE],
+    ] as const) {
+      expect(source, `${name} must not reference an asset`).not.toMatch(
+        /\.(?:webp|png|jpe?g|avif|svg)\b/i,
+      );
+      expect(source, `${name} must not reference the retired workbench`).not.toContain(
+        "balanced-process-materials",
+      );
+      expect(source, `${name} must not carry a background image`).not.toMatch(
+        /url\(|background-image/,
+      );
+    }
+  });
+
+  it("keeps the retired media constant deleted rather than inert", () => {
+    expect(CONTRACT_SOURCE).not.toMatch(/export const PREMIUM_WORKBENCH_HERO_MEDIA\b/);
+    expect(CONTRACT_SOURCE).not.toMatch(/export const PREMIUM_WORKBENCH_HERO_MEDIA_ASPECT\b/);
+    expect(COMPONENT_SOURCE).not.toContain("PREMIUM_WORKBENCH_HERO_MEDIA");
+  });
+
+  it("renders no image slot, fallback frame, or disclosure for the removed image", () => {
+    // Nothing is mounted and nothing is disclosed, so the fold shows no strip
+    // and no frame — not an empty one, not a placeholder one.
+    expect(markup).not.toContain('data-disclosure="public-claim"');
+    expect(markup).not.toContain("<figcaption");
+    expect(markup).not.toContain("Conceptual imagery");
+    expect(ruleBody(CSS_SOURCE, ".instrument")).not.toMatch(/border|box-shadow|border-radius/);
   });
 });
 
@@ -118,21 +209,53 @@ describe("PremiumWorkbenchHero copy", () => {
   const text = textOf(markup);
 
   it("uses the exact approved kicker, heading, and lede", () => {
+    expect(PREMIUM_WORKBENCH_HERO_COPY.kicker).toBe(
+      "WEST COAST KBP · ADU + GENERAL CONSTRUCTION",
+    );
+    expect(PREMIUM_WORKBENCH_HERO_COPY.heading).toBe(
+      "A construction project, kept legible from first lead to verified record.",
+    );
+    expect(PREMIUM_WORKBENCH_HERO_COPY.lede).toBe(
+      "KBP OS is designed to keep project facts, decisions, documents, and completed " +
+        "work in one living record—organized by the system, controlled by people.",
+    );
     expect(text).toContain(PREMIUM_WORKBENCH_HERO_COPY.kicker);
     expect(text).toContain(PREMIUM_WORKBENCH_HERO_COPY.heading);
     expect(text).toContain(PREMIUM_WORKBENCH_HERO_COPY.lede);
-    expect(PREMIUM_WORKBENCH_HERO_COPY.kicker).toBe("KBP OS · ADU + General Construction");
-    expect(PREMIUM_WORKBENCH_HERO_COPY.heading).toBe(
-      "From the first lead to a managed construction process.",
-    );
   });
 
   it("declares exactly one h1, and it carries the heading", () => {
     expect(countOf(markup, "<h1")).toBe(1);
     expect(markup).toMatch(
-      /<h1[^>]*id="premium-workbench-hero-title"[^>]*>From the first lead to a managed construction process\.<\/h1>/,
+      /<h1[^>]*id="premium-workbench-hero-title"[^>]*>A construction project, kept legible from first lead to verified record\.<\/h1>/,
     );
     expect(markup).toContain('aria-labelledby="premium-workbench-hero-title"');
+  });
+
+  it("names the business before it names the platform", () => {
+    // Construction reads first: the trade, then the journey, then the record.
+    expect(text.indexOf("WEST COAST KBP")).toBeLessThan(text.indexOf("KBP OS"));
+    expect(text).toContain("ADU + GENERAL CONSTRUCTION");
+    // People are named as the deciders, in the approved words.
+    expect(text).toContain("controlled by people");
+  });
+
+  it("keeps the first fold free of AI and orchestration vocabulary", () => {
+    const forbidden = [
+      /\bAI\b/,
+      /\bagent\b/i,
+      /\bmodel\b/i,
+      /\bpipeline\b/i,
+      /\borchestrat/i,
+      /\bautomation\b/i,
+      /\bDeedseal\b/i,
+      /\bseal\b/i,
+      /\bnode\b/i,
+      /\bdashboard\b/i,
+    ];
+    for (const pattern of forbidden) {
+      expect(text, `unexpected token matching ${pattern.source}`).not.toMatch(pattern);
+    }
   });
 
   it("renders both published calls to action in order", () => {
@@ -140,7 +263,8 @@ describe("PremiumWorkbenchHero copy", () => {
       expect(markup).toContain(`href="${action.href}"`);
       expect(markup).toContain(action.label);
     }
-    expect(markup.indexOf('href="/models"')).toBeLessThan(markup.indexOf('href="/studio"'));
+    expect(markup.indexOf('href="/studio"')).toBeLessThan(markup.indexOf('href="/process"'));
+    expect(markup).not.toContain('href="/start"');
   });
 
   it("states no price, schedule, permit, guarantee, or autonomous-action claim", () => {
@@ -161,36 +285,27 @@ describe("PremiumWorkbenchHero copy", () => {
       "autonomous",
       "instantly",
       "free consultation",
+      "supplier",
+      "customer",
     ];
     const haystack = text.toLowerCase();
-    const disclosure = PREMIUM_WORKBENCH_HERO_MEDIA.disclosure.toLowerCase();
     for (const term of forbidden) {
-      // A term is admissible only where the media disclosure refuses it, and
-      // never more often than the refusal itself states it.
-      expect(countOf(haystack, term), `unexpected claim token: ${term}`).toBe(
-        countOf(disclosure, term),
-      );
+      // The composition carries no disclosure of its own, so nothing in the
+      // fold may state any of these even once.
+      expect(countOf(haystack, term), `unexpected claim token: ${term}`).toBe(0);
     }
+    // No address, no date, no count of completed projects. The station indices
+    // are the fold's only digits, so the copy itself is what is measured here.
+    const copy = [
+      ...Object.values(PREMIUM_WORKBENCH_HERO_COPY),
+      ...PREMIUM_WORKBENCH_HERO_ACTIONS.map((action) => action.label),
+      ...HERO_CHAPTERS.map((chapter) => HERO_CHAPTER_LABELS[chapter]),
+    ].join(" ");
+    expect(copy).not.toMatch(/\d/);
   });
 });
 
-describe("PremiumWorkbenchHero workbench surface", () => {
-  const markup = render(<PremiumWorkbenchHero />);
-
-  it("renders the committed workbench asset with a descriptive alt", () => {
-    expect(markup).toContain(encodeURIComponent(PREMIUM_WORKBENCH_HERO_MEDIA.src));
-    expect(markup).toContain(`alt="${PREMIUM_WORKBENCH_HERO_MEDIA.alt}"`);
-    expect(countOf(markup, "<img")).toBe(1);
-    expect(markup).toContain('sizes="(max-width: 63.99rem) 100vw, 54vw"');
-  });
-
-  it("labels the imagery without making a project, plan, or material claim", () => {
-    expect(textOf(markup)).toContain(PREMIUM_WORKBENCH_HERO_MEDIA.disclosure);
-    expect(markup).toContain("<figcaption");
-  });
-});
-
-describe("PremiumWorkbenchHero reserved blueprint region", () => {
+describe("PremiumWorkbenchHero reserved instrument region", () => {
   it("reserves the region and draws nothing when no child is supplied", () => {
     const markup = render(<PremiumWorkbenchHero />);
     expect(markup).toContain(`id="${BLUEPRINT_MOTION_SLOT_ID}"`);
@@ -210,67 +325,95 @@ describe("PremiumWorkbenchHero reserved blueprint region", () => {
 
   it("mounts a supplied child and stops hiding the region", () => {
     const markup = render(
-      <PremiumWorkbenchHero blueprintMotionSlot={<p data-worker="228">mounted</p>} />,
+      <PremiumWorkbenchHero blueprintMotionSlot={<p data-instrument="mounted">mounted</p>} />,
     );
     expect(markup).toContain('data-slot-state="filled"');
-    expect(markup).toContain('<p data-worker="228">mounted</p>');
+    expect(markup).toContain('<p data-instrument="mounted">mounted</p>');
     expect(openTagContaining(markup, `data-slot="${BLUEPRINT_MOTION_SLOT_ID}"`)).not.toContain(
       "aria-hidden",
     );
   });
 
-  it("publishes the presented phase, overridable independently of the rail", () => {
-    expect(render(<PremiumWorkbenchHero activeChapter="project" />)).toContain(
-      'data-slot-phase="project"',
+  it("publishes the presented phase independently of the public station", () => {
+    expect(render(<PremiumWorkbenchHero activeChapter="bounded-work" />)).toContain(
+      'data-slot-phase="lead"',
     );
     expect(render(<PremiumWorkbenchHero motionPhase="build" />)).toContain(
       'data-slot-phase="build"',
     );
   });
+
+  it("publishes the instrument's own claim boundary, and only when it has one", () => {
+    const markup = render(
+      <PremiumWorkbenchHero instrumentDisclosure="Not a construction document." />,
+    );
+    expect(markup).toContain('data-disclosure="public-claim"');
+    expect(textOf(markup)).toContain("Not a construction document.");
+    expect(countOf(markup, "<figcaption")).toBe(1);
+  });
 });
 
-describe("PremiumWorkbenchHero chapter rail", () => {
+describe("PremiumWorkbenchHero public progression", () => {
   const markup = render(<PremiumWorkbenchHero />);
 
-  it("renders the three chapters in order with their indices", () => {
-    expect(textOf(markup)).toContain("01 Lead");
-    expect(textOf(markup)).toContain("02 Project");
-    expect(textOf(markup)).toContain("03 Record");
-    let cursor = -1;
-    for (const chapter of HERO_CHAPTERS) {
-      const next = markup.indexOf(`id="${heroChapterElementId(chapter)}"`);
-      expect(next).toBeGreaterThan(cursor);
-      cursor = next;
-    }
+  it("renders exactly the four stations, in order, with their indices", () => {
+    expect(countOf(markup, "data-hero-chapter=")).toBe(4);
+    const text = textOf(markup);
+    expect(text).toContain("01 Lead");
+    expect(text).toContain("02 Bounded work");
+    expect(text).toContain("03 Verified record");
+    expect(text).toContain("04 Business memory");
+
+    const order = [...markup.matchAll(/data-hero-chapter="([a-z-]+)"/g)].map((match) => match[1]);
+    expect(order).toEqual([...HERO_CHAPTERS]);
   });
 
-  it("marks exactly one chapter current, defaulting to the chapter this module owns", () => {
+  it("names the rail for the project, not for the product", () => {
+    expect(markup).toContain(`aria-label="${HERO_RAIL_LABEL}"`);
+    expect(HERO_RAIL_LABEL).toBe("Project progression");
+    expect(countOf(markup, "<ol")).toBe(1);
+  });
+
+  it("marks exactly one station current, defaulting to the first", () => {
     expect(countOf(markup, 'aria-current="step"')).toBe(1);
     expect(markup).toContain('data-active-chapter="lead"');
     expect(markup).toMatch(/data-hero-chapter="lead"[^>]*data-state="active"/);
-    expect(markup).toMatch(/data-hero-chapter="project"[^>]*data-state="upcoming"/);
+    expect(markup).toMatch(/data-hero-chapter="bounded-work"[^>]*data-state="upcoming"/);
   });
 
-  it("moves the current marker when another chapter is presented", () => {
-    const projectMarkup = render(<PremiumWorkbenchHero activeChapter="project" />);
-    expect(countOf(projectMarkup, 'aria-current="step"')).toBe(1);
-    expect(projectMarkup).toMatch(/data-hero-chapter="project"[^>]*data-state="active"/);
+  it("moves the current marker and completes the stations behind it", () => {
+    const later = render(<PremiumWorkbenchHero activeChapter="verified-record" />);
+    expect(countOf(later, 'aria-current="step"')).toBe(1);
+    expect(later).toMatch(/data-hero-chapter="verified-record"[^>]*data-state="active"/);
+    expect(later).toMatch(/data-hero-chapter="lead"[^>]*data-state="complete"/);
+    expect(later).toMatch(/data-hero-chapter="bounded-work"[^>]*data-state="complete"/);
+  });
+
+  it("never marks business memory current, at any station the fold can present", () => {
+    for (const chapter of HERO_PHASE_DERIVED_CHAPTERS) {
+      const rendered = render(<PremiumWorkbenchHero activeChapter={chapter} />);
+      expect(rendered).toMatch(/data-hero-chapter="business-memory"[^>]*data-state="standing"/);
+      expect(countOf(rendered, 'aria-current="step"')).toBe(1);
+      expect(rendered).not.toMatch(
+        /data-hero-chapter="business-memory"[^>]*aria-current/,
+      );
+    }
   });
 });
 
 describe("PremiumWorkbenchHero composition rules", () => {
-  const css = readFileSync(path.join(moduleDir, "PremiumWorkbenchHero.module.css"), "utf8");
+  const css = CSS_SOURCE;
 
-  it("splits the composition 46 / 54 at desktop", () => {
+  it("gives the instrument the dominant column at desktop", () => {
     expect(ruleBody(css, ".composition")).toContain("grid-template-columns: 46fr 54fr;");
   });
 
-  it("keeps the workbench surface edge to edge — never a floating card", () => {
-    for (const selector of [".surface", ".surfaceImage", ".motionSlot"]) {
+  it("keeps the instrument field edge to edge — never a floating card", () => {
+    for (const selector of [".instrument", ".motionSlot"]) {
       const body = ruleBody(css, selector);
       expect(body, `${selector} must not be a card`).not.toMatch(/border-radius|box-shadow/);
     }
-    expect(ruleBody(css, ".surface")).toContain("margin: 0;");
+    expect(ruleBody(css, ".instrument")).toContain("margin: 0;");
   });
 
   it("uses no glassmorphism anywhere in the composition", () => {
@@ -301,6 +444,10 @@ describe("PremiumWorkbenchHero composition rules", () => {
     }
     expect(slot).toContain("inset: 0;");
     expect(slot).toContain("pointer-events: none;");
+    // The three media properties are gone from the paint as well as the contract.
+    for (const retired of ["source-aspect", "object-fit", "object-position"]) {
+      expect(slot).not.toContain(retired);
+    }
   });
 
   it("gives every interactive element a visible focus state", () => {
@@ -318,7 +465,7 @@ describe("PremiumWorkbenchHero composition rules", () => {
  * still "mentions" a colour.
  */
 describe("PremiumWorkbenchHero colour scheme durability", () => {
-  const css = readFileSync(path.join(moduleDir, "PremiumWorkbenchHero.module.css"), "utf8");
+  const css = CSS_SOURCE;
   const globals = readFileSync(
     path.join(moduleDir, "..", "..", "..", "app", "globals.css"),
     "utf8",
@@ -418,7 +565,7 @@ describe("PremiumWorkbenchHero colour scheme durability", () => {
     expect(dark["--color-forest-deep-surface"]).toBe("#0c110f");
   });
 
-  it("paints the media disclosure on the brand surface token, never the heading ink token", () => {
+  it("paints the claim strip on the brand surface token, never the heading ink token", () => {
     const body = ruleBody(css, ".disclosure");
     expect(body).toContain("background: var(--color-forest-deep-surface, #121a17);");
     expect(body).not.toMatch(/background:\s*var\(\s*--(pwh-forest-deep|color-forest-deep)\s*[,)]/);
@@ -440,10 +587,20 @@ describe("PremiumWorkbenchHero colour scheme durability", () => {
     expect(body).not.toMatch(/(^|[\s{;])color:/);
   });
 
+  it("separates the instrument field from the editorial field by tone, in both schemes", () => {
+    for (const scheme of ["light", "dark"] as const) {
+      const field = resolve(declaration(".instrument", "background"), PALETTES[scheme]);
+      const editorial = resolve(declaration(".editorial", "background"), PALETTES[scheme]);
+      expect(field, `instrument field must differ from the paper in ${scheme}`).not.toBe(
+        editorial,
+      );
+    }
+  });
+
   for (const scheme of ["light", "dark"] as const) {
     const palette = PALETTES[scheme];
 
-    it(`holds the media disclosure at AA in ${scheme}`, () => {
+    it(`holds the claim strip at AA in ${scheme}`, () => {
       const ratio = contrast(
         resolve(declaration(".disclosure", "color"), palette),
         resolve(declaration(".disclosure", "background"), palette),
@@ -488,11 +645,22 @@ describe("PremiumWorkbenchHero colour scheme durability", () => {
         expect(ratio, `${name} contrast in ${scheme}: ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
       }
     });
+
+    it(`holds the public progression at AA in ${scheme}`, () => {
+      const rail = resolve(declaration(".rail", "background"), palette);
+      for (const selector of ['.chapter[data-state="complete"]', '.chapter[data-state="active"]']) {
+        const ratio = contrast(resolve(declaration(selector, "color"), palette), rail);
+        expect(ratio, `${selector} in ${scheme}: ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+      }
+      // The standing and upcoming stations take the muted ink from `.chapter`.
+      const muted = contrast(resolve(declaration(".chapter", "color"), palette), rail);
+      expect(muted, `muted station in ${scheme}: ${muted.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+    });
   }
 
   it("proves the rejected tokens are the failure, not an arbitrary preference", () => {
-    // The two bytes this revision replaced, measured in dark. These are the
-    // ratios the reviewer observed in the browser at 759d2ff.
+    // The two bytes an earlier revision replaced, measured in dark. These are
+    // the ratios the reviewer observed in the browser at 759d2ff.
     const inverse = resolve("var(--pwh-ink-inverse)", dark);
     expect(contrast(inverse, dark["--color-forest-deep"])).toBeLessThan(4.5);
     expect(contrast(dark["--color-forest"], dark["--color-canvas"])).toBeLessThan(4.5);
