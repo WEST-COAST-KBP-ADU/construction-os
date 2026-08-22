@@ -36,8 +36,19 @@
  */
 
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import {
+  chmod,
+  copyFile,
+  mkdir,
+  mkdtemp,
+  readFile,
+  rm,
+  stat,
+  writeFile,
+} from 'node:fs/promises';
+import { dirname, join, resolve } from 'node:path';
+import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -75,6 +86,7 @@ const LOCAL_DOOR_ENTRY = ENTRY;
 const OWNER = 'avoroncov971-maker';
 const FROZEN_RELATION = 'West Coast KBP — first user';
 const COLD_START_COMMAND = 'node tools/memory/check-construction-role-door.mjs';
+const FIXTURE_CHILD = process.env.CONSTRUCTION_ROLE_DOOR_FIXTURE_CHILD === '1';
 
 /** Cold-start / verification surfaces, with the number of required invocations. */
 const REGISTRATIONS = [
@@ -117,21 +129,28 @@ const clone = (input) => ({
  * rather than silently satisfied by a local constant.
  */
 function deriveAuthority(raw, refuse) {
-  if (typeof raw !== 'string' || raw.length === 0) {
+  if ((!Buffer.isBuffer(raw) && typeof raw !== 'string') || raw.length === 0) {
     refuse(REFUSAL.TOPOLOGY, `the vendored contour topology at ${VENDORED_TOPOLOGY.path} is missing or empty`);
     return null;
   }
 
-  const bytes = Buffer.byteLength(raw, 'utf8');
-  const digest = `sha256:${createHash('sha256').update(raw, 'utf8').digest('hex')}`;
-  if (bytes !== VENDORED_TOPOLOGY.sourceBytes || digest !== VENDORED_TOPOLOGY.sourceDigest) {
-    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY.path} is ${bytes} bytes digesting ${digest}; the pinned authority at ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} is ${VENDORED_TOPOLOGY.sourceBytes} bytes digesting ${VENDORED_TOPOLOGY.sourceDigest}. The vendored copy is no longer byte-identical to the authority it claims to reuse, so the door's address cannot be derived from it.`);
+  const content = Buffer.isBuffer(raw) ? raw : Buffer.from(raw, 'utf8');
+  const bytes = content.byteLength;
+  const digest = `sha256:${createHash('sha256').update(content).digest('hex')}`;
+  const blobSha1 = createHash('sha1')
+    .update(Buffer.from(`blob ${bytes}\0`, 'utf8'))
+    .update(content)
+    .digest('hex');
+  if (bytes !== VENDORED_TOPOLOGY.sourceBytes
+      || digest !== VENDORED_TOPOLOGY.sourceDigest
+      || blobSha1 !== VENDORED_TOPOLOGY.sourceBlobSha1) {
+    refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY.path} is ${bytes} bytes digesting ${digest} with Git blob identity ${blobSha1}; the pinned authority at ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} is ${VENDORED_TOPOLOGY.sourceBytes} bytes digesting ${VENDORED_TOPOLOGY.sourceDigest} with Git blob identity ${VENDORED_TOPOLOGY.sourceBlobSha1}. The vendored copy is no longer byte-identical to the authority it claims to reuse, so the door's address cannot be derived from it.`);
     return null;
   }
 
   let topology;
   try {
-    topology = JSON.parse(raw);
+    topology = JSON.parse(content.toString('utf8'));
   } catch (error) {
     refuse(REFUSAL.TOPOLOGY, `${VENDORED_TOPOLOGY.path} is not parseable JSON: ${error?.message ?? error}`);
     return null;
@@ -192,6 +211,28 @@ function deriveAuthority(raw, refuse) {
   }
 
   return authority;
+}
+
+/**
+ * Observe the vendored authority as one total, fail-closed boundary. Filesystem
+ * failures are deliberately not reflected verbatim: platform error codes and
+ * stacks are implementation details, while every failed authority observation
+ * has the one stable public meaning `CONTOUR_TOPOLOGY_DRIFT`.
+ */
+async function observeTopology(root, refuse) {
+  const path = resolve(root, VENDORED_TOPOLOGY.path);
+  let metadata;
+  let raw;
+  try {
+    metadata = await stat(path);
+    if (!metadata.isFile() || (metadata.mode & 0o444) === 0) throw new Error('unreadable authority');
+    raw = await readFile(path);
+  } catch {
+    refuse(REFUSAL.TOPOLOGY, `the vendored contour topology at ${VENDORED_TOPOLOGY.path} is missing or unreadable; the door's address cannot be derived`);
+    return null;
+  }
+  const authority = deriveAuthority(raw, refuse);
+  return authority ? raw : null;
 }
 
 /**
@@ -370,18 +411,117 @@ function assertHostileProbe(name, baseline, mutate, expectedCode) {
   }
 }
 
+const CHECKER = 'tools/memory/check-construction-role-door.mjs';
+
+async function copyFixture(sourceRoot, fixtureRoot) {
+  for (const path of [...SURFACES, VENDORED_TOPOLOGY.path, CHECKER]) {
+    await mkdir(dirname(resolve(fixtureRoot, path)), { recursive: true });
+    await copyFile(resolve(sourceRoot, path), resolve(fixtureRoot, path));
+  }
+}
+
+function runFixture(fixtureRoot) {
+  return spawnSync(process.execPath, [resolve(fixtureRoot, CHECKER)], {
+    cwd: fixtureRoot,
+    encoding: 'utf8',
+    env: { ...process.env, CONSTRUCTION_ROLE_DOOR_FIXTURE_CHILD: '1' },
+    timeout: 60_000,
+  });
+}
+
+function assertFixturePass(name, fixtureRoot) {
+  const result = runFixture(fixtureRoot);
+  if (result.status !== 0 || !result.stdout.includes('CONSTRUCTION_ROLE_DOOR_OK:')) {
+    throw new Error(`HOSTILE_REAL_FILE_BASELINE_FAILED ${name}: status=${result.status} stdout=${JSON.stringify(result.stdout)} stderr=${JSON.stringify(result.stderr)}`);
+  }
+}
+
+function assertFixtureRefusal(name, fixtureRoot, expectedCode) {
+  const result = runFixture(fixtureRoot);
+  const output = `${result.stdout}${result.stderr}`;
+  const namedRefusal = `CONSTRUCTION_ROLE_DOOR_REFUSED: ${expectedCode}:`;
+  if (result.status === 0 || !output.includes(namedRefusal)) {
+    throw new Error(`HOSTILE_REAL_FILE_PROBE_FAILED ${name}: expected ${namedRefusal}, status=${result.status}, stdout=${JSON.stringify(result.stdout)} stderr=${JSON.stringify(result.stderr)}`);
+  }
+  if (/\b(?:ENOENT|EACCES|EISDIR)\b|(?:^|\n)\s+at\s/.test(output)) {
+    throw new Error(`HOSTILE_REAL_FILE_RAW_STACK ${name}: a platform error or raw stack escaped the stable refusal: ${JSON.stringify(output)}`);
+  }
+}
+
+/**
+ * Exercise the checker as a process over disposable real files. The untouched
+ * fixture must pass before any mutation; each attack must then emit the exact
+ * topology refusal without a raw filesystem code or stack.
+ */
+async function runRealFileProbes(sourceRoot, authority) {
+  const temporary = await mkdtemp(join(tmpdir(), 'construction-role-door-'));
+  try {
+    const baselineRoot = resolve(temporary, 'baseline');
+    await copyFixture(sourceRoot, baselineRoot);
+    assertFixturePass('untouched copied tree', baselineRoot);
+
+    const coordinatedRoot = resolve(temporary, 'coordinated-false-authority');
+    await copyFixture(sourceRoot, coordinatedRoot);
+    for (const path of PATHS) {
+      const target = resolve(coordinatedRoot, path);
+      const content = await readFile(target, 'utf8');
+      await writeFile(target, content.replaceAll(authority.role, 'role.construction.false-director'));
+    }
+    const topologyPath = resolve(coordinatedRoot, VENDORED_TOPOLOGY.path);
+    const falseTopology = (await readFile(topologyPath, 'utf8'))
+      .replaceAll(authority.role, 'role.construction.false-director');
+    await writeFile(topologyPath, falseTopology);
+    const resetDigest = `sha256:${createHash('sha256').update(falseTopology, 'utf8').digest('hex')}`;
+    const resetBytes = Buffer.byteLength(falseTopology, 'utf8');
+    const checkerPath = resolve(coordinatedRoot, CHECKER);
+    const checker = await readFile(checkerPath, 'utf8');
+    const resetChecker = checker
+      .replace(/sourceDigest: 'sha256:[0-9a-f]{64}'/, `sourceDigest: '${resetDigest}'`)
+      .replace(/sourceBytes: \d+/, `sourceBytes: ${resetBytes}`);
+    if (resetChecker === checker
+        || falseTopology === (await readFile(resolve(sourceRoot, VENDORED_TOPOLOGY.path), 'utf8'))) {
+      throw new Error('HOSTILE_REAL_FILE_PROBE_INERT coordinated false authority: the attack changed nothing');
+    }
+    await writeFile(checkerPath, resetChecker);
+    assertFixtureRefusal('coordinated false role, topology, size, and SHA-256', coordinatedRoot, REFUSAL.TOPOLOGY);
+
+    const missingRoot = resolve(temporary, 'missing-authority');
+    await copyFixture(sourceRoot, missingRoot);
+    await rm(resolve(missingRoot, VENDORED_TOPOLOGY.path));
+    assertFixtureRefusal('missing vendored authority', missingRoot, REFUSAL.TOPOLOGY);
+
+    const unreadableRoot = resolve(temporary, 'unreadable-authority');
+    await copyFixture(sourceRoot, unreadableRoot);
+    await chmod(resolve(unreadableRoot, VENDORED_TOPOLOGY.path), 0o000);
+    assertFixtureRefusal('unreadable vendored authority', unreadableRoot, REFUSAL.TOPOLOGY);
+  } finally {
+    await rm(temporary, { recursive: true, force: true });
+  }
+  return 3;
+}
+
 const replaceLast = (content, needle, replacement) => {
   const index = content.lastIndexOf(needle);
   return index < 0 ? content : content.slice(0, index) + replacement + content.slice(index + needle.length);
 };
 
 async function main() {
+  const topologyErrors = [];
+  const observation = await observeTopology(
+    ROOT,
+    (code, detail) => topologyErrors.push(`${code}: ${detail}`),
+  );
+  if (!observation) {
+    for (const error of topologyErrors) process.stderr.write(`CONSTRUCTION_ROLE_DOOR_REFUSED: ${error}\n`);
+    process.exitCode = 1;
+    return;
+  }
+
   const surfaces = Object.fromEntries(await Promise.all(SURFACES.map(async (path) => [
     path,
     await readFile(resolve(ROOT, path), 'utf8'),
   ])));
-  const topology = await readFile(resolve(ROOT, VENDORED_TOPOLOGY.path), 'utf8');
-  const baseline = { surfaces, topology };
+  const baseline = { surfaces, topology: observation };
 
   const { errors: baselineErrors, authority } = validate(baseline);
   if (baselineErrors.length > 0) {
@@ -423,8 +563,13 @@ async function main() {
     assertHostileProbe(name, baseline, mutate, expectedCode);
   }
 
-  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_OK: 14 positive check groups, ${probes.length} hostile probes, 0 refusals\n`);
-  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_AUTHORITY: ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} ${VENDORED_TOPOLOGY.sourceDigest} (vendored byte-identical at ${VENDORED_TOPOLOGY.path})\n`);
+  const realFileProbeCount = FIXTURE_CHILD ? 0 : await runRealFileProbes(ROOT, authority);
+
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_OK: 14 positive check groups, ${probes.length + realFileProbeCount} hostile probes, 0 refusals\n`);
+  if (realFileProbeCount > 0) {
+    process.stdout.write(`CONSTRUCTION_ROLE_DOOR_REAL_FILE_PROBES: untouched=PASS coordinated-false-authority=${REFUSAL.TOPOLOGY} missing-authority=${REFUSAL.TOPOLOGY} unreadable-authority=${REFUSAL.TOPOLOGY} raw-stacks=0\n`);
+  }
+  process.stdout.write(`CONSTRUCTION_ROLE_DOOR_AUTHORITY: ${VENDORED_TOPOLOGY.sourceRepository}@${VENDORED_TOPOLOGY.sourceRevision} blob:${VENDORED_TOPOLOGY.sourceBlobSha1} ${VENDORED_TOPOLOGY.sourceDigest} (vendored byte-identical at ${VENDORED_TOPOLOGY.path})\n`);
   process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ADDRESS: contour=${authority.contour} role=${authority.role} status=${authority.status} (derived from the pinned authority, not asserted here)\n`);
   process.stdout.write(`CONSTRUCTION_ROLE_DOOR_ROUTE: ${ENTRY} -> ${authority.route}\n`);
   process.stdout.write(`CONSTRUCTION_ROLE_DOOR_COLD_START: ${REGISTRATIONS.map(([path, count]) => `${path}x${count}`).join(' ')}\n`);
