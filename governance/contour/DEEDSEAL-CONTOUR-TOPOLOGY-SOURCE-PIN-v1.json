@@ -1,0 +1,11 @@
+{
+  "record": "DEEDSEAL-CONTOUR-TOPOLOGY-SOURCE-PIN-0001",
+  "source_repository": "kbp-core-engineering/kbp-dev-office",
+  "source_path": "manifests/contour/deedseal-contour-topology-v1.json",
+  "source_revision": "d8038451c820ce0ae22b8575bbbfa7183424f79d",
+  "source_blob_sha1": "634f8927a98db840a48bc2d8d281d9e7645f8c9b",
+  "source_size_bytes": 18515,
+  "source_sha256": "c5170a7df374a72c740c4ccc62a93b8b91a93caf086193f19c9566affe1fb972",
+  "trust_boundary": "merged-base-pin; updates require a separate exact-source review",
+  "authority": "none"
+}
