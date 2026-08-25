@@ -258,7 +258,6 @@ describe("portal visual-system regressions", () => {
     expect(executableHeader).not.toContain("brand-signal-pulse");
 
     // No substituted mark either: Product 2's identity is typographic only.
-    // The mobile-menu affordance is outside the brand link and is untouched.
     const brandLink = header.match(
       /<Link href="\/" className="brand"[\s\S]*?<\/Link>/,
     )?.[0];
@@ -266,9 +265,10 @@ describe("portal visual-system regressions", () => {
     expect(brandLink).toBeDefined();
     expect(brandLink).not.toMatch(/<svg|<img|<Image|role="img"|aria-hidden/i);
     expect(brandLink).toContain('className="brand__name"');
-    expect(brandLink).toContain('className="brand__tagline"');
+    expect(brandLink).not.toContain('className="brand__tagline"');
     expect(header).toContain("accessibility.brandHomeLabel");
-    expect(header).toContain("aria-label={accessibility.primaryNavigationLabel}");
+    expect(executableHeader.match(/<Link\b/g)).toHaveLength(1);
+    expect(executableHeader).not.toMatch(/<nav\b|<details\b|NavigationLinks/);
   });
 
   it("keeps the Product 2 mark stationary in every motion state", () => {

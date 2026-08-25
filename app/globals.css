@@ -1373,6 +1373,48 @@
   }
 }
 
+/* PRODUCT2-OWNER-SELECTED-LIGHT-FACADE-VISUAL-RECOVERY-0001
+ *
+ * The root facade is a fixed visual artifact, not an adaptive theme. These
+ * root-only semantic values come after the legacy system-dark remap so an iPad
+ * or browser preference cannot reinterpret the selected light composition.
+ * Deep routes remain directly addressable and keep their existing token
+ * behavior; only the public front door opts into this permanent light-mineral
+ * surface. */
+body:has(.spine-home) {
+  color-scheme: light;
+  --color-canvas: #F5F5F1;
+  --color-surface: #FCFCF9;
+  --color-surface-muted: #E9EAE5;
+  --color-surface-raised: #FFFFFF;
+  --color-forest: #39413D;
+  --color-forest-deep: #202522;
+  --color-forest-deep-surface: #202522;
+  --color-forest-soft: #E9EAE5;
+  --color-gold: #A8462A;
+  --color-gold-deep: #8B351F;
+  --color-gold-soft: #F0DDD6;
+  --color-ink: #202522;
+  --color-ink-muted: #59615D;
+  --color-ink-subtle: #5D6560;
+  --color-ink-inverse: #FFFFFF;
+  --color-ink-inverse-muted: #D9DDD9;
+  --color-line: #D5D7D1;
+  --color-line-strong: #858C86;
+  --color-shell: #F5F5F1;
+  --color-shell-raised: #FCFCF9;
+  --color-shell-text: #202522;
+  --color-shell-text-muted: #59615D;
+  --color-boundary: #D5D7D1;
+  --color-boundary-strong: #858C86;
+  --color-selection: #A8462A;
+  --color-selection-soft: #F0DDD6;
+  --color-selection-contrast: #FFFFFF;
+  --color-focus: #117990;
+  --color-focus-contrast: #FFFFFF;
+  --color-focus-ring: #117990;
+}
+
 *,
 *::before,
 *::after {
@@ -2927,6 +2969,35 @@ a {
   color: var(--color-shell-text);
 }
 
+body:has(.spine-home) .site-header {
+  border-color: var(--color-line);
+  background: var(--color-canvas);
+}
+
+body:has(.spine-home) .site-header__inner {
+  min-height: 4.25rem;
+  justify-content: flex-start;
+  padding-block: var(--space-4);
+}
+
+body:has(.spine-home) .brand__name {
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The temporary front door is a presentation surface, not a directory into
+ * the visually unaccepted legacy routes. Directly addressed deep routes retain
+ * their notice and footer; the root carries its own status and ends at the
+ * frozen cross-reference. */
+body:has(.spine-home) .development-notice,
+body:has(.spine-home) .site-footer {
+  display: none;
+}
+
 .brand__name,
 .site-nav__link {
   color: var(--color-shell-text);
@@ -3555,6 +3626,22 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 
   border-top: var(--o2-stroke-thin) solid var(--o2-copper-line);
   background: var(--o2-wash-daylight);
+}
+
+/* The frozen cross-reference belongs to the recovered facade. Its wording and
+ * destinations remain untouched; only the inherited legacy gradient is
+ * flattened into the same light-mineral sheet and terracotta technical rule. */
+body:has(.spine-home) .spine-crosslink {
+  --color-canvas: #F5F5F1;
+  --color-line: #D5D7D1;
+  --color-line-strong: #858C86;
+  --color-ink-muted: #59615D;
+  --color-forest-deep: #202522;
+  --color-focus: #117990;
+  --color-focus-contrast: #FFFFFF;
+
+  border-top: var(--line-width) solid #A8462A;
+  background: var(--color-canvas);
 }
 
 .spine-crosslink__inner {

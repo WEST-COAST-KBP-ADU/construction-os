@@ -5,7 +5,6 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import sitemap from "../../app/sitemap";
 import ContentHero from "../components/content/ContentHero";
 import ServicePageView from "../components/content/ServicePageView";
 import { contentPageLabels, servicePages } from "./contentPages";
@@ -25,8 +24,8 @@ import { siteConfig } from "./siteConfig";
  * The safety coverage is not replaced. Every guard the base carried — no form,
  * no data collection, no external runtime, no price, no schedule, no partner
  * claim, no unsupported property claim, no client JavaScript, bounded and
- * reduced-motion-safe motion, one canonical Studio sitemap entry — is carried
- * forward and, where the facade made it checkable at a finer grain, tightened.
+ * reduced-motion-safe motion and static rendering — is carried forward and,
+ * where the facade made it checkable at a finer grain, tightened.
  */
 
 const page = readFileSync(resolve(process.cwd(), "app/page.tsx"), "utf8");
@@ -77,9 +76,6 @@ const facadeCopy = [
   facade.heading,
   facade.message,
   facade.boundary,
-  facade.boundarySupporting,
-  facade.action.label,
-  facade.action.supporting,
   facade.fieldHeading,
   facade.detailCaption,
   ...facade.modules.flatMap((module) => [module.label, module.description, module.limit]),
@@ -178,14 +174,15 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
 
     // The primary message names the one operating surface and all four of the
     // things it is being built to hold.
-    expect(facade.heading).toContain("one operating surface");
+    const primaryMessage = `${facade.heading} ${facade.message}`.toLowerCase();
+    expect(primaryMessage).toContain("one operating surface");
     for (const subject of [
       "land",
       "feasibility review",
       "project control",
       "durable business memory",
     ]) {
-      expect(facade.heading.toLowerCase()).toContain(subject);
+      expect(primaryMessage).toContain(subject);
     }
 
     // And the component renders every one of them, rather than declaring copy
@@ -197,7 +194,6 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       "category",
       "message",
       "boundary",
-      "boundarySupporting",
     ]) {
       expect(facadeComponent).toContain(`platformFacade.${key}`);
     }
@@ -386,7 +382,7 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     );
 
     // Nothing that carries the first-screen message is hidden at any width.
-    for (const kept of [".status", ".heading", ".message", ".boundary", ".action"]) {
+    for (const kept of [".status", ".heading", ".message", ".boundary"]) {
       expect(facadeStylesCode).not.toMatch(
         new RegExp(`\\${kept}[^{]*\\{[^}]*display:\\s*none`, "i"),
       );
@@ -474,37 +470,25 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       "Reaches no parcel conclusion.",
       "Determines no eligibility or buildability.",
       facade.detailCaption,
-      facade.boundarySupporting,
     ].join("\n");
 
     for (const word of conclusionWords) {
       expect(refusals.toLowerCase()).toContain(word.toLowerCase());
     }
 
-    // And the surface says outright that it reaches no property conclusion.
-    expect(facade.boundarySupporting).toContain("reaches a conclusion about a property");
-    expect(facade.boundarySupporting).toContain("Nothing on this page collects information");
+    expect(facade.modules.find((module) => module.label === "LAND")?.limit).toBe(
+      "Reaches no parcel conclusion.",
+    );
   });
 
-  it("offers exactly one truthful current action, into an existing public route", () => {
-    expect(facade.action.href).toBe("/studio");
-    expect(facade.action.label).toBe("Open Concept Studio");
-
-    // One link out of the editorial column, and no second call to action
-    // competing with it.
+  it("does not launch the front door into a visually unaccepted deep route", () => {
     const editorialBlock = facadeComponentCode.slice(
       facadeComponentCode.indexOf("styles.editorial"),
       facadeComponentCode.indexOf("styles.field}"),
     );
-    expect(editorialBlock.match(/<Link\b/g)).toHaveLength(1);
-
-    // The destination is a route that actually exists and is published once.
-    expect(existsSync(resolve(process.cwd(), "app/studio/page.tsx"))).toBe(true);
-    const studioUrl = new URL("/studio", siteConfig.url).toString();
-    const studioEntries = sitemap().filter((entry) => entry.url === studioUrl);
-
-    expect(studioEntries).toHaveLength(1);
-    expect(studioEntries[0]).toMatchObject({ changeFrequency: "monthly", priority: 0.8 });
+    expect(editorialBlock).not.toMatch(/<(?:a|Link|button)\b/);
+    expect(facadeComponentCode).not.toMatch(/href=|<Link\b/);
+    expect(stylesheet).toContain("body:has(.spine-home) .site-footer");
   });
 
   it("keeps the global chrome coherent with the new root message", () => {
@@ -521,11 +505,41 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     expect(page).toContain("buildBusinessJsonLd");
     expect(siteConfig.name).toBe(facade.identity);
 
-    // Pre-release global navigation, unchanged and still client-JS free.
-    expect(header).toContain('{ label: "Models", href: "/models" }');
-    expect(header).toContain('{ label: "Concept Studio", href: "/studio" }');
-    expect(header).toContain('<details className="site-nav-mobile">');
+    // The shared Header is now the selected minimal typographic identity. It
+    // exposes one Home link and no legacy route navigation or mobile menu.
+    expect(header.match(/<Link\b/g)).toHaveLength(1);
+    expect(header).toContain('href="/"');
+    expect(header).toContain('className="brand__name"');
+    expect(header).not.toMatch(/<nav\b|<details\b|primaryNavigation|NavigationLinks/);
     expect(header).not.toContain('"use client"');
+  });
+
+  it("pins the front door to one permanent light-mineral palette after dark mode", () => {
+    const darkMode = stylesheet.indexOf("@media (prefers-color-scheme: dark)");
+    const recovery = stylesheet.indexOf("body:has(.spine-home) {");
+    const recoveryBlock = stylesheet.slice(recovery, stylesheet.indexOf("\n}", recovery) + 2);
+
+    expect(darkMode).toBeGreaterThan(-1);
+    expect(recovery).toBeGreaterThan(darkMode);
+    expect(recoveryBlock).toContain("color-scheme: light;");
+    expect(recoveryBlock).toContain("--color-canvas: #F5F5F1;");
+    expect(recoveryBlock).toContain("--color-surface: #FCFCF9;");
+    expect(recoveryBlock).toContain("--color-ink: #202522;");
+    expect(recoveryBlock).toContain("--color-selection: #A8462A;");
+
+    expect(facadeStylesCode).toMatch(
+      /\.heading\s*\{[\s\S]*?font-family:\s*var\(--font-sans\)/,
+    );
+    expect(facadeStylesCode).not.toMatch(
+      /\.heading\s*\{[^}]*font-family:\s*var\(--font-serif\)/,
+    );
+
+    const crosslinkRecovery = stylesheet.slice(
+      stylesheet.indexOf("body:has(.spine-home) .spine-crosslink"),
+      stylesheet.indexOf("\n}", stylesheet.indexOf("body:has(.spine-home) .spine-crosslink")) + 2,
+    );
+    expect(crosslinkRecovery).toContain("background: var(--color-canvas);");
+    expect(crosslinkRecovery).not.toMatch(/gradient/i);
   });
 
   it("keeps Home motion bounded, optional and reduced-motion safe", () => {
@@ -546,7 +560,7 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       facadeStylesCode.indexOf("@media (prefers-reduced-motion: reduce)"),
     );
     expect(reduceBlock).toContain("animation: none");
-    expect(reduceBlock).toContain("transition: none");
+    expect(facadeStylesCode).not.toMatch(/\btransition\s*:/);
   });
 
   it("points every service breadcrumb at a destination the root actually publishes", () => {

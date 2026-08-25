@@ -55,6 +55,7 @@ function ruleBody(selector: string): string {
 }
 
 const seam = ruleBody(".spine-crosslink");
+const recoveredRootSeam = ruleBody("body:has(.spine-home) .spine-crosslink");
 
 /** Resolves a declared `var(--o2-x)` reference to the hex the recipe gives it. */
 function bridged(baseToken: string): string {
@@ -105,6 +106,16 @@ describe("KBPOS-DEEDSEAL-CROSSLINK-O2-0001 the seam is inside the recipe", () =>
     // Copper is cleared for marks and hairlines only, never for type.
     expect(seam).toMatch(/border-top:[^;]*var\(--o2-copper-line\)/);
     expect(seam).not.toMatch(/color:\s*var\(--o2-copper/);
+  });
+
+  it("flattens the root seam into the permanent light facade after the legacy recipe", () => {
+    const legacyAt = stylesheet.indexOf(".spine-crosslink {");
+    const recoveryAt = stylesheet.indexOf("body:has(.spine-home) .spine-crosslink {");
+
+    expect(recoveryAt).toBeGreaterThan(legacyAt);
+    expect(recoveredRootSeam).toContain("background: var(--color-canvas);");
+    expect(recoveredRootSeam).toContain("border-top: var(--line-width) solid #A8462A;");
+    expect(recoveredRootSeam).not.toMatch(/gradient|--o2-wash/i);
   });
 
   it("clears every contrast floor at the wash's darkest step", () => {
