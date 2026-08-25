@@ -516,6 +516,102 @@
       "source": {"repository": "WEST-COAST-KBP-ADU/construction-os", "path": "governance/product/visual-production/p2-hero-visual-master-manifest-v1.json", "revision": "747cf379952c87816499b2a7ea587ff6167774c8", "digest": "sha256:b38b3d7a6e6836af252a926d872bfb0c03694a0b07c3d9e403b8dc05a2038d38"},
       "verify": "git show 747cf379952c87816499b2a7ea587ff6167774c8:governance/product/visual-production/p2-hero-visual-master-manifest-v1.json | sha256sum",
       "note": "Proves only the technical render evidence at PR #332 exact head. The Owner visual gate rejected it as the production target."
+    },
+    {
+      "id": "module.product-2-temporary-public-platform-facade-0001",
+      "type": "MODULE_SUBGRAPH",
+      "plane": "EXECUTION_PLANE",
+      "parent": "goal.product-2.publicly-supported-surface",
+      "boundary_status": "DIRECTION",
+      "title": "Temporary public platform facade — a professional technical root surface that states the real ADU business and the undeveloped platform boundary in one screen while the platform is built",
+      "advances_how": "The root page currently tells a large residential editorial story behind a photographic first fold, which reads as a finished consumer offer. This module replaces only the root projection with a restrained technical facade that says two true things at once: West Coast KBP is a real Greater Sacramento ADU and residential-construction business building an AI-native operating platform for its own work, and that platform is under development with live intake, accounts, property conclusions and external actions not enabled. It opens no capability the boundary classifies NOT_OPENED, and it makes no Product 1 integration claim beyond the frozen first-user wording.",
+      "coordination_node": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/353",
+      "dependencies": [],
+      "join": {
+        "id": "join.product-2-temporary-public-platform-facade.stage-1",
+        "policy": "all_required",
+        "expected_branches": [
+          "work.product2-platform-development-facade-option2-0001"
+        ],
+        "declared_before_fanout": true,
+        "satisfied": false
+      },
+      "note": "Temporary by intent. This module is the interim public projection while the platform is built; it neither supersedes nor cancels module.product-2-hero-visual-production-0001, whose visual production work remains live and separately gated."
+    },
+    {
+      "id": "work.product2-platform-development-facade-option2-0001",
+      "type": "WORK_NODE",
+      "plane": "EXECUTION_PLANE",
+      "parent": "module.product-2-temporary-public-platform-facade-0001",
+      "boundary_status": "DIRECTION",
+      "title": "Worker-353 / Issue #353 — ship the Owner-selected Option 2 technical facade as the root public projection",
+      "node_url": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/353",
+      "inputs": [
+        {
+          "name": "owner_selected_option_2_visual_contract",
+          "type": "application/vnd.kbp.visual-contract+owner-selected"
+        },
+        {
+          "name": "frozen_deedseal_cross_reference_constants",
+          "type": "application/typescript+frozen-wording"
+        },
+        {
+          "name": "existing_public_routes_and_chrome",
+          "type": "application/vnd.kbp.public-surface+authoritative"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "option_2_root_facade_projection",
+          "type": "text/tsx+server-rendered"
+        },
+        {
+          "name": "option_2_facade_stylesheet",
+          "type": "text/css+module"
+        },
+        {
+          "name": "named_option_2_facade_assertions",
+          "type": "text/typescript+test"
+        },
+        {
+          "name": "three_viewport_captures",
+          "type": "image/png+responsive-set"
+        }
+      ],
+      "dependencies": [],
+      "terminal_conditions": [
+        "the root projection carries the Owner-selected Option 2 contract exactly — ivory mineral canvas, charcoal type, one restrained terracotta accent, blueprint grid, asymmetric editorial hero, the 2x2 LAND / FEASIBILITY / PROJECT / MEMORY module field, thin graph-memory connectors and one quiet line-drawn ADU detail — with no invented direction, logo or mark",
+        "the first screen states the identity, the category, the single operating-surface message, the visible PLATFORM IN DEVELOPMENT status and the visible boundary that live intake, accounts and external actions are not enabled",
+        "the four module labels read as product direction and each keeps its own boundary: no parcel conclusion, no eligibility or buildability determination, no live project execution claim, no completed public integration claim",
+        "the frozen West Coast KBP first-user cross-reference sentence renders byte-for-byte from src/lib/deedsealCrossReference.ts, with no Powered by Deedseal, integration, customer, deployment or outcome language",
+        "every existing route keeps its bytes; only the root projection is replaced, and the superseded hero components and assets are retained rather than deleted",
+        "the root stays static and server-rendered with no new client JavaScript, no form, input, account, analytics, API call, live intake or external effect",
+        "1440x900, 820x1180 and 390x844 are rendered and inspected, with no horizontal overflow at 390x844 and status, H1, explanation and primary action legible",
+        "the changed-path set is exactly the six paths the Issue allowlists, with no seventh path",
+        "a terminal RESULT names the exact Draft PR head; independent non-author review, Owner acceptance and Owner merge remain separate acts this Work Node does not perform"
+      ],
+      "join_destination": "join.product-2-temporary-public-platform-facade.stage-1",
+      "terminal_result": {
+        "state": "PENDING",
+        "evidence": null
+      },
+      "execution": {
+        "started_event": null,
+        "running": false,
+        "why": "The intent graph observes nothing about itself. Worker-353 did publish the required STARTED record on Issue #353 before its first repository mutation, but that is live GitHub evidence and belongs to the Issue and to the derived engineering projection, not to this surface — asserting it here would make intended state a second, competing observation of the same fact. This Work Node stays PENDING until an exact-head RESULT, an independent non-author review and Owner merge."
+      },
+      "evidence_expectation": {
+        "state": "EXPECTED_NOT_YET_EXISTING",
+        "artefacts": [
+          "the exact Draft PR head SHA",
+          "successful hosted checks on that exact head",
+          "three viewport captures at 1440x900, 820x1180 and 390x844",
+          "one authorized exact-SHA Vercel Preview URL for visual verification only"
+        ],
+        "why_not_a_node": "The evidence does not yet exist at an exact revision and digest, so the pinned contract forbids minting an EVIDENCE node for it.",
+        "custody_until_ledger_exists": "The exact Draft PR head and the Issue #353 terminal IMPLEMENTATION_RESULT record."
+      },
+      "note": "The facade is a truthful interim projection, not a capability claim. It opens no intake, account, database, connector, provider, deployment or Production use, and it asserts no Product 1 public integration beyond the frozen first-user relation."
     }
   ],
   "edges": [
@@ -628,7 +724,21 @@
     {"id": "edge.proves.hero-physical-truth", "type": "PROVES", "from": "evidence.product2-hero-physical-truth-merged", "to": "work.product2-hero-physical-truth-0001", "claim": "The Owner-merged record proves the physical-truth prerequisite at an exact revision and digest."},
     {"id": "edge.proves.hero-camera-motion", "type": "PROVES", "from": "evidence.product2-hero-camera-motion-merged", "to": "work.product2-hero-blender-camera-motion-recovery-0001", "claim": "The Owner-merged record proves the Blender camera and motion prerequisite at an exact revision and digest."},
     {"id": "edge.proves.hero-procedural-rights", "type": "PROVES", "from": "evidence.product2-hero-procedural-rights-merged", "to": "work.product2-hero-custom-3d-source-clearance-0001", "claim": "The Owner-merged policy proves the closed procedural-rights prerequisite at an exact revision and digest."},
-    {"id": "edge.proves.worker-331-technical-render-only", "type": "PROVES", "from": "evidence.product2-hero-worker-331-technical-render", "to": "work.product2-hero-visual-master-assembly-0001", "claim": "The exact manifest proves Worker-331 technical render evidence only; it does not prove visual acceptance or Production readiness."}
+    {"id": "edge.proves.worker-331-technical-render-only", "type": "PROVES", "from": "evidence.product2-hero-worker-331-technical-render", "to": "work.product2-hero-visual-master-assembly-0001", "claim": "The exact manifest proves Worker-331 technical render evidence only; it does not prove visual acceptance or Production readiness."},
+    {
+      "id": "edge.advances.temporary-public-platform-facade-module-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "module.product-2-temporary-public-platform-facade-0001",
+      "to": "goal.product-2.publicly-supported-surface",
+      "claim": "A public surface that stays inside what is actually supported is exactly what this outcome asks for. A temporary technical facade that states the real business and names the development boundary in the same screen advances it; the photographic editorial root it replaces reads as a finished consumer offer and overstates what is supported today."
+    },
+    {
+      "id": "edge.advances.platform-development-facade-option2-to-supported-surface",
+      "type": "ADVANCES",
+      "from": "work.product2-platform-development-facade-option2-0001",
+      "to": "goal.product-2.publicly-supported-surface",
+      "claim": "Worker-353 implements the already Owner-selected Option 2 direction as the root projection and carries the visible development boundary and the frozen first-user wording with it. Its containment in module.product-2-temporary-public-platform-facade-0001 is its parent scope, which is how the adopted contract expresses membership: an ADVANCES edge ends on a live GOAL. It claims no visual acceptance, no implementation of a capability the boundary classifies NOT_OPENED, no deployment and no Production use."
+    }
   ],
   "owner_decisions": [
     {

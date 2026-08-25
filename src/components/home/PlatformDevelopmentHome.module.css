@@ -1,0 +1,587 @@
+/*
+ * PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 — the Owner-selected
+ * Option 2 recipe, scoped to the temporary public platform facade.
+ *
+ * The direction, held exactly: a warm ivory / light mineral canvas, charcoal
+ * typography, one restrained terracotta accent, a subtle square blueprint grid
+ * across the background, an asymmetric editorial left-aligned hero, a
+ * disciplined 2x2 module field on the right with thin graph-memory connectors
+ * and nodes, one quiet line-drawn ADU technical detail sitting in the grid,
+ * generous whitespace and precise rules.
+ *
+ * What the contract rules out is ruled out here too. There is no gradient of
+ * any kind — the blueprint grid and the connectors are SVG line work, not
+ * `linear-gradient` fills. There is no glassmorphism, no backdrop blur, no
+ * dashboard chrome, no giant rounded SaaS card (the module seats carry a 2px
+ * radius and a hairline rule), no photographic surface and no invented mark.
+ *
+ * Colour is taken from the tokens `app/globals.css` already publishes, so the
+ * facade sits inside the site's own system rather than forking a second one.
+ * The single new value is the terracotta accent, declared once below and
+ * measured: #A8462A on the ivory canvas is 5.12:1, which clears WCAG AA for
+ * normal-size text with margin, and clears AA Large and non-text UI outright.
+ */
+
+.facade {
+  /* The one accent, declared once. Every terracotta below reads this. */
+  --facade-accent: #a8462a;
+  /* Blueprint hairlines, kept well under the text contrast so the grid reads
+     as a substrate rather than as content. */
+  --facade-grid-ink: color-mix(in srgb, var(--color-line-strong) 34%, transparent);
+  --facade-connector-ink: color-mix(in srgb, var(--color-line-strong) 62%, transparent);
+  --facade-detail-ink: color-mix(in srgb, var(--color-line-strong) 78%, transparent);
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background: var(--color-canvas);
+  border-bottom: var(--line-width) solid var(--color-line);
+  padding-block: clamp(var(--space-8), 4vw, var(--space-14));
+}
+
+/* ------------------------------------------------------------------ *
+ * Blueprint substrate
+ * ------------------------------------------------------------------ */
+
+.blueprint {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--facade-grid-ink);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ *
+ * Asymmetric editorial layout
+ * ------------------------------------------------------------------ */
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  /* Asymmetric on purpose: the editorial column leads, the module field
+     answers it. Both tracks are `minmax(0, …)` so long words can never push
+     the page into a horizontal scroll. */
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  gap: clamp(var(--space-10), 5vw, var(--space-16));
+  align-items: start;
+}
+
+.editorial {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+/* ------------------------------------------------------------------ *
+ * Status, identity, first-screen message
+ * ------------------------------------------------------------------ */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  border: var(--line-width) solid color-mix(in srgb, var(--facade-accent) 38%, transparent);
+  border-radius: 0.125rem;
+  padding: var(--space-2) var(--space-4);
+  color: var(--facade-accent);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+.statusMark {
+  display: block;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  background: var(--facade-accent);
+}
+
+.identity {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.24em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.heading {
+  /* Wide enough to set in three lines at the desktop target, so the status,
+     the boundary and the primary action all stay inside the first screen. */
+  max-width: 32ch;
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 2.85vw, 2.55rem);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.014em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.category {
+  margin: 0;
+  /* The precise rule the contract asks for: a hairline above the category,
+     the width of the accent mark, not a decorative flourish. */
+  border-top: var(--line-width) solid var(--color-line-strong);
+  padding-top: var(--space-4);
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-body-sm);
+  letter-spacing: 0.04em;
+  line-height: var(--line-height-body);
+}
+
+.message {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-body-lg);
+  line-height: 1.62;
+}
+
+.boundary {
+  max-width: 52ch;
+  margin: var(--space-2) 0 0;
+  border-left: 0.125rem solid var(--facade-accent);
+  padding-left: var(--space-4);
+  color: var(--color-ink);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-body);
+}
+
+.boundarySupporting {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body-sm);
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------------ *
+ * The single current action
+ * ------------------------------------------------------------------ */
+
+.actions {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  border-bottom: 0.09375rem solid var(--facade-accent);
+  padding-bottom: var(--space-2);
+  color: var(--color-ink);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  transition: color var(--duration-standard) var(--easing-standard);
+}
+
+.action:hover {
+  color: var(--facade-accent);
+}
+
+.action:focus-visible {
+  outline: 0.125rem solid var(--color-focus);
+  outline-offset: 0.25rem;
+}
+
+.actionSupporting {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body-sm);
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------------ *
+ * The 2x2 module field
+ * ------------------------------------------------------------------ */
+
+.field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.fieldHeading {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.14em;
+  line-height: var(--line-height-body);
+  text-transform: uppercase;
+}
+
+.moduleField {
+  position: relative;
+  min-width: 0;
+}
+
+/*
+ * Two hairline connectors along the grid's own gutters, meeting at the centre.
+ * The seats sit opaque on top of the layer, so a full lattice would survive
+ * only as disconnected stubs in the gaps; a cross through the gutters reads as
+ * one continuous relation between all four modules, which is what the layer is
+ * there to say.
+ */
+.connectors {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.connectors::before,
+.connectors::after {
+  position: absolute;
+  background: var(--facade-connector-ink);
+  content: "";
+}
+
+/* The horizontal connector, on the field's centre line. */
+.connectors::before {
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: var(--line-width);
+}
+
+/* The vertical connector. */
+.connectors::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--line-width);
+}
+
+.connectorNodeTop,
+.connectorNodeRight,
+.connectorNodeBottom,
+.connectorNodeLeft,
+.connectorCore {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* A node where each connector passes a seat. */
+.connectorNodeTop,
+.connectorNodeRight,
+.connectorNodeBottom,
+.connectorNodeLeft {
+  width: 0.25rem;
+  height: 0.25rem;
+  background: var(--facade-connector-ink);
+}
+
+.connectorNodeTop {
+  top: 25%;
+  left: 50%;
+}
+
+.connectorNodeBottom {
+  top: 75%;
+  left: 50%;
+}
+
+.connectorNodeLeft {
+  top: 50%;
+  left: 25%;
+}
+
+.connectorNodeRight {
+  top: 50%;
+  left: 75%;
+}
+
+/*
+ * The one place the four modules meet. It is the single terracotta moment in
+ * the field, and it sits on the canvas so the connectors read as passing behind
+ * it rather than through it.
+ */
+.connectorCore {
+  top: 50%;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: var(--line-width) solid var(--facade-accent);
+  background: var(--color-canvas);
+}
+
+.modules {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Four equal seats. Equal rows also put the horizontal gutter exactly on the
+     field's centre line, which is where the graph-memory connector runs. */
+  grid-auto-rows: 1fr;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.module {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  /* A seat, not a SaaS card: hairline rule, 2px radius, no shadow, no fill
+     beyond the mineral surface the canvas already carries. */
+  border: var(--line-width) solid var(--color-line);
+  border-radius: 0.125rem;
+  background: var(--color-surface);
+  padding: var(--space-5);
+}
+
+.moduleIndex {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.moduleLabel {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+}
+
+.moduleDescription {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: var(--font-size-body-sm);
+  line-height: 1.58;
+}
+
+.moduleLimit {
+  margin: var(--space-1) 0 0;
+  border-top: var(--line-width) solid var(--color-line);
+  padding-top: var(--space-3);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------ *
+ * The one quiet ADU technical detail
+ * ------------------------------------------------------------------ */
+
+.detail {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin: 0;
+  border-top: var(--line-width) solid var(--color-line);
+  padding-top: var(--space-5);
+}
+
+.detailDrawing {
+  width: min(100%, 21rem);
+  height: auto;
+  color: var(--facade-detail-ink);
+}
+
+.detailRidge {
+  color: var(--facade-accent);
+}
+
+.detailCaption {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-label);
+  line-height: 1.55;
+}
+
+/* ------------------------------------------------------------------ *
+ * Responsive behaviour — 1440x900, 820x1180, 390x844
+ * ------------------------------------------------------------------ */
+
+/* Below the two-column threshold the field stacks under the editorial column.
+   At 820x1180 the module grid deliberately stays 2x2, which is what the
+   contract asks a tablet to show. */
+@media (max-width: 63.99rem) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(var(--space-8), 7vw, var(--space-12));
+  }
+
+  .heading {
+    max-width: 26ch;
+  }
+}
+
+/* At 390x844 the module grid becomes a single column, as the contract permits.
+   Nothing is hidden: the status, the H1, the explanation and the primary action
+   all stay on the surface and stay legible. */
+@media (max-width: 33rem) {
+  .modules {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* A phone has far less vertical room above the fold, so the type steps down
+     with it and the whole required first-screen message still lands inside
+     390x844 rather than being pushed under it. */
+  .facade {
+    padding-block: var(--space-6);
+  }
+
+  .editorial {
+    gap: var(--space-3);
+  }
+
+  .message {
+    font-size: var(--font-size-body);
+    line-height: 1.55;
+  }
+
+  /* With one column there is no 2x2 field for a connector lattice to describe,
+     so the layer is retired rather than left drawing a shape that is no longer
+     on the screen. */
+  .connectors {
+    display: none;
+  }
+
+  .heading {
+    max-width: none;
+    font-size: clamp(1.6rem, 7.2vw, 2rem);
+    line-height: 1.15;
+  }
+
+  .identity {
+    letter-spacing: 0.18em;
+  }
+
+  .module {
+    padding: var(--space-4);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion — optional, subtle, CSS-only, and switched off on request
+ * ------------------------------------------------------------------ */
+
+@keyframes facadeSettle {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/*
+ * `backwards` fill is the safe direction: the resting state of every element
+ * below is already the visible one, so if animation never runs — an engine that
+ * does not support it, or a capture taken before it starts — the content is
+ * simply there. The animation only borrows the first fraction of a second.
+ */
+.status,
+.identity,
+.heading,
+.category,
+.message,
+.boundary,
+.boundarySupporting,
+.actions,
+.fieldHeading,
+.moduleField,
+.detail {
+  animation: facadeSettle 620ms var(--easing-standard) backwards;
+}
+
+.identity {
+  animation-delay: 40ms;
+}
+
+.heading {
+  animation-delay: 80ms;
+}
+
+.category {
+  animation-delay: 120ms;
+}
+
+.message {
+  animation-delay: 160ms;
+}
+
+.boundary {
+  animation-delay: 200ms;
+}
+
+.boundarySupporting {
+  animation-delay: 230ms;
+}
+
+.actions {
+  animation-delay: 260ms;
+}
+
+.fieldHeading {
+  animation-delay: 140ms;
+}
+
+.moduleField {
+  animation-delay: 180ms;
+}
+
+.detail {
+  animation-delay: 240ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status,
+  .identity,
+  .heading,
+  .category,
+  .message,
+  .boundary,
+  .boundarySupporting,
+  .actions,
+  .fieldHeading,
+  .moduleField,
+  .detail {
+    animation: none;
+  }
+
+  .action {
+    transition: none;
+  }
+}
