@@ -1,9 +1,13 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import sitemap from "../../app/sitemap";
+import ContentHero from "../components/content/ContentHero";
+import ServicePageView from "../components/content/ServicePageView";
 import { contentPageLabels, servicePages } from "./contentPages";
 import { publicRouteRegistry } from "./routes";
 import { siteConfig } from "./siteConfig";
@@ -32,6 +36,10 @@ const servicePageView = readFileSync(
   resolve(process.cwd(), "src/components/content/ServicePageView.tsx"),
   "utf8",
 );
+const contentHero = readFileSync(
+  resolve(process.cwd(), "src/components/content/ContentHero.tsx"),
+  "utf8",
+);
 const serviceRoute = readFileSync(
   resolve(process.cwd(), "app/services/[slug]/page.tsx"),
   "utf8",
@@ -57,6 +65,7 @@ const codeOf = (source: string) => source.replace(/\/\*[\s\S]*?\*\//g, "");
 const pageCode = codeOf(page);
 const facadeComponentCode = codeOf(facadeComponent);
 const facadeStylesCode = codeOf(facadeStyles);
+const contentHeroCode = codeOf(contentHero);
 
 const facade = siteConfig.platformFacade;
 
@@ -579,5 +588,303 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     // breadcrumb reaches all five of them.
     expect(serviceRoute).toContain("<ServicePageView page={page} />");
     expect(servicePages).toHaveLength(5);
+  });
+});
+
+/*
+ * PRODUCT2-FACADE-BREADCRUMB-DEDUPLICATION-REPAIR-0001.
+ *
+ * The assertions below read rendered markup, not source text. A breadcrumb is
+ * something a reader sees, and `Home / Home` was invisible to every string
+ * assertion the suite already carried — both crumbs were true, the destination
+ * was real, and the duplication only existed once the component was composed
+ * with its caller. `renderToStaticMarkup` is this repository's convention and
+ * is also the no-JavaScript render, so what is inspected here is exactly what a
+ * reader receives before hydration.
+ */
+
+/** The breadcrumb navigation of a rendered content page, as a reader meets it. */
+const breadcrumbOf = (html: string) => {
+  const nav = /<nav\b[^>]*aria-label="Breadcrumb"[^>]*>([\s\S]*?)<\/nav>/.exec(html);
+
+  if (!nav) {
+    return null;
+  }
+
+  const inner = nav[1];
+
+  return {
+    markup: nav[0],
+    links: [...inner.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)].map(([, attributes, label]) => ({
+      href: /href="([^"]*)"/.exec(attributes)?.[1] ?? null,
+      label: label.replace(/<[^>]*>/g, "").trim(),
+    })),
+    separators: [
+      ...inner.matchAll(
+        /<span\b[^>]*class="[^"]*breadcrumb__separator[^"]*"[^>]*>([\s\S]*?)<\/span>/g,
+      ),
+    ].map(([markup, text]) => ({ markup, text: text.trim() })),
+    text: inner
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim(),
+  };
+};
+
+/** Exactly one visible crumb — `Home`, pointing at the published root. */
+const isSingleHomeCrumb = (html: string) => {
+  const crumb = breadcrumbOf(html);
+
+  return (
+    crumb !== null &&
+    crumb.links.length === 1 &&
+    crumb.links[0].href === "/" &&
+    crumb.links[0].label === contentPageLabels.home &&
+    crumb.separators.length === 0 &&
+    crumb.text === contentPageLabels.home
+  );
+};
+
+/**
+ * Every way a breadcrumb can be wrong here, named.
+ *
+ * The probes below are markup mutations rather than file edits, so the guard
+ * is proved to refuse each shape in-process instead of being assumed to.
+ */
+const breadcrumbDefects = (html: string) => {
+  const crumb = breadcrumbOf(html);
+
+  if (!crumb) {
+    return ["no breadcrumb navigation"];
+  }
+
+  const defects: string[] = [];
+  const homeCrumbs = crumb.links.filter((link) => link.label === contentPageLabels.home);
+
+  if (homeCrumbs.length > 1) {
+    defects.push("duplicate Home crumb");
+  }
+  if (crumb.separators.some((separator) => separator.text === "")) {
+    defects.push("empty separator");
+  }
+  if (crumb.separators.length >= crumb.links.length) {
+    defects.push("separator without a following crumb");
+  }
+  if (crumb.links.some((link) => link.href === null || link.href.trim() === "")) {
+    defects.push("empty breadcrumb target");
+  }
+  if (crumb.links.some((link) => link.label === "")) {
+    defects.push("empty breadcrumb label");
+  }
+  if (crumb.markup.includes("#services")) {
+    defects.push("retired /#services destination");
+  }
+  if (crumb.links.some((link) => link.label === contentPageLabels.services)) {
+    defects.push("Services label with no services index");
+  }
+
+  return defects;
+};
+
+const heroFixture = {
+  eyebrow: contentPageLabels.servicePageStatus,
+  title: "A bounded review lane",
+  lede: "Organized for owner review, with no conclusion reached here.",
+  signal: "Owner review boundary.",
+  sequence: "01",
+};
+
+const renderContentHero = (parentLabel: string, parentHref: string) =>
+  renderToStaticMarkup(
+    createElement(ContentHero, { ...heroFixture, parentLabel, parentHref }),
+  );
+
+const renderServicePage = (servicePage: (typeof servicePages)[number]) =>
+  renderToStaticMarkup(createElement(ServicePageView, { page: servicePage }));
+
+/** The exact leading crumb the repaired component emits, as shipped bytes. */
+const leadingHomeCrumb = '<a class="breadcrumb__link" href="/">Home</a>';
+
+/** The separator markup the component emits when a second crumb follows it. */
+const separatorMarkup = '<span aria-hidden="true" class="breadcrumb__separator">/</span>';
+
+/** Every live `ContentHero` caller that names a parent other than the root. */
+const nonHomeCallers = [
+  { path: "app/about/page.tsx", label: contentPageLabels.about, href: "/about" },
+  { path: "app/compare/page.tsx", label: contentPageLabels.compare, href: "/compare" },
+  { path: "app/process/page.tsx", label: contentPageLabels.process, href: "/process" },
+  { path: "app/faq/page.tsx", label: contentPageLabels.faq, href: "/faq" },
+  {
+    path: "src/components/content/JurisdictionPageView.tsx",
+    label: "ADU Services",
+    href: "/services/detached-adu",
+  },
+];
+
+describe("PRODUCT2-FACADE-BREADCRUMB-DEDUPLICATION-REPAIR-0001 service breadcrumb", () => {
+  it("renders exactly one Home crumb and zero separators on all five service pages", () => {
+    expect(servicePages).toHaveLength(5);
+
+    for (const servicePage of servicePages) {
+      const html = renderServicePage(servicePage);
+      const crumb = breadcrumbOf(html);
+
+      expect(crumb, servicePage.slug).not.toBeNull();
+      expect(crumb?.links, servicePage.slug).toEqual([
+        { href: "/", label: contentPageLabels.home },
+      ]);
+      expect(crumb?.separators, servicePage.slug).toHaveLength(0);
+      expect(crumb?.text, servicePage.slug).toBe(contentPageLabels.home);
+      expect(isSingleHomeCrumb(html), servicePage.slug).toBe(true);
+      expect(breadcrumbDefects(html), servicePage.slug).toEqual([]);
+    }
+  });
+
+  it("preserves Home / {parent} for every caller whose parent is not Home", () => {
+    /*
+     * The five live callers, read from their own sources so a caller that
+     * changed its parent could not pass here on a stale fixture — then rendered
+     * with exactly the values they pass.
+     */
+    for (const caller of nonHomeCallers) {
+      const source = readFileSync(resolve(process.cwd(), caller.path), "utf8");
+      expect(source, caller.path).toContain(`parentHref="${caller.href}"`);
+
+      const crumb = breadcrumbOf(renderContentHero(caller.label, caller.href));
+
+      expect(crumb?.links, caller.path).toEqual([
+        { href: "/", label: contentPageLabels.home },
+        { href: caller.href, label: caller.label },
+      ]);
+      expect(crumb?.separators, caller.path).toHaveLength(1);
+      expect(crumb?.separators[0].text, caller.path).toBe("/");
+      expect(crumb?.separators[0].markup, caller.path).toContain('aria-hidden="true"');
+    }
+  });
+
+  it("suppresses the second crumb only when both the label and the destination repeat Home", () => {
+    /*
+     * One attribute at a time. A caller that changes the label alone, or the
+     * destination alone, is naming a different parent and keeps its second
+     * crumb — the condition is not allowed to collapse to a single operand.
+     */
+    const divergences = [
+      { label: "Overview", href: "/", changed: "label" },
+      { label: contentPageLabels.home, href: "/about", changed: "href" },
+    ];
+
+    for (const divergence of divergences) {
+      const crumb = breadcrumbOf(renderContentHero(divergence.label, divergence.href));
+
+      expect(crumb?.links, divergence.changed).toEqual([
+        { href: "/", label: contentPageLabels.home },
+        { href: divergence.href, label: divergence.label },
+      ]);
+      expect(crumb?.separators, divergence.changed).toHaveLength(1);
+    }
+
+    // And the identical parent — what `ServicePageView` truthfully passes —
+    // deduplicates.
+    expect(isSingleHomeCrumb(renderContentHero(contentPageLabels.home, "/"))).toBe(true);
+  });
+
+  it("fails if the deduplication condition is removed", () => {
+    /*
+     * The pre-repair markup, rebuilt from the bytes that ship rather than typed
+     * out, so the probe cannot drift away from the component. If the condition
+     * were removed, this is exactly what the five service pages would emit —
+     * and the guard above refuses it.
+     */
+    const shipped = renderServicePage(servicePages[0]);
+    expect(shipped).toContain(leadingHomeCrumb);
+
+    const withoutDeduplication = shipped.replace(
+      leadingHomeCrumb,
+      `${leadingHomeCrumb}${separatorMarkup}${leadingHomeCrumb}`,
+    );
+
+    expect(isSingleHomeCrumb(withoutDeduplication)).toBe(false);
+    expect(breadcrumbDefects(withoutDeduplication)).toContain("duplicate Home crumb");
+
+    // The condition itself is present in the shipped component and compares
+    // both operands.
+    expect(contentHeroCode).toContain("parentRepeatsHome");
+    expect(contentHeroCode).toMatch(
+      /parentHref === homeCrumb\.href &&\s*parentLabel === homeCrumb\.label/,
+    );
+  });
+
+  it("fails if the retired /#services destination is reintroduced", () => {
+    for (const servicePage of servicePages) {
+      expect(renderServicePage(servicePage), servicePage.slug).not.toContain("#services");
+    }
+    expect(contentHeroCode).not.toContain("#services");
+
+    const reintroduced = renderServicePage(servicePages[0]).replace(
+      leadingHomeCrumb,
+      `${leadingHomeCrumb}${separatorMarkup}<a class="breadcrumb__link" href="/#services">Services</a>`,
+    );
+
+    expect(breadcrumbDefects(reintroduced)).toContain("retired /#services destination");
+    expect(breadcrumbDefects(reintroduced)).toContain("Services label with no services index");
+    expect(isSingleHomeCrumb(reintroduced)).toBe(false);
+  });
+
+  it("fails if an empty separator, an empty target or a duplicate Home is inserted", () => {
+    const shipped = renderServicePage(servicePages[0]);
+
+    const emptySeparator = shipped.replace(
+      leadingHomeCrumb,
+      `${leadingHomeCrumb}<span aria-hidden="true" class="breadcrumb__separator"></span>`,
+    );
+    expect(breadcrumbDefects(emptySeparator)).toContain("empty separator");
+    expect(breadcrumbDefects(emptySeparator)).toContain("separator without a following crumb");
+
+    const emptyTarget = shipped.replace(
+      leadingHomeCrumb,
+      `${leadingHomeCrumb}${separatorMarkup}<a class="breadcrumb__link" href="">Home</a>`,
+    );
+    expect(breadcrumbDefects(emptyTarget)).toContain("empty breadcrumb target");
+
+    const duplicateHome = shipped.replace(
+      leadingHomeCrumb,
+      `${leadingHomeCrumb}${separatorMarkup}${leadingHomeCrumb}`,
+    );
+    expect(breadcrumbDefects(duplicateHome)).toContain("duplicate Home crumb");
+
+    // The shipped bytes carry none of them.
+    expect(breadcrumbDefects(shipped)).toEqual([]);
+  });
+
+  it("keeps breadcrumb semantics, its accessible name and a focusable target", () => {
+    for (const servicePage of servicePages) {
+      const crumb = breadcrumbOf(renderServicePage(servicePage));
+
+      expect(crumb?.markup, servicePage.slug).toMatch(/^<nav\b/);
+      expect(crumb?.markup, servicePage.slug).toContain('aria-label="Breadcrumb"');
+
+      // A real anchor with a real destination keeps its natural tab stop, and
+      // the repository's `:focus-visible` rule paints the ring on it.
+      expect(crumb?.links[0].href, servicePage.slug).toBe("/");
+      expect(crumb?.links[0].label, servicePage.slug).toBe(contentPageLabels.home);
+    }
+
+    expect(stylesheet).toContain(":focus-visible");
+  });
+
+  it("leaves the root facade and every non-service surface untouched", () => {
+    // The repair lives in the breadcrumb slot of one shared hero. It publishes
+    // no route, no anchor and no label of its own, and it reaches the root
+    // projection not at all.
+    expect(contentHeroCode).not.toMatch(/<(?:form|input|textarea|select|iframe)\b/i);
+    expect(contentHeroCode).not.toMatch(/https?:\/\//);
+    expect(contentHeroCode).not.toContain("services");
+    expect(pageCode).not.toContain("ContentHero");
+    expect(pageCode).not.toContain('id="services"');
+
+    // `ServicePageView` is untouched by this repair and still names the root
+    // truthfully, exactly as PRODUCT2-…-REPAIR-0001 left it.
+    expect(servicePageView).toContain("parentLabel={contentPageLabels.home}");
+    expect(servicePageView).toContain('parentHref="/"');
   });
 });
