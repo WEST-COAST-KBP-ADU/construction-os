@@ -20,8 +20,8 @@ export default function ServicePageView({ page }: { page: ServicePage }) {
         title={page.title}
         lede={page.lede}
         signal={page.reviewSignal}
-        parentLabel={contentPageLabels.services}
-        parentHref="/#services"
+        parentLabel={contentPageLabels.home}
+        parentHref="/"
         sequence={page.sequence}
       />
 

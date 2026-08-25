@@ -4,6 +4,8 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import sitemap from "../../app/sitemap";
+import { contentPageLabels, servicePages } from "./contentPages";
+import { publicRouteRegistry } from "./routes";
 import { siteConfig } from "./siteConfig";
 
 /*
@@ -28,6 +30,10 @@ const header = readFileSync(resolve(process.cwd(), "src/components/Header.tsx"),
 const stylesheet = readFileSync(resolve(process.cwd(), "app/globals.css"), "utf8");
 const servicePageView = readFileSync(
   resolve(process.cwd(), "src/components/content/ServicePageView.tsx"),
+  "utf8",
+);
+const serviceRoute = readFileSync(
+  resolve(process.cwd(), "app/services/[slug]/page.tsx"),
   "utf8",
 );
 
@@ -72,6 +78,32 @@ const facadeCopy = [
 
 /** The root surfaces this packet is answerable for, as shipped code. */
 const rootSurfaces = [pageCode, facadeComponentCode];
+
+/*
+ * PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-REPAIR-0001.
+ *
+ * The external-resource guard reads the facade stylesheet as well as the two
+ * TSX sources. A stylesheet cannot write `<img src>`, but `url(...)` and
+ * `@import` reach a remote host just as effectively, and the zero-external-
+ * request claim is about the page a reader loads, not about the language the
+ * request happens to be written in.
+ */
+const externalResourceSurfaces = [...rootSurfaces, facadeStylesCode];
+
+/**
+ * Every spelling of a remote resource these surfaces could carry.
+ *
+ * The protocol-relative forms are included deliberately: `url(//cdn.example.com/x)`
+ * names no scheme and still leaves the origin.
+ */
+const remoteResourceForms = [
+  /https?:\/\//,
+  /url\(\s*["']?\s*(?:https?:)?\/\//i,
+  /@import\s+(?:url\(\s*)?["']?\s*(?:https?:)?\/\//i,
+];
+
+const requestsRemoteResource = (source: string) =>
+  remoteResourceForms.some((form) => form.test(source));
 
 /*
  * The superseded photographic assets stay in the repository as reusable route
@@ -367,11 +399,44 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       expect(source).not.toMatch(/\bfetch\s*\(|XMLHttpRequest|navigator\.|localStorage|document\./);
       expect(source).not.toMatch(/process\.env/);
       expect(source).not.toMatch(/mailto:|tel:/i);
-      // The only external destinations on the page come from the frozen
-      // cross-reference module, never from a URL literal written here.
-      expect(source).not.toMatch(/https?:\/\//);
     }
     expect(facadeCopy).not.toMatch(/sign up|get started|request a quote|contact us|book a/i);
+  });
+
+  it("requests no external resource from any root surface, stylesheet included", () => {
+    /*
+     * PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-REPAIR-0001.
+     *
+     * This guard previously read the two TSX sources only, so a remote asset
+     * declared in `PlatformDevelopmentHome.module.css` passed unseen. The
+     * stylesheet is a root surface too, and it is read here.
+     */
+    expect(externalResourceSurfaces).toHaveLength(3);
+    expect(externalResourceSurfaces).toContain(facadeStylesCode);
+    expect(facadeStylesCode.length).toBeGreaterThan(0);
+
+    for (const source of externalResourceSurfaces) {
+      // The only external destinations on the page come from the frozen
+      // cross-reference module, never from a URL literal written here.
+      expect(requestsRemoteResource(source)).toBe(false);
+    }
+
+    /*
+     * A guard is only worth having if it refuses the thing it names, so the
+     * matchers are exercised against the hostile forms rather than assumed to
+     * work. Nothing is written to disk: the mutation is a string built from the
+     * real stylesheet bytes.
+     */
+    const hostileStylesheetMutations = [
+      `${facadeStyles}\n.facade { background-image: url("https://cdn.example.com/hostile.png"); }\n`,
+      `@import url("https://cdn.example.com/hostile.css");\n${facadeStyles}`,
+      `${facadeStyles}\n.facade { background-image: url(//cdn.example.com/hostile.png); }\n`,
+      `@import "//cdn.example.com/hostile.css";\n${facadeStyles}`,
+    ];
+
+    for (const mutation of hostileStylesheetMutations) {
+      expect(requestsRemoteResource(codeOf(mutation))).toBe(true);
+    }
   });
 
   it("introduces no price, schedule, credential, guarantee or partner claim", () => {
@@ -475,18 +540,44 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     expect(reduceBlock).toContain("transition: none");
   });
 
-  it("reports the services anchor the facade retires, rather than resolving it silently", () => {
+  it("points every service breadcrumb at a destination the root actually publishes", () => {
     /*
-     * The retired editorial homepage carried `id="services"`, and
-     * `ServicePageView` still points its breadcrumb at `/#services`. The Option 2
-     * facade publishes no services section, so that fragment no longer resolves
-     * to a section and the breadcrumb lands at the top of the root page.
+     * PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-REPAIR-0001.
      *
-     * `src/components/content/ServicePageView.tsx` is outside this packet's
-     * six-path allowlist, so the divergence is asserted and reported here for
-     * the Owner rather than repaired inside this packet or left undocumented.
+     * The retired editorial homepage carried `id="services"`, and
+     * `ServicePageView` pointed its breadcrumb at `/#services` under the visible
+     * label "Services". The Option 2 facade publishes no services section, so
+     * that destination stopped existing — and there is no `/services` index
+     * route anywhere on the site to fall back to, so the label stopped being
+     * true as well.
+     *
+     * The repair is the breadcrumb, not the anchor. Re-publishing a bare
+     * `id="services"` would be a target manufactured to satisfy a link with no
+     * services content to anchor, and the retired section is not restored. The
+     * breadcrumb now names the root route it can actually reach, and this test
+     * pins that repair where it used to pin the divergence.
      */
     expect(pageCode).not.toContain('id="services"');
-    expect(servicePageView).toContain('parentHref="/#services"');
+
+    // The breadcrumb resolves to the published root route, under the label a
+    // reader sees.
+    expect(servicePageView).toContain("parentLabel={contentPageLabels.home}");
+    expect(servicePageView).toContain('parentHref="/"');
+    expect(contentPageLabels.home).toBe("Home");
+
+    // No service surface points at the retired fragment any more.
+    expect(servicePageView).not.toContain("#services");
+
+    // The destination is a real published route, and "Services" is not one.
+    const publishedPaths = publicRouteRegistry
+      .filter((route) => route.publicationState === "published")
+      .map((route) => route.path);
+    expect(publishedPaths).toContain("/");
+    expect(publicRouteRegistry.map((route) => route.path)).not.toContain("/services");
+
+    // One shared view carries every published service page, so the repaired
+    // breadcrumb reaches all five of them.
+    expect(serviceRoute).toContain("<ServicePageView page={page} />");
+    expect(servicePages).toHaveLength(5);
   });
 });
