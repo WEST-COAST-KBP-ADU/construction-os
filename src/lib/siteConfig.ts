@@ -78,6 +78,22 @@ export type VoiceCheckpoint = {
 
 const officialVerificationWarning = "Requires official source verification.";
 
+/**
+ * One module of the temporary public platform facade.
+ *
+ * PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001. A module is a
+ * product-direction label, never a claim of live capability, so each one
+ * carries its own explicit `limit` beside its description. The limit is not
+ * decoration: it is the boundary the packet requires the surface to preserve.
+ */
+export type PlatformFacadeModule = {
+  id: string;
+  index: string;
+  label: string;
+  description: string;
+  limit: string;
+};
+
 export const siteConfig = {
   name: "West Coast KBP",
   url: "https://westcoastkbp.com",
@@ -99,6 +115,76 @@ export const siteConfig = {
       "This platform is under active development and is provided for testing and review only.",
     supporting:
       "Live intake, submissions, customer accounts, and external actions are not enabled.",
+  },
+
+  /*
+   * PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 — the copy of the
+   * temporary public platform facade that projects the root route.
+   *
+   * It is additive on purpose. `developmentNotice`, `nav`, `hero`, `sections`
+   * and `footer` above are read by the global chrome and by other routes, so
+   * this packet adds its own block rather than reinterpreting theirs, and the
+   * root message stays coherent with the notice the layout already renders.
+   *
+   * Every string here is buyer-first English that a reader can check. The
+   * surface states what the business is and what the platform does not yet do,
+   * and it asserts no price, schedule, saving, permit, zoning, buildability or
+   * legal conclusion, no guarantee, testimonial, customer count, partner status
+   * and no availability claim.
+   */
+  platformFacade: {
+    identity: "West Coast KBP",
+    category: "AI-native ADU & residential construction platform",
+    statusLabel: "PLATFORM IN DEVELOPMENT",
+    heading:
+      "Building one operating surface for land, feasibility review, project control and durable business memory.",
+    message:
+      "West Coast KBP is a real ADU and residential construction business in the Greater Sacramento area, building that surface for its own work — so the record of a job stays in one place instead of scattered across calls, threads and files.",
+    boundary: "Live intake, accounts and external actions are not enabled.",
+    boundarySupporting:
+      "Nothing on this page collects information, opens an account, reaches an external system, or reaches a conclusion about a property.",
+    action: {
+      label: "Open Concept Studio",
+      href: "/studio",
+      supporting:
+        "Already public, property-agnostic, and asks for no address or contact information.",
+    },
+    fieldHeading: "The four modules the surface is being built around",
+    modules: [
+      {
+        id: "land",
+        index: "01",
+        label: "LAND",
+        description:
+          "Organize candidate opportunities and the context that surrounds them, so a site can be considered without the facts going missing.",
+        limit: "Reaches no parcel conclusion.",
+      },
+      {
+        id: "feasibility",
+        index: "02",
+        label: "FEASIBILITY",
+        description:
+          "Prepare the official-source and professional-review questions a site raises, and keep the unknowns visible as unknowns.",
+        limit: "Determines no eligibility or buildability.",
+      },
+      {
+        id: "project",
+        index: "03",
+        label: "PROJECT",
+        description:
+          "Organize scope, decisions, evidence and the next action as one object, so the state of the work is legible rather than remembered.",
+        limit: "Claims no live project execution.",
+      },
+      {
+        id: "memory",
+        index: "04",
+        label: "MEMORY",
+        description:
+          "Preserve accepted records and decisions as product direction, so what the business learns survives the job it was learned on.",
+        limit: "Claims no completed public integration.",
+      },
+    ] satisfies PlatformFacadeModule[],
+    detailCaption: "Reference elevation — a drawing convention, not a specific approved plan.",
   },
 
   labels: {
