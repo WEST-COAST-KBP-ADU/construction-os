@@ -1373,15 +1373,27 @@
   }
 }
 
-/* PRODUCT2-OWNER-SELECTED-LIGHT-FACADE-VISUAL-RECOVERY-0001
+/* PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001
  *
- * The root facade is a fixed visual artifact, not an adaptive theme. These
- * root-only semantic values come after the legacy system-dark remap so an iPad
- * or browser preference cannot reinterpret the selected light composition.
- * Deep routes remain directly addressable and keep their existing token
- * behavior; only the public front door opts into this permanent light-mineral
- * surface. */
-body:has(.spine-home) {
+ * The public surface is one fixed light enterprise system, not an adaptive
+ * theme. These canonical values are declared at `:root` — the document root,
+ * not `body` — after the legacy system-dark remap above, so no device or
+ * browser colour preference can reinterpret them on any route.
+ *
+ * The superseded recovery scoped this block to `body:has(.spine-home)`. That
+ * selector coupled three unrelated routes to the front door because
+ * `.spine-home` is also on `/models`, `/models/[model]` and `/service-areas`,
+ * and it left `html` resolving dark under a dark preference — invisible in a
+ * screenshot because `body` covers the viewport, but painted by the UA on the
+ * root canvas during iOS/iPadOS rubber-band overscroll. Declaring it here
+ * removes the coupling and the overscroll defect together.
+ *
+ * This block redefines every custom property the system-dark remap overrides.
+ * The recovery covered 30 of 41; the eleven status, signal and shadow tokens
+ * it omitted are pinned below at their canonical light values, because a
+ * global lock would otherwise leave dark-mode light-on-dark status colours
+ * sitting on a light ground. */
+:root {
   color-scheme: light;
   --color-canvas: #F5F5F1;
   --color-surface: #FCFCF9;
@@ -1413,6 +1425,38 @@ body:has(.spine-home) {
   --color-focus: #117990;
   --color-focus-contrast: #FFFFFF;
   --color-focus-ring: #117990;
+
+  /* The eleven the front-door-scoped recovery did not carry. Status, signal
+   * and shadow values are the canonical light ones; without them a global lock
+   * would leave the dark remap's light-on-dark status colours on a light
+   * ground, and its heavy black shadows under light cards. */
+  --color-success: #1F6A45;
+  --color-success-soft: #e0f0e5;
+  --color-warning: #91450C;
+  --color-warning-soft: #f7e3ca;
+  --color-danger: #8E3838;
+  --color-danger-soft: #f9e7e5;
+  --color-signal: #39D98A;
+  --color-signal-rgb: 57 217 138;
+  --shadow-card: 0 0.75rem 2.5rem rgb(34 38 36 / 0.07);
+  --shadow-card-hover: 0 1.25rem 3.25rem rgb(34 38 36 / 0.13);
+  --shadow-panel: 0 1.5rem 4.5rem rgb(17 20 19 / 0.22);
+}
+
+/* Deep routes still compose deliberate dark section bands of their own — the
+ * `--dark` section modifiers and the two model heroes. Those are route content
+ * and this packet does not redesign them, but the lock's accent is a deep
+ * terracotta chosen to read on the light canvas, and on a #202522 band it
+ * measures 2.65:1. Inside those scopes the accent falls back to the lighter
+ * gold steps this stylesheet already authors for dark grounds, so the accent
+ * keeps its role and clears AA on both kinds of surface. No new colour is
+ * introduced: both values are the existing dark-ground steps. */
+.content-section--dark,
+.spine-section--dark,
+.model-page-hero,
+.model-detail__hero {
+  --color-gold: #D9A36D;
+  --color-gold-deep: #E9BE91;
 }
 
 *,
@@ -1421,14 +1465,22 @@ body:has(.spine-home) {
   box-sizing: border-box;
 }
 
+/* The root element owns the page canvas. `html` carries both the colour scheme
+ * and the background, so the surface the UA paints beyond the document box —
+ * iPadOS rubber-band overscroll above the header and below the footer — is the
+ * same light mineral as the page rather than a UA-chosen dark ground. The
+ * rubber-band itself is left alone: this is a colour correction, not a change
+ * to how the page scrolls. `body` repeats the background rather than
+ * inheriting it so neither box can be transparent onto a different canvas. */
 html {
   scroll-behavior: smooth;
-  background: var(--color-canvas);
+  color-scheme: light;
+  background-color: var(--color-canvas);
 }
 
 body {
   margin: 0;
-  background: var(--color-canvas);
+  background-color: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: var(--font-size-body);
@@ -2212,7 +2264,10 @@ a {
 }
 
 .breadcrumb__separator {
-  color: var(--color-line-strong);
+  /* A hairline token is a border value, not a text value. On the light canvas
+   * it measures 3.35:1 as type; the muted ink the breadcrumb already uses
+   * clears AA and keeps the separator visibly subordinate to the links. */
+  color: var(--color-ink-muted);
 }
 
 .content-hero {
@@ -2969,33 +3024,57 @@ a {
   color: var(--color-shell-text);
 }
 
-body:has(.spine-home) .site-header {
+/* One header treatment for the whole public surface. Flat light ground and a
+ * hairline rule instead of the translucent dark bar, on every route rather
+ * than on whichever page happened to carry `.spine-home`. The wordmark keeps
+ * its established typographic treatment below; no icon, mark, badge or
+ * decorative logo is introduced. */
+.site-header {
   border-color: var(--color-line);
   background: var(--color-canvas);
+  /* The ground is fully opaque now, so the inherited blur has nothing to
+   * sample. Cleared explicitly: the selected direction carries no glass. */
+  backdrop-filter: none;
 }
 
-body:has(.spine-home) .site-header__inner {
+.site-header__inner {
   min-height: 4.25rem;
-  justify-content: flex-start;
-  padding-block: var(--space-4);
 }
 
-body:has(.spine-home) .brand__name {
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  font-size: var(--font-size-body-sm);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* The footer is shell, and the shell ground is now light on every route. Its
+ * chrome text was written for the dark footer and reads `--color-ink-inverse`
+ * and a 64% white — white on the light ground, which measures 1.09:1. These
+ * rules put the footer's own text back on the shell text roles that its
+ * background already uses, so ground and ink move together. Wording, links,
+ * order and structure are untouched. */
+.site-footer .footer__eyebrow {
+  color: var(--color-selection);
 }
 
-/* The temporary front door is a presentation surface, not a directory into
- * the visually unaccepted legacy routes. Directly addressed deep routes retain
- * their notice and footer; the root carries its own status and ends at the
- * frozen cross-reference. */
-body:has(.spine-home) .development-notice,
-body:has(.spine-home) .site-footer {
-  display: none;
+.site-footer .footer__statement,
+.site-footer .footer__name,
+.site-footer .footer__preview {
+  color: var(--color-shell-text);
+}
+
+.site-footer .footer__tagline,
+.site-footer .footer__trust,
+.site-footer .footer__copy,
+.site-footer .footer__copyright,
+.site-footer .footer__link {
+  color: var(--color-shell-text-muted);
+}
+
+.site-footer .footer__link:hover {
+  color: var(--color-shell-text);
+}
+
+.site-footer__top {
+  border-top-color: var(--color-line);
+}
+
+.site-footer__legal {
+  border-color: var(--color-line);
 }
 
 .brand__name,
@@ -3628,10 +3707,12 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   background: var(--o2-wash-daylight);
 }
 
-/* The frozen cross-reference belongs to the recovered facade. Its wording and
- * destinations remain untouched; only the inherited legacy gradient is
- * flattened into the same light-mineral sheet and terracotta technical rule. */
-body:has(.spine-home) .spine-crosslink {
+/* The frozen cross-reference is rendered by `app/page.tsx` alone. Its wording
+ * and destinations remain untouched; only the inherited legacy gradient is
+ * flattened into the same light-mineral sheet and terracotta technical rule.
+ * Selected by its own position inside the main column rather than by
+ * `body:has(.spine-home)`, so no unrelated route inherits the flattening. */
+.site-main > .spine-crosslink {
   --color-canvas: #F5F5F1;
   --color-line: #D5D7D1;
   --color-line-strong: #858C86;

@@ -55,7 +55,7 @@ function ruleBody(selector: string): string {
 }
 
 const seam = ruleBody(".spine-crosslink");
-const recoveredRootSeam = ruleBody("body:has(.spine-home) .spine-crosslink");
+const recoveredRootSeam = ruleBody(".site-main > .spine-crosslink");
 
 /** Resolves a declared `var(--o2-x)` reference to the hex the recipe gives it. */
 function bridged(baseToken: string): string {
@@ -109,8 +109,11 @@ describe("KBPOS-DEEDSEAL-CROSSLINK-O2-0001 the seam is inside the recipe", () =>
   });
 
   it("flattens the root seam into the permanent light facade after the legacy recipe", () => {
+    // PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001: the flattening
+    // is selected by the seam's own place in the main column, not by a class
+    // three other routes also carry.
     const legacyAt = stylesheet.indexOf(".spine-crosslink {");
-    const recoveryAt = stylesheet.indexOf("body:has(.spine-home) .spine-crosslink {");
+    const recoveryAt = stylesheet.indexOf(".site-main > .spine-crosslink {");
 
     expect(recoveryAt).toBeGreaterThan(legacyAt);
     expect(recoveredRootSeam).toContain("background: var(--color-canvas);");

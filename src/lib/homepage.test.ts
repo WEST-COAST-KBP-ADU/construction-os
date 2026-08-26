@@ -62,6 +62,7 @@ const facadeStyles = homeComponentSource("PlatformDevelopmentHome.module.css");
 const codeOf = (source: string) => source.replace(/\/\*[\s\S]*?\*\//g, "");
 
 const pageCode = codeOf(page);
+const stylesheetCode = codeOf(stylesheet);
 const facadeComponentCode = codeOf(facadeComponent);
 const facadeStylesCode = codeOf(facadeStyles);
 const contentHeroCode = codeOf(contentHero);
@@ -481,14 +482,35 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     );
   });
 
-  it("does not launch the front door into a visually unaccepted deep route", () => {
+  it("keeps the facade composition itself free of links and controls", () => {
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001.
+     *
+     * The facade component still publishes no link, button or control of its
+     * own — that part of the Option 2 contract is unchanged. What changed is
+     * the surrounding shell: the Owner directed one coherent light system
+     * across the whole public surface, so wayfinding is the shared header's
+     * job on every route, and the front door no longer hides the shared
+     * chrome. The two assertions below therefore prove the facade stays a
+     * composition, and the sheet no longer suppresses the notice or footer.
+     */
     const editorialBlock = facadeComponentCode.slice(
       facadeComponentCode.indexOf("styles.editorial"),
       facadeComponentCode.indexOf("styles.field}"),
     );
     expect(editorialBlock).not.toMatch(/<(?:a|Link|button)\b/);
     expect(facadeComponentCode).not.toMatch(/href=|<Link\b/);
-    expect(stylesheet).toContain("body:has(.spine-home) .site-footer");
+
+    // No route-conditional shell suppression survives anywhere in the sheet.
+    // Checked against the code, so the comments that record the removed
+    // coupling are not mistaken for the coupling itself.
+    expect(stylesheetCode).not.toContain("body:has(.spine-home)");
+    // The notice and the footer themselves, not their BEM children — a
+    // responsive rule that hides `.site-footer__lead` is existing layout and
+    // is deliberately out of scope here.
+    expect(stylesheetCode).not.toMatch(
+      /\.(?:development-notice|site-footer)(?![\w-])[^{]*\{[^}]*display:\s*none/i,
+    );
   });
 
   it("keeps the global chrome coherent with the new root message", () => {
@@ -505,27 +527,87 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     expect(page).toContain("buildBusinessJsonLd");
     expect(siteConfig.name).toBe(facade.identity);
 
-    // The shared Header is now the selected minimal typographic identity. It
-    // exposes one Home link and no legacy route navigation or mobile menu.
-    expect(header.match(/<Link\b/g)).toHaveLength(1);
+    // The shared Header keeps its typographic identity — wordmark, no icon,
+    // mark, badge or decorative logo — and carries the complete primary
+    // navigation on every route it renders on, desktop and mobile. Removing
+    // the navigation from the front door had removed it from all twelve
+    // public routes, so it is restored in the shared component.
     expect(header).toContain('href="/"');
     expect(header).toContain('className="brand__name"');
-    expect(header).not.toMatch(/<nav\b|<details\b|primaryNavigation|NavigationLinks/);
+    expect(header).toContain("primaryNavigation");
+    expect(header).toMatch(/<nav\b/);
+    expect(header).toMatch(/<details className="site-nav-mobile">/);
     expect(header).not.toContain('"use client"');
+
+    // Every destination the base navigation published is still published.
+    for (const href of [
+      "/models",
+      "/studio",
+      "/process",
+      "/service-areas",
+      "/about",
+    ]) {
+      expect(header).toContain(`href: "${href}"`);
+    }
+
+    // Identity stays typographic: no icon, mark, badge or logo substitutes.
+    const headerCode = codeOf(header);
+    expect(headerCode).not.toMatch(/<(?:img|svg|Image)\b/i);
   });
 
-  it("pins the front door to one permanent light-mineral palette after dark mode", () => {
-    const darkMode = stylesheet.indexOf("@media (prefers-color-scheme: dark)");
-    const recovery = stylesheet.indexOf("body:has(.spine-home) {");
-    const recoveryBlock = stylesheet.slice(recovery, stylesheet.indexOf("\n}", recovery) + 2);
+  it("pins the whole public surface to one permanent light palette after dark mode", () => {
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001.
+     *
+     * The lock is declared at `:root`, after the system-dark remap, so it wins
+     * on source order at equal specificity on every route — not at
+     * `body:has(.spine-home)`, which reached only whichever pages happened to
+     * carry that class and left `html` resolving dark underneath.
+     */
+    const darkMode = stylesheetCode.indexOf("@media (prefers-color-scheme: dark)");
+    // The remap nests `:root` inside the media block; the lock is the first
+    // `:root` that starts after that block closes.
+    const darkInnerEnd = stylesheetCode.indexOf("\n  }", darkMode);
+    const darkEnd = stylesheetCode.indexOf("\n}", darkInnerEnd) + 2;
+    const lock = stylesheetCode.indexOf(":root {", darkEnd);
+    const lockBlock = stylesheetCode.slice(lock, stylesheetCode.indexOf("\n}", lock) + 2);
 
     expect(darkMode).toBeGreaterThan(-1);
-    expect(recovery).toBeGreaterThan(darkMode);
-    expect(recoveryBlock).toContain("color-scheme: light;");
-    expect(recoveryBlock).toContain("--color-canvas: #F5F5F1;");
-    expect(recoveryBlock).toContain("--color-surface: #FCFCF9;");
-    expect(recoveryBlock).toContain("--color-ink: #202522;");
-    expect(recoveryBlock).toContain("--color-selection: #A8462A;");
+    expect(lock).toBeGreaterThan(darkEnd);
+    expect(lockBlock).toContain("color-scheme: light;");
+    expect(lockBlock).toContain("--color-canvas: #F5F5F1;");
+    expect(lockBlock).toContain("--color-surface: #FCFCF9;");
+    expect(lockBlock).toContain("--color-ink: #202522;");
+    expect(lockBlock).toContain("--color-selection: #A8462A;");
+
+    // The shell roles the shared header, footer, development notice and the
+    // Concept Studio chrome all read resolve light too, so no route keeps a
+    // dark band while the page around it is light.
+    expect(lockBlock).toContain("--color-shell: #F5F5F1;");
+    expect(lockBlock).toContain("--color-shell-text: #202522;");
+
+    // Every property the dark remap overrides is answered by the lock. A token
+    // it missed would resolve to its dark value on a light ground.
+    const darkBlock = stylesheetCode.slice(darkMode, darkInnerEnd + 4);
+    const overridden = [
+      ...darkBlock.matchAll(/^\s{4}(--[a-z0-9-]+):/gm),
+    ].map(([, name]) => name);
+
+    expect(overridden.length).toBeGreaterThan(0);
+    for (const name of overridden) {
+      expect(lockBlock, `${name} is remapped by dark mode but not re-pinned`).toMatch(
+        new RegExp(`^\\s{2}${name}:`, "m"),
+      );
+    }
+
+    // The document root, not just the body box, carries the scheme and the
+    // ground — this is the surface iPadOS paints during overscroll.
+    const htmlBlock = stylesheetCode.slice(
+      stylesheetCode.indexOf("\nhtml {"),
+      stylesheetCode.indexOf("\n}", stylesheetCode.indexOf("\nhtml {")) + 2,
+    );
+    expect(htmlBlock).toContain("color-scheme: light;");
+    expect(htmlBlock).toContain("background-color: var(--color-canvas);");
 
     expect(facadeStylesCode).toMatch(
       /\.heading\s*\{[\s\S]*?font-family:\s*var\(--font-sans\)/,
@@ -534,10 +616,12 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       /\.heading\s*\{[^}]*font-family:\s*var\(--font-serif\)/,
     );
 
-    const crosslinkRecovery = stylesheet.slice(
-      stylesheet.indexOf("body:has(.spine-home) .spine-crosslink"),
-      stylesheet.indexOf("\n}", stylesheet.indexOf("body:has(.spine-home) .spine-crosslink")) + 2,
+    const seamAt = stylesheetCode.indexOf(".site-main > .spine-crosslink {");
+    const crosslinkRecovery = stylesheetCode.slice(
+      seamAt,
+      stylesheetCode.indexOf("\n}", seamAt) + 2,
     );
+    expect(seamAt).toBeGreaterThan(-1);
     expect(crosslinkRecovery).toContain("background: var(--color-canvas);");
     expect(crosslinkRecovery).not.toMatch(/gradient/i);
   });

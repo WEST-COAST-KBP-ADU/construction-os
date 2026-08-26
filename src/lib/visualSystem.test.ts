@@ -232,10 +232,12 @@ describe("portal visual-system regressions", () => {
     // P2-CHROME-CANON-ALIGN-0001: the pinned signal token contract is
     // unchanged, but canon E7 forbids painting the borrowed Product 1 signal
     // anywhere on Product 2. Repainting it fails here.
-    expect(stylesheet.match(/--color-signal:\s*#39D98A;/g)).toHaveLength(2);
+    // Three declarations now: the base `:root`, the system-dark remap, and the
+    // canonical light lock that re-pins every token the remap overrides.
+    expect(stylesheet.match(/--color-signal:\s*#39D98A;/g)).toHaveLength(3);
     expect(
       stylesheet.match(/--color-signal-rgb:\s*57 217 138;/g),
-    ).toHaveLength(2);
+    ).toHaveLength(3);
 
     const outsideDeclarations = stylesheet
       .replace(/--color-signal:\s*#39D98A;/g, "")
@@ -265,10 +267,22 @@ describe("portal visual-system regressions", () => {
     expect(brandLink).toBeDefined();
     expect(brandLink).not.toMatch(/<svg|<img|<Image|role="img"|aria-hidden/i);
     expect(brandLink).toContain('className="brand__name"');
-    expect(brandLink).not.toContain('className="brand__tagline"');
+    expect(brandLink).toContain('className="brand__tagline"');
     expect(header).toContain("accessibility.brandHomeLabel");
-    expect(executableHeader.match(/<Link\b/g)).toHaveLength(1);
-    expect(executableHeader).not.toMatch(/<nav\b|<details\b|NavigationLinks/);
+
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001.
+     *
+     * The brand link stays a wordmark with no device. What this probe no
+     * longer asserts is the *absence* of navigation: the shared header carries
+     * the complete primary navigation on all twelve public routes. Two `Link`
+     * elements are written — the brand link, and the one inside the map that
+     * renders every navigation destination. A device smuggled into the brand
+     * link still fails above.
+     */
+    expect(executableHeader.match(/<Link\b/g)).toHaveLength(2);
+    expect(executableHeader).toMatch(/<nav\b/);
+    expect(executableHeader).toContain("NavigationLinks");
   });
 
   it("keeps the Product 2 mark stationary in every motion state", () => {
@@ -319,6 +333,119 @@ describe("portal visual-system regressions", () => {
     expect(executableHeader).not.toMatch(
       /Hero|canvas|graph|A600|<video|backdrop-filter/i,
     );
+  });
+
+  it("locks the whole public surface light at the document root", () => {
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001.
+     *
+     * The Owner selected one light enterprise system for the entire public
+     * surface. The system-dark remap above is retained as the record of the
+     * legacy behaviour, but it can no longer reach a rendered page: the lock
+     * re-declares every property it touches at `:root`, later in the sheet and
+     * at equal specificity, so source order decides and the result is the same
+     * light shell under either OS preference.
+     */
+    const darkAt = executableStylesheet.indexOf(
+      "@media (prefers-color-scheme: dark)",
+    );
+    // The remap nests `:root` inside the media block, so the lock is the first
+    // `:root` that starts *after* the media block closes.
+    const darkInnerEnd = executableStylesheet.indexOf("\n  }", darkAt);
+    const darkEnd = executableStylesheet.indexOf("\n}", darkInnerEnd) + 2;
+    const lockAt = executableStylesheet.indexOf(":root {", darkEnd);
+
+    expect(darkAt).toBeGreaterThan(-1);
+    expect(darkInnerEnd).toBeGreaterThan(darkAt);
+    expect(lockAt).toBeGreaterThan(darkEnd);
+
+    const lockBlock = executableStylesheet.slice(
+      lockAt,
+      executableStylesheet.indexOf("\n}", lockAt) + 2,
+    );
+    const darkBlock = executableStylesheet.slice(darkAt, darkInnerEnd + 4);
+
+    // Completeness: not one property may be remapped dark without an answer.
+    const remapped = [...darkBlock.matchAll(/^\s{4}(--[a-z0-9-]+):/gm)].map(
+      ([, name]) => name,
+    );
+
+    expect(remapped.length).toBeGreaterThan(0);
+    for (const name of remapped) {
+      expect(lockBlock, `${name} is remapped dark and never re-pinned`).toMatch(
+        new RegExp(`^\\s{2}${name}:`, "m"),
+      );
+    }
+
+    // The lock is the light palette, and it carries the scheme itself.
+    expect(lockBlock).toContain("color-scheme: light;");
+    expect(token(lockBlock, "--color-canvas")).toBe("#F5F5F1");
+    expect(token(lockBlock, "--color-ink")).toBe("#202522");
+
+    // Text on the locked ground clears AA, including the status colours the
+    // superseded front-door-scoped block never re-pinned.
+    const ground = token(lockBlock, "--color-canvas");
+    for (const name of [
+      "--color-ink",
+      "--color-ink-muted",
+      "--color-success",
+      "--color-warning",
+      "--color-danger",
+    ]) {
+      expect(
+        contrastRatio(token(lockBlock, name), ground),
+        `${name} on the locked canvas`,
+      ).toBeGreaterThanOrEqual(4.5);
+    }
+
+    // The root element, not only `body`, owns the scheme and the ground. This
+    // is the surface iPadOS paints during rubber-band overscroll, and the one
+    // the superseded block left resolving dark.
+    const htmlAt = executableStylesheet.indexOf("\nhtml {");
+    const htmlBlock = executableStylesheet.slice(
+      htmlAt,
+      executableStylesheet.indexOf("\n}", htmlAt) + 2,
+    );
+
+    expect(htmlAt).toBeGreaterThan(-1);
+    expect(htmlBlock).toContain("color-scheme: light;");
+    expect(htmlBlock).toContain("background-color: var(--color-canvas);");
+
+    // And no rule selects the shell by which page is being rendered.
+    expect(executableStylesheet).not.toContain("body:has(.spine-home)");
+  });
+
+  it("keeps footer ink on the same shell roles as the footer ground", () => {
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001 regression guard.
+     *
+     * The footer chrome was written for a dark footer and read
+     * `--color-ink-inverse` and a literal 64% white. Once the shell ground
+     * locked light and the footer stopped being hidden on the front door, that
+     * ink measured 1.09:1 on its own background — present in the DOM, visible
+     * to a `getBoundingClientRect` check, and unreadable to a person. Ground
+     * and ink must move together, so both come from the shell roles.
+     */
+    const finalFooter = executableStylesheet.slice(
+      executableStylesheet.lastIndexOf(".site-footer {"),
+    );
+    const footerRules = [
+      ...finalFooter.matchAll(
+        /(^|\n)([^\n{}]*\.(?:site-footer|footer__)[^\n{}]*)\{([^}]*)\}/g,
+      ),
+    ];
+
+    expect(footerRules.length).toBeGreaterThan(0);
+
+    for (const [, , selector, body] of footerRules) {
+      expect(body, `footer rule ${selector.trim()}`).not.toMatch(
+        /var\(--color-ink-inverse/,
+      );
+      // No literal white ink either — that is the same defect spelled out.
+      expect(body, `footer rule ${selector.trim()}`).not.toMatch(
+        /color:\s*(?:#f{3,8}\b|rgba?\(\s*255[\s,]+255[\s,]+255)/i,
+      );
+    }
   });
 
   it("keeps dark-mode headings readable while retaining a dark brand surface", () => {
