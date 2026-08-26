@@ -1131,10 +1131,6 @@
 }
 
 @media (min-width: 47.56rem) and (max-width: 64rem) {
-  .brand__tagline {
-    display: none;
-  }
-
   .site-nav__list {
     gap: var(--space-3);
   }
@@ -1217,10 +1213,6 @@
 
   .site-nav-mobile__list li:last-child .site-nav-mobile__link {
     border-bottom: 0;
-  }
-
-  .brand__tagline {
-    display: none;
   }
 
   .residential-hero {
@@ -1443,18 +1435,25 @@
   --shadow-panel: 0 1.5rem 4.5rem rgb(17 20 19 / 0.22);
 }
 
-/* Deep routes still compose deliberate dark section bands of their own — the
- * `--dark` section modifiers and the two model heroes. Those are route content
- * and this packet does not redesign them, but the lock's accent is a deep
- * terracotta chosen to read on the light canvas, and on a #202522 band it
- * measures 2.65:1. Inside those scopes the accent falls back to the lighter
- * gold steps this stylesheet already authors for dark grounds, so the accent
- * keeps its role and clears AA on both kinds of surface. No new colour is
- * introduced: both values are the existing dark-ground steps. */
+/* Deep routes still compose deliberate dark *mid-page* section bands of their
+ * own — the `--dark` section modifiers on `/about`, `/compare`, `/process`,
+ * `/adu-builder/*` and `/services/*`. Those sit below the fold at ≤3% of the
+ * first screen, function as restrained content accents inside the light
+ * enterprise shell, and are route content this packet does not redesign. The
+ * lock's accent is a deep terracotta chosen to read on the light canvas, and
+ * on a #202522 band it measures 2.65:1; inside those scopes the accent falls
+ * back to the lighter gold steps this stylesheet already authors for dark
+ * grounds. No new colour is introduced: both values are the existing
+ * dark-ground steps.
+ *
+ * PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: `.model-page-hero`
+ * and `.model-detail__hero` are no longer in this list. They are not mid-page
+ * accents — they are the first-screen heroes of `/models`, `/service-areas`
+ * and `/models/[model]`, and they covered 51–64% of the first screen at
+ * desktop. The Owner does not retain large dark page heroes, so both are
+ * converted to the light system below and need no dark-ground accent step. */
 .content-section--dark,
-.spine-section--dark,
-.model-page-hero,
-.model-detail__hero {
+.spine-section--dark {
   --color-gold: #D9A36D;
   --color-gold-deep: #E9BE91;
 }
@@ -1553,13 +1552,6 @@ a {
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--tracking-heading);
-  line-height: var(--line-height-tight);
-}
-
-.brand__tagline {
-  color: var(--color-ink-muted);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
 }
 
@@ -3082,10 +3074,6 @@ a {
   color: var(--color-shell-text);
 }
 
-.brand__tagline {
-  color: var(--color-shell-text-muted);
-}
-
 .site-nav__link:hover {
   color: var(--color-gold);
 }
@@ -3241,15 +3229,22 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   color: var(--color-gold);
 }
 
+/* PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: these two headings
+ * are the first thing below the header on `/models`, `/service-areas` and
+ * `/models/[model]`. They carried the serif editorial display face on a
+ * near-black ground — the exact pattern Issue #360 rejected. They now carry
+ * the accepted contemporary sans headline on the light system. Size clamp,
+ * max-width, margin and balance are unchanged, so the composition holds; only
+ * the face, weight, tracking and ink move onto the accepted recipe. */
 .model-page-hero h1,
 .model-detail__title {
   max-width: 52rem;
   margin: var(--space-5) 0 0;
-  color: var(--color-ink-inverse);
-  font-family: var(--font-serif);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   font-size: clamp(3rem, 7vw, 6.4rem);
-  font-weight: var(--font-weight-regular);
-  letter-spacing: -0.055em;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-heading);
   line-height: 0.95;
   text-wrap: balance;
 }
@@ -3753,10 +3748,27 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   }
 }
 
+/* PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001
+ *
+ * The two page heroes. `.model-page-hero` is the first screen of `/models` and
+ * `/service-areas`; `.model-detail__hero` is the first screen of every
+ * `/models/[model]` route, including `/models/adu-a-600`. Measured at the
+ * parent they painted `--color-forest-deep-surface` under
+ * `--color-ink-inverse` and covered 51–64% of the first screen at desktop and
+ * 56% at mobile — a dark editorial page inside a light chrome frame, and the
+ * dominant visual event of those routes rather than an accent.
+ *
+ * They are now the same light mineral system as the rest of the public
+ * surface: the raised light sheet the shell already uses for surfaces that sit
+ * above the canvas, charcoal ink, and one fine neutral rule to seat the hero
+ * against the section below it. Every route using either class is converted by
+ * this rule, present and future. Layout, spacing, copy, heading levels, links
+ * and imagery are untouched — this changes ground and ink, not composition. */
 .model-page-hero,
 .model-detail__hero {
-  background: var(--color-forest-deep-surface);
-  color: var(--color-ink-inverse);
+  border-bottom: var(--line-width) solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-ink);
 }
 
 .model-page-hero__inner,
@@ -3766,21 +3778,21 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 }
 
 .model-page-hero h1 {
-  color: var(--color-ink-inverse);
+  color: var(--color-ink);
   font-size: clamp(2.75rem, 6vw, 5.25rem);
 }
 
 .model-page-hero__inner > p:not(.spine-kicker):not(.model-page-hero__signal) {
   max-width: 45rem;
   margin: var(--space-6) 0 0;
-  color: var(--color-ink-inverse-muted);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height-copy);
 }
 
 .model-page-hero__signal {
   margin: var(--space-6) 0 0;
-  color: var(--color-gold);
+  color: var(--color-selection);
   font-family: var(--font-mono);
   font-size: var(--font-size-body-sm);
 }
@@ -3791,12 +3803,12 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 
 .model-detail__hero .breadcrumb__link,
 .model-detail__hero .breadcrumb__separator {
-  color: var(--color-ink-inverse-muted);
+  color: var(--color-ink-muted);
 }
 
 .model-detail__eyebrow {
   margin: 0;
-  color: var(--color-gold);
+  color: var(--color-selection);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-kicker);
@@ -3809,14 +3821,14 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 
 .model-detail__lede {
   margin: var(--space-5) 0 0;
-  color: var(--color-gold);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-body-lg);
 }
 
 .model-detail__boundary {
   max-width: 48rem;
   margin: var(--space-6) 0 0;
-  color: var(--color-ink-inverse-muted);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height-copy);
 }

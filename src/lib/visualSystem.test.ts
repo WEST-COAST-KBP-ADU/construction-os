@@ -140,7 +140,22 @@ const STUDIO_STRUCTURAL_ALIASES = {
   "--studio-line-strong": "--color-boundary-strong",
   "--studio-accent": "--color-selection",
   "--studio-accent-soft": "--color-selection-soft",
-  "--studio-accent-dark": "--color-shell",
+  /*
+   * PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001.
+   *
+   * `--studio-accent-dark` is the Studio's primary-action fill, and it aliased
+   * `--color-shell`. That held only while the shell was a dark ground: the
+   * light lock moved `--color-shell` to `#F5F5F1`, the fill collapsed onto the
+   * rail the control sits on, and `Compare concepts` rendered as bare text at
+   * 1.00:1. It aliases `--color-ink` now, and the four interaction roles below
+   * carry the rest of the states. `studioAccessibility.test.ts` resolves this
+   * whole chain to real hex and measures every state against the light lock.
+   */
+  "--studio-accent-dark": "--color-ink",
+  "--studio-action-ink": "--color-ink-inverse",
+  "--studio-action-hover": "--color-selection",
+  "--studio-action-active": "--color-gold-deep",
+  "--studio-action-ring": "--color-focus-ring",
   "--studio-shell": "--color-shell",
   "--studio-shell-raised": "--color-shell-raised",
   "--studio-shell-ink": "--color-shell-text",
@@ -267,7 +282,16 @@ describe("portal visual-system regressions", () => {
     expect(brandLink).toBeDefined();
     expect(brandLink).not.toMatch(/<svg|<img|<Image|role="img"|aria-hidden/i);
     expect(brandLink).toContain('className="brand__name"');
-    expect(brandLink).toContain('className="brand__tagline"');
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001.
+     *
+     * The Owner's header is the name-only West Coast KBP wordmark. Restoring
+     * the shared header had reintroduced `brand__tagline` inside the brand
+     * link and inverted this assertion to match; it is inverted back. The
+     * tagline is untouched in the footer and in document metadata.
+     */
+    expect(brandLink).not.toContain("brand__tagline");
+    expect(executableHeader).not.toContain("brand__tagline");
     expect(header).toContain("accessibility.brandHomeLabel");
 
     /*
@@ -283,6 +307,57 @@ describe("portal visual-system regressions", () => {
     expect(executableHeader.match(/<Link\b/g)).toHaveLength(2);
     expect(executableHeader).toMatch(/<nav\b/);
     expect(executableHeader).toContain("NavigationLinks");
+  });
+
+  it("keeps every first-screen page hero on the light enterprise system", () => {
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001.
+     *
+     * `.model-page-hero` is the first screen of `/models` and `/service-areas`;
+     * `.model-detail__hero` is the first screen of every `/models/[model]`
+     * route. Both painted `--color-forest-deep-surface` under
+     * `--color-ink-inverse` with a serif display heading, covering 51–64% of
+     * the first screen at desktop. The Owner does not retain large dark page
+     * heroes. Reintroducing a dark ground, inverse ink or the serif display
+     * face on either hero must fail here.
+     */
+    const heroGround = executableStylesheet.match(
+      /\n\.model-page-hero,\n\.model-detail__hero \{([\s\S]*?)\n\}/,
+    )?.[1];
+
+    expect(heroGround).toBeDefined();
+    expect(heroGround).toContain("background: var(--color-surface)");
+    expect(heroGround).toContain("color: var(--color-ink)");
+    expect(heroGround).not.toContain("--color-forest-deep-surface");
+    expect(heroGround).not.toContain("--color-ink-inverse");
+
+    const heroHeading = executableStylesheet.match(
+      /\n\.model-page-hero h1,\n\.model-detail__title \{([\s\S]*?)\n\}/,
+    )?.[1];
+
+    expect(heroHeading).toBeDefined();
+    expect(heroHeading).toContain("font-family: var(--font-sans)");
+    expect(heroHeading).toContain("color: var(--color-ink)");
+    expect(heroHeading).not.toContain("var(--font-serif)");
+
+    // No rule anywhere may put inverse ink inside either hero again: inverse
+    // ink is light, and both heroes are now light grounds.
+    for (const scope of [".model-page-hero", ".model-detail__hero"]) {
+      for (const [, body] of executableStylesheet.matchAll(
+        new RegExp(`\\n[^\\n{}]*\\${scope}[^\\n{}]*\\{([\\s\\S]*?)\\n\\}`, "g"),
+      )) {
+        expect(body).not.toContain("--color-ink-inverse");
+        expect(body).not.toContain("--color-forest-deep-surface");
+      }
+    }
+
+    // The dark-ground accent fallback is for mid-page content bands only. If a
+    // hero is ever added back to that list it is a dark ground again.
+    const accentFallback = executableStylesheet.match(
+      /\n\.content-section--dark,\n([\s\S]*?)\{/,
+    )?.[1];
+
+    expect(accentFallback).toBe(".spine-section--dark ");
   });
 
   it("keeps the Product 2 mark stationary in every motion state", () => {
@@ -552,9 +627,18 @@ describe("portal visual-system regressions", () => {
       stylesheet.indexOf("/* Final shell overrides live after the legacy route system by design. */"),
     );
 
-    expect(finalShell).toMatch(
-      /\.brand__tagline\s*\{[\s\S]*?color:\s*var\(--color-shell-text-muted\)/,
-    );
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: the header is the
+     * name-only wordmark, so `brand__tagline` is no longer rendered and its
+     * four rules — two `display: none` media overrides, the base type rule and
+     * the shell colour override — are removed rather than left as dead style
+     * for an element that cannot appear. This pins the removal in both files.
+     */
+    expect(finalShell).not.toContain(".brand__tagline");
+    expect(stylesheet).not.toContain(".brand__tagline");
+    expect(executableHeader).not.toContain("brand__tagline");
+    /* The rest of the shell chrome the light lock repaired stays pinned. */
+    expect(finalShell).toContain(".site-header");
     expect(stylesheet).toMatch(
       /\.development-notice__label\s*\{[\s\S]*?color:\s*var\(--color-shell-text\)/,
     );
@@ -692,8 +776,14 @@ describe("portal visual-system regressions", () => {
     expect(studioStylesheet).toMatch(
       /@media \(max-width: 42rem\) \{[\s\S]*?\.conceptList \{[\s\S]*?display: grid;[\s\S]*?grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);[\s\S]*?overflow: visible;/,
     );
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: `.compareButton`
+     * joins the reduced-motion list. Its four interaction states cross-fade
+     * their fill, so under `prefers-reduced-motion: reduce` that transition
+     * must be dropped like every other one in this stylesheet.
+     */
     expect(studioStylesheet).toMatch(
-      /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.stageImage,[\s\S]*?\.optionButton,[\s\S]*?\.optionSelected \{\s*transition: none;/,
+      /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*?\.stageImage,[\s\S]*?\.optionButton,[\s\S]*?\.optionSelected,[\s\S]*?\.compareButton \{\s*transition: none;/,
     );
   });
 });
