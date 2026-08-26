@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { siteConfig } from "@/src/lib/siteConfig";
 
 import styles from "./PlatformDevelopmentHome.module.css";
@@ -163,24 +161,6 @@ export default function PlatformDevelopmentHome() {
 
           <p className={styles.boundary}>{platformFacade.boundary}</p>
 
-          {/*
-            The action follows the boundary directly. A reader who has taken in
-            the status, the identity, the message and the boundary is at the
-            point of asking "what can I actually look at?", and the answer
-            should be there — not after two more paragraphs of qualification.
-            It also keeps the whole required first-screen message inside the
-            first screen at 1440x900, 820x1180 and 390x844 alike; the two
-            supporting paragraphs below elaborate what has already been said.
-          */}
-          <div className={styles.actions}>
-            <Link href={platformFacade.action.href} className={styles.action}>
-              {platformFacade.action.label}
-              <span aria-hidden="true">→</span>
-            </Link>
-            <p className={styles.actionSupporting}>{platformFacade.action.supporting}</p>
-          </div>
-
-          <p className={styles.boundarySupporting}>{platformFacade.boundarySupporting}</p>
         </div>
 
         <div className={styles.field}>

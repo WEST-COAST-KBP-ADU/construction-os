@@ -10,15 +10,38 @@
   --studio-line-strong: var(--color-boundary-strong);
   --studio-accent: var(--color-selection);
   --studio-accent-soft: var(--color-selection-soft);
-  --studio-accent-dark: var(--color-shell);
   --studio-shell: var(--color-shell);
   --studio-shell-raised: var(--color-shell-raised);
   --studio-shell-ink: var(--color-shell-text);
   --studio-shell-muted: var(--color-shell-text-muted);
-  /* Inert fixtures retained for the pre-existing contrast-parser contract:
-   * --studio-accent-dark: #7f5312;
-   * --studio-ink: #102a22;
-   */
+
+  /* PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001
+   *
+   * `--studio-accent-dark` is the Studio's primary-action fill. It aliased
+   * `--color-shell`, which was only ever correct while the shell was a dark
+   * ground. Once the public surface locked light, `--color-shell` became
+   * `#F5F5F1` and the fill collapsed onto the `.compareRail` the button sits
+   * on — 1.00:1 at rest, a control rendered as bare text. It now aliases
+   * `--color-ink`, the same charcoal the Studio's other filled control
+   * already carries, so the primary action keeps a real affordance on the
+   * light system. No new colour is introduced.
+   *
+   * The remaining interaction roles are declared here rather than as literals
+   * in the rule below so `studioAccessibility.test.ts` can resolve the whole
+   * effective chain — `--studio-*` to `--color-*` to the `:root` light lock in
+   * `app/globals.css` — and measure every state.
+   *
+   * Two inert hex fixtures used to sit here, `--studio-accent-dark: #7f5312`
+   * and `--studio-ink: #102a22`. They are deleted. They were the only
+   * six-digit hexes the old census regex could match inside this block, so
+   * that census had been asserting AA against two colours the product never
+   * painted — which is how a 1.00:1 primary control shipped under a reported
+   * zero failures. */
+  --studio-accent-dark: var(--color-ink);
+  --studio-action-ink: var(--color-ink-inverse);
+  --studio-action-hover: var(--color-selection);
+  --studio-action-active: var(--color-gold-deep);
+  --studio-action-ring: var(--color-focus-ring);
   /* Temporary product-option placeholders; not material or texture claims. */
   --studio-warm-white: #f1eee4;
   --studio-sand-dune: #d6c8b3;
@@ -329,22 +352,44 @@
   line-height: 0.8;
 }
 
+/* PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: the Studio's primary
+ * action. Its border, fill and label used to be `--studio-shell`,
+ * `--studio-accent-dark` and `--studio-shell-ink`; under the light lock all
+ * three resolved onto the light ground, so the control had no resting
+ * affordance and its hover label vanished into an identical fill. All four
+ * interaction states are now declared explicitly, each from an existing
+ * global role, and each is measured by `studioAccessibility.test.ts`. */
 .compareButton {
   min-height: 3rem;
-  border: 1px solid var(--studio-shell);
+  border: 1px solid var(--studio-accent-dark);
   border-radius: 0.25rem;
   background: var(--studio-accent-dark);
-  color: var(--studio-shell-ink); /* Legacy parser contract: color: white; */
+  color: var(--studio-action-ink);
   cursor: pointer;
   font-size: 0.78rem;
   font-weight: 700;
   padding: 0.75rem 1.15rem;
+  transition: background-color 140ms ease, border-color 140ms ease;
 }
 
 .compareButton:hover {
-  border-color: var(--studio-line-strong);
-  background: var(--studio-ink);
-  color: var(--studio-shell-ink);
+  border-color: var(--studio-action-hover);
+  background: var(--studio-action-hover);
+  color: var(--studio-action-ink);
+}
+
+/* The shared shell focus ring is declared through `:where()`, so it carries no
+ * specificity and a light ring could sit on the light rail. This one wins, and
+ * the offset keeps it legible against both the charcoal fill and the rail. */
+.compareButton:focus-visible {
+  outline: var(--focus-outline-width) solid var(--studio-action-ring);
+  outline-offset: 0.125rem;
+}
+
+.compareButton:active {
+  border-color: var(--studio-action-active);
+  background: var(--studio-action-active);
+  color: var(--studio-action-ink);
 }
 
 .currentConfig {
@@ -658,7 +703,8 @@
 @media (prefers-reduced-motion: reduce) {
   .stageImage,
   .optionButton,
-  .optionSelected {
+  .optionSelected,
+  .compareButton {
     transition: none;
   }
 }

@@ -42,7 +42,7 @@ function NavigationLinks({ mobile = false }: { mobile?: boolean }) {
 }
 
 export default function Header() {
-  const { accessibility, name, tagline } = siteConfig;
+  const { accessibility, name } = siteConfig;
 
   return (
     <header className="site-header">
@@ -50,11 +50,24 @@ export default function Header() {
         {/* P2-CHROME-CANON-ALIGN-0001 (canon E5, E7): Product 2's identity is
             typographic and stationary. The former brand-seal carried Product 1's
             pulsing signal device; it is removed and is not substituted by another
-            icon, dot, monogram, badge, or animated mark here. */}
+            icon, dot, monogram, badge, or animated mark here.
+
+            PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001: this is the
+            shared header for all twelve public routes, so the primary navigation
+            Issue #360 removed is restored here in full — desktop nav and mobile
+            menu alike. Removing it from the front door had removed it from every
+            route, including Concept Studio. The header now sits on the light
+            enterprise ground the global tokens define; nothing about the
+            navigation's destinations, labels or order changed.
+
+            PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: restoring the
+            shared header had also reintroduced `brand__tagline` inside the
+            brand link. The Owner's header is the name-only West Coast KBP
+            wordmark, so the tagline is removed again here. It is unchanged in
+            the footer and in document metadata, which are its own surfaces. */}
         <Link href="/" className="brand" aria-label={accessibility.brandHomeLabel}>
           <span className="brand__wordmark">
             <span className="brand__name">{name}</span>
-            <span className="brand__tagline">{tagline}</span>
           </span>
         </Link>
 

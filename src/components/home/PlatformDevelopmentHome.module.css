@@ -115,16 +115,14 @@
 }
 
 .heading {
-  /* Wide enough to set in three lines at the desktop target, so the status,
-     the boundary and the primary action all stay inside the first screen. */
-  max-width: 32ch;
+  max-width: 20ch;
   margin: 0;
   color: var(--color-ink);
-  font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 2.85vw, 2.55rem);
-  font-weight: var(--font-weight-regular);
-  letter-spacing: -0.014em;
-  line-height: 1.12;
+  font-family: var(--font-sans);
+  font-size: clamp(2.4rem, 4.2vw, 4.25rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.052em;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
@@ -142,7 +140,7 @@
 }
 
 .message {
-  max-width: 52ch;
+  max-width: 46ch;
   margin: 0;
   color: var(--color-ink);
   font-size: var(--font-size-body-lg);
@@ -158,57 +156,6 @@
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-body);
-}
-
-.boundarySupporting {
-  max-width: 52ch;
-  margin: 0;
-  color: var(--color-ink-muted);
-  font-size: var(--font-size-body-sm);
-  line-height: 1.6;
-}
-
-/* ------------------------------------------------------------------ *
- * The single current action
- * ------------------------------------------------------------------ */
-
-.actions {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
-}
-
-.action {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-3);
-  border-bottom: 0.09375rem solid var(--facade-accent);
-  padding-bottom: var(--space-2);
-  color: var(--color-ink);
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-tight);
-  transition: color var(--duration-standard) var(--easing-standard);
-}
-
-.action:hover {
-  color: var(--facade-accent);
-}
-
-.action:focus-visible {
-  outline: 0.125rem solid var(--color-focus);
-  outline-offset: 0.25rem;
-}
-
-.actionSupporting {
-  max-width: 46ch;
-  margin: 0;
-  color: var(--color-ink-muted);
-  font-size: var(--font-size-body-sm);
-  line-height: 1.6;
 }
 
 /* ------------------------------------------------------------------ *
@@ -445,8 +392,7 @@
 }
 
 /* At 390x844 the module grid becomes a single column, as the contract permits.
-   Nothing is hidden: the status, the H1, the explanation and the primary action
-   all stay on the surface and stay legible. */
+   Nothing in the first-screen message is hidden. */
 @media (max-width: 33rem) {
   .modules {
     grid-template-columns: minmax(0, 1fr);
@@ -518,8 +464,6 @@
 .category,
 .message,
 .boundary,
-.boundarySupporting,
-.actions,
 .fieldHeading,
 .moduleField,
 .detail {
@@ -546,14 +490,6 @@
   animation-delay: 200ms;
 }
 
-.boundarySupporting {
-  animation-delay: 230ms;
-}
-
-.actions {
-  animation-delay: 260ms;
-}
-
 .fieldHeading {
   animation-delay: 140ms;
 }
@@ -573,15 +509,10 @@
   .category,
   .message,
   .boundary,
-  .boundarySupporting,
-  .actions,
   .fieldHeading,
   .moduleField,
   .detail {
     animation: none;
   }
 
-  .action {
-    transition: none;
-  }
 }

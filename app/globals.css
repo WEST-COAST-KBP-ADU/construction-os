@@ -1131,10 +1131,6 @@
 }
 
 @media (min-width: 47.56rem) and (max-width: 64rem) {
-  .brand__tagline {
-    display: none;
-  }
-
   .site-nav__list {
     gap: var(--space-3);
   }
@@ -1217,10 +1213,6 @@
 
   .site-nav-mobile__list li:last-child .site-nav-mobile__link {
     border-bottom: 0;
-  }
-
-  .brand__tagline {
-    display: none;
   }
 
   .residential-hero {
@@ -1373,20 +1365,121 @@
   }
 }
 
+/* PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001
+ *
+ * The public surface is one fixed light enterprise system, not an adaptive
+ * theme. These canonical values are declared at `:root` — the document root,
+ * not `body` — after the legacy system-dark remap above, so no device or
+ * browser colour preference can reinterpret them on any route.
+ *
+ * The superseded recovery scoped this block to `body:has(.spine-home)`. That
+ * selector coupled three unrelated routes to the front door because
+ * `.spine-home` is also on `/models`, `/models/[model]` and `/service-areas`,
+ * and it left `html` resolving dark under a dark preference — invisible in a
+ * screenshot because `body` covers the viewport, but painted by the UA on the
+ * root canvas during iOS/iPadOS rubber-band overscroll. Declaring it here
+ * removes the coupling and the overscroll defect together.
+ *
+ * This block redefines every custom property the system-dark remap overrides.
+ * The recovery covered 30 of 41; the eleven status, signal and shadow tokens
+ * it omitted are pinned below at their canonical light values, because a
+ * global lock would otherwise leave dark-mode light-on-dark status colours
+ * sitting on a light ground. */
+:root {
+  color-scheme: light;
+  --color-canvas: #F5F5F1;
+  --color-surface: #FCFCF9;
+  --color-surface-muted: #E9EAE5;
+  --color-surface-raised: #FFFFFF;
+  --color-forest: #39413D;
+  --color-forest-deep: #202522;
+  --color-forest-deep-surface: #202522;
+  --color-forest-soft: #E9EAE5;
+  --color-gold: #A8462A;
+  --color-gold-deep: #8B351F;
+  --color-gold-soft: #F0DDD6;
+  --color-ink: #202522;
+  --color-ink-muted: #59615D;
+  --color-ink-subtle: #5D6560;
+  --color-ink-inverse: #FFFFFF;
+  --color-ink-inverse-muted: #D9DDD9;
+  --color-line: #D5D7D1;
+  --color-line-strong: #858C86;
+  --color-shell: #F5F5F1;
+  --color-shell-raised: #FCFCF9;
+  --color-shell-text: #202522;
+  --color-shell-text-muted: #59615D;
+  --color-boundary: #D5D7D1;
+  --color-boundary-strong: #858C86;
+  --color-selection: #A8462A;
+  --color-selection-soft: #F0DDD6;
+  --color-selection-contrast: #FFFFFF;
+  --color-focus: #117990;
+  --color-focus-contrast: #FFFFFF;
+  --color-focus-ring: #117990;
+
+  /* The eleven the front-door-scoped recovery did not carry. Status, signal
+   * and shadow values are the canonical light ones; without them a global lock
+   * would leave the dark remap's light-on-dark status colours on a light
+   * ground, and its heavy black shadows under light cards. */
+  --color-success: #1F6A45;
+  --color-success-soft: #e0f0e5;
+  --color-warning: #91450C;
+  --color-warning-soft: #f7e3ca;
+  --color-danger: #8E3838;
+  --color-danger-soft: #f9e7e5;
+  --color-signal: #39D98A;
+  --color-signal-rgb: 57 217 138;
+  --shadow-card: 0 0.75rem 2.5rem rgb(34 38 36 / 0.07);
+  --shadow-card-hover: 0 1.25rem 3.25rem rgb(34 38 36 / 0.13);
+  --shadow-panel: 0 1.5rem 4.5rem rgb(17 20 19 / 0.22);
+}
+
+/* Deep routes still compose deliberate dark *mid-page* section bands of their
+ * own — the `--dark` section modifiers on `/about`, `/compare`, `/process`,
+ * `/adu-builder/*` and `/services/*`. Those sit below the fold at ≤3% of the
+ * first screen, function as restrained content accents inside the light
+ * enterprise shell, and are route content this packet does not redesign. The
+ * lock's accent is a deep terracotta chosen to read on the light canvas, and
+ * on a #202522 band it measures 2.65:1; inside those scopes the accent falls
+ * back to the lighter gold steps this stylesheet already authors for dark
+ * grounds. No new colour is introduced: both values are the existing
+ * dark-ground steps.
+ *
+ * PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: `.model-page-hero`
+ * and `.model-detail__hero` are no longer in this list. They are not mid-page
+ * accents — they are the first-screen heroes of `/models`, `/service-areas`
+ * and `/models/[model]`, and they covered 51–64% of the first screen at
+ * desktop. The Owner does not retain large dark page heroes, so both are
+ * converted to the light system below and need no dark-ground accent step. */
+.content-section--dark,
+.spine-section--dark {
+  --color-gold: #D9A36D;
+  --color-gold-deep: #E9BE91;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+/* The root element owns the page canvas. `html` carries both the colour scheme
+ * and the background, so the surface the UA paints beyond the document box —
+ * iPadOS rubber-band overscroll above the header and below the footer — is the
+ * same light mineral as the page rather than a UA-chosen dark ground. The
+ * rubber-band itself is left alone: this is a colour correction, not a change
+ * to how the page scrolls. `body` repeats the background rather than
+ * inheriting it so neither box can be transparent onto a different canvas. */
 html {
   scroll-behavior: smooth;
-  background: var(--color-canvas);
+  color-scheme: light;
+  background-color: var(--color-canvas);
 }
 
 body {
   margin: 0;
-  background: var(--color-canvas);
+  background-color: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
   font-size: var(--font-size-body);
@@ -1459,13 +1552,6 @@ a {
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--tracking-heading);
-  line-height: var(--line-height-tight);
-}
-
-.brand__tagline {
-  color: var(--color-ink-muted);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
 }
 
@@ -2170,7 +2256,10 @@ a {
 }
 
 .breadcrumb__separator {
-  color: var(--color-line-strong);
+  /* A hairline token is a border value, not a text value. On the light canvas
+   * it measures 3.35:1 as type; the muted ink the breadcrumb already uses
+   * clears AA and keeps the separator visibly subordinate to the links. */
+  color: var(--color-ink-muted);
 }
 
 .content-hero {
@@ -2927,13 +3016,62 @@ a {
   color: var(--color-shell-text);
 }
 
-.brand__name,
-.site-nav__link {
+/* One header treatment for the whole public surface. Flat light ground and a
+ * hairline rule instead of the translucent dark bar, on every route rather
+ * than on whichever page happened to carry `.spine-home`. The wordmark keeps
+ * its established typographic treatment below; no icon, mark, badge or
+ * decorative logo is introduced. */
+.site-header {
+  border-color: var(--color-line);
+  background: var(--color-canvas);
+  /* The ground is fully opaque now, so the inherited blur has nothing to
+   * sample. Cleared explicitly: the selected direction carries no glass. */
+  backdrop-filter: none;
+}
+
+.site-header__inner {
+  min-height: 4.25rem;
+}
+
+/* The footer is shell, and the shell ground is now light on every route. Its
+ * chrome text was written for the dark footer and reads `--color-ink-inverse`
+ * and a 64% white — white on the light ground, which measures 1.09:1. These
+ * rules put the footer's own text back on the shell text roles that its
+ * background already uses, so ground and ink move together. Wording, links,
+ * order and structure are untouched. */
+.site-footer .footer__eyebrow {
+  color: var(--color-selection);
+}
+
+.site-footer .footer__statement,
+.site-footer .footer__name,
+.site-footer .footer__preview {
   color: var(--color-shell-text);
 }
 
-.brand__tagline {
+.site-footer .footer__tagline,
+.site-footer .footer__trust,
+.site-footer .footer__copy,
+.site-footer .footer__copyright,
+.site-footer .footer__link {
   color: var(--color-shell-text-muted);
+}
+
+.site-footer .footer__link:hover {
+  color: var(--color-shell-text);
+}
+
+.site-footer__top {
+  border-top-color: var(--color-line);
+}
+
+.site-footer__legal {
+  border-color: var(--color-line);
+}
+
+.brand__name,
+.site-nav__link {
+  color: var(--color-shell-text);
 }
 
 .site-nav__link:hover {
@@ -3091,15 +3229,22 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   color: var(--color-gold);
 }
 
+/* PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001: these two headings
+ * are the first thing below the header on `/models`, `/service-areas` and
+ * `/models/[model]`. They carried the serif editorial display face on a
+ * near-black ground — the exact pattern Issue #360 rejected. They now carry
+ * the accepted contemporary sans headline on the light system. Size clamp,
+ * max-width, margin and balance are unchanged, so the composition holds; only
+ * the face, weight, tracking and ink move onto the accepted recipe. */
 .model-page-hero h1,
 .model-detail__title {
   max-width: 52rem;
   margin: var(--space-5) 0 0;
-  color: var(--color-ink-inverse);
-  font-family: var(--font-serif);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
   font-size: clamp(3rem, 7vw, 6.4rem);
-  font-weight: var(--font-weight-regular);
-  letter-spacing: -0.055em;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-heading);
   line-height: 0.95;
   text-wrap: balance;
 }
@@ -3557,6 +3702,24 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   background: var(--o2-wash-daylight);
 }
 
+/* The frozen cross-reference is rendered by `app/page.tsx` alone. Its wording
+ * and destinations remain untouched; only the inherited legacy gradient is
+ * flattened into the same light-mineral sheet and terracotta technical rule.
+ * Selected by its own position inside the main column rather than by
+ * `body:has(.spine-home)`, so no unrelated route inherits the flattening. */
+.site-main > .spine-crosslink {
+  --color-canvas: #F5F5F1;
+  --color-line: #D5D7D1;
+  --color-line-strong: #858C86;
+  --color-ink-muted: #59615D;
+  --color-forest-deep: #202522;
+  --color-focus: #117990;
+  --color-focus-contrast: #FFFFFF;
+
+  border-top: var(--line-width) solid #A8462A;
+  background: var(--color-canvas);
+}
+
 .spine-crosslink__inner {
   display: flex;
   flex-wrap: wrap;
@@ -3585,10 +3748,27 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
   }
 }
 
+/* PRODUCT2-WESTCOASTKBP-LIGHT-SURFACE-FINAL-REPAIR-0001
+ *
+ * The two page heroes. `.model-page-hero` is the first screen of `/models` and
+ * `/service-areas`; `.model-detail__hero` is the first screen of every
+ * `/models/[model]` route, including `/models/adu-a-600`. Measured at the
+ * parent they painted `--color-forest-deep-surface` under
+ * `--color-ink-inverse` and covered 51–64% of the first screen at desktop and
+ * 56% at mobile — a dark editorial page inside a light chrome frame, and the
+ * dominant visual event of those routes rather than an accent.
+ *
+ * They are now the same light mineral system as the rest of the public
+ * surface: the raised light sheet the shell already uses for surfaces that sit
+ * above the canvas, charcoal ink, and one fine neutral rule to seat the hero
+ * against the section below it. Every route using either class is converted by
+ * this rule, present and future. Layout, spacing, copy, heading levels, links
+ * and imagery are untouched — this changes ground and ink, not composition. */
 .model-page-hero,
 .model-detail__hero {
-  background: var(--color-forest-deep-surface);
-  color: var(--color-ink-inverse);
+  border-bottom: var(--line-width) solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-ink);
 }
 
 .model-page-hero__inner,
@@ -3598,21 +3778,21 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 }
 
 .model-page-hero h1 {
-  color: var(--color-ink-inverse);
+  color: var(--color-ink);
   font-size: clamp(2.75rem, 6vw, 5.25rem);
 }
 
 .model-page-hero__inner > p:not(.spine-kicker):not(.model-page-hero__signal) {
   max-width: 45rem;
   margin: var(--space-6) 0 0;
-  color: var(--color-ink-inverse-muted);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height-copy);
 }
 
 .model-page-hero__signal {
   margin: var(--space-6) 0 0;
-  color: var(--color-gold);
+  color: var(--color-selection);
   font-family: var(--font-mono);
   font-size: var(--font-size-body-sm);
 }
@@ -3623,12 +3803,12 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 
 .model-detail__hero .breadcrumb__link,
 .model-detail__hero .breadcrumb__separator {
-  color: var(--color-ink-inverse-muted);
+  color: var(--color-ink-muted);
 }
 
 .model-detail__eyebrow {
   margin: 0;
-  color: var(--color-gold);
+  color: var(--color-selection);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-semibold);
   letter-spacing: var(--tracking-kicker);
@@ -3641,14 +3821,14 @@ button[aria-pressed="true"][style*="--swatch-color"]:focus-visible:not([disabled
 
 .model-detail__lede {
   margin: var(--space-5) 0 0;
-  color: var(--color-gold);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-body-lg);
 }
 
 .model-detail__boundary {
   max-width: 48rem;
   margin: var(--space-6) 0 0;
-  color: var(--color-ink-inverse-muted);
+  color: var(--color-ink-muted);
   font-size: var(--font-size-body-lg);
   line-height: var(--line-height-copy);
 }

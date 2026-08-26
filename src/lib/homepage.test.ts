@@ -5,7 +5,6 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import sitemap from "../../app/sitemap";
 import ContentHero from "../components/content/ContentHero";
 import ServicePageView from "../components/content/ServicePageView";
 import { contentPageLabels, servicePages } from "./contentPages";
@@ -25,8 +24,8 @@ import { siteConfig } from "./siteConfig";
  * The safety coverage is not replaced. Every guard the base carried — no form,
  * no data collection, no external runtime, no price, no schedule, no partner
  * claim, no unsupported property claim, no client JavaScript, bounded and
- * reduced-motion-safe motion, one canonical Studio sitemap entry — is carried
- * forward and, where the facade made it checkable at a finer grain, tightened.
+ * reduced-motion-safe motion and static rendering — is carried forward and,
+ * where the facade made it checkable at a finer grain, tightened.
  */
 
 const page = readFileSync(resolve(process.cwd(), "app/page.tsx"), "utf8");
@@ -63,6 +62,7 @@ const facadeStyles = homeComponentSource("PlatformDevelopmentHome.module.css");
 const codeOf = (source: string) => source.replace(/\/\*[\s\S]*?\*\//g, "");
 
 const pageCode = codeOf(page);
+const stylesheetCode = codeOf(stylesheet);
 const facadeComponentCode = codeOf(facadeComponent);
 const facadeStylesCode = codeOf(facadeStyles);
 const contentHeroCode = codeOf(contentHero);
@@ -77,9 +77,6 @@ const facadeCopy = [
   facade.heading,
   facade.message,
   facade.boundary,
-  facade.boundarySupporting,
-  facade.action.label,
-  facade.action.supporting,
   facade.fieldHeading,
   facade.detailCaption,
   ...facade.modules.flatMap((module) => [module.label, module.description, module.limit]),
@@ -178,14 +175,15 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
 
     // The primary message names the one operating surface and all four of the
     // things it is being built to hold.
-    expect(facade.heading).toContain("one operating surface");
+    const primaryMessage = `${facade.heading} ${facade.message}`.toLowerCase();
+    expect(primaryMessage).toContain("one operating surface");
     for (const subject of [
       "land",
       "feasibility review",
       "project control",
       "durable business memory",
     ]) {
-      expect(facade.heading.toLowerCase()).toContain(subject);
+      expect(primaryMessage).toContain(subject);
     }
 
     // And the component renders every one of them, rather than declaring copy
@@ -197,7 +195,6 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       "category",
       "message",
       "boundary",
-      "boundarySupporting",
     ]) {
       expect(facadeComponent).toContain(`platformFacade.${key}`);
     }
@@ -386,7 +383,7 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     );
 
     // Nothing that carries the first-screen message is hidden at any width.
-    for (const kept of [".status", ".heading", ".message", ".boundary", ".action"]) {
+    for (const kept of [".status", ".heading", ".message", ".boundary"]) {
       expect(facadeStylesCode).not.toMatch(
         new RegExp(`\\${kept}[^{]*\\{[^}]*display:\\s*none`, "i"),
       );
@@ -474,37 +471,46 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       "Reaches no parcel conclusion.",
       "Determines no eligibility or buildability.",
       facade.detailCaption,
-      facade.boundarySupporting,
     ].join("\n");
 
     for (const word of conclusionWords) {
       expect(refusals.toLowerCase()).toContain(word.toLowerCase());
     }
 
-    // And the surface says outright that it reaches no property conclusion.
-    expect(facade.boundarySupporting).toContain("reaches a conclusion about a property");
-    expect(facade.boundarySupporting).toContain("Nothing on this page collects information");
+    expect(facade.modules.find((module) => module.label === "LAND")?.limit).toBe(
+      "Reaches no parcel conclusion.",
+    );
   });
 
-  it("offers exactly one truthful current action, into an existing public route", () => {
-    expect(facade.action.href).toBe("/studio");
-    expect(facade.action.label).toBe("Open Concept Studio");
-
-    // One link out of the editorial column, and no second call to action
-    // competing with it.
+  it("keeps the facade composition itself free of links and controls", () => {
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001.
+     *
+     * The facade component still publishes no link, button or control of its
+     * own — that part of the Option 2 contract is unchanged. What changed is
+     * the surrounding shell: the Owner directed one coherent light system
+     * across the whole public surface, so wayfinding is the shared header's
+     * job on every route, and the front door no longer hides the shared
+     * chrome. The two assertions below therefore prove the facade stays a
+     * composition, and the sheet no longer suppresses the notice or footer.
+     */
     const editorialBlock = facadeComponentCode.slice(
       facadeComponentCode.indexOf("styles.editorial"),
       facadeComponentCode.indexOf("styles.field}"),
     );
-    expect(editorialBlock.match(/<Link\b/g)).toHaveLength(1);
+    expect(editorialBlock).not.toMatch(/<(?:a|Link|button)\b/);
+    expect(facadeComponentCode).not.toMatch(/href=|<Link\b/);
 
-    // The destination is a route that actually exists and is published once.
-    expect(existsSync(resolve(process.cwd(), "app/studio/page.tsx"))).toBe(true);
-    const studioUrl = new URL("/studio", siteConfig.url).toString();
-    const studioEntries = sitemap().filter((entry) => entry.url === studioUrl);
-
-    expect(studioEntries).toHaveLength(1);
-    expect(studioEntries[0]).toMatchObject({ changeFrequency: "monthly", priority: 0.8 });
+    // No route-conditional shell suppression survives anywhere in the sheet.
+    // Checked against the code, so the comments that record the removed
+    // coupling are not mistaken for the coupling itself.
+    expect(stylesheetCode).not.toContain("body:has(.spine-home)");
+    // The notice and the footer themselves, not their BEM children — a
+    // responsive rule that hides `.site-footer__lead` is existing layout and
+    // is deliberately out of scope here.
+    expect(stylesheetCode).not.toMatch(
+      /\.(?:development-notice|site-footer)(?![\w-])[^{]*\{[^}]*display:\s*none/i,
+    );
   });
 
   it("keeps the global chrome coherent with the new root message", () => {
@@ -521,11 +527,103 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
     expect(page).toContain("buildBusinessJsonLd");
     expect(siteConfig.name).toBe(facade.identity);
 
-    // Pre-release global navigation, unchanged and still client-JS free.
-    expect(header).toContain('{ label: "Models", href: "/models" }');
-    expect(header).toContain('{ label: "Concept Studio", href: "/studio" }');
-    expect(header).toContain('<details className="site-nav-mobile">');
+    // The shared Header keeps its typographic identity — wordmark, no icon,
+    // mark, badge or decorative logo — and carries the complete primary
+    // navigation on every route it renders on, desktop and mobile. Removing
+    // the navigation from the front door had removed it from all twelve
+    // public routes, so it is restored in the shared component.
+    expect(header).toContain('href="/"');
+    expect(header).toContain('className="brand__name"');
+    expect(header).toContain("primaryNavigation");
+    expect(header).toMatch(/<nav\b/);
+    expect(header).toMatch(/<details className="site-nav-mobile">/);
     expect(header).not.toContain('"use client"');
+
+    // Every destination the base navigation published is still published.
+    for (const href of [
+      "/models",
+      "/studio",
+      "/process",
+      "/service-areas",
+      "/about",
+    ]) {
+      expect(header).toContain(`href: "${href}"`);
+    }
+
+    // Identity stays typographic: no icon, mark, badge or logo substitutes.
+    const headerCode = codeOf(header);
+    expect(headerCode).not.toMatch(/<(?:img|svg|Image)\b/i);
+  });
+
+  it("pins the whole public surface to one permanent light palette after dark mode", () => {
+    /*
+     * PRODUCT2-WESTCOASTKBP-LIGHT-SHELL-COHERENCE-REPAIR-0001.
+     *
+     * The lock is declared at `:root`, after the system-dark remap, so it wins
+     * on source order at equal specificity on every route — not at
+     * `body:has(.spine-home)`, which reached only whichever pages happened to
+     * carry that class and left `html` resolving dark underneath.
+     */
+    const darkMode = stylesheetCode.indexOf("@media (prefers-color-scheme: dark)");
+    // The remap nests `:root` inside the media block; the lock is the first
+    // `:root` that starts after that block closes.
+    const darkInnerEnd = stylesheetCode.indexOf("\n  }", darkMode);
+    const darkEnd = stylesheetCode.indexOf("\n}", darkInnerEnd) + 2;
+    const lock = stylesheetCode.indexOf(":root {", darkEnd);
+    const lockBlock = stylesheetCode.slice(lock, stylesheetCode.indexOf("\n}", lock) + 2);
+
+    expect(darkMode).toBeGreaterThan(-1);
+    expect(lock).toBeGreaterThan(darkEnd);
+    expect(lockBlock).toContain("color-scheme: light;");
+    expect(lockBlock).toContain("--color-canvas: #F5F5F1;");
+    expect(lockBlock).toContain("--color-surface: #FCFCF9;");
+    expect(lockBlock).toContain("--color-ink: #202522;");
+    expect(lockBlock).toContain("--color-selection: #A8462A;");
+
+    // The shell roles the shared header, footer, development notice and the
+    // Concept Studio chrome all read resolve light too, so no route keeps a
+    // dark band while the page around it is light.
+    expect(lockBlock).toContain("--color-shell: #F5F5F1;");
+    expect(lockBlock).toContain("--color-shell-text: #202522;");
+
+    // Every property the dark remap overrides is answered by the lock. A token
+    // it missed would resolve to its dark value on a light ground.
+    const darkBlock = stylesheetCode.slice(darkMode, darkInnerEnd + 4);
+    const overridden = [
+      ...darkBlock.matchAll(/^\s{4}(--[a-z0-9-]+):/gm),
+    ].map(([, name]) => name);
+
+    expect(overridden.length).toBeGreaterThan(0);
+    for (const name of overridden) {
+      expect(lockBlock, `${name} is remapped by dark mode but not re-pinned`).toMatch(
+        new RegExp(`^\\s{2}${name}:`, "m"),
+      );
+    }
+
+    // The document root, not just the body box, carries the scheme and the
+    // ground — this is the surface iPadOS paints during overscroll.
+    const htmlBlock = stylesheetCode.slice(
+      stylesheetCode.indexOf("\nhtml {"),
+      stylesheetCode.indexOf("\n}", stylesheetCode.indexOf("\nhtml {")) + 2,
+    );
+    expect(htmlBlock).toContain("color-scheme: light;");
+    expect(htmlBlock).toContain("background-color: var(--color-canvas);");
+
+    expect(facadeStylesCode).toMatch(
+      /\.heading\s*\{[\s\S]*?font-family:\s*var\(--font-sans\)/,
+    );
+    expect(facadeStylesCode).not.toMatch(
+      /\.heading\s*\{[^}]*font-family:\s*var\(--font-serif\)/,
+    );
+
+    const seamAt = stylesheetCode.indexOf(".site-main > .spine-crosslink {");
+    const crosslinkRecovery = stylesheetCode.slice(
+      seamAt,
+      stylesheetCode.indexOf("\n}", seamAt) + 2,
+    );
+    expect(seamAt).toBeGreaterThan(-1);
+    expect(crosslinkRecovery).toContain("background: var(--color-canvas);");
+    expect(crosslinkRecovery).not.toMatch(/gradient/i);
   });
 
   it("keeps Home motion bounded, optional and reduced-motion safe", () => {
@@ -546,7 +644,7 @@ describe("PRODUCT2-PLATFORM-DEVELOPMENT-FACADE-OPTION2-0001 root facade", () => 
       facadeStylesCode.indexOf("@media (prefers-reduced-motion: reduce)"),
     );
     expect(reduceBlock).toContain("animation: none");
-    expect(reduceBlock).toContain("transition: none");
+    expect(facadeStylesCode).not.toMatch(/\btransition\s*:/);
   });
 
   it("points every service breadcrumb at a destination the root actually publishes", () => {

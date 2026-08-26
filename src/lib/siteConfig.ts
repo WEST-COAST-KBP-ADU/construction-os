@@ -136,51 +136,38 @@ export const siteConfig = {
     identity: "West Coast KBP",
     category: "AI-native ADU & residential construction platform",
     statusLabel: "PLATFORM IN DEVELOPMENT",
-    heading:
-      "Building one operating surface for land, feasibility review, project control and durable business memory.",
+    heading: "One operating surface for ADU work.",
     message:
-      "West Coast KBP is a real ADU and residential construction business in the Greater Sacramento area, building that surface for its own work — so the record of a job stays in one place instead of scattered across calls, threads and files.",
+      "Land, feasibility review, project control and durable business memory — organized for West Coast KBP's own Greater Sacramento construction work.",
     boundary: "Live intake, accounts and external actions are not enabled.",
-    boundarySupporting:
-      "Nothing on this page collects information, opens an account, reaches an external system, or reaches a conclusion about a property.",
-    action: {
-      label: "Open Concept Studio",
-      href: "/studio",
-      supporting:
-        "Already public, property-agnostic, and asks for no address or contact information.",
-    },
-    fieldHeading: "The four modules the surface is being built around",
+    fieldHeading: "Operating field / 04 modules",
     modules: [
       {
         id: "land",
         index: "01",
         label: "LAND",
-        description:
-          "Organize candidate opportunities and the context that surrounds them, so a site can be considered without the facts going missing.",
+        description: "Organize candidate opportunities and context.",
         limit: "Reaches no parcel conclusion.",
       },
       {
         id: "feasibility",
         index: "02",
         label: "FEASIBILITY",
-        description:
-          "Prepare the official-source and professional-review questions a site raises, and keep the unknowns visible as unknowns.",
+        description: "Prepare official-source and professional-review questions.",
         limit: "Determines no eligibility or buildability.",
       },
       {
         id: "project",
         index: "03",
         label: "PROJECT",
-        description:
-          "Organize scope, decisions, evidence and the next action as one object, so the state of the work is legible rather than remembered.",
+        description: "Organize scope, decisions, evidence and next actions.",
         limit: "Claims no live project execution.",
       },
       {
         id: "memory",
         index: "04",
         label: "MEMORY",
-        description:
-          "Preserve accepted records and decisions as product direction, so what the business learns survives the job it was learned on.",
+        description: "Preserve accepted records and decisions as product direction.",
         limit: "Claims no completed public integration.",
       },
     ] satisfies PlatformFacadeModule[],
