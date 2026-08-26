@@ -104,14 +104,14 @@ describe("JOURNEY-EXIT-001 contract", () => {
     expect(component).not.toMatch(/<(?:form|input|textarea|select)\b/i);
   });
 
-  it("wires exactly one final block to each route with unique ARIA linkage", () => {
-    const primaryMarkers: Record<JourneyExitRoute, string> = {
+  it("wires the two active journey exits and keeps the retired Studio exit off the hold surface", () => {
+    const journeyExitRoutesStillRendered = ["process", "faq"] as const;
+    const primaryMarkers: Record<(typeof journeyExitRoutesStillRendered)[number], string> = {
       process: "<FaqSection items={processPage.faq} />",
       faq: "{faqPage.groups.map",
-      studio: "<StudioWorkbench />",
     };
 
-    for (const route of journeyExitRoutes) {
+    for (const route of journeyExitRoutesStillRendered) {
       const source = routeSources[route];
       const invocation = `<JourneyExit route="${route}" />`;
 
@@ -120,6 +120,10 @@ describe("JOURNEY-EXIT-001 contract", () => {
       expect(source.indexOf(invocation)).toBeLessThan(source.lastIndexOf("</main>"));
       expect(journeyExits[route].headingId).toBe(`journey-exit-${route}-heading`);
     }
+
+    expect(routeSources.studio).not.toContain('<JourneyExit route="studio" />');
+    expect(routeSources.studio).not.toContain("StudioWorkbench");
+    expect(routeSources.studio).toContain("A new design workspace is in development.");
 
     expect(new Set(journeyExitRoutes.map((route) => journeyExits[route].headingId)).size).toBe(3);
   });
