@@ -27,6 +27,47 @@ const EXPECTED_SERVICE_SLUGS = [
   "adu-legalization",
 ];
 
+/** The twelve ordered stages ADU-PROCESS-IMPLEMENTATION-001 requires on /process. */
+const EXPECTED_STAGE_TITLES = [
+  "Intent and constraints",
+  "Property facts of record",
+  "Jurisdiction path and constraint research",
+  "Concept selection and configuration",
+  "Scope, budget basis, and written agreement",
+  "Design documentation",
+  "Engineering, energy, and consultant packages",
+  "Permit submittal and review cycles",
+  "Procurement and supplier commitments",
+  "Site work and construction",
+  "Inspections and corrections",
+  "Closeout and handover",
+];
+
+const EXPECTED_STAGE_SEQUENCES = [
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+];
+
+/**
+ * Stages whose copy restates something an authority publishes or requires.
+ * Each must carry the official-source warning per governance/BOUNDARIES.md.
+ */
+const JURISDICTION_DERIVED_STAGES = ["03", "05", "06", "07", "08", "11"];
+
+/** A responsible party is always a human, a professional, a supplier, or an authority. */
+const RESPONSIBLE_PARTY_VOCABULARY =
+  /\b(?:you|owner|client|licensed|professional|contractor|surveyor|supplier|inspector|agency|authority|superintendent|applicant|person)\b/i;
+
 function flattenCopy(value: unknown): string {
   if (typeof value === "string") return value;
   if (Array.isArray(value)) return value.map(flattenCopy).join(" ");
@@ -73,16 +114,8 @@ describe("TASK-0008 service and trust content", () => {
   });
 
   it("keeps the process bounded and owner-controlled", () => {
-    expect(processPage.steps.map((step) => step.sequence)).toEqual([
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-    ]);
-    expect(flattenCopy(processPage)).toContain("OwnerReview");
     expect(flattenCopy(processPage)).toContain(officialVerificationWarning);
+    expect(flattenCopy(processPage)).toContain("no form");
   });
 
   it("publishes the approved FAQ themes without weakening verification language", () => {
@@ -99,6 +132,86 @@ describe("TASK-0008 service and trust content", () => {
     for (const fact of aboutPage.pendingFacts) {
       expect(fact).toContain("pending owner input");
     }
+  });
+});
+
+describe("ADU-PROCESS-IMPLEMENTATION-001 twelve-stage construction journey", () => {
+  it("publishes exactly the twelve required stages in the required order", () => {
+    expect(processPage.stages).toHaveLength(EXPECTED_STAGE_TITLES.length);
+    expect(processPage.stages.map((stage) => stage.title)).toEqual(EXPECTED_STAGE_TITLES);
+    expect(processPage.stages.map((stage) => stage.sequence)).toEqual(EXPECTED_STAGE_SEQUENCES);
+  });
+
+  it("gives every stage a homeowner question, a responsible party, an output, and a blocker", () => {
+    for (const stage of processPage.stages) {
+      expect(stage.question.endsWith("?"), stage.title).toBe(true);
+      expect(stage.description.length, stage.title).toBeGreaterThan(0);
+      expect(stage.output.length, stage.title).toBeGreaterThan(0);
+      expect(stage.blocker.length, stage.title).toBeGreaterThan(0);
+      expect(stage.responsibleParty, stage.title).toMatch(RESPONSIBLE_PARTY_VOCABULARY);
+    }
+
+    const questions = processPage.stages.map((stage) => stage.question);
+    const blockers = processPage.stages.map((stage) => stage.blocker);
+
+    expect(new Set(questions).size).toBe(questions.length);
+    expect(new Set(blockers).size).toBe(blockers.length);
+  });
+
+  it("carries the official-source warning on every jurisdiction-derived stage", () => {
+    for (const sequence of JURISDICTION_DERIVED_STAGES) {
+      const stage = processPage.stages.find((item) => item.sequence === sequence);
+
+      expect(stage, sequence).toBeDefined();
+      expect(flattenCopy(stage), sequence).toContain(officialVerificationWarning);
+    }
+  });
+
+  it("keeps internal vocabulary out of the customer-facing journey", () => {
+    expect(flattenCopy(processPage)).not.toMatch(
+      /\b(?:graph|graphs|node|nodes|edge|edges|packet|packets|lane|lanes|gate|gates|schema|hash|truth class)\b/i,
+    );
+  });
+
+  it("never lets software hold an approval, a purchase, a filing, or a certification", () => {
+    const sentences = flattenCopy(processPage)
+      .split(/(?<=\.)\s+/)
+      .filter((sentence) => /\b(?:software|ai|portal|platform)\b/i.test(sentence));
+
+    expect(sentences.length).toBeGreaterThan(0);
+
+    for (const sentence of sentences) {
+      expect(sentence).toMatch(/\b(?:no|not|never|nothing|cannot)\b/i);
+    }
+  });
+
+  it("publishes no calendar year, projected permit date, or promised completion", () => {
+    const journeyCopy = flattenCopy(processPage);
+
+    expect(journeyCopy).not.toMatch(/\bprojected (?:permit|approval|completion) date\b/i);
+    expect(journeyCopy).not.toMatch(/\b(?:19|20)\d{2}\b/);
+    expect(journeyCopy).toContain("never a projected decision date");
+
+    // Every guarantee or promise on the page is negated, or is the question a
+    // homeowner asks before the answer negates it.
+    const claims = journeyCopy
+      .split(/(?<=[.?])\s+/)
+      .filter((sentence) => /\b(?:guarantee|guarantees|promise|promises|promised)\b/i.test(sentence));
+
+    expect(claims.length).toBeGreaterThan(0);
+
+    for (const claim of claims) {
+      expect(claim, claim).toMatch(/\b(?:no|not|never|nothing)\b|\?$/i);
+    }
+  });
+
+  it("collects nothing and keeps the public no-form boundary intact", () => {
+    const journeyCopy = flattenCopy(processPage);
+
+    expect(journeyCopy).toContain(
+      "no form, account, upload, storage, tracking, booking, or message path",
+    );
+    expect(journeyCopy).not.toMatch(/\b(?:email address|phone number|street address|upload your)\b/i);
   });
 });
 
