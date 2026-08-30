@@ -1,0 +1,260 @@
+{
+  "schema": "p2-integration-handoff/1",
+  "packetId": "P2-BUSINESS-JOURNEY-IA-0001",
+  "issue": "https://github.com/WEST-COAST-KBP-ADU/construction-os/issues/247",
+  "repository": "WEST-COAST-KBP-ADU/construction-os",
+  "exactBase": "cf099534cb0256a1748641972abbdad49fcf8645",
+  "branch": "agent/p2-business-journey-ia-0001",
+  "activityMode": "docs-only",
+  "runtimeBytesChanged": 0,
+  "authority": {
+    "owner": "avoroncov971-maker",
+    "rule": "Tony alone selects, approves, merges, and publishes. No session reviews, accepts, or merges its own work."
+  },
+  "purpose": "Split the future code work implied by this narrative into non-overlapping domains, so four packets can be cut without a path collision, a copy collision, or a second author on any head.",
+  "artifacts": {
+    "index": "docs/design/p2-business-journey-ia-0001/README.md",
+    "spine": "docs/design/p2-business-journey-ia-0001/homepage-journey.md",
+    "scenario": "docs/design/p2-business-journey-ia-0001/interaction-scenario.md",
+    "copy": "docs/design/p2-business-journey-ia-0001/copy-deck.md",
+    "handoff": "docs/design/p2-business-journey-ia-0001/integration-handoff.json"
+  },
+  "frozenPaths": [
+    {
+      "path": "src/lib/deedsealCrossReference.ts",
+      "blobShaAtBase": "caa6e9c26f33d164229747f8a1f855c0d0186ae3",
+      "rule": "Read-only for every domain below. Not in any allowlist. A single changed byte fails the packet."
+    }
+  ],
+  "seam": {
+    "name": "single-writer-of-app-page",
+    "statement": "app/page.tsx is leased to exactly one domain — D2. D1 and D3 publish contract modules and components; D2 is the only domain that edits the page that mounts them. This follows the precedent already committed at the base in src/components/home/premiumWorkbenchHero.contract.ts (BLUEPRINT_MOTION_SLOT_CONTRACT), where a reserved region and a published contract let two workers compose without sharing a file.",
+    "consequence": "D1 and D3 must land before D2 mounts them, or D2 mounts against the published contract and the component follows. Either order is legal; a shared edit to app/page.tsx is not."
+  },
+  "domains": [
+    {
+      "id": "D1",
+      "name": "header-and-hero",
+      "singleOutcome": "The first fold and the site chrome present a premium ADU and general-construction business, with the release-status truth delivered as one calm line.",
+      "units": ["U1"],
+      "alsoOwns": ["L1-N (development-notice copy)", "L2 (header brand mark adjudication)"],
+      "ownsPaths": [
+        "src/components/home/PremiumWorkbenchHero.tsx",
+        "src/components/home/PremiumWorkbenchHero.module.css",
+        "src/components/home/PremiumWorkbenchHero.test.tsx",
+        "src/components/home/premiumWorkbenchHero.contract.ts",
+        "src/components/home/HeroBlueprintStage.tsx",
+        "src/components/home/HeroBlueprintStage.module.css",
+        "src/components/home/HeroBlueprintStage.test.tsx",
+        "src/components/home/LiveBlueprintSequence.tsx",
+        "src/components/home/LiveBlueprintSequence.module.css",
+        "src/components/home/LiveBlueprintSequence.test.tsx",
+        "src/components/Header.tsx",
+        "src/components/DevelopmentNotice.tsx",
+        "src/lib/siteConfig.ts"
+      ],
+      "forbiddenPaths": [
+        "app/page.tsx",
+        "src/lib/deedsealCrossReference.ts",
+        "src/components/home/journey/**",
+        "src/components/home/deedsealBridge/**"
+      ],
+      "consumesReadOnly": [
+        "docs/design/p2-business-journey-ia-0001/copy-deck.md#u1",
+        "src/styles/option2-premium.tokens.css"
+      ],
+      "dependsOn": ["Owner visual selection on #246"],
+      "blockedBy": [
+        "Hero art direction is unresolved until #246 is decided. Copy (U1-K, U1-H, U1-B1, U1-B2, U1-C1, U1-C2, U1-D) is specified and may be landed independently of the art."
+      ],
+      "acceptance": [
+        "First-fold copy equals copy-deck IDs U1-K, U1-H, U1-B1, U1-B2 byte-for-byte, pinned by a test in the same way the base already pins PREMIUM_WORKBENCH_HERO_COPY.",
+        "Media disclosure U1-D renders inside the fold that contains the image, at every viewport.",
+        "Chapter rail renders exactly HERO_CHAPTER_LABELS: Lead, Project, Record.",
+        "Motion is one unattended pass, then rest; prefers-reduced-motion renders one complete legible frame.",
+        "The header brand mark is adjudicated against the Product 1 pulsing-dot prohibition, with the verdict recorded on the packet.",
+        "npm test && npm run lint && npm run build green at the exact head; Preview reviewed by the Owner with eyes before any merge."
+      ]
+    },
+    {
+      "id": "D2",
+      "name": "post-hero-narrative",
+      "singleOutcome": "The homepage below the fold carries units U2 through U7 in order, and is the only place any of them is mounted.",
+      "units": ["U2", "U3", "U4", "U5", "U6", "U7"],
+      "ownsPaths": [
+        "app/page.tsx",
+        "src/components/home/journey/**",
+        "src/lib/homepageJourney.ts",
+        "src/lib/homepageJourney.test.ts",
+        "src/lib/homepage.test.ts",
+        "src/lib/homepageServices.ts"
+      ],
+      "forbiddenPaths": [
+        "src/lib/deedsealCrossReference.ts",
+        "src/components/home/PremiumWorkbenchHero.*",
+        "src/components/home/HeroBlueprintStage.*",
+        "src/components/home/LiveBlueprintSequence.*",
+        "src/components/home/premiumWorkbenchHero.contract.ts",
+        "src/components/home/deedsealBridge/**",
+        "src/components/Header.tsx",
+        "src/components/DevelopmentNotice.tsx",
+        "src/lib/siteConfig.ts",
+        "src/lib/journeyExits.ts",
+        "src/lib/contentPages.ts",
+        "src/lib/jurisdictionPages.ts",
+        "src/lib/publicModelCatalog.ts",
+        "src/components/content/ModelCatalog.tsx"
+      ],
+      "consumesReadOnly": [
+        "docs/design/p2-business-journey-ia-0001/copy-deck.md#u2 through #u7",
+        "src/lib/journeyExits.ts",
+        "src/lib/contentPages.ts",
+        "src/lib/jurisdictionPages.ts",
+        "src/lib/publicModelCatalog.ts",
+        "src/components/content/ModelCatalog.tsx"
+      ],
+      "dependsOn": ["D1 contract (mount point of the hero)", "D3 component or its published contract (mount point of the bridge)"],
+      "blockedBy": [],
+      "acceptance": [
+        "Exactly six sections between the hero and the bridge, in the order U2, U3, U4, U5, U6, U7. A seventh section fails the packet.",
+        "Every rendered sentence appears in copy-deck.md; a sentence not in the deck fails the packet.",
+        "Every DESIGN_TARGET sentence renders inside the same section as its boundary line: U3-D with U3-B2..U3-B4, U5-D with U5-B1..U5-B3.",
+        "Every CTA resolves to a route present in publicRouteRegistry at the exact head; the Residential Addition card carries no link.",
+        "No public string in the diff matches the AI-vocabulary ban list; enforced by a mutation-tested vitest rule.",
+        "Desktop and mobile reading orders match homepage-journey.md at 1440x900, 820x1180, and 390x844.",
+        "Page motion budget: one U3 step sequence and at most one U5 connection, each once; everything else static.",
+        "npm test && npm run lint && npm run build green at the exact head; Preview reviewed by the Owner with eyes before any merge."
+      ]
+    },
+    {
+      "id": "D3",
+      "name": "deedseal-bridge",
+      "singleOutcome": "The lower-page Deedseal bridge is its own quiet module, rendering the frozen sentence byte-exact with both committed destinations intact.",
+      "units": ["U8"],
+      "ownsPaths": [
+        "src/components/home/deedsealBridge/**",
+        "src/lib/deedsealCrossReference.test.ts"
+      ],
+      "forbiddenPaths": [
+        "src/lib/deedsealCrossReference.ts",
+        "app/page.tsx",
+        "src/components/home/journey/**",
+        "src/components/home/PremiumWorkbenchHero.*",
+        "src/components/home/HeroBlueprintStage.*",
+        "src/components/Header.tsx",
+        "src/lib/siteConfig.ts"
+      ],
+      "consumesReadOnly": [
+        "src/lib/deedsealCrossReference.ts",
+        "docs/design/p2-business-journey-ia-0001/copy-deck.md#u8",
+        "src/styles/option2-premium.tokens.css"
+      ],
+      "dependsOn": ["P2-DEEDSEAL-PROOF-BRIDGE-0001 (#248) for any copy beyond the frozen sentence"],
+      "blockedBy": [
+        "U8-X1, U8-X2, U8-X3, U8-X4 are EVIDENCE_REQUIRED and tagged DEPENDS_ON_248. None may be authored inside this domain."
+      ],
+      "acceptance": [
+        "DEEDSEAL_CROSS_REFERENCE_SENTENCE renders byte-exact, assembled from the frozen constants and never re-typed as a literal.",
+        "The single linked word is proof, resolving to DEEDSEAL_PUBLIC_URL; the record link uses DEEDSEAL_PROOF_RECORD_LABEL and DEEDSEAL_PROOF_RECORD_URL verbatim.",
+        "git diff of src/lib/deedsealCrossReference.ts against the base is empty; blob SHA still caa6e9c26f33d164229747f8a1f855c0d0186ae3.",
+        "No heading, no logo, no wordmark, no seal, no passport or box metaphor, no pulsing dot, no entrance motion.",
+        "The module reads as calm and subordinate to the construction narrative at every viewport.",
+        "npm test && npm run lint && npm run build green at the exact head; Preview reviewed by the Owner with eyes before any merge."
+      ]
+    },
+    {
+      "id": "D4",
+      "name": "exact-head-visual-qa",
+      "singleOutcome": "One independent, non-author read-only verdict on the composed page at one exact head.",
+      "units": ["U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8"],
+      "activityMode": "independent read-only review",
+      "ownsPaths": [
+        "docs/design/p2-business-journey-qa/**"
+      ],
+      "forbiddenPaths": [
+        "app/**",
+        "src/**",
+        "public/**",
+        "package.json",
+        "package-lock.json",
+        ".github/**"
+      ],
+      "consumesReadOnly": [
+        "the composed head produced by D1, D2, and D3",
+        "docs/design/p2-business-journey-ia-0001/**"
+      ],
+      "dependsOn": ["D1", "D2", "D3"],
+      "blockedBy": [],
+      "acceptance": [
+        "Verdict pinned to one exact 40-character head SHA; a new commit voids it and requires a fresh review.",
+        "Reviewer declares its own model, lane, and session, and states non-authorship explicitly. The author of the head can never review it.",
+        "Screenshots at 1440x900, 820x1180, and 390x844, plus one prefers-reduced-motion pass.",
+        "Checks: eight units in order; every sentence present in copy-deck.md; every DESIGN_TARGET boundary line co-located; every CTA resolves; frozen sentence byte-exact; no pulsing dot or Product 1 identity device anywhere; no AI-category vocabulary or imagery.",
+        "Terminal verdict is exactly NO BLOCKING FINDING or BLOCKED FOR REVISION."
+      ]
+    }
+  ],
+  "pathLeaseCheck": {
+    "disjoint": true,
+    "sharedWritablePaths": [],
+    "note": "No path appears in the ownsPaths of more than one domain. app/page.tsx is leased to D2 alone; src/lib/deedsealCrossReference.ts is leased to nobody."
+  },
+  "sequencing": [
+    {
+      "step": 1,
+      "run": ["D1", "D3"],
+      "concurrency": "parallel",
+      "reason": "Disjoint leases and no mutual dependency. D1 is gated on the Owner's #246 selection for art only; its copy is independent."
+    },
+    {
+      "step": 2,
+      "run": ["D2"],
+      "concurrency": "single",
+      "reason": "Sole writer of app/page.tsx; mounts D1's hero and D3's bridge."
+    },
+    {
+      "step": 3,
+      "run": ["D4"],
+      "concurrency": "single",
+      "reason": "Independent read-only verdict at one composed exact head."
+    }
+  ],
+  "globalProhibitions": [
+    "No route created, renamed, redirected, or removed.",
+    "No price, date, schedule, availability, certification, licence, partnership, completed-project, testimonial, or metric claim.",
+    "No autonomous-AI claim, and no automated actor as the subject of a decision verb.",
+    "No completed Deedseal-integration claim; Powered by Deedseal is not shippable present-tense copy.",
+    "No AI faces, chat bubbles, robot workforce, cyberpunk network, or AI-powered category framing.",
+    "No Product 1 green pulsing dot, and no device that reads as it.",
+    "No mutation of any deedseal/* repository, no Product 1 change.",
+    "No weakening of an existing test; new visual or copy rules must be mutation-tested.",
+    "No PII, no real customer facts, no parcel or permit identifiers.",
+    "No Preview, Production, DNS, secret, access, or billing change from a narrative packet."
+  ],
+  "gates": {
+    "commands": ["npm test", "npm run lint", "npm run build"],
+    "requirement": "All three green at the exact head of every mutation domain.",
+    "previewRule": "Preview is worker-created engineering evidence and never Owner acceptance. A docs-only diff claims no Preview at all.",
+    "ownerGate": "Tony judges the Preview with his eyes before any merge. Textual description of the result is not a substitute."
+  },
+  "openDependencies": [
+    {
+      "id": "DEPENDS_ON_246",
+      "what": "Owner selection of one Hero visual direction.",
+      "blocks": ["D1 art direction"],
+      "doesNotBlock": ["D1 copy", "D2", "D3", "D4"]
+    },
+    {
+      "id": "DEPENDS_ON_248",
+      "what": "Sibling proof-bridge packet output.",
+      "blocks": ["U8-X1", "U8-X2", "U8-X3", "U8-X4"],
+      "doesNotBlock": ["U8-B", "U8-C1", "D3 structure"]
+    },
+    {
+      "id": "DEPENDS_ON_PRODUCT_1",
+      "what": "A public integration record between Product 2 and Product 1.",
+      "blocks": ["every present-tense integration formulation, including Powered by Deedseal"],
+      "doesNotBlock": ["the frozen first-user sentence, which is already adopted and published"]
+    }
+  ]
+}
